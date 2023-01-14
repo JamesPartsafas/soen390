@@ -1,0 +1,11 @@
+package com.soen.synapsis.appuser;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class AppUserService {
+
+    public AppUser getAppUser() {
+        return new AppUser(1L, "joe", "joe@mail.com");
+    }
+}

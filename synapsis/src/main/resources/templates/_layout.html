@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <title>Synapsis</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div th:replace="fragments/navbar :: navbar"></div>
+  Hello from layout.
+  <div layout:fragment="content">
+    Some content
+  </div>
+  <div th:replace="fragments/footer :: footer"></div>
+
+  <script src="js/index.js"></script>
+</body>
+</html>
