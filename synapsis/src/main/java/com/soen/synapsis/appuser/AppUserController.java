@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "api/appuser")
+@RequestMapping(path = "user")
 public class AppUserController {
 
     private final AppUserService appUserService;
@@ -19,5 +19,15 @@ public class AppUserController {
     @GetMapping
     public AppUser getAppUser() {
         return appUserService.getAppUser();
+    }
+
+    @GetMapping("privateuser")
+    public String getUserData() {
+        return "This is the user page";
+    }
+
+    @GetMapping("admin")
+    public String getAdminData() {
+        return "This is the admin page";
     }
 }

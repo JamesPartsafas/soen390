@@ -1,19 +1,41 @@
 package com.soen.synapsis.appuser;
 
+import javax.persistence.*;
+
+@Entity
 public class AppUser {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(unique = true, nullable = false)
     private String email;
 
-    public AppUser(Long id, String name, String email) {
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    protected AppUser() {}
+
+    public AppUser(Long id, String name, String password, String email, Role role) {
         this.id = id;
         this.name = name;
+        this.password = password;
         this.email = email;
+        this.role = role;
     }
 
-    public AppUser(String name, String email) {
+    public AppUser(String name, String password, String email, Role role) {
         this.name = name;
+        this.password = password;
         this.email = email;
+        this.role = role;
     }
 
     public Long getId() {
@@ -32,6 +54,14 @@ public class AppUser {
         this.name = name;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -40,12 +70,21 @@ public class AppUser {
         this.email = email;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "AppUser{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
+                ", role=" + role +
                 '}';
     }
 }
