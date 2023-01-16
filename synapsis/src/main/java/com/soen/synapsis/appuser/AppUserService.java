@@ -6,6 +6,6 @@ import org.springframework.stereotype.Component;
 public class AppUserService {
 
     public AppUser getAppUser() {
-        return new AppUser(1L, "joe", "joe@mail.com");
+        return new AppUser(1L, "joe", "1234", "joe@mail.com", Role.USER);
     }
 }
