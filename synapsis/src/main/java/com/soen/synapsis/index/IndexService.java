@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class IndexService {
 
-    String getHomePage() {
+    public String getHomePage() {
         return "pages/home";
     }
 }
