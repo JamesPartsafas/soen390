@@ -34,15 +34,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
-                .antMatchers("/")
-                .permitAll()
-                .antMatchers("/user/privateuser")
-                .hasAuthority(Role.USER.toString())
-                .antMatchers("/user/admin")
-                .hasAuthority(Role.ADMIN.toString())
+                .antMatchers("/privateuser").hasAuthority(Role.USER.toString())
+                .antMatchers("/admin").hasAuthority(Role.ADMIN.toString())
+                .antMatchers("/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
-                .formLogin();
+                .formLogin().loginPage("/login").defaultSuccessUrl("/", true).usernameParameter("email")
+                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/login");
     }
 }

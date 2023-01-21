@@ -9,8 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.ui.Model;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 class AppUserControllerTest {
@@ -33,9 +35,11 @@ class AppUserControllerTest {
 
     @Test
     void getAppUser() {
-        underTest.getAppUser();
+        Long id = 1L;
 
-        verify(appUserService).getAppUser();
+        underTest.getAppUser(id, mock(Model.class));
+
+        verify(appUserService).getAppUser(id);
     }
 
     @Test

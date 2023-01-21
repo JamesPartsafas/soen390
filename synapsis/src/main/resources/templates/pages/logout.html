@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="_layout">
 <div layout:fragment="content">
-    <h1>new home page</h1>
+
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Log out" />
+    </form>
 </div>
 </html>
