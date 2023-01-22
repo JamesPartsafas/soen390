@@ -1,18 +1,18 @@
 # SOEN 390 - Synapsis
 
 ## Participants
-* Jan ong
-* James Partsafas
-* Christina Darstbanian
-* Chad Buck
-* Ghaith Chrit
-* Tony Yang
-* Divleen Kaur Ahluwalia
-* Kenny Phan
-* Zi Hao Tan
+* Jan ong (40154849)
+* James Partsafas (40170301)
+* Christina Darstbanian (40097340)
+* Chad Buck (40030617)
+* Ghaith Chrit (40114180)
+* Tony Yang (40171440)
+* Divleen Kaur Ahluwalia (40116121)
+* Kenny Phan (40164827)
+* Zi Hao Tan (40174018)
 
 ## Objective
-To develop a LinkedIn-like app.
+To develop a LinkedIn-like app that connects all professionals, thus making it easy to search for jobs, post job openings, and build professional connections.
 
 ## Technologies Used
 
@@ -36,3 +36,4 @@ Synapsis is a professional networking site that is built to satisfy users’ bus
 * Messaging between connected users
 * Managing job postings
 * Storing user documents
+* Searching and Applying for jobs
