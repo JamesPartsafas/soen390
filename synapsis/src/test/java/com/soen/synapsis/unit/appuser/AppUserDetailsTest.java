@@ -22,7 +22,7 @@ public class AppUserDetailsTest {
     public AppUserDetailsTest() {
         email = "joeuserdetails@mail.com";
         password = "1234";
-        role = Role.USER;
+        role = Role.CANDIDATE;
         this.appUser = new AppUser(1L, "joe", password, email, role);
 
         underTest = new AppUserDetails(appUser);
