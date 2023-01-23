@@ -1,3 +1,34 @@
-<div th:fragment="navbar">
-  This is the navbar
+<div th:fragment="navbar" class="h-32">
+    <nav class="bg-white px-4 lg:px-2 py-6 fixed w-full z-20 top-0 left-0">
+        <div class="container flex flex-wrap items-center justify-between mx-auto">
+            <a href="/" class="flex items-center">
+                <img src="/assets/synapsis_black.svg" class="h-12 lg:h-16 mt-3 mr-3 " alt="Synapsis Logo">
+            </a>
+            <div class="flex md:order-2">
+                <a href="/login" class="btn btn-primary text-xl">
+                    Sign In
+                </a>
+            </div>
+            <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+                <ul class="flex flex-col p-4 mt-4 md:flex-row md:space-x-24 md:mt-0 text-3xl font-light text-black">
+                    <li>
+                        <a href="#"
+                           aria-current="page">Home</a>
+                    </li>
+                    <li>
+                        <a href="#"
+                        >About</a>
+                    </li>
+                    <li>
+                        <a href="#"
+                        >Services</a>
+                    </li>
+                    <li>
+                        <a href="#"
+                        >Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 </div>

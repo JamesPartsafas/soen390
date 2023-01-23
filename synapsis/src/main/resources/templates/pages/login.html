@@ -1,6 +1,35 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="_layout">
-<div layout:fragment="content">
+<html xmlns:th="https://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Synapsis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#fa2742',
+                        'primary-variant': '#fc9ca8',
+                        'black': '#1d2228',
+                        'black-variant': '#3c4653',
+                        'grey': '#8f949b',
+                        'light': '#e1e2e2',
+                        'facebook-blue': '#1877F2',
+                        'true-black': '#000000'
+                    },
+                    fontFamily: {
+                        sans: ['Merriweather Sans', 'sans-serif'],
+                        serif: ['Catamaran', 'serif'],
+                    }
+                }
+
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<div>
 
     <form th:action="@{/login}" method="post">
 
@@ -8,13 +37,94 @@
 
         <p th:if="${param.logout}">You have successfully logged out.</p>
 
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" required />
+        <div class="container flex flex-row justify-center mt-32">
+            <div class="flex-none w-1/2 mr-12">
+                <img src="" alt="Website Example">
+            </div>
+            <div class="flex-none container flex flex-wrap flex-col justify-center content-center mt-8 w-80 border rounded-sm">
+                <div class="mt-6">
+                    <img src="" class="w-8 inline" alt="S">
+                    <img src="/assets/synapsis_black.svg" class="inline h-10 w-48" alt="Synapsis Logo">
+                </div>
+                <input id="email" name="email" type="email" placeholder="Email"
+                       class="font-thin font-serif mt-4 pl-3 h-14 w-3/4 content-center border rounded-md"
+                       required/>
+                <input id="password" name="password" type="password" placeholder="Password"
+                       class="font-thin font-serif pl-3 mt-3 h-14 w-3/4 content-center border rounded-md"
+                       required/>
 
-        <label for="password">Password</label>
-        <input id="password" name="password" type="password" required />
+                <button type="submit" class="btn btn-primary mt-3 bg-primary text-base justify-self-end">Login
+                </button>
 
-        <button type="submit">Login</button>
+                <hr class="mt-3 text-black">
+
+                <a class="mt-5 h-14 bg-facebook-blue rounded-md drop-shadow-md">
+                    <div class="mt-4">
+                        <img class="ml-3 mb-1 w-6 h-6 inline" src="/assets/facebook-logo.png">
+                        <div class="ml-2 mr-3 text-center text-white text-xl font-serif font-normal inline">Sign In with
+                            Facebook
+                        </div>
+                    </div>
+                </a>
+                <a class="mt-5 h-14 bg-white rounded-md drop-shadow-md">
+                    <div class="mt-4">
+                        <img class="ml-3 mb-1 w-6 h-6 inline" src="/assets/google-logo.png">
+                        <div class="ml-2 mr-3 text-center text-black text-xl font-serif font-normal inline">Sign In with
+                            Google
+                        </div>
+                    </div>
+                </a>
+                <a class="mt-5 h-14 bg-true-black rounded-md drop-shadow-md">
+                    <div class="mt-4">
+                        <img class="ml-4 mb-2 w-5 h-6 inline" src="/assets/apple-logo.png">
+                        <div class="ml-2 mr-3 text-center text-white text-xl font-serif font-normal inline">Sign In with
+                            Apple
+                        </div>
+                    </div>
+                </a>
+                <div class="mt-5 mb-4 text-black font-serif font-normal text-base ">
+                    Don't have an account? <a class="text-primary">Click here</a>
+                </div>
+            </div>
+        </div>
+
     </form>
+
+    <div class="container flex flex-row justify-center items-center mt-48">
+        <div class="flex-none mr-4">
+            <img src="/assets/synapsis_red.svg" class="h-3 w-14 inline" alt="Synapsis Logo">
+            <div class="inline font-light text-grey text-xs">
+                &#169; 2023
+            </div>
+        </div>
+
+        <div class="flex-none font-light text-grey text-xs mr-4">
+            <a href="#">Companies</a>
+        </div>
+        <div class="flex-none font-light text-grey text-xs mr-4">
+            <a href="#">Accessibility</a>
+        </div>
+        <div class="flex-none font-light text-grey text-xs mr-4">
+            <a href="#">User Agreement</a>
+        </div>
+        <div class="flex-none font-light text-grey text-xs mr-4">
+            <a href="#">Privacy Policy</a>
+        </div>
+        <div class="flex-none font-light text-grey text-xs mr-4">
+            <a href="#">Cookie Policy</a>
+        </div>
+        <div class="flex-none font-light text-grey text-xs mr-4">
+            <a href="#">Copyright Policy</a>
+        </div>
+        <div class="flex-none font-light text-grey text-xs mr-4">
+            <a href="#">Brand Policy</a>
+        </div>
+        <div class="flex-none font-light text-grey text-xs mr-4">
+            <a href="#">Community Guidelines</a>
+        </div>
+        <div class="flex-none font-light text-grey text-xs mr-4">
+            <a href="#">English</a>
+        </div>
+    </div>
 </div>
 </html>
