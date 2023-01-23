@@ -28,7 +28,7 @@ class AppUserRepositoryTest {
                 "Joe User",
                 "1234",
                 email,
-                Role.USER);
+                Role.CANDIDATE);
         underTest.save(appUser);
 
         AppUser foundAppUser = underTest.findByEmail(email);

@@ -23,7 +23,7 @@ class AppUserTest {
         id = 10L;
         password = "1234";
         email = "joeunittest@mail.com";
-        role = Role.USER;
+        role = Role.CANDIDATE;
         underTest = new AppUser(id, name, password, email, role);
     }
 
