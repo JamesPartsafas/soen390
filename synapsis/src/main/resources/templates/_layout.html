@@ -1,18 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-  <meta charset="UTF-8">
-  <title>Synapsis</title>
-  <link rel="stylesheet" href="css/styles.css">
+    <meta charset="UTF-8">
+    <title>Synapsis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#fa2742',
+                        'primary-variant': '#fc9ca8',
+                        'black': '#1d2228',
+                        'black-variant': '#3c4653',
+                        'grey': '#8f949b',
+                        'light': '#e1e2e2'
+                    },
+                    fontFamily: {
+                        sans: ['Merriweather Sans', 'sans-serif'],
+                        serif: ['Catamaran', 'serif'],
+                    }
+                }
+
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <div th:replace="fragments/navbar :: navbar"></div>
-  Hello from layout.
-  <div layout:fragment="content">
+<div th:replace="fragments/navbar :: navbar"></div>
+<div layout:fragment="content">
     Some content
-  </div>
-  <div th:replace="fragments/footer :: footer"></div>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
 
-  <script src="js/index.js"></script>
+<script src="js/index.js"></script>
 </body>
 </html>
