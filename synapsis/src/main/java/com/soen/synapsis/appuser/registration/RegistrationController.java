@@ -53,7 +53,7 @@ public class RegistrationController {
             return response;
         }
         catch (Exception e) {
-            model.addAttribute("error", "There was an error registering you. Ensure the entered email is valid.");
+            model.addAttribute("error", "There was an error registering you. " + e.getMessage());
             return register(model);
         }
     }

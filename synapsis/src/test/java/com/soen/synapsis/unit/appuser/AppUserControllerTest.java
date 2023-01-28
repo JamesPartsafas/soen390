@@ -1,9 +1,6 @@
 package com.soen.synapsis.unit.appuser;
 
-import com.soen.synapsis.appuser.AppUserController;
-import com.soen.synapsis.appuser.AppUserDetailsService;
-import com.soen.synapsis.appuser.AppUserRepository;
-import com.soen.synapsis.appuser.AppUserService;
+import com.soen.synapsis.appuser.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,9 +8,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 class AppUserControllerTest {
 
@@ -34,12 +32,24 @@ class AppUserControllerTest {
     }
 
     @Test
-    void getAppUser() {
+    void getAppUserReturnsUserInfo() {
+        AppUser appUser = new AppUser(1L, "Joe Man", "1234", "joeman@mail.com", Role.CANDIDATE);
+
+        when(appUserService.getAppUser(appUser.getId())).thenReturn(Optional.of(appUser));
+
+        String returnValue = underTest.getAppUser(appUser.getId(), mock(Model.class));
+
+        assertEquals("pages/userpage", returnValue);
+    }
+
+    @Test
+    void getAppUserThatDoesNotExistRedirects() {
         Long id = 1L;
 
-        underTest.getAppUser(id, mock(Model.class));
+        String returnValue = underTest.getAppUser(id, mock(Model.class));
 
         verify(appUserService).getAppUser(id);
+        assertEquals("redirect:/", returnValue);
     }
 
     @Test

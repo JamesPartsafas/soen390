@@ -26,7 +26,7 @@ public class AppUserService {
         boolean appUserExists = appUserRepository.findByEmail(appUser.getEmail()) != null;
 
         if (appUserExists) {
-            throw new IllegalStateException("This email is already taken");
+            throw new IllegalStateException("This email is already taken.");
         }
 
         appUser.setPassword(encoder.encode(appUser.getPassword()));
