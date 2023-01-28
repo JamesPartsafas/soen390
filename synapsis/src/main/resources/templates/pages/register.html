@@ -12,6 +12,17 @@
         <label>Password</label>
         <input type="password" th:field="*{password}" required />
 
+        <fieldset required>
+            <legend>Select which type of account you would like to use:</legend>
+            <div>
+                <input type="radio" name="role" th:field="*{role}" id="candidate-button" value="CANDIDATE" />
+                <label for="candidate-button">Candidate</label>
+
+                <input type="radio" name="role" th:field="*{role}" id="company-button" value="COMPANY" />
+                <label for="company-button">Company</label>
+            </div>
+        </fieldset>
+
         <button type="submit">Register</button>
     </form>
 </div>

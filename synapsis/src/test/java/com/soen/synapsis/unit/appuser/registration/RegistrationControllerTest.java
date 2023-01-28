@@ -2,6 +2,7 @@ package com.soen.synapsis.unit.appuser.registration;
 
 import com.soen.synapsis.appuser.AppUserController;
 import com.soen.synapsis.appuser.AppUserService;
+import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.registration.RegistrationController;
 import com.soen.synapsis.appuser.registration.RegistrationRequest;
 import com.soen.synapsis.appuser.registration.RegistrationService;
@@ -46,7 +47,7 @@ class RegistrationControllerTest {
 
     @Test
     void sendValidRegisterInfo() {
-        RegistrationRequest request = new RegistrationRequest("joe", "joe@maul.com", "1234");
+        RegistrationRequest request = new RegistrationRequest("joe", "joe@maul.com", "1234", Role.CANDIDATE);
 
         underTest.register(request,
                 mock(BindingResult.class),
@@ -58,7 +59,7 @@ class RegistrationControllerTest {
 
     @Test
     void registerWithBindingErrors() {
-        RegistrationRequest request = new RegistrationRequest("joe", "joe@maul.com", "1234");
+        RegistrationRequest request = new RegistrationRequest("joe", "joe@maul.com", "1234", Role.CANDIDATE);
         HttpServletRequest servlet = mock(HttpServletRequest.class);
         Model model = mock(Model.class);
 

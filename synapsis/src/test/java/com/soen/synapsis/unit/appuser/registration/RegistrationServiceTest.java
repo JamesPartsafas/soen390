@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import static com.soen.synapsis.utility.Constants.MIN_PASSWORD_LENGTH;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -39,8 +40,9 @@ class RegistrationServiceTest {
     void registerValidUser() {
         String email = "joe@mail.com";
         String name = "joe";
-        String password = "1234";
-        RegistrationRequest request = new RegistrationRequest(name, email, password);
+        String password = "12345678";
+        Role role = Role.CANDIDATE;
+        RegistrationRequest request = new RegistrationRequest(name, email, password, role);
 
         underTest.register(request);
 
@@ -52,13 +54,38 @@ class RegistrationServiceTest {
     void throwOnInvalidEmail() {
         String email = "joemail.com";
         String name = "joe";
+        String password = "12345678";
+        Role role = Role.CANDIDATE;
+        RegistrationRequest request = new RegistrationRequest(name, email, password, role);
+        String expectedMessage = "The provided email is not valid.";
+
+        assertThrows(IllegalStateException.class,
+                () -> underTest.register(request), expectedMessage);
+    }
+
+    @Test
+    void throwOnInvalidRole() {
+        String email = "joemail.com";
+        String name = "joe";
+        String password = "12345678";
+        Role role = Role.ADMIN;
+        RegistrationRequest request = new RegistrationRequest(name, email, password, role);
+        String expectedMessage = "The requested role is not valid.";
+
+        assertThrows(IllegalStateException.class,
+                () -> underTest.register(request), expectedMessage);
+    }
+
+    @Test
+    void throwOnInvalidPassword() {
+        String email = "joemail.com";
+        String name = "joe";
         String password = "1234";
-        RegistrationRequest request = new RegistrationRequest(name, email, password);
-        String expectedMessage = "Provided email is not valid";
+        Role role = Role.CANDIDATE;
+        RegistrationRequest request = new RegistrationRequest(name, email, password, role);
+        String expectedMessage = "The chosen password must be at least " + MIN_PASSWORD_LENGTH + " characters long.";
 
-        Exception exception = assertThrows(IllegalStateException.class,
-                () -> underTest.register(request));
-
-        assertTrue(exception.getMessage().contentEquals(expectedMessage));
+        assertThrows(IllegalStateException.class,
+                () -> underTest.register(request), expectedMessage);
     }
 }

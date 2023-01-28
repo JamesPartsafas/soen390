@@ -6,10 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
@@ -38,5 +41,30 @@ public class AppUserServiceTest {
         Optional<AppUser> optionalAppUser = underTest.getAppUser(id);
 
         verify(appUserRepository, times(1)).findById(id);
+    }
+
+    @Test
+    void signUpUserWithUniqueEmail() {
+        String email = "joeman@mail.com";
+        AppUser appUser = new AppUser("Joe Man", "1234", email, Role.CANDIDATE);
+
+        when(appUserRepository.findByEmail(email)).thenReturn(null);
+
+        String returnValue = underTest.signUpUser(appUser);
+
+        verify(appUserRepository).save(appUser);
+        assertEquals("pages/home", returnValue);
+    }
+
+    @Test
+    void signUpUserWithExistingEmailThrows() {
+        String email = "joeman@mail.com";
+        AppUser appUser = new AppUser("Joe Man", "1234", email, Role.CANDIDATE);
+
+        when(appUserRepository.findByEmail(email)).thenReturn(appUser);
+
+        Exception exception = assertThrows(IllegalStateException.class,
+                () -> underTest.signUpUser(appUser),
+                "This email is already taken.");
     }
 }
