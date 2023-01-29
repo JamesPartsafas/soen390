@@ -28,8 +28,10 @@ jobs:
         run: mvn clean test
 
       - name: Run static code analysis
-        uses: pmd/pmd-github-action@v1
+        run: mvn pmd:pmd --file synapsis/pom.xml
+
+      - name: Upload analysis artifact
+        uses: actions/upload-artifact@v3
         with:
-          sourcePath: 'synapsis/src/main/java'
-          rulesets: 'ruleset.xml'
-          analyzeModifiedFilesOnly: false
+          name: code-analysis
+          path: synapsis/target/site/
