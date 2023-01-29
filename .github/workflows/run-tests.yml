@@ -1,0 +1,36 @@
+name: Run Tests
+
+on: [pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 11
+        working-directory: ./synapsis
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Setup Maven
+        working-directory: ./synapsis
+        uses: stCarolas/setup-maven@4.4
+        with:
+          maven-version: 3.8.7
+        
+      - name: Run tests and coverage checks
+        working-directory: ./synapsis
+        run: mvn clean test
+
+      - name: Run static code analysis
+        working-directory: ./synapsis
+        uses: pmd/pmd-github-action@v1
+        with:
+          rulesets: 'ruleset.xml'
