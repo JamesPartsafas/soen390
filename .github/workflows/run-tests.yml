@@ -32,3 +32,4 @@ jobs:
         with:
           sourcePath: 'synapsis/src/main/java'
           rulesets: 'ruleset.xml'
+          analyzeModifiedFilesOnly: false
