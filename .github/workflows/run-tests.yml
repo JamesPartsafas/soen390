@@ -28,7 +28,7 @@ jobs:
         run: mvn clean test
 
       - name: Run static code analysis
-        working-directory: ./synapsis
         uses: pmd/pmd-github-action@v1
         with:
+          sourcePath: 'synapsis/src/main/java'
           rulesets: 'ruleset.xml'
