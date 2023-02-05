@@ -33,6 +33,6 @@ public class ConnectionService {
         Connection connection = new Connection(cKey1, requester, receiver, true);
         connectionRepository.save(connection);
 
-        return "pages/home";
+        return null; // Should return to "pages/networking" after it is implemented
     }
 }
