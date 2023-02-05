@@ -30,26 +30,6 @@ public class ConnectionService {
             throw new IllegalStateException("Connection has already been made.");
         }
 
-        /*
-        An alternative to this ugly solution is to save in a record the connection in the other way around:
-        The requester would be the receiver and vice-versa.
-        So, in the database the following two records would be saved for a connection:
-
-        | receiver_id | requester_id | pending |
-        | 1           | 2            |   true  |
-        | 2           | 1            |   true  |
-
-        I'm not sure which solution is better.
-         */
-
-/*
-        boolean connectionExists = connectionRepository.findById(cKey);
-
-        if(connectionExists){
-            throw new IllegalStateException("Connection has already been made.");
-        }
-*/
-
         Connection connection = new Connection(cKey1, requester, receiver, true);
         connectionRepository.save(connection);
 
