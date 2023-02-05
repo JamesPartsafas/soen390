@@ -13,11 +13,11 @@ public class ConnectionService {
     }
 
     public String makeConnection(AppUser requester, AppUser receiver) {
-        if (requester.getRole() != Role.CANDIDATE) {
-            throw new IllegalStateException("Only candidates can make connections.");
+        if (requester.getRole() == Role.ADMIN) {
+            throw new IllegalStateException("Admins cannot make connections.");
         }
-        if (receiver.getRole() != Role.CANDIDATE) {
-            throw new IllegalStateException("Only candidates can receive connections.");
+        if (receiver.getRole() == Role.ADMIN) {
+            throw new IllegalStateException("Admins cannot receive connections.");
         }
 
         ConnectionKey cKey1 = new ConnectionKey(requester.getId(), receiver.getId());

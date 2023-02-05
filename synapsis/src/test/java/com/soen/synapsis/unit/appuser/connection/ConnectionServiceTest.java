@@ -40,9 +40,29 @@ public class ConnectionServiceTest {
     }
 
     @Test
-    void makeConnectionSuccessful() {
+    void makeConnectionSuccessfulWithCandidateRoles() {
         AppUser appUser1 = new AppUser("Joe Man", "1234", "joeman@email.com", Role.CANDIDATE);
         AppUser appUser2 = new AppUser("Joe Woman", "1234", "joewoman@email.com", Role.CANDIDATE);
+
+        String returnValue = connectionService.makeConnection(appUser1, appUser2);
+
+        assertEquals("pages/home", returnValue);
+    }
+
+    @Test
+    void makeConnectionSuccessfulWithCompanyRoles() {
+        AppUser appUser1 = new AppUser("Joe Man", "1234", "joeman@email.com", Role.COMPANY);
+        AppUser appUser2 = new AppUser("Joe Woman", "1234", "joewoman@email.com", Role.COMPANY);
+
+        String returnValue = connectionService.makeConnection(appUser1, appUser2);
+
+        assertEquals("pages/home", returnValue);
+    }
+
+    @Test
+    void makeConnectionSuccessfulWithRecruiterRoles() {
+        AppUser appUser1 = new AppUser("Joe Man", "1234", "joeman@email.com", Role.RECRUITER);
+        AppUser appUser2 = new AppUser("Joe Woman", "1234", "joewoman@email.com", Role.RECRUITER);
 
         String returnValue = connectionService.makeConnection(appUser1, appUser2);
 
@@ -56,7 +76,7 @@ public class ConnectionServiceTest {
 
         Exception exception = assertThrows(IllegalStateException.class,
                 () -> connectionService.makeConnection(appUser1, appUser2),
-                "Only candidates can make connections.");
+                "Admins cannot make connections.");
     }
 
     @Test
@@ -66,7 +86,7 @@ public class ConnectionServiceTest {
 
         Exception exception = assertThrows(IllegalStateException.class,
                 () -> connectionService.makeConnection(appUser1, appUser2),
-                "Only candidates can receive connections.");
+                "Admins cannot receive connections.");
     }
 
 }
