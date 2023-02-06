@@ -10,6 +10,7 @@ import java.util.Optional;
 public class AppUserService {
 
     private final AppUserRepository appUserRepository;
+
     private final BCryptPasswordEncoder encoder;
 
     @Autowired
