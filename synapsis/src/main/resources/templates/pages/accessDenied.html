@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Synapsis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#fa2742',
+                        'primary-variant': '#fc9ca8',
+                        'black': '#1d2228',
+                        'black-variant': '#3c4653',
+                        'grey': '#8f949b',
+                        'light': '#e1e2e2'
+                    },
+                    fontFamily: {
+                        sans: ['Merriweather Sans', 'sans-serif'],
+                        serif: ['Catamaran', 'serif'],
+                    }
+                }
+
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="flex items-center justify-center h-screen">
+        <div class="flex flex-col items-center border border-gray-600 p-6 bg-gray-300">
+            <h1 class="text-3xl font-bold">Access Denied</h1>
+            <p>You are not authorized to view this page.</p>
+            <a th:href="@{/}" class="underline">Return to homepage</a>
+        </div>
+    </div>
+</body>
+</html>

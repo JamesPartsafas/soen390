@@ -1,6 +1,6 @@
 package com.soen.synapsis.appuser.registration;
 
-import com.soen.synapsis.index.IndexController;
+import com.soen.synapsis.appuser.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -10,14 +10,16 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+
 
 import javax.servlet.http.HttpServletRequest;
+
 
 @Controller
 public class RegistrationController {
 
     private RegistrationService registrationService;
+    private AppUserRepository appUserRepository;
 
     @Autowired
     public RegistrationController(RegistrationService registrationService) {
@@ -57,6 +59,69 @@ public class RegistrationController {
             return register(model);
         }
     }
+
+
+    @GetMapping(value ="/admincreation")
+    public String registerAdmin(Model model) {
+        if (isUserAuthenticated()) {
+            model.addAttribute("registrationRequest", new RegistrationRequest());
+
+            return "pages/adminCreationPage";
+        }
+        return null;
+    }
+
+    @PostMapping (value ="/admincreation")
+    public String registerAdmin(RegistrationRequest request,
+                           BindingResult bindingResult,
+                           Model model) {
+
+        try{
+
+            if (bindingResult.hasErrors()) {
+                throw new Exception();
+            }
+
+            if (isUserAuthenticated()){
+                String response = registrationService.registerAdmin(request);
+                return response;
+            }
+        }
+        catch (Exception e) {
+            model.addAttribute("error", "There was an error registering the ADMIN. " + e.getMessage());
+            return registerAdmin(model);
+        }
+        return null;
+    }
+
+
+    @GetMapping("/passwordreset")
+    public String passwordReset(Model model) {
+
+        model.addAttribute("registrationRequest", new RegistrationRequest());
+
+        return "pages/passwordResetForm";
+    }
+
+    @PostMapping("/passwordreset")
+    public String passwordReset(RegistrationRequest request,
+                                BindingResult bindingResult,
+                                Model model) {
+
+        try {
+            if (bindingResult.hasErrors()) {
+                throw new Exception();
+            }
+
+            String response = registrationService.updateUserPassword(request);
+            return response;
+        }
+        catch (Exception e) {
+            model.addAttribute("error", "There was an error resetting your password. " + e.getMessage());
+            return passwordReset(model);
+        }
+    }
+
 
     @GetMapping("/login")
     public String viewLoginPage() {

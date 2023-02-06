@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
 <div layout:fragment="content">
     <div class="container flex flex-wrap justify-between items-center">
@@ -16,6 +16,9 @@
             <button class="text-2xl btn btn-primary mt-8 ml-6">
                 Register
             </button>
+            <a class="text-2xl underline mt-8 ml-6" th:href="@{/admincreationpage}">
+                Create Admin (Restricted)
+            </a>
         </div>
         <div class="flex-none mt-48 w-3/5 h-full">
             <img src="" alt="Front Page Image">

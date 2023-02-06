@@ -40,6 +40,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         httpSecurity.authorizeRequests()
                 .antMatchers("/privateuser").hasAuthority(Role.CANDIDATE.toString())
                 .antMatchers("/admin").hasAuthority(Role.ADMIN.toString())
+                .antMatchers("/admincreationpage").hasAuthority(Role.ADMIN.toString())
                 .antMatchers("/**").permitAll()
                 .antMatchers("/oauth2/**").permitAll()
                 .anyRequest()
