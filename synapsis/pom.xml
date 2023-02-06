@@ -115,6 +115,7 @@
                         <phase>test</phase>
                         <goals>
                             <goal>check</goal>
+                            <goal>report</goal>
                         </goals>
                         <configuration>
                             <rules>
