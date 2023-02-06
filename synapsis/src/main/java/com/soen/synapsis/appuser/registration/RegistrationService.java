@@ -49,12 +49,13 @@ public class RegistrationService {
         );
     }
 
-    public AppUser retrieveUserOrRegisterSSOIfNotExists(String name, String email) {
+    public AppUser retrieveSSOUserOrRegisterIfNotExists(String name, String email) {
         AppUser retrievedUser = appUserService.getAppUser(email);
         if (retrievedUser != null) {
             return retrievedUser;
         }
 
+        //User does not exist. Create the account.
         AppUser createdUser = new AppUser(name, Constants.SSO_PASSWORD, email, Role.CANDIDATE, AuthProvider.GOOGLE);
         appUserService.signUpUser(createdUser);
 

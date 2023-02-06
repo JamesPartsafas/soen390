@@ -1,7 +1,6 @@
 package com.soen.synapsis.appuser;
 
 import com.soen.synapsis.appuser.oauth.CustomOAuth2UserService;
-//import com.soen.synapsis.appuser.oauth.OAuth2LoginSuccessHandler;
 import com.soen.synapsis.utility.ExcludeFromGeneratedTestReport;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

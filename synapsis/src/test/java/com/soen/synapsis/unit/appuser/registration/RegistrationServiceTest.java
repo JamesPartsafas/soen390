@@ -95,7 +95,7 @@ class RegistrationServiceTest {
         String email = "joe@mail.com";
         when(appUserService.getAppUser(email)).thenReturn(new AppUser("joe", "1234", email, Role.CANDIDATE));
 
-        AppUser retrievedUser = underTest.retrieveUserOrRegisterSSOIfNotExists("joe", email);
+        AppUser retrievedUser = underTest.retrieveSSOUserOrRegisterIfNotExists("joe", email);
 
         assertNotNull(retrievedUser);
     }
@@ -105,7 +105,7 @@ class RegistrationServiceTest {
         String name = "joe";
         String email = "joe@mail.com";
 
-        AppUser createdUser = underTest.retrieveUserOrRegisterSSOIfNotExists(name, email);
+        AppUser createdUser = underTest.retrieveSSOUserOrRegisterIfNotExists(name, email);
 
         assertEquals(name, createdUser.getName());
         assertEquals(Constants.SSO_PASSWORD, createdUser.getPassword());

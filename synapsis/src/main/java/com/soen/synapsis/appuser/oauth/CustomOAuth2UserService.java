@@ -24,7 +24,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @ExcludeFromGeneratedTestReport
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        AppUser appUser = registrationService.retrieveUserOrRegisterSSOIfNotExists(
+        AppUser appUser = registrationService.retrieveSSOUserOrRegisterIfNotExists(
                 oAuth2User.getAttribute("name"), oAuth2User.getAttribute("email"));
 
         return new CustomOAuth2User(appUser);
