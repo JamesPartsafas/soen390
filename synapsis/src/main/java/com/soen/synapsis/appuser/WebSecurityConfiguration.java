@@ -1,7 +1,8 @@
 package com.soen.synapsis.appuser;
 
+import com.soen.synapsis.appuser.oauth.CustomOAuth2UserService;
+//import com.soen.synapsis.appuser.oauth.OAuth2LoginSuccessHandler;
 import com.soen.synapsis.utility.ExcludeFromGeneratedTestReport;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -17,10 +18,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private UserDetailsService userDetailsService;
+    private CustomOAuth2UserService oAuth2UserService;
 
-    @Autowired
-    public WebSecurityConfiguration(UserDetailsService userDetailsService) {
+    public WebSecurityConfiguration(UserDetailsService userDetailsService,
+                                    CustomOAuth2UserService oAuth2UserService) {
         this.userDetailsService = userDetailsService;
+        this.oAuth2UserService = oAuth2UserService;
     }
 
     @Bean
@@ -39,10 +42,19 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/privateuser").hasAuthority(Role.CANDIDATE.toString())
                 .antMatchers("/admin").hasAuthority(Role.ADMIN.toString())
                 .antMatchers("/**").permitAll()
+                .antMatchers("/oauth2/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
-                .formLogin().loginPage("/login").defaultSuccessUrl("/", true).usernameParameter("email")
+                .formLogin()
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/", true)
+                    .usernameParameter("email")
+                .and()
+                .oauth2Login()
+                    .loginPage("/login")
+                    .userInfoEndpoint().userService(oAuth2UserService)
+                    .and()
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/login");
     }
 }

@@ -1,6 +1,7 @@
 package com.soen.synapsis.unit.appuser;
 
 import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AuthProvider;
 import com.soen.synapsis.appuser.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ class AppUserTest {
     private String password;
     private String email;
     private Role role;
+    private AuthProvider authProvider;
 
     @BeforeEach
     void setUp() {
@@ -24,7 +26,8 @@ class AppUserTest {
         password = "1234";
         email = "joeunittest@mail.com";
         role = Role.CANDIDATE;
-        underTest = new AppUser(id, name, password, email, role);
+        authProvider = AuthProvider.LOCAL;
+        underTest = new AppUser(id, name, password, email, role, authProvider);
     }
 
     @Test
@@ -95,6 +98,20 @@ class AppUserTest {
         underTest.setRole(newRole);
 
         assertEquals(newRole, underTest.getRole());
+    }
+
+    @Test
+    void getAuthProvider() {
+        assertEquals(authProvider, underTest.getAuthProvider());
+    }
+
+    @Test
+    void setAuthProvider() {
+        AuthProvider newAuthProvider = AuthProvider.GOOGLE;
+
+        underTest.setAuthProvider(newAuthProvider);
+
+        assertEquals(newAuthProvider, underTest.getAuthProvider());
     }
 
     @Test

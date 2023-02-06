@@ -3,6 +3,7 @@ package com.soen.synapsis.appuser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.Optional;
 
@@ -20,6 +21,10 @@ public class AppUserService {
 
     public Optional<AppUser> getAppUser(Long id) {
         return appUserRepository.findById(id);
+    }
+
+    public AppUser getAppUser(String email) {
+        return appUserRepository.findByEmail(email);
     }
 
     public String signUpUser(AppUser appUser) {
