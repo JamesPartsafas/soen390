@@ -1,6 +1,5 @@
 package com.soen.synapsis.appuser.registration;
 
-import com.soen.synapsis.appuser.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 public class RegistrationController {
 
     private RegistrationService registrationService;
-    private AppUserRepository appUserRepository;
 
     @Autowired
     public RegistrationController(RegistrationService registrationService) {
