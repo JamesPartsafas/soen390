@@ -14,7 +14,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import static org.powermock.api.mockito.PowerMockito.when;
 
 import javax.servlet.http.HttpServletRequest;
 
