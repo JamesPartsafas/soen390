@@ -14,11 +14,16 @@
                         'black': '#1d2228',
                         'black-variant': '#3c4653',
                         'grey': '#8f949b',
+                        'light-50': '#f0f1f1',
                         'light': '#e1e2e2'
                     },
                     fontFamily: {
                         sans: ['Merriweather Sans', 'sans-serif'],
                         serif: ['Catamaran', 'serif'],
+                    },
+                    gridTemplateRows: {
+                        '20': 'repeat(20, minmax(0, 1fr))',
+                        'span-7': 'span 7 / span 7'
                     }
                 }
 
@@ -27,7 +32,7 @@
     </script>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
-<body>
+<body class="overflow-x-hidden">
 <div th:replace="fragments/navbar :: navbar"></div>
 <div layout:fragment="content">
     Some content
