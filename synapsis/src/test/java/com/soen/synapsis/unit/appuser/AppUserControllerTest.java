@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 
 import java.util.Optional;
@@ -64,5 +65,25 @@ class AppUserControllerTest {
         String expected = "This is the admin page";
 
         assertEquals(expected, underTest.getAdminData());
+    }
+
+    @Test
+    void isCompanyForSetCandidateToRecruiter() {
+        AppUser loggedInAppUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.COMPANY);
+        AppUserDetails appUserDetails = new AppUserDetails(loggedInAppUser);
+
+        String returnValue = underTest.markCandidateToRecruiter(loggedInAppUser, appUserDetails);
+
+        assertEquals("pages/userpage", returnValue);
+    }
+
+    @Test
+    void isNotCompanyForSetCandidateToRecruiter() {
+        AppUser loggedInAppUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.CANDIDATE);
+        AppUserDetails appUserDetails = new AppUserDetails(loggedInAppUser);
+
+        String returnValue = underTest.markCandidateToRecruiter(loggedInAppUser, appUserDetails);
+
+        assertEquals("You must be a company to mark candidates as recruiters.", returnValue);
     }
 }

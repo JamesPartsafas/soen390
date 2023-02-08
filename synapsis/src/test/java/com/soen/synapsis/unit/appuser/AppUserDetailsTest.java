@@ -66,4 +66,9 @@ public class AppUserDetailsTest {
     void isEnabledReturnsTrue() {
         assertTrue(underTest.isEnabled());
     }
+
+    @Test
+    void getRoleReturnsRole() {
+        assertEquals(role, underTest.getRole());
+    }
 }

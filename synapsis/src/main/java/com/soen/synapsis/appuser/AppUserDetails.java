@@ -50,4 +50,8 @@ public class AppUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public Role getRole() {
+        return appUser.getRole();
+    }
 }
