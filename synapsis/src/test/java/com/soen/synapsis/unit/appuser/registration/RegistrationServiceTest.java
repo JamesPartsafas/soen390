@@ -2,10 +2,12 @@ package com.soen.synapsis.unit.appuser.registration;
 
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AppUserService;
+import com.soen.synapsis.appuser.AuthProvider;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.registration.EmailValidator;
 import com.soen.synapsis.appuser.registration.RegistrationRequest;
 import com.soen.synapsis.appuser.registration.RegistrationService;
+import com.soen.synapsis.utility.Constants;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,8 +17,7 @@ import org.mockito.MockitoAnnotations;
 
 import static com.soen.synapsis.utility.Constants.MIN_PASSWORD_LENGTH;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 class RegistrationServiceTest {
 
@@ -87,5 +88,29 @@ class RegistrationServiceTest {
 
         assertThrows(IllegalStateException.class,
                 () -> underTest.register(request), expectedMessage);
+    }
+
+    @Test
+    void ssoRetrievalReturnsFoundUser() {
+        String email = "joe@mail.com";
+        when(appUserService.getAppUser(email)).thenReturn(new AppUser("joe", "1234", email, Role.CANDIDATE));
+
+        AppUser retrievedUser = underTest.retrieveSSOUserOrRegisterIfNotExists("joe", email);
+
+        assertNotNull(retrievedUser);
+    }
+
+    @Test
+    void ssoRegisterSuccessfullyInsertsNewUser() {
+        String name = "joe";
+        String email = "joe@mail.com";
+
+        AppUser createdUser = underTest.retrieveSSOUserOrRegisterIfNotExists(name, email);
+
+        assertEquals(name, createdUser.getName());
+        assertEquals(Constants.SSO_PASSWORD, createdUser.getPassword());
+        assertEquals(email, createdUser.getEmail());
+        assertEquals(Role.CANDIDATE, createdUser.getRole());
+        assertEquals(AuthProvider.GOOGLE, createdUser.getAuthProvider());
     }
 }

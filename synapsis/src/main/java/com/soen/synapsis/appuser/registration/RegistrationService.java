@@ -2,7 +2,10 @@ package com.soen.synapsis.appuser.registration;
 
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AppUserService;
+import com.soen.synapsis.appuser.AuthProvider;
 import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.appuser.oauth.CustomOAuth2User;
+import com.soen.synapsis.utility.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +44,21 @@ public class RegistrationService {
                 new AppUser(request.getName(),
                         request.getPassword(),
                         request.getEmail(),
-                        requestedRole)
+                        requestedRole,
+                        AuthProvider.LOCAL)
         );
+    }
+
+    public AppUser retrieveSSOUserOrRegisterIfNotExists(String name, String email) {
+        AppUser retrievedUser = appUserService.getAppUser(email);
+        if (retrievedUser != null) {
+            return retrievedUser;
+        }
+
+        //User does not exist. Create the account.
+        AppUser createdUser = new AppUser(name, Constants.SSO_PASSWORD, email, Role.CANDIDATE, AuthProvider.GOOGLE);
+        appUserService.signUpUser(createdUser);
+
+        return createdUser;
     }
 }

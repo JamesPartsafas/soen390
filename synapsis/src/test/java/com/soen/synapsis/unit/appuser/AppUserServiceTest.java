@@ -44,6 +44,15 @@ public class AppUserServiceTest {
     }
 
     @Test
+    void getAppUserByEmailReturnsUser() {
+        String email = "joe@mail.com";
+
+        AppUser appUser = underTest.getAppUser(email);
+
+        verify(appUserRepository, times(1)).findByEmail(email);
+    }
+
+    @Test
     void signUpUserWithUniqueEmail() {
         String email = "joeman@mail.com";
         AppUser appUser = new AppUser("Joe Man", "1234", email, Role.CANDIDATE);
