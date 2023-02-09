@@ -1,16 +1,12 @@
 package com.soen.synapsis.appuser.registration;
 
-import com.soen.synapsis.index.IndexController;
+import com.soen.synapsis.appuser.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,7 +22,7 @@ public class RegistrationController {
 
     @GetMapping("/register")
     public String register(Model model) {
-        if (isUserAuthenticated())
+        if (AppUser.isUserAuthenticated())
             return "redirect:/";
 
         model.addAttribute("registrationRequest", new RegistrationRequest());
@@ -39,7 +35,7 @@ public class RegistrationController {
                            BindingResult bindingResult,
                            HttpServletRequest servlet,
                            Model model) {
-        if (isUserAuthenticated())
+        if (AppUser.isUserAuthenticated())
             return "redirect:/";
 
         try {
@@ -51,8 +47,7 @@ public class RegistrationController {
             servlet.login(request.getEmail(), request.getPassword());
 
             return response;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             model.addAttribute("error", "There was an error registering you. " + e.getMessage());
             return register(model);
         }
@@ -60,7 +55,7 @@ public class RegistrationController {
 
     @GetMapping("/login")
     public String viewLoginPage() {
-        if (isUserAuthenticated())
+        if (AppUser.isUserAuthenticated())
             return "redirect:/";
 
         return "pages/login";
@@ -69,14 +64,5 @@ public class RegistrationController {
     @GetMapping("/logout")
     public String viewLogoutPage() {
         return "pages/logout";
-    }
-
-    private boolean isUserAuthenticated() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (auth == null || auth instanceof AnonymousAuthenticationToken)
-            return false;
-
-        return true;
     }
 }
