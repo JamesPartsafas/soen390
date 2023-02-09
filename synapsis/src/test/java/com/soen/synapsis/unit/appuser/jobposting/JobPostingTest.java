@@ -43,7 +43,7 @@ class JobPostingTest {
 
     @Test
     void getPosition() {
-        assertEquals(position, undertest.getPosition();
+        assertEquals(position, undertest.getPosition());
     }
 
     @Test
