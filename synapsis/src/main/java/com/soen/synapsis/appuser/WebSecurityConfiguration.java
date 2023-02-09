@@ -40,6 +40,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         httpSecurity.authorizeRequests()
                 .antMatchers("/privateuser").hasAuthority(Role.CANDIDATE.toString())
                 .antMatchers("/admin").hasAuthority(Role.ADMIN.toString())
+                .antMatchers("/admincreationpage").hasAuthority(Role.ADMIN.toString())
+                .antMatchers("/passwordresetpage").authenticated()
                 .antMatchers("/**").permitAll()
                 .antMatchers("/oauth2/**").permitAll()
                 .anyRequest()
@@ -54,6 +56,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .loginPage("/login")
                     .userInfoEndpoint().userService(oAuth2UserService)
                     .and()
-                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/login");
+                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/login")
+                .and().exceptionHandling().accessDeniedPage("/accessDenied");
+
     }
 }
