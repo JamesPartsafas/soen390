@@ -58,15 +58,7 @@
 
                 <hr class="mt-3 text-black">
 
-                <a class="mt-5 h-14 bg-facebook-blue rounded-md drop-shadow-md">
-                    <div class="mt-4">
-                        <img class="ml-3 mb-1 w-6 h-6 inline" src="/assets/facebook-logo.png">
-                        <div class="ml-2 mr-3 text-center text-white text-xl font-serif font-normal inline">Sign In with
-                            Facebook
-                        </div>
-                    </div>
-                </a>
-                <a class="mt-5 h-14 bg-white rounded-md drop-shadow-md">
+                <a th:href="@{/oauth2/authorization/google}" class="mt-5 h-14 bg-white rounded-md drop-shadow-md">
                     <div class="mt-4">
                         <img class="ml-3 mb-1 w-6 h-6 inline" src="/assets/google-logo.png">
                         <div class="ml-2 mr-3 text-center text-black text-xl font-serif font-normal inline">Sign In with
@@ -74,14 +66,7 @@
                         </div>
                     </div>
                 </a>
-                <a class="mt-5 h-14 bg-true-black rounded-md drop-shadow-md">
-                    <div class="mt-4">
-                        <img class="ml-4 mb-2 w-5 h-6 inline" src="/assets/apple-logo.png">
-                        <div class="ml-2 mr-3 text-center text-white text-xl font-serif font-normal inline">Sign In with
-                            Apple
-                        </div>
-                    </div>
-                </a>
+
                 <div class="mt-5 mb-4 text-black font-serif font-normal text-base ">
                     Don't have an account? <a class="text-primary">Click here</a>
                 </div>

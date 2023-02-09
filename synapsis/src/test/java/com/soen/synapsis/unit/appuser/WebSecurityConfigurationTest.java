@@ -3,6 +3,7 @@ package com.soen.synapsis.unit.appuser;
 import com.soen.synapsis.appuser.AppUserDetailsService;
 import com.soen.synapsis.appuser.AppUserRepository;
 import com.soen.synapsis.appuser.WebSecurityConfiguration;
+import com.soen.synapsis.appuser.oauth.CustomOAuth2UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,11 +20,13 @@ class WebSecurityConfigurationTest {
     private AutoCloseable autoCloseable;
     @Mock
     private AppUserDetailsService appUserDetailsService;
+    @Mock
+    private CustomOAuth2UserService customOAuth2UserService;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new WebSecurityConfiguration(appUserDetailsService);
+        underTest = new WebSecurityConfiguration(appUserDetailsService, customOAuth2UserService);
     }
 
     @AfterEach

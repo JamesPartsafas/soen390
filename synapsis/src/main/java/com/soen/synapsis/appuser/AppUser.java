@@ -15,7 +15,7 @@ public class AppUser {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private String password;
 
     @Column(unique = true, nullable = false)
@@ -25,22 +25,35 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    protected AppUser() {
-    }
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider;
 
-    public AppUser(Long id, String name, String password, String email, Role role) {
+    protected AppUser() {}
+
+    public AppUser(Long id, String name, String password, String email, Role role, AuthProvider authProvider) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.email = email;
         this.role = role;
+        this.authProvider = authProvider;
     }
 
-    public AppUser(String name, String password, String email, Role role) {
+    public AppUser(Long id, String name, String password, String email, Role role) {
+        this(id, name, password, email, role, AuthProvider.LOCAL);
+    }
+
+    public AppUser(String name, String password, String email, Role role, AuthProvider authProvider) {
         this.name = name;
         this.password = password;
         this.email = email;
         this.role = role;
+        this.authProvider = authProvider;
+    }
+
+    public AppUser(String name, String password, String email, Role role) {
+        this(name, password, email, role, AuthProvider.LOCAL);
     }
 
     public Long getId() {
@@ -92,6 +105,14 @@ public class AppUser {
         return true;
     }
 
+    public AuthProvider getAuthProvider() {
+        return authProvider;
+    }
+
+    public void setAuthProvider(AuthProvider authProvider) {
+        this.authProvider = authProvider;
+    }
+
     @Override
     public String toString() {
         return "AppUser{" +
@@ -99,6 +120,7 @@ public class AppUser {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", role=" + role +
+                ", authProvider=" + authProvider +
                 '}';
     }
 }

@@ -19,4 +19,22 @@ class IndexServiceTest {
 
         assertEquals(expected, underTest.getHomePage());
     }
+
+    @Test
+    void getAdminPage() {
+        String expected = "pages/adminCreationPage";
+        assertEquals(expected, underTest.getAdminPage());
+    }
+
+    @Test
+    void getAccessDeniedPage(){
+        String expected = "pages/accessDenied";
+        assertEquals(expected, underTest.getAccessDeniedPage());
+    }
+
+    @Test
+    void getPasswordResetPage(){
+        String expected = "pages/passwordResetForm";
+        assertEquals(expected, underTest.getPasswordResetPage());
+    }
 }
