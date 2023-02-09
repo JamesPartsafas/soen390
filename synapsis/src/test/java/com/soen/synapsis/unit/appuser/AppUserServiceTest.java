@@ -76,4 +76,33 @@ public class AppUserServiceTest {
                 () -> underTest.signUpUser(appUser),
                 "This email is already taken.");
     }
+
+    @Test
+    void markCandidateToRecruiterSucceeds() {
+        AppUser appUserCandidate = new AppUser(1L, "Joe Man", "1234", "joecandidate@mail.com", Role.CANDIDATE);
+        AppUser appUserCompany = new AppUser(2L, "Joe Man", "1234", "joecompany@mail.com", Role.COMPANY);
+        AppUserDetails loggedInAppUser = new AppUserDetails(appUserCompany);
+        appUserRepository.save(appUserCandidate);
+        appUserRepository.save(appUserCompany);
+
+        underTest.markCandidateToRecruiter(appUserCandidate, loggedInAppUser);
+
+        assertEquals(Role.RECRUITER, appUserCandidate.getRole());
+        assertEquals(loggedInAppUser.getId(),appUserCandidate.getCompanyId());
+    }
+
+    @Test
+    void markCandidateToRecruiterFails() {
+        AppUser appUserNotCandidate = new AppUser(1L, "Joe Man", "1234", "joecompany@mail.com", Role.COMPANY);
+        AppUser appUserCompany = new AppUser(2L, "Joe Man", "1234", "joecompany@mail.com", Role.COMPANY);
+        AppUserDetails loggedInAppUser = new AppUserDetails(appUserCompany);
+        appUserRepository.save(appUserNotCandidate);
+        appUserRepository.save(appUserCompany);
+
+        assertThrows(IllegalStateException.class,
+                () -> underTest.markCandidateToRecruiter(appUserNotCandidate, loggedInAppUser),
+                "The user must be a candidate to be marked as a recruiter.");
+
+
+    }
 }

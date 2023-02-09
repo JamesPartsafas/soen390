@@ -1,12 +1,10 @@
 package com.soen.synapsis.appuser;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -46,5 +44,20 @@ public class AppUserController {
     @ResponseBody
     public String getAdminData() {
         return "This is the admin page";
+    }
+
+    @PutMapping("/company/setCandidateToRecruiter")
+    @ResponseBody
+    public String markCandidateToRecruiter(AppUser appUser, @AuthenticationPrincipal AppUserDetails loggedApplicationUser) {
+        if(loggedApplicationUser.getRole() != Role.COMPANY) {
+            return "You must be a company to mark candidates as recruiters.";
+        }
+        try {
+            appUserService.markCandidateToRecruiter(appUser, loggedApplicationUser);
+        }
+        catch(IllegalStateException e) {
+            return e.getMessage();
+        }
+        return "pages/userpage";
     }
 }
