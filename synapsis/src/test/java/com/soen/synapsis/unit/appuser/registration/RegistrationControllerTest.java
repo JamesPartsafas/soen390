@@ -1,14 +1,10 @@
 package com.soen.synapsis.unit.appuser.registration;
 
-import com.soen.synapsis.appuser.AppUserController;
-import com.soen.synapsis.appuser.AppUserService;
-import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.appuser.*;
 import com.soen.synapsis.appuser.registration.RegistrationController;
 import com.soen.synapsis.appuser.registration.RegistrationRequest;
 import com.soen.synapsis.appuser.registration.RegistrationService;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -17,8 +13,10 @@ import org.springframework.validation.BindingResult;
 
 import javax.servlet.http.HttpServletRequest;
 
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
 
 class RegistrationControllerTest {
 
@@ -27,10 +25,12 @@ class RegistrationControllerTest {
     private AutoCloseable autoCloseable;
     private RegistrationController underTest;
 
+
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
         underTest = new RegistrationController(registrationService);
+
     }
 
     @AfterEach
@@ -75,9 +75,15 @@ class RegistrationControllerTest {
     }
 
     @Test
+    void viewRegisterAdminPage() {
+        String returnedPage = underTest.registerAdmin(Mockito.mock(Model.class));
+        assertEquals(null, returnedPage);
+    }
+
+
+    @Test
     void viewLoginPage() {
         String returnedPage = underTest.viewLoginPage();
-
         assertEquals("pages/login", returnedPage);
     }
 
@@ -86,5 +92,30 @@ class RegistrationControllerTest {
         String returnedPage = underTest.viewLogoutPage();
 
         assertEquals("pages/logout", returnedPage);
+    }
+
+    @Test
+    void sendValidPasswordResetInfo() throws Exception {
+        RegistrationRequest request = new RegistrationRequest("joe", "joeadmin@mail.com", "1234", Role.ADMIN);
+        BindingResult bindingResult = mock(BindingResult.class);
+        underTest.passwordReset(request,
+                bindingResult,
+                Mockito.mock(Model.class));
+
+        verify(registrationService).updateUserPassword(request);
+    }
+
+    @Test
+    void sendPasswordResetInfoWithBindingError(){
+        RegistrationRequest request = new RegistrationRequest("joe", "joeadmin@gmail.com", "1234", Role.ADMIN);
+        Model model = mock(Model.class);
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(true);
+
+        underTest.registerAdmin(request,
+                bindingResult,
+                model);
+
+        verify(model).addAttribute(anyString(), anyString());
     }
 }

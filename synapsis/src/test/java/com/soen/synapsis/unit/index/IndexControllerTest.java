@@ -40,4 +40,23 @@ class IndexControllerTest {
 
         verify(indexService).getHomePage();
     }
+
+    @Test
+    void getAdminPage() {
+        underTest.getAdminPage(model);
+        verify(indexService).getAdminPage();
+    }
+
+    @Test
+    void getPasswordResetPage() {
+        underTest.getPasswordResetPage(model);
+        verify(indexService).getPasswordResetPage();
+    }
+
+    @Test
+    void getAccessDeniedPage() {
+        underTest.getAccessDeniedPage(model);
+        verify(indexService).getAccessDeniedPage();
+    }
+
 }

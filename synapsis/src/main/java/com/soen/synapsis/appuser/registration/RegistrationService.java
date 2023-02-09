@@ -61,4 +61,37 @@ public class RegistrationService {
 
         return createdUser;
     }
+
+    public String registerAdmin(RegistrationRequest request) {
+        boolean isValidEmail = emailValidator.validateEmail(request.getEmail());
+
+        if (!isValidEmail) {
+            throw new IllegalStateException("The provided email is not valid.");
+        }
+
+        if (request.getPassword().length() < MIN_PASSWORD_LENGTH) {
+            throw new IllegalStateException("The chosen password must be at least " + MIN_PASSWORD_LENGTH + " characters long.");
+        }
+
+        return appUserService.signUpAdmin(
+                new AppUser(request.getName(),
+                        request.getPassword(),
+                        request.getEmail(),
+                        Role.ADMIN)
+        );
+    }
+
+    public String updateUserPassword(RegistrationRequest request){
+        boolean isValidEmail = emailValidator.validateEmail(request.getEmail());
+
+        if (!isValidEmail) {
+            throw new IllegalStateException("The provided email is not valid.");
+        }
+        if (request.getPassword().length() < MIN_PASSWORD_LENGTH) {
+            throw new IllegalStateException("The chosen password must be at least " + MIN_PASSWORD_LENGTH + " characters long.");
+        }
+
+        return appUserService.updatePassword(request.getEmail(), request.getPassword());
+
+    }
 }

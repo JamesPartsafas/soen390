@@ -113,4 +113,57 @@ class RegistrationServiceTest {
         assertEquals(Role.CANDIDATE, createdUser.getRole());
         assertEquals(AuthProvider.GOOGLE, createdUser.getAuthProvider());
     }
+
+    @Test
+    void registerValidAdmin() {
+        String email = "joeadmin@mail.com";
+        String name = "joe admin";
+        String password = "123456789";
+        Role role = Role.ADMIN;
+        RegistrationRequest request = new RegistrationRequest(name, email, password, role);
+
+        underTest.registerAdmin(request);
+
+        verify(appUserService, times(1))
+                .signUpAdmin(Mockito.any(AppUser.class));
+    }
+
+    @Test
+    void throwOnInvalidAdminEmail() {
+        String email = "joemail.com";
+        String name = "joe";
+        String password = "12345678";
+        Role role = Role.ADMIN;
+        RegistrationRequest request = new RegistrationRequest(name, email, password, role);
+        String expectedMessage = "The provided email is not valid.";
+
+        assertThrows(IllegalStateException.class,
+                () -> underTest.registerAdmin(request), expectedMessage);
+    }
+
+    @Test
+    void throwOnInvalidAdminPassword() {
+        String email = "joemail.com";
+        String name = "joe";
+        String password = "1234";
+        Role role = Role.ADMIN;
+        RegistrationRequest request = new RegistrationRequest(name, email, password, role);
+        String expectedMessage = "The chosen password must be at least " + MIN_PASSWORD_LENGTH + " characters long.";
+
+        assertThrows(IllegalStateException.class,
+                () -> underTest.registerAdmin(request), expectedMessage);
+    }
+    @Test
+    void updateUserPasswordTest() {
+        String email = "joe@mail.com";
+        String name="Joe";
+        String password = "12345678";
+        Role role = Role.CANDIDATE;
+        RegistrationRequest request = new RegistrationRequest(name, email, password, role);
+
+        underTest.updateUserPassword(request);
+
+        verify(appUserService, times(1))
+                .updatePassword(request.getEmail(), request.getPassword());
+    }
 }
