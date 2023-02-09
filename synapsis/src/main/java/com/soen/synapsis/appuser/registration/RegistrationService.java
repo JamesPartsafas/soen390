@@ -60,6 +60,8 @@ public class RegistrationService {
         appUserService.signUpUser(createdUser);
 
         return createdUser;
+    }
+
     public String registerAdmin(RegistrationRequest request) {
         boolean isValidEmail = emailValidator.validateEmail(request.getEmail());
 

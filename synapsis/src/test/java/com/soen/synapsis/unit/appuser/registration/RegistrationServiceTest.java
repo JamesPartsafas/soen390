@@ -112,6 +112,9 @@ class RegistrationServiceTest {
         assertEquals(email, createdUser.getEmail());
         assertEquals(Role.CANDIDATE, createdUser.getRole());
         assertEquals(AuthProvider.GOOGLE, createdUser.getAuthProvider());
+    }
+
+    @Test
     void registerValidAdmin() {
         String email = "joeadmin@mail.com";
         String name = "joe admin";

@@ -96,23 +96,23 @@ public class RegistrationController {
     @GetMapping("/passwordreset")
     public String passwordReset(Model model) {
 
-        model.addAttribute("registrationRequest", new RegistrationRequest());
+            model.addAttribute("registrationRequest", new RegistrationRequest());
 
-        return "pages/passwordResetForm";
+            return "pages/passwordResetForm";
+
     }
 
     @PostMapping("/passwordreset")
     public String passwordReset(RegistrationRequest request,
                                 BindingResult bindingResult,
                                 Model model) {
-
         try {
             if (bindingResult.hasErrors()) {
                 throw new Exception();
             }
 
-            String response = registrationService.updateUserPassword(request);
-            return response;
+                String response = registrationService.updateUserPassword(request);
+                return response;
         }
         catch (Exception e) {
             model.addAttribute("error", "There was an error resetting your password. " + e.getMessage());
