@@ -43,13 +43,13 @@ public class AppUserService {
     }
 
 
-    public void markCandidateToRecruiter(AppUser appUser, @AuthenticationPrincipal AppUserDetails loggedApplicationUser) {
+    public void markCandidateToRecruiter(AppUser appUser, @AuthenticationPrincipal AppUserDetails companyUser) {
 
         if(appUser.getRole() != Role.CANDIDATE) {
             throw new IllegalStateException("The user must be a candidate to be marked as a recruiter.");
         }
         appUser.setRole(Role.RECRUITER);
-        appUser.setCompanyId(loggedApplicationUser.getId());
+        appUser.setCompanyId(companyUser.getId());
         appUserRepository.save(appUser);
 
     }

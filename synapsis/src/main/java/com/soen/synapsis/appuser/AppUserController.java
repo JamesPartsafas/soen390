@@ -48,12 +48,12 @@ public class AppUserController {
 
     @PutMapping("/company/setCandidateToRecruiter")
     @ResponseBody
-    public String markCandidateToRecruiter(AppUser appUser, @AuthenticationPrincipal AppUserDetails loggedApplicationUser) {
-        if(loggedApplicationUser.getRole() != Role.COMPANY) {
+    public String markCandidateToRecruiter(AppUser appUser, @AuthenticationPrincipal AppUserDetails companyUser) {
+        if(companyUser.getRole() != Role.COMPANY) {
             return "You must be a company to mark candidates as recruiters.";
         }
         try {
-            appUserService.markCandidateToRecruiter(appUser, loggedApplicationUser);
+            appUserService.markCandidateToRecruiter(appUser, companyUser);
         }
         catch(IllegalStateException e) {
             return e.getMessage();
