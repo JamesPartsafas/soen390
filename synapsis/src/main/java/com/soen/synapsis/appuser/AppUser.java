@@ -25,6 +25,9 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 
+    @Column
+    private Long companyId;
+
     protected AppUser() {}
 
     public AppUser(Long id, String name, String password, String email, Role role, AuthProvider authProvider) {
@@ -34,6 +37,7 @@ public class AppUser {
         this.email = email;
         this.role = role;
         this.authProvider = authProvider;
+        this.companyId = null;
     }
 
     public AppUser(Long id, String name, String password, String email, Role role) {
@@ -46,6 +50,7 @@ public class AppUser {
         this.email = email;
         this.role = role;
         this.authProvider = authProvider;
+        this.companyId = null;
     }
 
     public AppUser(String name, String password, String email, Role role) {
@@ -98,6 +103,14 @@ public class AppUser {
 
     public void setAuthProvider(AuthProvider authProvider) {
         this.authProvider = authProvider;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     @Override
