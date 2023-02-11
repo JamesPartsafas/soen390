@@ -1,5 +1,9 @@
 package com.soen.synapsis.appuser;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import javax.persistence.*;
 
 @Entity
@@ -95,6 +99,15 @@ public class AppUser {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public static boolean isUserAuthenticated() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null || auth instanceof AnonymousAuthenticationToken)
+            return false;
+
+        return true;
     }
 
     public AuthProvider getAuthProvider() {

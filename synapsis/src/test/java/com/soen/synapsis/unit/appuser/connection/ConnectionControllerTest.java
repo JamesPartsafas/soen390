@@ -4,11 +4,13 @@ import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.connection.ConnectionController;
 import com.soen.synapsis.appuser.connection.ConnectionService;
+import com.soen.synapsis.utilities.SecurityUtilities;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,7 +30,17 @@ public class ConnectionControllerTest {
 
     @AfterEach
     void tearDown() throws Exception {
+        SecurityContextHolder.clearContext();
         autoCloseable.close();
+    }
+
+    @Test
+    void viewConnectionPage() {
+        SecurityUtilities.authenticateAnonymousUser();
+
+        String returnedPage = underTest.viewNetwork();
+
+        assertEquals("pages/network", returnedPage);
     }
 
     @Test
@@ -41,5 +53,4 @@ public class ConnectionControllerTest {
 
         assertEquals(null, returnedPage);
     }
-
 }
