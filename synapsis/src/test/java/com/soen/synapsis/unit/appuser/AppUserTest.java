@@ -3,11 +3,15 @@ package com.soen.synapsis.unit.appuser;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AuthProvider;
 import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.utilities.SecurityUtilities;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 class AppUserTest {
 
@@ -28,6 +32,11 @@ class AppUserTest {
         role = Role.CANDIDATE;
         authProvider = AuthProvider.LOCAL;
         underTest = new AppUser(id, name, password, email, role, authProvider);
+    }
+
+    @AfterEach
+    void tearDown() {
+        SecurityContextHolder.clearContext();
     }
 
     @Test
@@ -100,6 +109,7 @@ class AppUserTest {
         assertEquals(newRole, underTest.getRole());
     }
 
+
     @Test
     void getAuthProvider() {
         assertEquals(authProvider, underTest.getAuthProvider());
@@ -118,4 +128,16 @@ class AppUserTest {
     void testToString() {
         assertThat(underTest.toString()).isNotNull();
     }
+
+    @Test
+    void testIsUserAuthenticatedReturnsTrue() {
+        SecurityUtilities.authenticateAnonymousUser();
+        assertThat(AppUser.isUserAuthenticated()).isTrue();
+    }
+
+    @Test
+    void testIsUserAuthenticatedReturnsFalse() {
+        assertThat(AppUser.isUserAuthenticated()).isFalse();
+    }
+
 }
