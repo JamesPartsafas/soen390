@@ -38,6 +38,11 @@ public class AppUserDetailsTest {
     }
 
     @Test
+    void getIdReturnsId() {
+        assertEquals(appUser.getId(), underTest.getID());
+    }
+
+    @Test
     void getPasswordReturnsPassword() {
         assertEquals(password, underTest.getPassword());
     }

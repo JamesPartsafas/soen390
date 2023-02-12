@@ -1,6 +1,7 @@
 package com.soen.synapsis.unit.appuser.connection;
 
 import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AppUserRepository;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.connection.Connection;
 import com.soen.synapsis.appuser.connection.ConnectionKey;
@@ -25,6 +26,8 @@ public class ConnectionServiceTest {
     private ConnectionService underTest;
     @Mock
     private ConnectionRepository connectionRepository;
+    @Mock
+    private AppUserRepository appUserRepository;
     private AutoCloseable autoCloseable;
     private AppUser candidateUser1;
     private AppUser candidateUser2;
@@ -35,7 +38,7 @@ public class ConnectionServiceTest {
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new ConnectionService(connectionRepository);
+        underTest = new ConnectionService(connectionRepository, appUserRepository);
 
         candidateUser1 = new AppUser(1L, "Joe Man", "1234", "joeman@email.com", Role.CANDIDATE);
         candidateUser2 = new AppUser(2L,"Joe Woman", "1234", "joewoman@email.com", Role.CANDIDATE);
@@ -56,7 +59,7 @@ public class ConnectionServiceTest {
         ArgumentCaptor<Connection> connectionArgumentCaptor = ArgumentCaptor.forClass(Connection.class);
         verify(connectionRepository).save(connectionArgumentCaptor.capture());
 
-        assertEquals(null, returnValue);
+        assertEquals("pages/network", returnValue);
     }
 
     @Test
@@ -66,7 +69,7 @@ public class ConnectionServiceTest {
         ArgumentCaptor<Connection> connectionArgumentCaptor = ArgumentCaptor.forClass(Connection.class);
         verify(connectionRepository).save(connectionArgumentCaptor.capture());
 
-        assertEquals(null, returnValue);
+        assertEquals("pages/network", returnValue);
     }
 
     @Test
@@ -76,7 +79,7 @@ public class ConnectionServiceTest {
         ArgumentCaptor<Connection> connectionArgumentCaptor = ArgumentCaptor.forClass(Connection.class);
         verify(connectionRepository).save(connectionArgumentCaptor.capture());
 
-        assertEquals(null, returnValue);
+        assertEquals("pages/network", returnValue);
     }
 
     @Test
