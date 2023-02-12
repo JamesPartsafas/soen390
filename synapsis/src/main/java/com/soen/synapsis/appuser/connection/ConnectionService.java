@@ -1,6 +1,7 @@
 package com.soen.synapsis.appuser.connection;
 
 import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AppUserDetails;
 import com.soen.synapsis.appuser.AppUserRepository;
 import com.soen.synapsis.appuser.Role;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,9 @@ public class ConnectionService {
         this.appUserRepository = appUserRepository;
     }
 
-    public List<AppUser> getConnections(Long user_uid) {
-        List<Connection> connectionsRequesters = connectionRepository.findAcceptedConnectionsByRequesterID(user_uid);
-        List<Connection> connectionsReceivers = connectionRepository.findAcceptedConnectionsByReceiverID(user_uid);
+    public List<AppUser> getConnections(AppUserDetails appUser) {
+        List<Connection> connectionsRequesters = connectionRepository.findAcceptedConnectionsByRequesterID(appUser.getID());
+        List<Connection> connectionsReceivers = connectionRepository.findAcceptedConnectionsByReceiverID(appUser.getID());
 
         List<Long> allConnectionIDs = new ArrayList<>();
 

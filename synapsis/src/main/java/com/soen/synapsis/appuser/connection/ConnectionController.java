@@ -28,7 +28,7 @@ public class ConnectionController {
             return "redirect:/";
         }
 
-        List<AppUser> connections = connectionService.getConnections(user.getID());
+        List<AppUser> connections = connectionService.getConnections(user);
 
         model.addAttribute("connections", connections);
 
