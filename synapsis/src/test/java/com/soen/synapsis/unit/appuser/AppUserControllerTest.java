@@ -69,21 +69,40 @@ class AppUserControllerTest {
 
     @Test
     void isCompanyForSetCandidateToRecruiter() {
-        AppUser loggedInAppUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.COMPANY);
-        AppUserDetails appUserDetails = new AppUserDetails(loggedInAppUser);
+        AppUser companyUser = new AppUser(1L, "Joe Man", "1234", "joecompany@mail.com", Role.COMPANY);
+        AppUser candidateUser = new AppUser(2L, "Joe Man", "1234", "joecandidate@mail.com", Role.CANDIDATE);
 
-        String returnValue = underTest.markCandidateToRecruiter(loggedInAppUser, appUserDetails);
+        String returnValue = underTest.markCandidateToRecruiter(candidateUser, companyUser);
 
         assertEquals("pages/userpage", returnValue);
     }
 
     @Test
     void isNotCompanyForSetCandidateToRecruiter() {
-        AppUser loggedInAppUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.CANDIDATE);
-        AppUserDetails appUserDetails = new AppUserDetails(loggedInAppUser);
+        AppUser notCompanyUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.RECRUITER);
+        AppUser candidateUser = new AppUser(2L, "Joe Man", "1234", "joecandidate@mail.com", Role.CANDIDATE);
 
-        String returnValue = underTest.markCandidateToRecruiter(loggedInAppUser, appUserDetails);
+        String returnValue = underTest.markCandidateToRecruiter(candidateUser, notCompanyUser);
 
         assertEquals("You must be a company to mark candidates as recruiters.", returnValue);
+    }
+    @Test
+    void isCompanyForSetRecruiterToCandidate() {
+        AppUser companyUser = new AppUser(1L, "Joe Man", "1234", "joecompany@mail.com", Role.COMPANY);
+        AppUser recruiterUser = new AppUser(2L, "Joe Man", "1234", "joerecruiter@mail.com", Role.RECRUITER);
+
+        String returnValue = underTest.unmarkRecruiterToCandidate(recruiterUser, companyUser);
+
+        assertEquals("pages/userpage", returnValue);
+    }
+
+    @Test
+    void isNotCompanyForSetRecruiterToCandidate() {
+        AppUser notCompanyUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.RECRUITER);
+        AppUser recruiterUser = new AppUser(2L, "Joe Man", "1234", "joecandidate@mail.com", Role.RECRUITER);
+
+        String returnValue = underTest.unmarkRecruiterToCandidate(recruiterUser, notCompanyUser);
+
+        assertEquals("You must be a company to unmark recruiters as candidates.", returnValue);
     }
 }

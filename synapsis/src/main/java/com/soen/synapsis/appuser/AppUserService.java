@@ -43,17 +43,19 @@ public class AppUserService {
     }
 
 
-    public void markCandidateToRecruiter(AppUser appUser, @AuthenticationPrincipal AppUserDetails companyUser) {
+    public void markCandidateToRecruiter(AppUser appUser, @AuthenticationPrincipal AppUser companyUser) {
 
         if(appUser.getRole() != Role.CANDIDATE) {
             throw new IllegalStateException("The user must be a candidate to be marked as a recruiter.");
         }
         appUser.setRole(Role.RECRUITER);
-        appUser.setCompanyId(companyUser.getId());
+        appUser.setCompany(companyUser);
+        companyUser.setRecruiter(appUser);
         appUserRepository.save(appUser);
+        appUserRepository.save(companyUser);
 
     }
-    
+
     public String signUpAdmin(AppUser appUser) {
         boolean appUserExists = appUserRepository.findByEmail(appUser.getEmail()) != null;
 
@@ -79,5 +81,17 @@ public class AppUserService {
         else{
             throw new IllegalStateException("This email does not belong to any user.");
         }
+    }
+    public void unmarkRecruiterToCandidate(AppUser appUser, @AuthenticationPrincipal AppUser companyUser) {
+
+        if(appUser.getRole() != Role.RECRUITER) {
+            throw new IllegalStateException("The user must be a recruiter to be unmark as a candidate.");
+        }
+        appUser.setRole(Role.CANDIDATE);
+        appUser.setCompany(null);
+        companyUser.setRecruiter(appUser);
+        appUserRepository.save(appUser);
+        appUserRepository.save(companyUser);
+
     }
 }
