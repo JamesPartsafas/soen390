@@ -1,6 +1,7 @@
 package com.soen.synapsis.unit.appuser.connection;
 
 import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AppUserDetails;
 import com.soen.synapsis.appuser.AppUserRepository;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.connection.Connection;
@@ -14,6 +15,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -111,6 +115,28 @@ public class ConnectionServiceTest {
         assertThrows(IllegalStateException.class,
                 () -> underTest.makeConnection(candidateUser1, candidateUser2),
                 "Connection has already been made.");
+    }
+
+    @Test
+    void getConnections() {
+        AppUserDetails appUserDetails = new AppUserDetails(candidateUser1);
+        ConnectionKey connectionKey = new ConnectionKey(candidateUser1.getId(), candidateUser2.getId());
+        Connection connection = new Connection(connectionKey, candidateUser1, candidateUser2, false);
+
+        List<Connection> allConnectionsIDs = new ArrayList<>();
+        allConnectionsIDs.add(connection);
+        List<AppUser> allConnections = new ArrayList<>();
+        allConnections.add(candidateUser2);
+
+        given(connectionRepository.findAcceptedConnectionsByRequesterID(Mockito.any(Long.class))).willReturn(allConnectionsIDs);
+        given(appUserRepository.getReferenceById(Mockito.any(Long.class))).willReturn(candidateUser2);
+
+        List<AppUser> returnValue = underTest.getConnections(appUserDetails);
+
+        verify(connectionRepository).findAcceptedConnectionsByRequesterID(candidateUser1.getId());
+        verify(connectionRepository).findAcceptedConnectionsByReceiverID(candidateUser1.getId());
+
+        assertEquals(allConnections, returnValue);
     }
 
 }
