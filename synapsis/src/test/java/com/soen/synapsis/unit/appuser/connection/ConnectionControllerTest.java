@@ -1,6 +1,7 @@
 package com.soen.synapsis.unit.appuser.connection;
 
 import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AppUserDetails;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.connection.ConnectionController;
 import com.soen.synapsis.appuser.connection.ConnectionService;
@@ -36,9 +37,11 @@ public class ConnectionControllerTest {
 
     @Test
     void viewConnectionPage() {
+        AppUser loggedInAppUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.CANDIDATE);
+        AppUserDetails appUserDetails = new AppUserDetails(loggedInAppUser);
         SecurityUtilities.authenticateAnonymousUser();
 
-        String returnedPage = underTest.viewNetwork();
+        String returnedPage = underTest.viewNetwork(appUserDetails, mock(Model.class));
 
         assertEquals("pages/network", returnedPage);
     }

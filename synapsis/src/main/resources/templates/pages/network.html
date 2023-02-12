@@ -11,7 +11,7 @@
                     <div class="flex-initial font-sans text-xl font-light w-40 ml-2">All
                         Connections
                     </div>
-                    <div class="flex-none font-sans text-xl font-light w-8 text-right">1</div>
+                    <div class="flex-none font-sans text-xl font-light w-8 text-right" th:text="${connections.size()}"></div>
                 </a>
                 <a href="#" class="flex flex-row justify-between items-center mt-3">
                     <i class="flex-none h-1 w-8 fa-solid fa-envelope fa-lg"></i>
@@ -39,6 +39,7 @@
                     Connections Requests
                 </div>
                 <div class="overflow-x-auto whitespace-nowrap h-80">
+
                     <div class="inline-block rounded-2xl shadow w-56 h-72 bg-white mt-4 mr-4">
                         <img class="w-56 h-40 rounded-t-2xl">
                         <div class="font-sans text-base font-light mt-2 ml-4">Tanya Leduc</div>
@@ -93,9 +94,9 @@
                     Connections
                 </div>
                 <div class="overflow-x-auto whitespace-nowrap h-80">
-                    <div class="inline-block rounded-2xl shadow w-56 h-72 bg-white mt-4 mr-4">
-                        <img class="w-56 h-40 rounded-t-2xl">
-                        <div class="font-sans text-base font-light mt-2 ml-4">Tanya Leduc</div>
+                    <div th:each="connection : ${connections}" class="inline-block rounded-2xl shadow w-56 h-72 bg-white mt-4 mr-4">
+                        <img class="m-auto w-36 h-40 rounded-t-2xl" src="/assets/default_user.svg">
+                        <div class="font-sans text-base font-light mt-2 ml-4" th:text="${connection.name}"></div>
                         <div class="font-sans text-sm font-light mt-1 ml-4">Craigstutors</div>
                         <div class="mx-auto mt-6 w-1/2">
                             <button class="btn btn-primary font-sans text-sm w-28 h-9 p-0">View Profile

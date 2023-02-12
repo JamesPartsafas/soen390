@@ -21,6 +21,10 @@ public class AppUserDetails implements UserDetails {
         return Collections.singleton(new SimpleGrantedAuthority(appUser.getRole().toString()));
     }
 
+    public Long getID() {
+        return appUser.getId();
+    }
+
     @Override
     public String getPassword() {
         return appUser.getPassword();

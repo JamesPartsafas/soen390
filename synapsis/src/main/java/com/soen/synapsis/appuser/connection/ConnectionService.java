@@ -1,15 +1,51 @@
 package com.soen.synapsis.appuser.connection;
 
 import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AppUserDetails;
+import com.soen.synapsis.appuser.AppUserRepository;
 import com.soen.synapsis.appuser.Role;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ConnectionService {
     private final ConnectionRepository connectionRepository;
+    private final AppUserRepository appUserRepository;
 
-    public ConnectionService(ConnectionRepository connectionRepository) {
+    public ConnectionService(ConnectionRepository connectionRepository, AppUserRepository appUserRepository) {
         this.connectionRepository = connectionRepository;
+        this.appUserRepository = appUserRepository;
+    }
+
+    public List<AppUser> getConnections(AppUserDetails appUser) {
+        List<Connection> connectionsRequesters = connectionRepository.findAcceptedConnectionsByRequesterID(appUser.getID());
+        List<Connection> connectionsReceivers = connectionRepository.findAcceptedConnectionsByReceiverID(appUser.getID());
+
+        List<Long> allConnectionIDs = new ArrayList<>();
+
+        // Get all the receiver IDs
+        if (connectionsRequesters != null) {
+            for (Connection c : connectionsRequesters) {
+                Long receiverID = c.getReceiver().getId();
+                allConnectionIDs.add(receiverID);
+            }
+        }
+        // Get all the requester IDs
+        if (connectionsReceivers != null) {
+            for (Connection c : connectionsReceivers) {
+                Long requesterID = c.getRequester().getId();
+                allConnectionIDs.add(requesterID);
+            }
+        }
+
+        List<AppUser> allConnections = new ArrayList<>();
+        for (Long l : allConnectionIDs) {
+            allConnections.add(appUserRepository.getReferenceById(l));
+        }
+
+        return allConnections;
     }
 
     public String makeConnection(AppUser requester, AppUser receiver) {
@@ -33,6 +69,6 @@ public class ConnectionService {
         Connection connection = new Connection(cKey1, requester, receiver, true);
         connectionRepository.save(connection);
 
-        return null; // Should return to "pages/networking" after it is implemented
+        return "pages/network";
     }
 }
