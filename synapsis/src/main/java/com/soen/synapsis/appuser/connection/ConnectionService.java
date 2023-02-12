@@ -19,8 +19,9 @@ public class ConnectionService {
     }
 
     public List<AppUser> getConnections(Long user_uid) {
-        List<Connection> connectionsRequesters = connectionRepository.findAllByIdRequesterIDAndPendingIsFalse(user_uid);
-        List<Connection> connectionsReceivers = connectionRepository.findAllByIdReceiverIDAndPendingIsFalse(user_uid);
+        List<Connection> connectionsRequesters = connectionRepository.findAcceptedConnectionsByRequesterID(user_uid);
+        List<Connection> connectionsReceivers = connectionRepository.findAcceptedConnectionsByReceiverID(user_uid);
+
         List<Long> allConnectionIDs = new ArrayList<>();
 
         // Get all the receiver IDs
