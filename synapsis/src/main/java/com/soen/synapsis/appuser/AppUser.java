@@ -1,5 +1,7 @@
 package com.soen.synapsis.appuser;
 
+import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
+import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -8,14 +10,14 @@ import javax.persistence.*;
 
 @Entity
 public class AppUser {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String name;
-
-    @Column
+    @Column(nullable = false)
     private String password;
 
     @Column(unique = true, nullable = false)
@@ -31,8 +33,14 @@ public class AppUser {
 
     @Column
     private Long companyId;
+    @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
+    private AppUserProfile profile;
 
-    protected AppUser() {}
+    @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
+    private CompanyProfile companyProfile;
+
+    protected AppUser() {
+    }
 
     public AppUser(Long id, String name, String password, String email, Role role, AuthProvider authProvider) {
         this.id = id;
@@ -124,6 +132,32 @@ public class AppUser {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public static AppUser getAuthenticatedUser() {
+        if (!isUserAuthenticated()) {
+            throw new IllegalStateException("User not registered");
+        }
+
+        AppUserDetails appUserDetails = (AppUserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        return appUserDetails.getAppUser();
+    }
+
+    public AppUserProfile getAppUserProfile() {
+        return profile;
+    }
+
+    public void setAppUserProfile(AppUserProfile profile) {
+        this.profile = profile;
+    }
+
+    public CompanyProfile getCompanyProfile() {
+        return companyProfile;
+    }
+
+    public void setCompanyProfile(CompanyProfile companyProfile) {
+        this.companyProfile = companyProfile;
     }
 
     @Override
