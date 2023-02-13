@@ -210,4 +210,38 @@ public class ConnectionServiceTest {
         assertEquals(underTest.acceptConnection(appUserDetails, candidateUser2.getId()), "redirect:/network");
     }
 
+    @Test
+    void disconnectDeletesTheConnection() {
+        ArgumentCaptor<ConnectionKey> connectionArgumentCaptor = ArgumentCaptor.forClass(ConnectionKey.class);
+
+        underTest.disconnect(candidateUser2.getId(), candidateUser1.getId());
+        verify(connectionRepository, atMostOnce()).deleteById(connectionArgumentCaptor.capture());
+    }
+
+    @Test
+    void isConnectedWithReturnsFalseIfConnectionDoesNotExist() {
+        when(connectionRepository.findById(any(ConnectionKey.class))).thenReturn(Optional.empty());
+
+        assertFalse(underTest.isConnectedWith(candidateUser2.getId(), candidateUser1.getId()));
+    }
+
+    @Test
+    void isConnectedWithReturnsFalseIfConnectionIsPending() {
+        ConnectionKey connectionKey = new ConnectionKey(candidateUser2.getId(), candidateUser1.getId());
+        Connection connection = new Connection(connectionKey, candidateUser2, candidateUser1, true);
+
+        when(connectionRepository.findById(any(ConnectionKey.class))).thenReturn(Optional.of(connection));
+
+        assertFalse(underTest.isConnectedWith(candidateUser2.getId(), candidateUser1.getId()));
+    }
+
+    @Test
+    void isConnectedWithReturnsTrueIfConnectionIsNotPending() {
+        ConnectionKey connectionKey = new ConnectionKey(candidateUser2.getId(), candidateUser1.getId());
+        Connection connection = new Connection(connectionKey, candidateUser2, candidateUser1, false);
+
+        when(connectionRepository.findById(any(ConnectionKey.class))).thenReturn(Optional.of(connection));
+
+        assertTrue(underTest.isConnectedWith(candidateUser2.getId(), candidateUser1.getId()));
+    }
 }

@@ -78,4 +78,14 @@ public class ConnectionControllerTest {
 
         assertEquals(null, returnedPage);
     }
+
+    @Test
+    void disconnectFromUser() {
+        AppUser appUser = new AppUser("Joe Man", "1234", "joeman@email.com", Role.CANDIDATE);
+        AppUserDetails appUserDetails = new AppUserDetails(appUser);
+
+        String returnedPage = underTest.disconnectFromUser(appUserDetails,2L);
+
+        assertEquals("redirect:/user/2", returnedPage);
+    }
 }
