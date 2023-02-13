@@ -29,7 +29,6 @@ public class AppUserController {
             return "redirect:/";
 
         AppUser appUser = optionalAppUser.get();
-        AppUserProfile profile = appUser.getAppUserProfile();
 
         model.addAttribute("id", appUser.getId());
         model.addAttribute("name", appUser.getName());
@@ -45,6 +44,7 @@ public class AppUserController {
             return "pages/companypage";
         }
 
+        AppUserProfile profile = appUser.getAppUserProfile();
         model.addAttribute("education", profile.getEducation());
         model.addAttribute("skill", profile.getSkill());
         model.addAttribute("work", profile.getWork());
