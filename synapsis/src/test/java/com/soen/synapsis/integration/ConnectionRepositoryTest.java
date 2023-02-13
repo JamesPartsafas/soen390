@@ -75,7 +75,7 @@ public class ConnectionRepositoryTest {
     }
 
     @Test
-    void itShouldFindPendingConnectionsByReceiverID() {
+    void PendingConnectionsByReceiverID_SomePendingConnections() {
         ConnectionKey connectionKey = new ConnectionKey(appUser1.getId(), appUser2.getId());
         Connection connection = new Connection(connectionKey, appUser1, appUser2, true);
         underTest.save(connection);
@@ -84,7 +84,7 @@ public class ConnectionRepositoryTest {
 
 
     @Test
-    void itShouldNotFindPendingConnectionsByReceiverIDIfConnectionIsNotPending() {
+    void PendingConnectionsByReceiverID_NoPendingConnections() {
         ConnectionKey connectionKey = new ConnectionKey(appUser1.getId(), appUser2.getId());
         Connection connection = new Connection(connectionKey, appUser1, appUser2, false);
         underTest.save(connection);

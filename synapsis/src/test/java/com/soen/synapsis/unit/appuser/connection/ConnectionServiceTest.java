@@ -141,7 +141,7 @@ public class ConnectionServiceTest {
     }
 
     @Test
-    void rejectConnectionWithNonexistentConnection() {
+    void rejectConnectionWithNonExistentConnection() {
         AppUserDetails appUserDetails = new AppUserDetails(candidateUser1);
         ArgumentCaptor<ConnectionKey> connectionArgumentCaptor = ArgumentCaptor.forClass(ConnectionKey.class);
         verify(connectionRepository, never()).deleteById(connectionArgumentCaptor.capture());
@@ -176,7 +176,7 @@ public class ConnectionServiceTest {
     }
 
     @Test
-    void acceptConnectionWithNonexistentConnection() {
+    void acceptConnectionWithNonExistentConnection() {
         AppUserDetails appUserDetails = new AppUserDetails(candidateUser1);
         ArgumentCaptor<ConnectionKey> connectionArgumentCaptor = ArgumentCaptor.forClass(ConnectionKey.class);
         verify(connectionRepository, never()).deleteById(connectionArgumentCaptor.capture());
