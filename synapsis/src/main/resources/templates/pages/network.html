@@ -71,8 +71,9 @@
                         <div class="font-sans text-base font-light mt-2 ml-4" th:text="${connection.name}"></div>
                         <div class="font-sans text-sm font-light mt-1 ml-4">Craigstutors</div>
                         <div class="mx-auto mt-6 w-1/2">
-                            <button class="btn btn-primary font-sans text-sm w-28 h-9 p-0">View Profile
-                            </button>
+                            <a th:href="@{/user/{id}(id=${connection.id})}" class="btn btn-primary font-sans text-sm w-28 h-9 p-0 flex justify-center items-center">
+                                <span>View Profile</span>
+                            </a>
                         </div>
                     </div>
                 </div>
