@@ -1,6 +1,7 @@
 package com.soen.synapsis.unit.appuser;
 
 import com.soen.synapsis.appuser.*;
+import com.soen.synapsis.utilities.SecurityUtilities;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,6 +52,23 @@ class AppUserControllerTest {
 
         verify(appUserService).getAppUser(id);
         assertEquals("redirect:/", returnValue);
+    }
+
+    @Test
+    void getUsersLikeNameUserNotSignedIn() {
+        AppUser loggedInAppUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.CANDIDATE);
+        AppUserDetails appUserDetails = new AppUserDetails(loggedInAppUser);
+        String returnedPage = underTest.getUsersLikeName(appUserDetails,"name", mock(Model.class));
+        assertEquals("redirect:/", returnedPage);
+    }
+
+    @Test
+    void getUsersLikeNameUserSignedIn() {
+        AppUser loggedInAppUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.CANDIDATE);
+        AppUserDetails appUserDetails = new AppUserDetails(loggedInAppUser);
+        SecurityUtilities.authenticateAnonymousUser();
+        String returnedPage = underTest.getUsersLikeName(appUserDetails,"name", mock(Model.class));
+        assertEquals("pages/usersearchpage", returnedPage);
     }
 
     @Test

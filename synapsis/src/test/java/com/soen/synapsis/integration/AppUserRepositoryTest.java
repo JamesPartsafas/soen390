@@ -8,7 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 class AppUserRepositoryTest {
@@ -43,5 +47,32 @@ class AppUserRepositoryTest {
         AppUser foundAppUser = underTest.findByEmail(email);
 
         assertThat(foundAppUser).isNull();
+    }
+
+    @Test
+    void itShouldFindUsersByNameIfUserNameExists() {
+        String name = "oh";
+        AppUser appUser1 = new AppUser(1L,
+                "John User 1",
+                "1234",
+                "joeuser1test@mail.com",
+                Role.CANDIDATE);
+
+        AppUser appUser2 = new AppUser(2L,
+                "John User 2",
+                "1234",
+                "joeuser2test@mail.com",
+                Role.CANDIDATE);
+
+        underTest.saveAll(Arrays.asList(appUser1, appUser2));
+        List<AppUser> users = underTest.findByNameContainingIgnoreCaseAndIdNot(name, 2L);
+        assertTrue(users.size() == 1);
+    }
+
+    @Test
+    void itShouldNotFindUsersByNameIfUserNameDoesNotExist() {
+        String name = "oh";
+        List<AppUser> users = underTest.findByNameContainingIgnoreCaseAndIdNot(name, 2L);
+        assertTrue(users.size() == 0);
     }
 }
