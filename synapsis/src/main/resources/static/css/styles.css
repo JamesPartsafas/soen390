@@ -11,6 +11,10 @@
     text-decoration: none;
 }
 
+.img{
+    border: 4px solid rgb(163 163 163);
+}
+
 :root {
     --color-bg: #fff;
     --color-primary: #fa2742;
