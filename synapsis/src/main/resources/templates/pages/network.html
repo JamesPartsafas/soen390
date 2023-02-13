@@ -39,7 +39,7 @@
                     Connections Requests
                 </div>
                 <div class="overflow-x-auto whitespace-nowrap h-80">
-
+                    <p th:text="${error}"></p>
                     <div th:each="pendingConnectionRequest: ${pendingConnectionRequests}" class="inline-block rounded-2xl shadow w-56 h-72 bg-white mt-4 mr-4">
                         <img class="w-56 h-40 rounded-t-2xl">
                         <div class="font-sans text-base font-light mt-2 ml-4" th:text="${pendingConnectionRequest.name}">Tanya Leduc</div>
