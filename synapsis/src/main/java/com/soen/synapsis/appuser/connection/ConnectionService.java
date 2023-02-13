@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ConnectionService {
@@ -46,6 +47,49 @@ public class ConnectionService {
         }
 
         return allConnections;
+    }
+
+    public List<AppUser> getPendingConnectionRequest(AppUserDetails user) {
+        return connectionRepository.findPendingConnectionsByReceiverID(user.getID());
+    }
+
+    public String rejectConnection(AppUserDetails user, Long id) {
+        ConnectionKey connectionKey = new ConnectionKey(id, user.getID());
+        Optional<Connection> retrievedConnection = connectionRepository.findById(connectionKey);
+
+        if (!retrievedConnection.isPresent()) {
+            throw new IllegalStateException("Connection does not exists.");
+        }
+
+        Connection connection = retrievedConnection.get();
+
+        if (!connection.isPending()) {
+            throw new IllegalStateException("Connection already accepted.");
+        }
+
+        connectionRepository.deleteById(connectionKey);
+
+        return "redirect:/network";
+    }
+
+    public String acceptConnection(AppUserDetails user, Long id) {
+        ConnectionKey connectionKey = new ConnectionKey(id, user.getID());
+        Optional<Connection> retrievedConnection = connectionRepository.findById(connectionKey);
+
+        if (!retrievedConnection.isPresent()) {
+            throw new IllegalStateException("Connection does not exists.");
+        }
+
+        Connection connection = retrievedConnection.get();
+
+        if (!connection.isPending()) {
+            throw new IllegalStateException("Connection already accepted.");
+        }
+
+        connection.setPending(false);
+        connectionRepository.save(connection);
+
+        return "redirect:/network";
     }
 
     public String makeConnection(AppUser requester, AppUser receiver) {
