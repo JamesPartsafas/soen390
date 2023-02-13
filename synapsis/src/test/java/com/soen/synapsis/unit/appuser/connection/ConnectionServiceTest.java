@@ -8,6 +8,7 @@ import com.soen.synapsis.appuser.connection.Connection;
 import com.soen.synapsis.appuser.connection.ConnectionKey;
 import com.soen.synapsis.appuser.connection.ConnectionRepository;
 import com.soen.synapsis.appuser.connection.ConnectionService;
+import org.checkerframework.checker.nullness.Opt;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,9 +19,9 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -137,6 +138,76 @@ public class ConnectionServiceTest {
         verify(connectionRepository).findAcceptedConnectionsByReceiverID(candidateUser1.getId());
 
         assertEquals(allConnections, returnValue);
+    }
+
+    @Test
+    void rejectConnectionWithNonExistentConnection() {
+        AppUserDetails appUserDetails = new AppUserDetails(candidateUser1);
+        ArgumentCaptor<ConnectionKey> connectionArgumentCaptor = ArgumentCaptor.forClass(ConnectionKey.class);
+        verify(connectionRepository, never()).deleteById(connectionArgumentCaptor.capture());
+
+        assertThrows(IllegalStateException.class, () -> underTest.rejectConnection(appUserDetails, candidateUser2.getId()));
+    }
+
+    @Test
+    void rejectConnectionWithAcceptedConnection() {
+        ConnectionKey connectionKey = new ConnectionKey(candidateUser2.getId(), candidateUser1.getId());
+        Connection connection = new Connection(connectionKey, candidateUser2, candidateUser1, false);
+
+        when(connectionRepository.findById(any(ConnectionKey.class))).thenReturn(Optional.of(connection));
+        ArgumentCaptor<ConnectionKey> connectionArgumentCaptor = ArgumentCaptor.forClass(ConnectionKey.class);
+        verify(connectionRepository, never()).deleteById(connectionArgumentCaptor.capture());
+
+        AppUserDetails appUserDetails = new AppUserDetails(candidateUser1);
+        assertThrows(IllegalStateException.class, () -> underTest.rejectConnection(appUserDetails, candidateUser2.getId()));
+    }
+
+    @Test
+    void rejectConnectionWithPendingConnection() {
+        ConnectionKey connectionKey = new ConnectionKey(candidateUser2.getId(), candidateUser1.getId());
+        Connection connection = new Connection(connectionKey, candidateUser2, candidateUser1, true);
+
+        when(connectionRepository.findById(any(ConnectionKey.class))).thenReturn(Optional.of(connection));
+        ArgumentCaptor<ConnectionKey> connectionArgumentCaptor = ArgumentCaptor.forClass(ConnectionKey.class);
+        verify(connectionRepository, atMostOnce()).deleteById(connectionArgumentCaptor.capture());
+
+        AppUserDetails appUserDetails = new AppUserDetails(candidateUser1);
+        assertEquals(underTest.rejectConnection(appUserDetails, candidateUser2.getId()), "redirect:/network");
+    }
+
+    @Test
+    void acceptConnectionWithNonExistentConnection() {
+        AppUserDetails appUserDetails = new AppUserDetails(candidateUser1);
+        ArgumentCaptor<ConnectionKey> connectionArgumentCaptor = ArgumentCaptor.forClass(ConnectionKey.class);
+        verify(connectionRepository, never()).deleteById(connectionArgumentCaptor.capture());
+
+        assertThrows(IllegalStateException.class, () -> underTest.acceptConnection(appUserDetails, candidateUser2.getId()));
+    }
+
+    @Test
+    void acceptConnectionWithAcceptedConnection() {
+        ConnectionKey connectionKey = new ConnectionKey(candidateUser2.getId(), candidateUser1.getId());
+        Connection connection = new Connection(connectionKey, candidateUser2, candidateUser1, false);
+
+        when(connectionRepository.findById(any(ConnectionKey.class))).thenReturn(Optional.of(connection));
+        ArgumentCaptor<ConnectionKey> connectionArgumentCaptor = ArgumentCaptor.forClass(ConnectionKey.class);
+        verify(connectionRepository, never()).deleteById(connectionArgumentCaptor.capture());
+
+        AppUserDetails appUserDetails = new AppUserDetails(candidateUser1);
+        assertThrows(IllegalStateException.class, () -> underTest.acceptConnection(appUserDetails, candidateUser2.getId()));
+    }
+
+    @Test
+    void acceptConnectionWithPendingConnection() {
+        ConnectionKey connectionKey = new ConnectionKey(candidateUser2.getId(), candidateUser1.getId());
+        Connection connection = new Connection(connectionKey, candidateUser2, candidateUser1, true);
+
+        when(connectionRepository.findById(any(ConnectionKey.class))).thenReturn(Optional.of(connection));
+        ArgumentCaptor<ConnectionKey> connectionArgumentCaptor = ArgumentCaptor.forClass(ConnectionKey.class);
+        verify(connectionRepository, atMostOnce()).deleteById(connectionArgumentCaptor.capture());
+
+        AppUserDetails appUserDetails = new AppUserDetails(candidateUser1);
+        assertEquals(underTest.acceptConnection(appUserDetails, candidateUser2.getId()), "redirect:/network");
     }
 
 }

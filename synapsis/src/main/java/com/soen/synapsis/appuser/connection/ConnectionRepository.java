@@ -1,6 +1,7 @@
 package com.soen.synapsis.appuser.connection;
 
 
+import com.soen.synapsis.appuser.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,4 +17,6 @@ public interface ConnectionRepository extends JpaRepository<Connection, Connecti
     @Query(value = "SELECT * FROM connection WHERE receiver_id = :receiverID AND pending = FALSE", nativeQuery = true)
     List<Connection> findAcceptedConnectionsByReceiverID(@Param("receiverID") Long receiverID);
 
+    @Query(value = "SELECT a FROM AppUser a JOIN Connection c ON c.id.requesterID = a.id WHERE c.id.receiverID = :receiverID AND c.pending = true ")
+    List<AppUser> findPendingConnectionsByReceiverID(@Param("receiverID") Long receiverID);
 }

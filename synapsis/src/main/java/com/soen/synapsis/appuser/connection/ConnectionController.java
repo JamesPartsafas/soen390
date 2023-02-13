@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -29,12 +30,34 @@ public class ConnectionController {
         }
 
         List<AppUser> connections = connectionService.getConnections(user);
+        List<AppUser> pendingConnectionRequest = connectionService.getPendingConnectionRequest(user);
 
         model.addAttribute("connections", connections);
+        model.addAttribute("pendingConnectionRequests", pendingConnectionRequest);
 
         return "pages/network";
     }
 
+    @PostMapping("/connection/reject")
+    public String rejectConnection(@AuthenticationPrincipal AppUserDetails user, @RequestParam("id") Long id, Model model) {
+        try {
+            String returnString = connectionService.rejectConnection(user, id);
+            return returnString;
+        } catch (Exception e) {
+            model.addAttribute("error", "There was an error rejecting the connection: " + e.getMessage());
+            return viewNetwork(user, model);
+        }
+    }
+
+    @PostMapping("/connection/accept")
+    public String acceptConnection(@AuthenticationPrincipal AppUserDetails user, @RequestParam("id") Long id, Model model) {
+        try {
+            return connectionService.acceptConnection(user, id);
+        } catch (Exception e) {
+            model.addAttribute("error", "There was an error accepting the connection: " + e.getMessage());
+            return viewNetwork(user, model);
+        }
+    }
 
     @PostMapping("/makeConnection")
     public String makeConnection(@RequestBody AppUser appUser1, @RequestBody AppUser appUser2, Model model) {
