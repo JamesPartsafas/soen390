@@ -43,7 +43,7 @@
                     <p th:text="${error}"></p>
                     <div th:each="pendingConnectionRequest: ${pendingConnectionRequests}" class="inline-block rounded-2xl shadow w-56 h-72 bg-white mt-4 mr-4">
                         <img class="w-56 h-40 rounded-t-2xl">
-                        <div class="font-sans text-base font-light mt-2 ml-4" th:text="${pendingConnectionRequest.name}">Tanya Leduc</div>
+                        <div class="font-sans text-base font-light mt-2 ml-4" th:text="${pendingConnectionRequest.name}"></div>
                         <div class="font-sans text-sm font-light mt-1 ml-4">Craigstutors</div>
                         <div class="ml-4 mr-4 mt-6 flex justify-between">
                             <form th:action="@{/connection/reject}" method="post">
