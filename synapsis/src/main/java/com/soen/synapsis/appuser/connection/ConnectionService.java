@@ -115,4 +115,22 @@ public class ConnectionService {
 
         return "pages/network";
     }
+
+    public void disconnect(Long requesterId, Long receiverId) {
+        ConnectionKey connectionKey = new ConnectionKey(requesterId, receiverId);
+        connectionRepository.deleteById(connectionKey);
+    }
+
+    public boolean isConnectedWith(Long requesterId, Long receiverId) {
+        ConnectionKey connectionKey = new ConnectionKey(requesterId, receiverId);
+        Optional<Connection> retrievedConnection = connectionRepository.findById(connectionKey);
+
+        if (!retrievedConnection.isPresent()) {
+            return false;
+        }
+
+        Connection connection = retrievedConnection.get();
+
+        return !connection.isPending();
+    }
 }
