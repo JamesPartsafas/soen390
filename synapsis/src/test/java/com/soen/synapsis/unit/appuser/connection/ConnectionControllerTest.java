@@ -47,6 +47,28 @@ public class ConnectionControllerTest {
     }
 
     @Test
+    void rejectConnectionRequestPage() {
+        AppUser loggedInAppUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.CANDIDATE);
+        AppUserDetails appUserDetails = new AppUserDetails(loggedInAppUser);
+        SecurityUtilities.authenticateAnonymousUser();
+
+        String returnedPage = underTest.rejectConnection(appUserDetails, 2L, mock(Model.class));
+
+        assertEquals(null, returnedPage);
+    }
+
+    @Test
+    void acceptConnectionRequest() {
+        AppUser loggedInAppUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.CANDIDATE);
+        AppUserDetails appUserDetails = new AppUserDetails(loggedInAppUser);
+        SecurityUtilities.authenticateAnonymousUser();
+
+        String returnedPage = underTest.acceptConnection(appUserDetails, 3L, mock(Model.class));
+
+        assertEquals(null, returnedPage);
+    }
+
+    @Test
     void makeConnectionTest() {
         AppUser appUser1 = new AppUser("Joe Man", "1234", "joeman@email.com", Role.CANDIDATE);
         AppUser appUser2 = new AppUser("Joe Woman", "1234", "joewoman@email.com", Role.CANDIDATE);

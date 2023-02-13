@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
@@ -73,4 +74,20 @@ public class ConnectionRepositoryTest {
         assertTrue(result.isEmpty());
     }
 
+    @Test
+    void itShouldFindPendingConnectionsByReceiverID() {
+        ConnectionKey connectionKey = new ConnectionKey(appUser1.getId(), appUser2.getId());
+        Connection connection = new Connection(connectionKey, appUser1, appUser2, true);
+        underTest.save(connection);
+        assertTrue(underTest.findPendingConnectionsByReceiverID(appUser2.getId()).size() == 1);
+    }
+
+
+    @Test
+    void itShouldNotFindPendingConnectionsByReceiverIDIfConnectionIsNotPending() {
+        ConnectionKey connectionKey = new ConnectionKey(appUser1.getId(), appUser2.getId());
+        Connection connection = new Connection(connectionKey, appUser1, appUser2, false);
+        underTest.save(connection);
+        assertTrue(underTest.findPendingConnectionsByReceiverID(appUser2.getId()).size() == 0);
+    }
 }
