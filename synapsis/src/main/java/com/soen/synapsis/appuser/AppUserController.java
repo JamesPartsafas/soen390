@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -32,6 +33,17 @@ public class AppUserController {
         model.addAttribute("email", appUser.getEmail());
 
         return "pages/userpage";
+    }
+
+    @GetMapping("/search")
+    public String getUsersLikeName(@AuthenticationPrincipal AppUserDetails user, @RequestParam String name, Model model) {
+        if (!AppUser.isUserAuthenticated()) {
+            return "redirect:/";
+        }
+
+        List<AppUser> users = appUserService.getUsersLikeName(name, user.getId());
+        model.addAttribute("users", users);
+        return "pages/usersearchpage";
     }
 
     @GetMapping("/privateuser")
