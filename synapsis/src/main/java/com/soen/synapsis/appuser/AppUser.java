@@ -1,5 +1,9 @@
 package com.soen.synapsis.appuser;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import javax.persistence.*;
 
 @Entity
@@ -25,6 +29,9 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 
+    @Column
+    private Long companyId;
+
     protected AppUser() {}
 
     public AppUser(Long id, String name, String password, String email, Role role, AuthProvider authProvider) {
@@ -34,6 +41,7 @@ public class AppUser {
         this.email = email;
         this.role = role;
         this.authProvider = authProvider;
+        this.companyId = null;
     }
 
     public AppUser(Long id, String name, String password, String email, Role role) {
@@ -46,6 +54,7 @@ public class AppUser {
         this.email = email;
         this.role = role;
         this.authProvider = authProvider;
+        this.companyId = null;
     }
 
     public AppUser(String name, String password, String email, Role role) {
@@ -92,12 +101,29 @@ public class AppUser {
         this.role = role;
     }
 
+    public static boolean isUserAuthenticated() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null || auth instanceof AnonymousAuthenticationToken)
+            return false;
+
+        return true;
+    }
+
     public AuthProvider getAuthProvider() {
         return authProvider;
     }
 
     public void setAuthProvider(AuthProvider authProvider) {
         this.authProvider = authProvider;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     @Override

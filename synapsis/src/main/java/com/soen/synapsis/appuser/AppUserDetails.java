@@ -21,6 +21,10 @@ public class AppUserDetails implements UserDetails {
         return Collections.singleton(new SimpleGrantedAuthority(appUser.getRole().toString()));
     }
 
+    public Long getID() {
+        return appUser.getId();
+    }
+
     @Override
     public String getPassword() {
         return appUser.getPassword();
@@ -49,5 +53,13 @@ public class AppUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Role getRole() {
+        return appUser.getRole();
+    }
+
+    public Long getId() {
+        return appUser.getId();
     }
 }

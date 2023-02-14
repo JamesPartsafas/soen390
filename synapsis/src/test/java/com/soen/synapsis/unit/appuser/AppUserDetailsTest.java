@@ -38,6 +38,11 @@ public class AppUserDetailsTest {
     }
 
     @Test
+    void getIdReturnsId() {
+        assertEquals(appUser.getId(), underTest.getID());
+    }
+
+    @Test
     void getPasswordReturnsPassword() {
         assertEquals(password, underTest.getPassword());
     }
@@ -65,5 +70,10 @@ public class AppUserDetailsTest {
     @Test
     void isEnabledReturnsTrue() {
         assertTrue(underTest.isEnabled());
+    }
+
+    @Test
+    void getRoleReturnsRole() {
+        assertEquals(role, underTest.getRole());
     }
 }

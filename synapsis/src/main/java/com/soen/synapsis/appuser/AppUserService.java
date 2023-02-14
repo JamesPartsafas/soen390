@@ -1,6 +1,7 @@
 package com.soen.synapsis.appuser;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -41,6 +42,18 @@ public class AppUserService {
         return "pages/home";
     }
 
+
+    public void markCandidateToRecruiter(AppUser appUser, @AuthenticationPrincipal AppUserDetails companyUser) {
+
+        if(appUser.getRole() != Role.CANDIDATE) {
+            throw new IllegalStateException("The user must be a candidate to be marked as a recruiter.");
+        }
+        appUser.setRole(Role.RECRUITER);
+        appUser.setCompanyId(companyUser.getId());
+        appUserRepository.save(appUser);
+
+    }
+    
     public String signUpAdmin(AppUser appUser) {
         boolean appUserExists = appUserRepository.findByEmail(appUser.getEmail()) != null;
 
@@ -66,6 +79,5 @@ public class AppUserService {
         else{
             throw new IllegalStateException("This email does not belong to any user.");
         }
-
     }
 }
