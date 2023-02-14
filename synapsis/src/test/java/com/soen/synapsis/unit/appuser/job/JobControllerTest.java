@@ -20,6 +20,7 @@ class JobControllerTest {
 
     @Mock
     private JobService jobService;
+    @Mock
     private AppUserService appUserService;
     private AutoCloseable autoCloseable;
     private JobController underTest;
