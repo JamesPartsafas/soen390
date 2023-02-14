@@ -50,7 +50,12 @@ public class AppUserService {
         }
         appUser.setRole(Role.RECRUITER);
         appUser.setCompany(companyUser);
-        companyUser.setRecruiter(appUser);
+        try {
+            companyUser.addRecruiter(appUser);
+        }
+        catch (IllegalStateException e) {
+            e.getMessage();
+        }
         appUserRepository.save(appUser);
         appUserRepository.save(companyUser);
 
@@ -87,9 +92,19 @@ public class AppUserService {
         if(appUser.getRole() != Role.RECRUITER) {
             throw new IllegalStateException("The user must be a recruiter to be unmark as a candidate.");
         }
-        appUser.setRole(Role.CANDIDATE);
+        if(companyUser != appUser.getCompany()) {
+            throw new IllegalStateException("The recruiter is not part of your company.");
+        }
+
         appUser.setCompany(null);
-        companyUser.setRecruiter(appUser);
+        appUser.setRole(Role.CANDIDATE);
+
+        try{
+            companyUser.removeRecruiter(appUser);
+        }
+        catch(IllegalStateException e) {
+            e.getMessage();
+        }
         appUserRepository.save(appUser);
         appUserRepository.save(companyUser);
 

@@ -129,26 +129,37 @@ public class AppUser {
         return recruiters;
     }
 
-    public void setRecruiter(AppUser recruiter) {
+    public void addRecruiter(AppUser recruiter) {
         if(this.getRole() != Role.COMPANY) {
-            throw new IllegalStateException("You must be a company to set recruiters.");
+            throw new IllegalStateException("You must be a company to add a recruiter.");
         }
         if(this.recruiters == null) {
             this.recruiters = new HashSet<AppUser>();
         }
-        if(recruiter.getRole() == Role.RECRUITER) {
-            recruiters.add(recruiter);
+        recruiters.add(recruiter);
+    }
+
+    public void removeRecruiter(AppUser recruiter) {
+        if(this.getRole() != Role.COMPANY) {
+            throw new IllegalStateException("You must be a company to remove a recruiter.");
         }
-        if(recruiter.getRole() != Role.RECRUITER) {
-            recruiters.remove(recruiter);
+        if(this.recruiters == null) {
+            throw new IllegalStateException("Your company does not have recruiters to be removed.");
         }
+        recruiters.remove(recruiter);
     }
 
     public AppUser getCompany() {
+        if(this.getRole() != Role.RECRUITER) {
+            throw new IllegalStateException("You must be a recruiter to belong to a company.");
+        }
         return company;
     }
 
     public void setCompany(AppUser company) {
+        if(this.getRole() != Role.RECRUITER) {
+            throw new IllegalStateException("You must be a recruiter to be part of a company.");
+        }
         this.company = company;
     }
 
