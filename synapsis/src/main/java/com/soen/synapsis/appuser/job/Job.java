@@ -110,4 +110,18 @@ public class Job {
     public void setNumApplicants(int numApplicants) {
         this.numApplicants = numApplicants;
     }
+
+    @Override
+    public String toString() {
+        return "Job{" +
+                "id=" + id +
+                ", position='" + position + '\'' +
+                ", company='" + company + '\'' +
+                ", address=" + address +
+                ", description=" + description +
+                ", type=" + type +
+                ", numAvailable=" + numAvailable +
+                ", numApplicants=" + numApplicants +
+                '}';
+    }
 }

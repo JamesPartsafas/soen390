@@ -12,9 +12,7 @@ public class JobRequest {
     private JobType type;
     private int numAvailable;
 
-    public JobRequest() {
-
-    }
+    public JobRequest() {}
 
     public JobRequest(String position, String company, String address, String description, JobType type, int numAvailable) {
         this.position = position;

@@ -11,25 +11,15 @@ import java.util.Optional;
 public class JobService {
 
     private final JobRepository jobRepository;
-    private final AppUserService appUserService;
 
     @Autowired
-    public JobService(JobRepository jobRepository, AppUserService appUserService) {
+    public JobService(JobRepository jobRepository) {
         this.jobRepository = jobRepository;
-        this.appUserService = appUserService;
     }
 
     public Optional<Job> getJob(Long id) {
         return jobRepository.findById(id);
     }
-
-    /*public String createJobPosting (AppUser creator, String position, String company, String address, String description, JobType type, int numAvailable) {
-        if (creator.getRole() != Role.RECRUITER) {
-            throw new IllegalStateException("This user is not a recruiter.");
-        }
-        jobRepository.save(new Job(creator, position, company, address, description, type, numAvailable));
-        return "pages/jobs";
-    }*/
 
     public String createJob (JobRequest request) {
 
@@ -48,6 +38,6 @@ public class JobService {
         Job job = new Job(creator, position, company, address, description, type, numAvailable);
         jobRepository.save(job);
 
-        return "pages/job/";
+        return "redirect:/job/" + job.getID();
     }
 }

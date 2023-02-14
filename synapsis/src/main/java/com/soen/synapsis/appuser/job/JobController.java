@@ -55,7 +55,7 @@ public class JobController {
     }
 
     @PostMapping("/createjob")
-    public String createJob(JobRequest request, BindingResult bindingResult, HttpServletRequest servlet, Model model, @AuthenticationPrincipal AppUserDetails creatorDetails) {
+    public String createJob(JobRequest request, BindingResult bindingResult, Model model, @AuthenticationPrincipal AppUserDetails creatorDetails) {
         try {
             if (bindingResult.hasErrors()) {
                 throw new Exception();
@@ -70,7 +70,7 @@ public class JobController {
         }
         catch (Exception e) {
             model.addAttribute("error", "There was an error creating a new job. " + e.getMessage());
-            return "pages/createjob";
+            return createJob(model);
         }
     }
 
