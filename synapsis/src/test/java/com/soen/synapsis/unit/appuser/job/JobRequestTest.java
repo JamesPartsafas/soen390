@@ -32,6 +32,7 @@ class JobRequestTest {
         type = JobType.FULLTIME;
         numAvailable = 5;
         underTest = new JobRequest(position, company, address, description, type, numAvailable);
+        underTest.setCreator(creator);
     }
 
     @Test
@@ -65,8 +66,9 @@ class JobRequestTest {
 
     @Test
     void setCompany() {
-        underTest.setCompany("Amaznot");
-        assertEquals(company, underTest.getCompany());
+        String newCompany = "Amaznot";
+        underTest.setCompany(newCompany);
+        assertEquals(newCompany, underTest.getCompany());
     }
 
     @Test

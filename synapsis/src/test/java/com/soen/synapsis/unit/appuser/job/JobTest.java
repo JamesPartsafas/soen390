@@ -34,12 +34,20 @@ class JobTest {
         description = "Sample Description";
         type = JobType.FULLTIME;
         numAvailable = 5;
-        numApplicants = 10;
+        numApplicants = 0;
         undertest = new Job(creator, position, company, address, description, type, numAvailable);
+        undertest.setID(id);
     }
 
     @Test
     void getID() { assertEquals(id, undertest.getID());}
+
+    @Test
+    void setID() {
+        Long newID = 10L;
+        undertest.setID(newID);
+        assertEquals(newID, undertest.getID());
+    }
 
     @Test
     void getCreator() { assertEquals(creator, undertest.getCreator());}
@@ -63,8 +71,9 @@ class JobTest {
 
     @Test
     void setCompany() {
-        undertest.setCompany("Amaznot");
-        assertEquals(company, undertest.getCompany());
+        String newCompany = "Amaznot";
+        undertest.setCompany(newCompany);
+        assertEquals(newCompany, undertest.getCompany());
     }
 
     @Test

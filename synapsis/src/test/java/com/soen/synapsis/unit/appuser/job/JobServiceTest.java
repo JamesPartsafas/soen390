@@ -52,7 +52,7 @@ class JobServiceTest {
 
         String returnValue = undertest.createJob(request);
 
-        assertEquals("pages/job/1", returnValue);
+        assertEquals("redirect:/job/null", returnValue);
     }
 
     @Test

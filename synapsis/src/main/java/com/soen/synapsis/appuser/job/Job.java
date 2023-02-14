@@ -53,6 +53,10 @@ public class Job {
         return id;
     }
 
+    public void setID(Long id) {
+        this.id = id;
+    }
+
     public AppUser getCreator() {
         return creator;
     }
