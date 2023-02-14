@@ -1,4 +1,4 @@
-package com.soen.synapsis.appuser.jobposting;
+package com.soen.synapsis.appuser.job;
 
 public enum JobType {
     FULLTIME,

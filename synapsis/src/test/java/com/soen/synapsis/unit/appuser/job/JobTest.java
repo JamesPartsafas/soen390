@@ -1,19 +1,20 @@
-package com.soen.synapsis.unit.appuser.jobposting;
+package com.soen.synapsis.unit.appuser.job;
 
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AuthProvider;
 import com.soen.synapsis.appuser.Role;
-import com.soen.synapsis.appuser.jobposting.JobPosting;
-import com.soen.synapsis.appuser.jobposting.JobType;
+import com.soen.synapsis.appuser.job.Job;
+import com.soen.synapsis.appuser.job.JobType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-class JobPostingTest {
+class JobTest {
 
-    private JobPosting undertest;
+    private Long id;
+    private Job undertest;
     private AppUser creator;
     private String position;
     private String company;
@@ -25,6 +26,7 @@ class JobPostingTest {
 
     @BeforeEach
     void setUp() {
+        id = 15L;
         creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
         position = "Software Engineer";
         company = "Synapsis";
@@ -33,13 +35,14 @@ class JobPostingTest {
         type = JobType.FULLTIME;
         numAvailable = 5;
         numApplicants = 10;
-        undertest = new JobPosting(creator, position, company, address, description, type, numAvailable, numApplicants);
+        undertest = new Job(creator, position, company, address, description, type, numAvailable);
     }
 
     @Test
-    void getCreator() {
-        assertEquals(creator, undertest.getCreator());
-    }
+    void getID() { assertEquals(id, undertest.getID());}
+
+    @Test
+    void getCreator() { assertEquals(creator, undertest.getCreator());}
 
     @Test
     void getPosition() {
@@ -60,9 +63,8 @@ class JobPostingTest {
 
     @Test
     void setCompany() {
-        String newCompany = "Amaznot";
-        undertest.setCompany(newCompany);
-        assertEquals(newCompany, undertest.getCompany());
+        undertest.setCompany("Amaznot");
+        assertEquals(company, undertest.getCompany());
     }
 
     @Test

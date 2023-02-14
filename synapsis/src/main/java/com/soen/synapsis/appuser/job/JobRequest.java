@@ -1,35 +1,36 @@
-package com.soen.synapsis.appuser.jobposting;
+package com.soen.synapsis.appuser.job;
 
 import com.soen.synapsis.appuser.AppUser;
-import com.soen.synapsis.appuser.Role;
 
-public class JobPosting {
+public class JobRequest {
 
-    private final AppUser creator;
+    private AppUser creator;
     private String position;
     private String company;
     private String address;
     private String description;
     private JobType type;
     private int numAvailable;
-    private int numApplicants;
 
-    public JobPosting (AppUser creator, String position, String company, String address, String description, JobType type, int numAvailable, int numApplicants) {
-        if (creator.getRole() != Role.RECRUITER) {
-            throw new IllegalStateException("This user is not a recruiter");
-        }
-        this.creator = creator;
+    public JobRequest() {
+
+    }
+
+    public JobRequest(String position, String company, String address, String description, JobType type, int numAvailable) {
         this.position = position;
         this.company = company;
         this.address = address;
         this.description = description;
         this.type = type;
         this.numAvailable = numAvailable;
-        this.numApplicants = numApplicants;
     }
 
     public AppUser getCreator() {
         return creator;
+    }
+
+    public void setCreator(AppUser creator) {
+        this.creator = creator;
     }
 
     public String getPosition() {
@@ -78,13 +79,5 @@ public class JobPosting {
 
     public void setNumAvailable(int numAvailable) {
         this.numAvailable = numAvailable;
-    }
-
-    public int getNumApplicants() {
-        return numApplicants;
-    }
-
-    public void setNumApplicants(int numApplicants) {
-        this.numApplicants = numApplicants;
     }
 }
