@@ -11,12 +11,12 @@
                     <div class="flex-initial font-sans text-xl font-light w-40 ml-2">All
                         Connections
                     </div>
-                    <div class="flex-none font-sans text-xl font-light w-8 text-right">1</div>
+                    <div class="flex-none font-sans text-xl font-light w-8 text-right" th:text="${connections.size()}"></div>
                 </a>
                 <a href="#" class="flex flex-row justify-between items-center mt-3">
                     <i class="flex-none h-1 w-8 fa-solid fa-envelope fa-lg"></i>
                     <div class="flex-initial font-sans text-xl font-light w-40 ml-2">Requests</div>
-                    <div class="flex-none font-sans text-xl font-light w-8 text-right">3</div>
+                    <div class="flex-none font-sans text-xl font-light w-8 text-right" th:text="${pendingConnectionRequests.size()}"></div>
                 </a>
                 <a href="#" class="flex flex-row justify-between items-center mt-3">
                     <i class="flex-none h-2 w-8 fa-solid fa-hand-holding fa-lg"></i>
@@ -39,51 +39,24 @@
                     Connections Requests
                 </div>
                 <div class="overflow-x-auto whitespace-nowrap h-80">
-                    <div class="inline-block rounded-2xl shadow w-56 h-72 bg-white mt-4 mr-4">
+
+                    <p th:text="${error}"></p>
+                    <div th:each="pendingConnectionRequest: ${pendingConnectionRequests}" class="inline-block rounded-2xl shadow w-56 h-72 bg-white mt-4 mr-4">
                         <img class="w-56 h-40 rounded-t-2xl">
-                        <div class="font-sans text-base font-light mt-2 ml-4">Tanya Leduc</div>
+                        <div class="font-sans text-base font-light mt-2 ml-4" th:text="${pendingConnectionRequest.name}"></div>
                         <div class="font-sans text-sm font-light mt-1 ml-4">Craigstutors</div>
-                        <div class="ml-4 mr-4 mt-6">
-                            <button class="btn btn-black font-sans text-sm w-20 h-9 p-0">Remove</button>
-                            <button class="btn btn-primary font-sans text-sm w-20 h-9 p-0 float-right">Accept</button>
+                        <div class="ml-4 mr-4 mt-6 flex justify-between">
+                            <form th:action="@{/connection/reject}" method="post">
+                                <input type="hidden" name="id" th:value="${pendingConnectionRequest.getId()}" />
+                                <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Remove</button>
+                            </form>
+                            <form th:action="@{/connection/accept}" method="post">
+                                <input type="hidden" name="id" th:value="${pendingConnectionRequest.getId()}" />
+                                <button class="btn bg-primary btn-primary font-sans text-sm w-20 h-9 p-0" type="submit">Accept</button>
+                            </form>
                         </div>
                     </div>
-                    <div class="inline-block rounded-2xl shadow w-56 h-72 bg-white mt-4 mr-4">
-                        <img class="w-56 h-40 rounded-t-2xl">
-                        <div class="font-sans text-base font-light mt-2 ml-4">Tanya Leduc</div>
-                        <div class="font-sans text-sm font-light mt-1 ml-4">Craigstutors</div>
-                        <div class="ml-4 mr-4 mt-6">
-                            <button class="btn btn-black font-sans text-sm w-20 h-9 p-0">Remove</button>
-                            <button class="btn btn-primary font-sans text-sm w-20 h-9 p-0 float-right">Accept</button>
-                        </div>
-                    </div>
-                    <div class="inline-block rounded-2xl shadow w-56 h-72 bg-white mt-4 mr-4">
-                        <img class="w-56 h-40 rounded-t-2xl">
-                        <div class="font-sans text-base font-light mt-2 ml-4">Tanya Leduc</div>
-                        <div class="font-sans text-sm font-light mt-1 ml-4">Craigstutors</div>
-                        <div class="ml-4 mr-4 mt-6">
-                            <button class="btn btn-black font-sans text-sm w-20 h-9 p-0">Remove</button>
-                            <button class="btn btn-primary font-sans text-sm w-20 h-9 p-0 float-right">Accept</button>
-                        </div>
-                    </div>
-                    <div class="inline-block rounded-2xl shadow w-56 h-72 bg-white mt-4 mr-4">
-                        <img class="w-56 h-40 rounded-t-2xl">
-                        <div class="font-sans text-base font-light mt-2 ml-4">Tanya Leduc</div>
-                        <div class="font-sans text-sm font-light mt-1 ml-4">Craigstutors</div>
-                        <div class="ml-4 mr-4 mt-6">
-                            <button class="btn btn-black font-sans text-sm w-20 h-9 p-0">Remove</button>
-                            <button class="btn btn-primary font-sans text-sm w-20 h-9 p-0 float-right">Accept</button>
-                        </div>
-                    </div>
-                    <div class="inline-block rounded-2xl shadow w-56 h-72 bg-white mt-4 mr-4">
-                        <img class="w-56 h-40 rounded-t-2xl">
-                        <div class="font-sans text-base font-light mt-2 ml-4">Tanya Leduc</div>
-                        <div class="font-sans text-sm font-light mt-1 ml-4">Craigstutors</div>
-                        <div class="ml-4 mr-4 mt-6">
-                            <button class="btn btn-black font-sans text-sm w-20 h-9 p-0">Remove</button>
-                            <button class="btn btn-primary font-sans text-sm w-20 h-9 p-0 float-right">Accept</button>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -93,9 +66,9 @@
                     Connections
                 </div>
                 <div class="overflow-x-auto whitespace-nowrap h-80">
-                    <div class="inline-block rounded-2xl shadow w-56 h-72 bg-white mt-4 mr-4">
-                        <img class="w-56 h-40 rounded-t-2xl">
-                        <div class="font-sans text-base font-light mt-2 ml-4">Tanya Leduc</div>
+                    <div th:each="connection : ${connections}" class="inline-block rounded-2xl shadow w-56 h-72 bg-white mt-4 mr-4">
+                        <img class="m-auto w-36 h-40 rounded-t-2xl" src="/assets/default_user.svg">
+                        <div class="font-sans text-base font-light mt-2 ml-4" th:text="${connection.name}"></div>
                         <div class="font-sans text-sm font-light mt-1 ml-4">Craigstutors</div>
                         <div class="mx-auto mt-6 w-1/2">
                             <button class="btn btn-primary font-sans text-sm w-28 h-9 p-0">View Profile
