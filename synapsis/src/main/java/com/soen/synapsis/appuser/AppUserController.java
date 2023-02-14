@@ -85,8 +85,6 @@ public class AppUserController {
 
     }
 
-    // create a method called update, get(sends u to the page where u will update),
-    // post(update database and send u to the correct page),
     @GetMapping("/privateuser")
     @ResponseBody
     public String getUserData() {
@@ -117,11 +115,5 @@ public class AppUserController {
     public String getUpdateUserProfile() {
         return "pages/updateuserpage";
     }
-
-    // @PostMapping("/userpage")
-    // public String update(AppUserProfile profile) {
-    // AppUserService.UpdateProfile(profile);
-    // return "pages/userpage";
-    // }
 
 }

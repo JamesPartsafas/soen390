@@ -39,4 +39,5 @@ public class UpdateCompanyProfileService {
 
         return "redirect:/user/" + appUser.getId();
     }
+
 }

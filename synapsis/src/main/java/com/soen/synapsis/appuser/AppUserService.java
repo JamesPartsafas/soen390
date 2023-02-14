@@ -33,8 +33,6 @@ public class AppUserService {
         this.encoder = new BCryptPasswordEncoder();
     }
 
-    // actually update method that will be called by update of appuser controller ,
-    // u gonna do appUserRepository.save(appUser);
     public Optional<AppUser> getAppUser(Long id) {
         return appUserRepository.findById(id);
     }
@@ -105,30 +103,4 @@ public class AppUserService {
             throw new IllegalStateException("This email does not belong to any user.");
         }
     }
-
-    // public Optional<AppUserProfile> getAppUserProfile(Long id) {
-    // return appUserProfileRepository.findById(id);
-    // }
-
-    // public String UpdateProfile(AppUserProfile profile) {
-    //// userProfile.setName(userProfile.getName());
-    //
-    // appUserProfileRepository.save(profile);
-    //
-    // return "pages/userpage";
-    // }
-
-    // public String UpdateProfile(Long id){
-    // AppUserProfile profile = new AppUserProfile()ppUserRepository.findById(id);
-    //
-    // profile.setName(profile.getName());
-    // appUserRepository.save(appUser);
-    // return "pages/login";
-    // }
-    // else{
-    // throw new IllegalStateException("This email does not belong to any user.");
-    // }
-
-    // }
-
 }

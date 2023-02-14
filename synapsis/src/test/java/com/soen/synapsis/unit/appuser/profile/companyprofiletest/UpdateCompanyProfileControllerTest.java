@@ -14,10 +14,12 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class UpdateCompanyProfileControllerTest {
+class
+UpdateCompanyProfileControllerTest {
     @Mock
     private UpdateCompanyProfileService updateCompanyProfileService;
     private AutoCloseable autoCloseable;
@@ -61,5 +63,11 @@ class UpdateCompanyProfileControllerTest {
         underTest.updateAppUserProfile(request, bindingResult, model);
 
         updateCompanyProfileService.updateProfile(request);
+    }
+
+
+    @Test
+    void testToString() {
+        assertThat(underTest.toString()).isNotNull();
     }
 }

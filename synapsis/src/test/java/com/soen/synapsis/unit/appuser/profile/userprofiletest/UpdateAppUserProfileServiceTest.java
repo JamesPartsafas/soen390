@@ -61,4 +61,16 @@ public class UpdateAppUserProfileServiceTest {
 
         underTest.updateProfile(request);
     }
+
+    @Test
+    void updateAppUserProfileFail() {
+        String returnedPage = underTest.updateProfile( new UpdateAppUserProfileRequest());
+
+
+        assertEquals("redirect:/", returnedPage);
+    }
+    @Test
+    void testToString() {
+        assertThat(underTest.toString()).isNotNull();
+    }
 }

@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -62,5 +63,10 @@ class UpdateAppUserProfileControllerTest {
 
         underTest.updateAppUserProfile(request, bindingResult, model);
         updateAppUserProfileService.updateProfile(request);
+    }
+
+    @Test
+    void testToString() {
+        assertThat(underTest.toString()).isNotNull();
     }
 }

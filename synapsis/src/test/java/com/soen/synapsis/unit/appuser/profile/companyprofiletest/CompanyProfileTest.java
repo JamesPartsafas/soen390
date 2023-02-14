@@ -59,6 +59,79 @@ public class CompanyProfileTest {
         assertEquals(newAppUser, underTest.getAppUser());
     }
 
+
+    @Test
+    void getWebsite() {
+        assertEquals(website, underTest.getWebsite());
+    }
+
+    @Test
+    void setWebsite() {
+        String newWebsite = "www.youtube.com";
+
+        underTest.setWebsite(newWebsite);
+
+        assertEquals(newWebsite, underTest.getWebsite());
+    }
+
+
+    @Test
+    void getIndustry() {
+        assertEquals(industry, underTest.getIndustry());
+    }
+
+    @Test
+    void setIndustry() {
+        String newIndustry= "Medical";
+
+        underTest.setIndustry(newIndustry);
+
+        assertEquals(newIndustry, underTest.getIndustry());
+    }
+
+
+    @Test
+    void getCompanySize() {
+        assertEquals(companySize, underTest.getCompanySize());
+    }
+
+    @Test
+    void setCompanySize() {
+        String newCompanySize = "5000";
+
+        underTest.setCompanySize(newCompanySize);
+
+        assertEquals(newCompanySize, underTest.getCompanySize());
+    }
+
+
+    @Test
+    void getLocation() {
+        assertEquals(location, underTest.getLocation());
+    }
+
+    @Test
+    void setLocation() {
+        String newLocation = "Germany";
+
+        underTest.setLocation(newLocation);
+
+        assertEquals(newLocation, underTest.getLocation());
+    }
+
+    @Test
+    void getSpeciality() {
+        assertEquals(speciality, underTest.getSpeciality());
+    }
+
+    @Test
+    void setSpeciality() {
+        String newSpeciality = "Cardiology section";
+
+        underTest.setSpeciality(newSpeciality);
+
+        assertEquals(newSpeciality, underTest.getSpeciality());
+    }
     @Test
     void testToString() {
         assertThat(underTest.toString()).isNotNull();
