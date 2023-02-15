@@ -2,6 +2,8 @@ package com.soen.synapsis.unit.appuser.profile.companyprofiletest;
 
 
 import com.soen.synapsis.appuser.*;
+import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
+import com.soen.synapsis.appuser.profile.appuserprofile.updateprofile.UpdateAppUserProfileRequest;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfileRepository;
 import com.soen.synapsis.appuser.profile.companyprofile.updateprofile.UpdateCompanyProfileRequest;
@@ -28,22 +30,8 @@ import static org.mockito.Mockito.*;
 
 public class UpdateCompanyProfileServiceTest {
     private UpdateCompanyProfileService underTest;
-    private  UpdateCompanyProfileRequest request;
-
-    @Mock
-    private AppUserRepository appUserRepository;
-    private AppUserService appUserService;
     @Mock
     private CompanyProfileRepository companyProfileRepository;
-
-    private UpdateCompanyProfileService updateCompanyProfileService;
-    private AppUser appUser;
-    private Long id;
-    private String website;
-    private String industry;
-    private String companySize;
-    private String location;
-    private String speciality;
 
     private AutoCloseable autoCloseable;
 
@@ -66,14 +54,21 @@ public class UpdateCompanyProfileServiceTest {
         String location = "CANADA";
         String speciality = "Material";
         UpdateCompanyProfileRequest request = new UpdateCompanyProfileRequest(website, industry, companySize, location, speciality);
-        underTest.updateProfile(request);
+
+        var appUser = new AppUser(1L, "google", "12345678", "google@mail.com", Role.COMPANY);
+
+        when(companyProfileRepository.findByAppUser(appUser)).thenReturn(new CompanyProfile());
+
+        underTest.updateProfile(request, appUser);
     }
     @Test
     void updateCompanyProfileFail() {
-        String returnedPage = underTest.updateProfile( new UpdateCompanyProfileRequest());
+        var appUser = new AppUser(1L, "google", "12345678", "google@mail.com", Role.COMPANY);
 
+        when(companyProfileRepository.findByAppUser(appUser)).thenReturn(null);
 
-        assertEquals("redirect:/", returnedPage);
+        assertThrows(IllegalStateException.class,
+                () -> underTest.updateProfile(new UpdateCompanyProfileRequest(), appUser));
     }
 
     @Test

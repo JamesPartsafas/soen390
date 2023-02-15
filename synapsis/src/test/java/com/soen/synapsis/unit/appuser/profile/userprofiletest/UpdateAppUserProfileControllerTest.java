@@ -50,7 +50,8 @@ class UpdateAppUserProfileControllerTest {
     void UpdateAppUserInfo() {
         UpdateAppUserProfileRequest request = new UpdateAppUserProfileRequest("Computer Science", "Problem-solving", "developer", "5144433344", "food delivery", "Data Structures", "ConUhack project", "2022 best employee", "English");
         underTest.updateAppUserProfile(request, mock(BindingResult.class), mock(Model.class));
-        updateAppUserProfileService.updateProfile(request);
+        updateAppUserProfileService.updateProfile(request, new AppUser(1L, "joe",
+                "12345678", "joe@mail.com", Role.CANDIDATE));
     }
 
     @Test
@@ -62,7 +63,8 @@ class UpdateAppUserProfileControllerTest {
         when(bindingResult.hasErrors()).thenReturn(true);
 
         underTest.updateAppUserProfile(request, bindingResult, model);
-        updateAppUserProfileService.updateProfile(request);
+        updateAppUserProfileService.updateProfile(request, new AppUser(1L, "joe",
+                "12345678", "joe@mail.com", Role.CANDIDATE));
     }
 
     @Test

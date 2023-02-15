@@ -1,6 +1,7 @@
 package com.soen.synapsis.unit.appuser.profile.userprofiletest;
 
 import com.soen.synapsis.appuser.*;
+import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfileRepository;
 import com.soen.synapsis.appuser.profile.appuserprofile.updateprofile.UpdateAppUserProfileRequest;
 import com.soen.synapsis.appuser.profile.appuserprofile.updateprofile.UpdateAppUserProfileService;
@@ -27,11 +28,7 @@ public class UpdateAppUserProfileServiceTest {
 
     private UpdateAppUserProfileService underTest;
     @Mock
-    private AppUserRepository appUserRepository;
-    private AppUserService appUserService;
     private AppUserProfileRepository appUserProfileRepository;
-
-    private UpdateAppUserProfileService updateAppUserProfileService;
 
     private AutoCloseable autoCloseable;
 
@@ -59,15 +56,21 @@ public class UpdateAppUserProfileServiceTest {
         String language = "French";
         UpdateAppUserProfileRequest request = new UpdateAppUserProfileRequest(education, skill, work, course, phone, volunteering, project, award, language);
 
-        underTest.updateProfile(request);
+        var appUser = new AppUser(1L, "joe", "12345678", "joe@mail.com", Role.CANDIDATE);
+
+        when(appUserProfileRepository.findByAppUser(appUser)).thenReturn(new AppUserProfile());
+
+        underTest.updateProfile(request, appUser);
     }
 
     @Test
     void updateAppUserProfileFail() {
-        String returnedPage = underTest.updateProfile( new UpdateAppUserProfileRequest());
+        var appUser = new AppUser(1L, "joe", "12345678", "joe@mail.com", Role.CANDIDATE);
 
+        when(appUserProfileRepository.findByAppUser(appUser)).thenReturn(null);
 
-        assertEquals("redirect:/", returnedPage);
+        assertThrows(IllegalStateException.class,
+                () -> underTest.updateProfile(new UpdateAppUserProfileRequest(), appUser));
     }
     @Test
     void testToString() {

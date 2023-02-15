@@ -39,7 +39,7 @@ public class UpdateCompanyProfileController {
                 throw new Exception();
             }
 
-            return updateCompanyProfileService.updateProfile(request);
+            return updateCompanyProfileService.updateProfile(request, AppUser.getAuthenticatedUser());
         } catch (Exception e) {
             model.addAttribute("error", "There was an error updating. " + e.getMessage());
             return updateAppUserProfile(model);

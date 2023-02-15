@@ -38,7 +38,7 @@ public class UpdateAppUserProfileController {
                 throw new Exception();
             }
 
-            return updateAppUserProfileService.updateProfile(request);
+            return updateAppUserProfileService.updateProfile(request, AppUser.getAuthenticatedUser());
         } catch (Exception e) {
             model.addAttribute("error", "There was an error updating. " + e.getMessage());
             return updateAppUserProfile(model);

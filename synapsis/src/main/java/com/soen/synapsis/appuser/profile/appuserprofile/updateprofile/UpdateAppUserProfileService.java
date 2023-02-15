@@ -16,12 +16,7 @@ public class UpdateAppUserProfileService {
         this.appUserProfileRepository = appUserProfileRepository;
     }
 
-    public String updateProfile(UpdateAppUserProfileRequest request) {
-        if (!AppUser.isUserAuthenticated() || AppUser.getAuthenticatedUser().getRole() != Role.CANDIDATE) {
-            return "redirect:/";
-        }
-
-        AppUser appUser = AppUser.getAuthenticatedUser();
+    public String updateProfile(UpdateAppUserProfileRequest request, AppUser appUser) {
         AppUserProfile profile = appUserProfileRepository.findByAppUser(appUser);
 
         if (profile == null) {

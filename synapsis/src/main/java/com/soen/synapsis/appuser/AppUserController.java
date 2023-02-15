@@ -59,32 +59,6 @@ public class AppUserController {
 
     }
 
-    @GetMapping("/updateuserpage/{uid}")
-    public String getUpdateAppUser(@PathVariable Long uid, Model model) {
-        Optional<AppUser> optionalAppUser = appUserService.getAppUser(uid);
-
-        if (optionalAppUser.isEmpty())
-            return "redirect:/";
-
-        AppUser appUser = optionalAppUser.get();
-
-        AppUserProfile profile = appUser.getAppUserProfile();
-
-        model.addAttribute("name", appUser.getName());
-        model.addAttribute("education", profile.getEducation());
-        model.addAttribute("skill", profile.getSkill());
-        model.addAttribute("work", profile.getWork());
-        model.addAttribute("course", profile.getCourse());
-        model.addAttribute("phone", profile.getPhone());
-        model.addAttribute("volunteering", profile.getVolunteering());
-        model.addAttribute("project", profile.getProject());
-        model.addAttribute("award", profile.getAward());
-        model.addAttribute("language", profile.getLanguage());
-
-        return "pages/updateuserpage";
-
-    }
-
     @GetMapping("/privateuser")
     @ResponseBody
     public String getUserData() {

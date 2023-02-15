@@ -1,6 +1,8 @@
 package com.soen.synapsis.unit.appuser.profile.companyprofiletest;
 
 
+import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.updateprofile.UpdateCompanyProfileController;
 import com.soen.synapsis.appuser.profile.companyprofile.updateprofile.UpdateCompanyProfileRequest;
@@ -49,7 +51,8 @@ UpdateCompanyProfileControllerTest {
 
         underTest.updateAppUserProfile(request, mock(BindingResult.class), mock(Model.class));
 
-        updateCompanyProfileService.updateProfile(request);
+        updateCompanyProfileService.updateProfile(request, new AppUser(1L, "google",
+                "12345678", "google@mail.com", Role.COMPANY));
     }
 
     @Test
@@ -62,7 +65,8 @@ UpdateCompanyProfileControllerTest {
 
         underTest.updateAppUserProfile(request, bindingResult, model);
 
-        updateCompanyProfileService.updateProfile(request);
+        updateCompanyProfileService.updateProfile(request, new AppUser(1L, "google",
+                "12345678", "google@mail.com", Role.COMPANY));
     }
 
 

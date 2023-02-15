@@ -17,12 +17,7 @@ public class UpdateCompanyProfileService {
         this.companyProfileRepository = companyProfileRepository;
     }
 
-    public String updateProfile(UpdateCompanyProfileRequest request) {
-        if (!AppUser.isUserAuthenticated() || AppUser.getAuthenticatedUser().getRole() != Role.COMPANY) {
-            return "redirect:/";
-        }
-
-        AppUser appUser = AppUser.getAuthenticatedUser();
+    public String updateProfile(UpdateCompanyProfileRequest request, AppUser appUser) {
         CompanyProfile profile = companyProfileRepository.findByAppUser(appUser);
 
         if (profile == null) {
