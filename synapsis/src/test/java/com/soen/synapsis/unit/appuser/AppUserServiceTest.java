@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -54,6 +55,16 @@ public class AppUserServiceTest {
         AppUser appUser = underTest.getAppUser(email);
 
         verify(appUserRepository, times(1)).findByEmail(email);
+    }
+
+    @Test
+    void getUsersLikeNameReturnsListOfAppUsers() {
+        String name = "name";
+        Long id = 1L;
+
+        List<AppUser> users = underTest.getUsersLikeName(name, id);
+
+        verify(appUserRepository, times(1)).findByNameContainingIgnoreCaseAndIdNot(name, id);
     }
 
     @Test

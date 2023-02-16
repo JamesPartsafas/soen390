@@ -9,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -40,6 +41,8 @@ public class AppUserService {
     public AppUser getAppUser(String email) {
         return appUserRepository.findByEmail(email);
     }
+
+    public List<AppUser> getUsersLikeName(String name, Long id) { return appUserRepository.findByNameContainingIgnoreCaseAndIdNot(name, id); }
 
     public String signUpUser(AppUser appUser) {
         boolean appUserExists = appUserRepository.findByEmail(appUser.getEmail()) != null;
