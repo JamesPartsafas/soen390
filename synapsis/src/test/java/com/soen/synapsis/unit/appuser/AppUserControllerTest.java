@@ -40,11 +40,11 @@ class AppUserControllerTest {
 
     @Test
     void getAppUserReturnsUserInfo() {
-        AppUser appUser = new AppUser(1L, "Joe Man", "1234", "joeman@mail.com", Role.CANDIDATE);
+        AppUser appUser = mock(AppUser.class);
         AppUserDetails appUserDetails = new AppUserDetails(appUser);
         SecurityUtilities.authenticateAnonymousUser();
 
-        when(appUserService.getAppUser(appUser.getId())).thenReturn(Optional.of(appUser));
+        when(appUserService.getAppUser(any(Long.class))).thenReturn(Optional.of(appUser));
         when(appUser.getAppUserProfile()).thenReturn(new AppUserProfile());
 
         String returnValue = underTest.getAppUser(appUserDetails, 1L, mock(Model.class));
