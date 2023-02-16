@@ -31,6 +31,7 @@ class AppUserControllerTest {
 
     @AfterEach
     void tearDown() throws Exception {
+        SecurityContextHolder.clearContext();
         autoCloseable.close();
     }
 
