@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="_layout">
+<div layout:fragment="content">
+    <meta charset="ISO-8859-1">
+    </script>
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <div>
+        <div class="pl-32 pr-5 pb-3">
+            <div class="flex max-w-2xl bg-neutral-100 h-[10rem]    border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <div class="img">
+                    <img class=" mt-3.5 rounded-full w-28 h-32   " src="../../assets/default_user.svg" alt="Default"/>
+                </div>
+                <div class="p-5 ">
+                    <h5 class="text-left text-2xl  font-bold tracking-tight text-gray-900 dark:text-white"
+                        th:text="${name}"></h5>
+                    <table>
+                        <tr>
+                            <th>
+                                <p class="font-normal text-gray-700  dark:text-gray-400" th:text="${website}"></p>
+                            </th>
+                            <th>
+                                <p class="ml-40  font-normal  text-gray-700 dark:text-gray-400"
+                                   th:text="${companySize}"></p>
+                            </th>
+                            <th>
+                                <p>+employees</p>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="font-normal  text-gray-700 dark:text-gray-400" th:text="${speciality}"></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="font-normal  text-gray-700 dark:text-gray-400" th:text="${location}"></p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-lg h-[8rem] bg-neutral-100   mr-60 absolute top-32 right-80 border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div class="pr-10 pb-10 pl-10 pt-5 ">
+                <a th:href="@{/company/update}" class=" text-left text-xl  font-normal  text-gray-900">
+                    Edit Public Profile
+                </a>
+                <br>
+                <a th:href="@{/passwordresetpage}" class="mb-3 text-left text-xl font normal text-gray-900"> Reset
+                    Password</a>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
