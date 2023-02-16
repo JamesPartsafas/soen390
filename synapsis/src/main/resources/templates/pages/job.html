@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <title>Synapsis</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'primary': '#fa2742',
+            'primary-variant': '#fc9ca8',
+            'black': '#1d2228',
+            'black-variant': '#3c4653',
+            'grey': '#8f949b',
+            'light': '#e1e2e2',
+            'facebook-blue': '#1877F2',
+            'true-black': '#000000'
+          },
+          fontFamily: {
+            sans: ['Merriweather Sans', 'sans-serif'],
+            serif: ['Catamaran', 'serif'],
+          }
+        }
+
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<div>
+
+  <p th:text="${position}"></p>
+  <p th:text="${company}"></p>
+  <p th:text="${address}"></p>
+  <p th:text="${description}"></p>
+  <p th:text="${type}"></p>
+  <p th:text="${numAvailable}"></p>
+  <p th:text="${numApplicants}"></p>
+
+</div>
+</html>
