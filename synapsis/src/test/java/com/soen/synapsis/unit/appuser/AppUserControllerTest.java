@@ -3,12 +3,13 @@ package com.soen.synapsis.unit.appuser;
 import com.soen.synapsis.appuser.*;
 import com.soen.synapsis.appuser.connection.ConnectionService;
 import com.soen.synapsis.utilities.SecurityUtilities;
+import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 
 import java.util.Optional;
@@ -33,6 +34,7 @@ class AppUserControllerTest {
 
     @AfterEach
     void tearDown() throws Exception {
+        SecurityContextHolder.clearContext();
         autoCloseable.close();
     }
 
@@ -43,8 +45,9 @@ class AppUserControllerTest {
         SecurityUtilities.authenticateAnonymousUser();
 
         when(appUserService.getAppUser(appUser.getId())).thenReturn(Optional.of(appUser));
+        when(appUser.getAppUserProfile()).thenReturn(new AppUserProfile());
 
-        String returnValue = underTest.getAppUser(appUserDetails, appUser.getId(), mock(Model.class));
+        String returnValue = underTest.getAppUser(appUserDetails, 1L, mock(Model.class));
 
         assertEquals("pages/userpage", returnValue);
     }
@@ -74,6 +77,24 @@ class AppUserControllerTest {
     }
 
     @Test
+    void getUsersLikeNameUserNotSignedIn() {
+        AppUser loggedInAppUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.CANDIDATE);
+        AppUserDetails appUserDetails = new AppUserDetails(loggedInAppUser);
+        SecurityContextHolder.clearContext();
+        String returnedPage = underTest.getUsersLikeName(appUserDetails,"name", mock(Model.class));
+        assertEquals("redirect:/", returnedPage);
+    }
+
+    @Test
+    void getUsersLikeNameUserSignedIn() {
+        AppUser loggedInAppUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.CANDIDATE);
+        AppUserDetails appUserDetails = new AppUserDetails(loggedInAppUser);
+        SecurityUtilities.authenticateAnonymousUser();
+        String returnedPage = underTest.getUsersLikeName(appUserDetails,"name", mock(Model.class));
+        assertEquals("pages/usersearchpage", returnedPage);
+    }
+
+    @Test
     void getUserData() {
         String expected = "This is the user page";
 
@@ -89,21 +110,40 @@ class AppUserControllerTest {
 
     @Test
     void isCompanyForSetCandidateToRecruiter() {
-        AppUser loggedInAppUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.COMPANY);
-        AppUserDetails appUserDetails = new AppUserDetails(loggedInAppUser);
+        AppUser companyUser = new AppUser(1L, "Joe Man", "1234", "joecompany@mail.com", Role.COMPANY);
+        AppUser candidateUser = new AppUser(2L, "Joe Man", "1234", "joecandidate@mail.com", Role.CANDIDATE);
 
-        String returnValue = underTest.markCandidateToRecruiter(loggedInAppUser, appUserDetails);
+        String returnValue = underTest.markCandidateToRecruiter(candidateUser, companyUser);
 
         assertEquals("pages/userpage", returnValue);
     }
 
     @Test
     void isNotCompanyForSetCandidateToRecruiter() {
-        AppUser loggedInAppUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.CANDIDATE);
-        AppUserDetails appUserDetails = new AppUserDetails(loggedInAppUser);
+        AppUser notCompanyUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.RECRUITER);
+        AppUser candidateUser = new AppUser(2L, "Joe Man", "1234", "joecandidate@mail.com", Role.CANDIDATE);
 
-        String returnValue = underTest.markCandidateToRecruiter(loggedInAppUser, appUserDetails);
+        String returnValue = underTest.markCandidateToRecruiter(candidateUser, notCompanyUser);
 
         assertEquals("You must be a company to mark candidates as recruiters.", returnValue);
+    }
+    @Test
+    void isCompanyForSetRecruiterToCandidate() {
+        AppUser companyUser = new AppUser(1L, "Joe Man", "1234", "joecompany@mail.com", Role.COMPANY);
+        AppUser recruiterUser = new AppUser(2L, "Joe Man", "1234", "joerecruiter@mail.com", Role.RECRUITER);
+
+        String returnValue = underTest.unmarkRecruiterToCandidate(recruiterUser, companyUser);
+
+        assertEquals("pages/userpage", returnValue);
+    }
+
+    @Test
+    void isNotCompanyForSetRecruiterToCandidate() {
+        AppUser notCompanyUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.RECRUITER);
+        AppUser recruiterUser = new AppUser(2L, "Joe Man", "1234", "joecandidate@mail.com", Role.RECRUITER);
+
+        String returnValue = underTest.unmarkRecruiterToCandidate(recruiterUser, notCompanyUser);
+
+        assertEquals("You must be a company to unmark recruiters as candidates.", returnValue);
     }
 }

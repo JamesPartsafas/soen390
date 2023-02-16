@@ -11,11 +11,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 class AppUserTest {
 
     private AppUser underTest;
+
+    private AppUser underTest2;
     private String name;
     private Long id;
     private String password;
@@ -140,4 +143,32 @@ class AppUserTest {
         assertThat(AppUser.isUserAuthenticated()).isFalse();
     }
 
+    @Test
+    void recruiterGetCompanySucceeds() {
+        underTest2 = new AppUser(id, name, password, email, Role.RECRUITER, authProvider);
+        assertEquals(underTest2.getCompany(), underTest2.getCompany());
+    }
+    @Test
+    void recruiterGetCompanyFails() {
+        assertThrows(IllegalStateException.class,
+                () -> underTest.getCompany(),
+                "You must be a recruiter to belong to a company.");
+    }
+    @Test
+    void recruiterSetCompanySucceeds() {
+        underTest2 = new AppUser(id, name, password, email, Role.RECRUITER, authProvider);
+        AppUser companyUser = new AppUser(id, name, password, email, Role.COMPANY, authProvider);
+
+        underTest2.setCompany(companyUser);
+
+        assertEquals(companyUser, underTest2.getCompany());
+
+    }
+    @Test
+    void recruiterSetCompanyFails() {
+        AppUser companyUser = new AppUser(id, name, password, email, Role.COMPANY, authProvider);
+        assertThrows(IllegalStateException.class,
+                () -> underTest.setCompany(companyUser),
+                "You must be a recruiter to be part of a company.");
+    }
 }

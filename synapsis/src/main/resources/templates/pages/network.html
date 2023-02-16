@@ -27,10 +27,10 @@
             </div>
         </div>
         <div class="col-start-5 col-end-12 row-span-1 h-14 bg-white border rounded-md">
-            <form class="h-full ml-4">
+            <form th:action="@{/search}" class="h-full ml-4" method="get">
 
                 <input class="w-full h-full font-sans text-xl font-light ml-4"
-                       placeholder="Search Connections">
+                       placeholder="Search Connections" name="name">
             </form>
         </div>
         <div class="col-start-5 col-end-12 row-span-6 bg-light-50 rounded-2xl">

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="_layout">
+<div layout:fragment="content">
+    <div th:if="${users.size() == 0}">
+        <p class="font-sans text-base font-light mt-2 ml-4">No users exists with that name</p>
+    </div>
+
+    <div th:if="${users.size() > 0}" th:each="user: ${users}">
+        <p class="font-sans text-base font-light mt-2 ml-4" th:text="${user.name}"></p>
+        <p class="font-sans text-base font-light mt-2 ml-4">CraigsTutor</p>
+        <a th:href="@{/user/{id}(id=${user.getId()})}">Check Profile</a>
+    </div>
+</div>
+</html>
