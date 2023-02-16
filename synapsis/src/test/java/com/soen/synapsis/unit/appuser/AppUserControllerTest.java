@@ -1,6 +1,7 @@
 package com.soen.synapsis.unit.appuser;
 
 import com.soen.synapsis.appuser.*;
+import com.soen.synapsis.appuser.connection.ConnectionService;
 import com.soen.synapsis.utilities.SecurityUtilities;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import org.junit.jupiter.api.AfterEach;
@@ -20,13 +21,15 @@ class AppUserControllerTest {
 
     @Mock
     private AppUserService appUserService;
+    @Mock
+    private ConnectionService connectionService;
     private AutoCloseable autoCloseable;
     private AppUserController underTest;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new AppUserController(appUserService);
+        underTest = new AppUserController(appUserService, connectionService);
     }
 
     @AfterEach
@@ -38,22 +41,38 @@ class AppUserControllerTest {
     @Test
     void getAppUserReturnsUserInfo() {
         AppUser appUser = mock(AppUser.class);
+        AppUserDetails appUserDetails = new AppUserDetails(appUser);
+        SecurityUtilities.authenticateAnonymousUser();
 
-        when(appUserService.getAppUser(appUser.getId())).thenReturn(Optional.of(appUser));
+        when(appUserService.getAppUser(any(Long.class))).thenReturn(Optional.of(appUser));
         when(appUser.getAppUserProfile()).thenReturn(new AppUserProfile());
 
-        String returnValue = underTest.getAppUser(appUser.getId(), mock(Model.class));
+        String returnValue = underTest.getAppUser(appUserDetails, 1L, mock(Model.class));
 
         assertEquals("pages/userpage", returnValue);
     }
 
     @Test
+    void getAppUserThatIsNoAuthenticatedRedirects() {
+        AppUser appUser = new AppUser(1L, "Joe Man", "1234", "joeman@mail.com", Role.CANDIDATE);
+        AppUserDetails appUserDetails = new AppUserDetails(appUser);
+
+        String returnValue = underTest.getAppUser(appUserDetails, appUser.getId(), mock(Model.class));
+        when(appUserService.getAppUser(appUser.getId())).thenReturn(Optional.of(appUser));
+
+        assertEquals("redirect:/", returnValue);
+    }
+
+    @Test
     void getAppUserThatDoesNotExistRedirects() {
-        Long id = 1L;
+        AppUser appUser = new AppUser(1L, "Joe Man", "1234", "joeman@mail.com", Role.CANDIDATE);
+        AppUserDetails appUserDetails = new AppUserDetails(appUser);
+        SecurityUtilities.authenticateAnonymousUser();
 
-        String returnValue = underTest.getAppUser(id, mock(Model.class));
+        String returnValue = underTest.getAppUser(appUserDetails, appUser.getId(), mock(Model.class));
+        when(appUserService.getAppUser(appUser.getId())).thenReturn(Optional.empty());
 
-        verify(appUserService).getAppUser(id);
+        verify(appUserService).getAppUser(appUser.getId());
         assertEquals("redirect:/", returnValue);
     }
 

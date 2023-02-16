@@ -70,5 +70,9 @@ public class ConnectionController {
         }
     }
 
-
+    @PostMapping("/disconnect")
+    public String disconnectFromUser(@AuthenticationPrincipal AppUserDetails user, @RequestParam("id") Long id) {
+        connectionService.disconnect(user.getID(), id);
+        return "redirect:/user/" + id;
+    }
 }

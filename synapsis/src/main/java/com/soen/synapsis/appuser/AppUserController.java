@@ -1,5 +1,6 @@
 package com.soen.synapsis.appuser;
 
+import com.soen.synapsis.appuser.connection.ConnectionService;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,24 +17,32 @@ import java.util.Optional;
 public class AppUserController {
 
     private final AppUserService appUserService;
+    private final ConnectionService connectionService;
 
     @Autowired
-    public AppUserController(AppUserService appUserService) {
+    public AppUserController(AppUserService appUserService, ConnectionService connectionService) {
         this.appUserService = appUserService;
+        this.connectionService = connectionService;
     }
 
     @GetMapping("/user/{uid}")
-    public String getAppUser(@PathVariable Long uid, Model model) {
+    public String getAppUser(@AuthenticationPrincipal AppUserDetails user, @PathVariable Long uid, Model model) {
+        if (!AppUser.isUserAuthenticated()) {
+            return "redirect:/";
+        }
+
         Optional<AppUser> optionalAppUser = appUserService.getAppUser(uid);
 
         if (optionalAppUser.isEmpty())
             return "redirect:/";
 
         AppUser appUser = optionalAppUser.get();
+        boolean isConnectedWith = connectionService.isConnectedWith(user.getID(), uid);
 
         model.addAttribute("id", appUser.getId());
         model.addAttribute("name", appUser.getName());
         model.addAttribute("email", appUser.getEmail());
+        model.addAttribute("isConnectedWith", isConnectedWith);
 
         if (appUser.getRole() == Role.COMPANY) {
             CompanyProfile companyProfile = appUser.getCompanyProfile();
