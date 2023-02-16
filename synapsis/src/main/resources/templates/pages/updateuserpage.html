@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="_layout">
+<div layout:fragment="content">
+    <meta charset="ISO-8859-1">
+
+    <p th:text="${error}"></p>
+    <form th:action="@{/user/update}" th:object="${updateAppUserProfileRequest}" method="post">
+        <div class="flex max-w-xl bg-neutral-100 border-gray-200 ml-28 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div class="p-5">
+                <label>Education</label><br>
+                <input type="text" id="education" th:field="*{education}"
+                       class="mb-2 text-left   font-normal tracking-tight text-gray-900 dark:text-white"/>
+                <br>
+                <label>Skill(s)</label><br>
+                <input type="text" id="skill" th:field="*{skill}"
+                       class="mb-2 text-left  font-normal tracking-tight text-gray-900 dark:text-white"/>
+                <br>
+                <label>Work</label><br>
+                <input type="text" id="work" th:field="*{work}"
+                       class="mb-2 text-left  font-normal tracking-tight text-gray-900 dark:text-white"/>
+                <br>
+                <label>Course(s)</label><br>
+                <input type="text" id="course" th:field="*{course}"
+                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+                <br>
+                <label>Phone</label><br>
+                <input type="text" id="phone" th:field="*{phone}"
+                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+                <br>
+                <label>Volunteering</label><br>
+                <input type="text" id="volunteering" th:field="*{volunteering}"
+                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+                <br>
+                <label>Project(s)</label><br>
+                <input type="text" id="project" th:field="*{project}"
+                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+                <br>
+                <label>Award(s)</label><br>
+                <input type="text" id="award" th:field="*{award}"
+                       class="mb-2 text-left font-normal  tracking-tight text-gray-900 dark:text-white"/>
+                <br>
+                <label>language(s)</label><br>
+                <input type="text" id="location" th:field="*{language}"
+                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+                <br>
+                <button class=" btn bg-red-500 text-white rounded-full" type="submit">Save</button>
+            </div>
+        </div>
+    </form>
+</div>
+</html>
