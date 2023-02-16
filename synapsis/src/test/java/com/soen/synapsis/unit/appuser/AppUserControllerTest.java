@@ -1,12 +1,12 @@
 package com.soen.synapsis.unit.appuser;
 
 import com.soen.synapsis.appuser.*;
+import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 
 import java.util.Optional;
@@ -34,9 +34,10 @@ class AppUserControllerTest {
 
     @Test
     void getAppUserReturnsUserInfo() {
-        AppUser appUser = new AppUser(1L, "Joe Man", "1234", "joeman@mail.com", Role.CANDIDATE);
+        AppUser appUser = mock(AppUser.class);
 
         when(appUserService.getAppUser(appUser.getId())).thenReturn(Optional.of(appUser));
+        when(appUser.getAppUserProfile()).thenReturn(new AppUserProfile());
 
         String returnValue = underTest.getAppUser(appUser.getId(), mock(Model.class));
 
