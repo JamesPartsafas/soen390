@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 
 import java.util.Optional;
@@ -59,6 +60,7 @@ class AppUserControllerTest {
     void getUsersLikeNameUserNotSignedIn() {
         AppUser loggedInAppUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.CANDIDATE);
         AppUserDetails appUserDetails = new AppUserDetails(loggedInAppUser);
+        SecurityContextHolder.clearContext();
         String returnedPage = underTest.getUsersLikeName(appUserDetails,"name", mock(Model.class));
         assertEquals("redirect:/", returnedPage);
     }
