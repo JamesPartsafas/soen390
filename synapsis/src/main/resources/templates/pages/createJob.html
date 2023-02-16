@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <title>Synapsis</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'primary': '#fa2742',
+            'primary-variant': '#fc9ca8',
+            'black': '#1d2228',
+            'black-variant': '#3c4653',
+            'grey': '#8f949b',
+            'light': '#e1e2e2',
+            'facebook-blue': '#1877F2',
+            'true-black': '#000000'
+          },
+          fontFamily: {
+            sans: ['Merriweather Sans', 'sans-serif'],
+            serif: ['Catamaran', 'serif'],
+          }
+        }
+
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<div>
+
+  <form th:action="@{/createjob}" method="post">
+
+    <p th:if="${param.error}">Invalid input.</p>
+
+    <div class="container flex flex-row justify-center mt-32">
+      <div class="flex-none w-1/2 mr-12">
+        <img src="" alt="Website Example">
+      </div>
+      <div class="flex-none container flex flex-wrap flex-col justify-center content-center mt-8 w-80 border rounded-sm">
+        <div class="mt-6">
+          <img src="" class="w-8 inline" alt="S">
+          <img src="/assets/synapsis_black.svg" class="inline h-10 w-48" alt="Synapsis Logo">
+        </div>
+        <input id="position" name="position" placeholder="Position"
+               class="font-thin font-serif mt-4 pl-3 h-14 w-3/4 content-center border rounded-md"
+               required/>
+        <input id="company" name="company" placeholder="Company"
+               class="font-thin font-serif pl-3 mt-3 h-14 w-3/4 content-center border rounded-md"
+               required/>
+        <input id="address" name="address" placeholder="Address"
+               class="font-thin font-serif pl-3 mt-3 h-14 w-3/4 content-center border rounded-md"
+               required/>
+        <input id="description" name="description" placeholder="Description"
+               class="font-thin font-serif pl-3 mt-3 h-14 w-3/4 content-center border rounded-md"
+               required/>
+        <label for="type">Type</label>
+        <select id="type" name="type" required>
+          <option value="FULLTIME">Full-time</option>
+          <option value="PARTTIME">Part-time</option>
+          <option value="CONTRACT">Contract</option>
+          <option value="TEMPORARY">Temporary</option>
+          <option value="VOLUNTEER">Volunteer</option>
+          <option value="INTERNSHIP">Internship</option>
+          <option value="OTHER">Other</option>
+        </select>
+        <input id="numAvailable" name="numAvailable" type="number" min="1" placeholder="Available Positions"
+               class="font-thin font-serif pl-3 mt-3 h-14 w-3/4 content-center border rounded-md"
+               required/>
+
+        <button type="submit" class="btn btn-primary mt-3 bg-primary text-base justify-self-end">Create
+        </button>
+      </div>
+    </div>
+
+  </form>
+
+</div>
+</html>

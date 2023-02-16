@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="_layout">
+<div layout:fragment="content">
+
+    <meta charset="ISO-8859-1">
+
+    <p th:text="${error}"></p>
+    <form th:action="@{/company/update}" th:object="${updateCompanyProfileRequest}" method="post">
+        <div class="flex max-w-xl bg-neutral-100 border-gray-200 ml-28 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div class="p-5">
+                <label>Website</label><br>
+                <input type="text" id="website" th:field="*{website}"
+                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+                <br>
+                <label>Industry</label><br>
+                <input type="text" id="industry" th:field="*{industry}"
+                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+                <br>
+                <label>Company Size</label><br>
+                <input type="text" id="companySize" th:field="*{companySize}"
+                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+                <br>
+                <label>Location</label><br>
+                <input type="text" id="location" th:field="*{location}"
+                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+                <br>
+                <label>Speciality</label><br>
+                <input type="text" id="speciality" th:field="*{speciality}"
+                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+                <br>
+                <button class=" btn bg-red-500 text-white rounded-full " type="submit">Save</button>
+            </div>
+        </div>
+    </form>
+</div>
+</html>
