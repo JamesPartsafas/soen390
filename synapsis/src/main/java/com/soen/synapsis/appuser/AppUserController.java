@@ -71,15 +71,30 @@ public class AppUserController {
         return "This is the admin page";
     }
 
-    @PutMapping("/company/setCandidateToRecruiter")
+    @PutMapping("/company/markCandidateToRecruiter")
     @ResponseBody
-    public String markCandidateToRecruiter(AppUser appUser, @AuthenticationPrincipal AppUserDetails companyUser) {
+    public String markCandidateToRecruiter(AppUser appUser, @AuthenticationPrincipal AppUser companyUser) {
         if (companyUser.getRole() != Role.COMPANY) {
             return "You must be a company to mark candidates as recruiters.";
         }
         try {
             appUserService.markCandidateToRecruiter(appUser, companyUser);
         } catch (IllegalStateException e) {
+            return e.getMessage();
+        }
+        return "pages/userpage";
+    }
+
+    @PutMapping("/company/unmarkRecruiterToCandidate")
+    @ResponseBody
+    public String unmarkRecruiterToCandidate(AppUser appUser, @AuthenticationPrincipal AppUser companyUser) {
+        if(companyUser.getRole() != Role.COMPANY) {
+            return "You must be a company to unmark recruiters as candidates.";
+        }
+        try {
+            appUserService.unmarkRecruiterToCandidate(appUser, companyUser);
+        }
+        catch(IllegalStateException e) {
             return e.getMessage();
         }
         return "pages/userpage";

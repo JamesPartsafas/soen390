@@ -7,6 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class AppUser {
@@ -31,8 +33,13 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 
-    @Column
-    private Long companyId;
+    @ManyToOne(cascade={CascadeType.ALL})
+    @JoinColumn(name="company_id")
+    private AppUser company;
+
+    @OneToMany(mappedBy="company")
+    private Set<AppUser> recruiters;
+
     @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
     private AppUserProfile profile;
 
@@ -49,7 +56,6 @@ public class AppUser {
         this.email = email;
         this.role = role;
         this.authProvider = authProvider;
-        this.companyId = null;
     }
 
     public AppUser(Long id, String name, String password, String email, Role role) {
@@ -62,7 +68,6 @@ public class AppUser {
         this.email = email;
         this.role = role;
         this.authProvider = authProvider;
-        this.companyId = null;
     }
 
     public AppUser(String name, String password, String email, Role role) {
@@ -126,12 +131,45 @@ public class AppUser {
         this.authProvider = authProvider;
     }
 
-    public Long getCompanyId() {
-        return companyId;
+    public Set<AppUser> getRecruiter() {
+        if(this.getRole() != Role.COMPANY) {
+            throw new IllegalStateException("You must be company to have recruiters.");
+        }
+        return recruiters;
     }
 
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
+    public void addRecruiter(AppUser recruiter) {
+        if(this.getRole() != Role.COMPANY) {
+            throw new IllegalStateException("You must be a company to add a recruiter.");
+        }
+        if(this.recruiters == null) {
+            this.recruiters = new HashSet<AppUser>();
+        }
+        recruiters.add(recruiter);
+    }
+
+    public void removeRecruiter(AppUser recruiter) {
+        if(this.getRole() != Role.COMPANY) {
+            throw new IllegalStateException("You must be a company to remove a recruiter.");
+        }
+        if(this.recruiters == null) {
+            throw new IllegalStateException("Your company does not have recruiters to be removed.");
+        }
+        recruiters.remove(recruiter);
+    }
+
+    public AppUser getCompany() {
+        if(this.getRole() != Role.RECRUITER) {
+            throw new IllegalStateException("You must be a recruiter to belong to a company.");
+        }
+        return company;
+    }
+
+    public void setCompany(AppUser company) {
+        if(this.getRole() != Role.RECRUITER) {
+            throw new IllegalStateException("You must be a recruiter to be part of a company.");
+        }
+        this.company = company;
     }
 
     public static AppUser getAuthenticatedUser() {
