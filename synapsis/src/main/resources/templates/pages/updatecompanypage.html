@@ -2,12 +2,9 @@
 <html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
 <div layout:fragment="content">
-
-    <meta charset="ISO-8859-1">
-
     <p th:text="${error}"></p>
     <form th:action="@{/company/update}" th:object="${updateCompanyProfileRequest}" method="post">
-        <div class="flex max-w-xl bg-neutral-100 border-gray-200 ml-28 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div class="flex max-w-xl bg-neutral-100 border-gray-200 ml-28 rounded-lg shadow">
             <div class="p-5">
                 <label>Website</label><br>
                 <input type="text" id="website" th:field="*{website}"
