@@ -8,7 +8,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +22,17 @@ public class AppUserController {
     public AppUserController(AppUserService appUserService, ConnectionService connectionService) {
         this.appUserService = appUserService;
         this.connectionService = connectionService;
+    }
+
+    @GetMapping("/user")
+    public String redirectToAuthenticatedUserProfile(@AuthenticationPrincipal AppUserDetails user) {
+        if (!AppUser.isUserAuthenticated()) {
+            return "redirect:/";
+        }
+
+        String userProfileURL = "redirect:/user/" + user.getID();
+
+        return userProfileURL;
     }
 
     @GetMapping("/user/{uid}")
@@ -109,13 +119,12 @@ public class AppUserController {
     @PutMapping("/company/unmarkRecruiterToCandidate")
     @ResponseBody
     public String unmarkRecruiterToCandidate(AppUser appUser, @AuthenticationPrincipal AppUser companyUser) {
-        if(companyUser.getRole() != Role.COMPANY) {
+        if (companyUser.getRole() != Role.COMPANY) {
             return "You must be a company to unmark recruiters as candidates.";
         }
         try {
             appUserService.unmarkRecruiterToCandidate(appUser, companyUser);
-        }
-        catch(IllegalStateException e) {
+        } catch (IllegalStateException e) {
             return e.getMessage();
         }
         return "pages/userpage";
