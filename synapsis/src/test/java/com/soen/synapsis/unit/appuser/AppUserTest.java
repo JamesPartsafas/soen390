@@ -133,17 +133,6 @@ class AppUserTest {
     }
 
     @Test
-    void testIsUserAuthenticatedReturnsTrue() {
-        SecurityUtilities.authenticateAnonymousUser();
-        assertThat(AppUser.isUserAuthenticated()).isTrue();
-    }
-
-    @Test
-    void testIsUserAuthenticatedReturnsFalse() {
-        assertThat(AppUser.isUserAuthenticated()).isFalse();
-    }
-
-    @Test
     void recruiterGetCompanySucceeds() {
         underTest2 = new AppUser(id, name, password, email, Role.RECRUITER, authProvider);
         assertEquals(underTest2.getCompany(), underTest2.getCompany());

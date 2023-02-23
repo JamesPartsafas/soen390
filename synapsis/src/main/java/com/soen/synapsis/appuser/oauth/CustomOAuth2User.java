@@ -1,13 +1,14 @@
 package com.soen.synapsis.appuser.oauth;
 
 import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AppUserAuth;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.*;
 
-public class CustomOAuth2User implements OAuth2User {
+public class CustomOAuth2User implements OAuth2User, AppUserAuth {
     private AppUser appUser;
 
     public CustomOAuth2User(AppUser appUser) {
@@ -39,5 +40,9 @@ public class CustomOAuth2User implements OAuth2User {
 
     public String getEmail() {
         return appUser.getEmail();
+    }
+
+    public AppUser getAppUser() {
+        return appUser;
     }
 }

@@ -114,15 +114,6 @@ public class AppUser {
         this.role = role;
     }
 
-    public static boolean isUserAuthenticated() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (auth == null || auth instanceof AnonymousAuthenticationToken)
-            return false;
-
-        return true;
-    }
-
     public AuthProvider getAuthProvider() {
         return authProvider;
     }
@@ -170,16 +161,6 @@ public class AppUser {
             throw new IllegalStateException("You must be a recruiter to be part of a company.");
         }
         this.company = company;
-    }
-
-    public static AppUser getAuthenticatedUser() {
-        if (!isUserAuthenticated()) {
-            throw new IllegalStateException("User not registered");
-        }
-
-        AppUserDetails appUserDetails = (AppUserDetails) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
-        return appUserDetails.getAppUser();
     }
 
     public AppUserProfile getAppUserProfile() {

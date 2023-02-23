@@ -3,6 +3,7 @@ package com.soen.synapsis.appuser.job;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AppUserDetails;
 import com.soen.synapsis.appuser.AppUserService;
+import com.soen.synapsis.appuser.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -19,13 +20,19 @@ import java.util.Optional;
 public class JobController {
 
     private final JobService jobService;
-    private final AppUserService appUserService;
+    private final AuthService authService;
 
     @Autowired
-    public JobController(JobService jobService, AppUserService appUserService) {
+    public JobController(JobService jobService) {
         this.jobService = jobService;
-        this.appUserService = appUserService;
+        this.authService = new AuthService();
     }
+
+    public JobController(JobService jobService, AuthService authService) {
+        this.jobService = jobService;
+        this.authService = authService;
+    }
+
 
     @GetMapping("/job/{jid}")
     public String getJob(@PathVariable Long jid, Model model) {
@@ -55,13 +62,13 @@ public class JobController {
     }
 
     @PostMapping("/createjob")
-    public String createJob(JobRequest request, BindingResult bindingResult, Model model, @AuthenticationPrincipal AppUserDetails creatorDetails) {
+    public String createJob(JobRequest request, BindingResult bindingResult, Model model) {
         try {
             if (bindingResult.hasErrors()) {
                 throw new Exception();
             }
 
-            AppUser creator = appUserService.getAppUser(creatorDetails.getUsername());
+            AppUser creator = authService.getAuthenticatedUser();
             request.setCreator(creator);
             String response = jobService.createJob(request);
 
