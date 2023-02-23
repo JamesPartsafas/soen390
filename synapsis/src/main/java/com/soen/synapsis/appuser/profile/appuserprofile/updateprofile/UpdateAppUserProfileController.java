@@ -1,6 +1,7 @@
 package com.soen.synapsis.appuser.profile.appuserprofile.updateprofile;
 
 import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AuthService;
 import com.soen.synapsis.appuser.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,15 +13,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class UpdateAppUserProfileController {
     private UpdateAppUserProfileService updateAppUserProfileService;
+    private AuthService authService;
 
     @Autowired
     public UpdateAppUserProfileController(UpdateAppUserProfileService updateAppUserProfileService) {
         this.updateAppUserProfileService = updateAppUserProfileService;
+        this.authService = new AuthService();
+    }
+
+    public UpdateAppUserProfileController(UpdateAppUserProfileService updateAppUserProfileService, AuthService authService) {
+        this.updateAppUserProfileService = updateAppUserProfileService;
+        this.authService = authService;
     }
 
     @GetMapping("/user/update")
     public String updateAppUserProfile(Model model) {
-        if (!AppUser.isUserAuthenticated() || AppUser.getAuthenticatedUser().getRole() != Role.CANDIDATE) {
+        if (!authService.doesUserHaveRole(Role.CANDIDATE, Role.RECRUITER)) {
             return "redirect:/";
         }
 
@@ -30,7 +38,7 @@ public class UpdateAppUserProfileController {
 
     @PostMapping("/user/update")
     public String updateAppUserProfile(UpdateAppUserProfileRequest request, BindingResult bindingResult, Model model) {
-        if (!AppUser.isUserAuthenticated() || AppUser.getAuthenticatedUser().getRole() != Role.CANDIDATE) {
+        if (!authService.doesUserHaveRole(Role.CANDIDATE, Role.RECRUITER)) {
             return "redirect:/";
         }
         try {
@@ -38,7 +46,7 @@ public class UpdateAppUserProfileController {
                 throw new Exception();
             }
 
-            return updateAppUserProfileService.updateProfile(request, AppUser.getAuthenticatedUser());
+            return updateAppUserProfileService.updateProfile(request, authService.getAuthenticatedUser());
         } catch (Exception e) {
             model.addAttribute("error", "There was an error updating. " + e.getMessage());
             return updateAppUserProfile(model);

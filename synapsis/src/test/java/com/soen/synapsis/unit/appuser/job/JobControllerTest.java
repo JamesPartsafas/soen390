@@ -21,14 +21,14 @@ class JobControllerTest {
     @Mock
     private JobService jobService;
     @Mock
-    private AppUserService appUserService;
+    private AuthService authService;
     private AutoCloseable autoCloseable;
     private JobController underTest;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new JobController(jobService, appUserService);
+        underTest = new JobController(jobService, authService);
     }
 
     @AfterEach
@@ -60,7 +60,9 @@ class JobControllerTest {
         JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1);
         AppUser creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
         request.setCreator(creator);
-        underTest.createJob(request, mock(BindingResult.class), mock(Model.class), mock(AppUserDetails.class));
+        when(authService.getAuthenticatedUser()).thenReturn(creator);
+
+        underTest.createJob(request, mock(BindingResult.class), mock(Model.class));
         verify(jobService).createJob(request);
     }
 
@@ -70,11 +72,12 @@ class JobControllerTest {
         AppUser creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
         request.setCreator(creator);
         Model model = mock(Model.class);
+        when(authService.getAuthenticatedUser()).thenReturn(creator);
 
         BindingResult bindingResult = mock(BindingResult.class);
         when(bindingResult.hasErrors()).thenReturn(true);
 
-        underTest.createJob(request, bindingResult, model, mock(AppUserDetails.class));
+        underTest.createJob(request, bindingResult, model);
 
         verify(model).addAttribute(anyString(), anyString());
     }

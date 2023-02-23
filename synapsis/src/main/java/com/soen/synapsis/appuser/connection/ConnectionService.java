@@ -20,9 +20,9 @@ public class ConnectionService {
         this.appUserRepository = appUserRepository;
     }
 
-    public List<AppUser> getConnections(AppUserDetails appUser) {
-        List<Connection> connectionsRequesters = connectionRepository.findAcceptedConnectionsByRequesterID(appUser.getID());
-        List<Connection> connectionsReceivers = connectionRepository.findAcceptedConnectionsByReceiverID(appUser.getID());
+    public List<AppUser> getConnections(AppUser appUser) {
+        List<Connection> connectionsRequesters = connectionRepository.findAcceptedConnectionsByRequesterID(appUser.getId());
+        List<Connection> connectionsReceivers = connectionRepository.findAcceptedConnectionsByReceiverID(appUser.getId());
 
         List<Long> allConnectionIDs = new ArrayList<>();
 
@@ -49,12 +49,12 @@ public class ConnectionService {
         return allConnections;
     }
 
-    public List<AppUser> getPendingConnectionRequest(AppUserDetails user) {
-        return connectionRepository.findPendingConnectionsByReceiverID(user.getID());
+    public List<AppUser> getPendingConnectionRequest(AppUser user) {
+        return connectionRepository.findPendingConnectionsByReceiverID(user.getId());
     }
 
-    public String rejectConnection(AppUserDetails user, Long id) {
-        ConnectionKey connectionKey = new ConnectionKey(id, user.getID());
+    public String rejectConnection(AppUser user, Long id) {
+        ConnectionKey connectionKey = new ConnectionKey(id, user.getId());
         Optional<Connection> retrievedConnection = connectionRepository.findById(connectionKey);
 
         if (!retrievedConnection.isPresent()) {
@@ -72,8 +72,8 @@ public class ConnectionService {
         return "redirect:/network";
     }
 
-    public String acceptConnection(AppUserDetails user, Long id) {
-        ConnectionKey connectionKey = new ConnectionKey(id, user.getID());
+    public String acceptConnection(AppUser user, Long id) {
+        ConnectionKey connectionKey = new ConnectionKey(id, user.getId());
         Optional<Connection> retrievedConnection = connectionRepository.findById(connectionKey);
 
         if (!retrievedConnection.isPresent()) {
