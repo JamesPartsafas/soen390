@@ -2,6 +2,7 @@ package com.soen.synapsis.appuser.connection;
 
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AppUserDetails;
+import com.soen.synapsis.appuser.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,17 +18,26 @@ import java.util.List;
 public class ConnectionController {
 
     private final ConnectionService connectionService;
+    private final AuthService authService;
 
     @Autowired
     public ConnectionController(ConnectionService connectionService) {
         this.connectionService = connectionService;
+        this.authService = new AuthService();
+    }
+
+    public ConnectionController(ConnectionService connectionService, AuthService authService) {
+        this.connectionService = connectionService;
+        this.authService = authService;
     }
 
     @GetMapping("/network")
-    public String viewNetwork(@AuthenticationPrincipal AppUserDetails user, Model model) {
-        if (!AppUser.isUserAuthenticated()) {
+    public String viewNetwork(Model model) {
+        if (!authService.isUserAuthenticated()) {
             return "redirect:/";
         }
+
+        AppUser user = authService.getAuthenticatedUser();
 
         List<AppUser> connections = connectionService.getConnections(user);
         List<AppUser> pendingConnectionRequest = connectionService.getPendingConnectionRequest(user);
@@ -39,23 +49,23 @@ public class ConnectionController {
     }
 
     @PostMapping("/connection/reject")
-    public String rejectConnection(@AuthenticationPrincipal AppUserDetails user, @RequestParam("id") Long id, Model model) {
+    public String rejectConnection(@RequestParam("id") Long id, Model model) {
         try {
-            String returnString = connectionService.rejectConnection(user, id);
+            String returnString = connectionService.rejectConnection(authService.getAuthenticatedUser(), id);
             return returnString;
         } catch (Exception e) {
             model.addAttribute("error", "There was an error rejecting the connection: " + e.getMessage());
-            return viewNetwork(user, model);
+            return viewNetwork(model);
         }
     }
 
     @PostMapping("/connection/accept")
-    public String acceptConnection(@AuthenticationPrincipal AppUserDetails user, @RequestParam("id") Long id, Model model) {
+    public String acceptConnection(@RequestParam("id") Long id, Model model) {
         try {
-            return connectionService.acceptConnection(user, id);
+            return connectionService.acceptConnection(authService.getAuthenticatedUser(), id);
         } catch (Exception e) {
             model.addAttribute("error", "There was an error accepting the connection: " + e.getMessage());
-            return viewNetwork(user, model);
+            return viewNetwork(model);
         }
     }
 
@@ -71,8 +81,8 @@ public class ConnectionController {
     }
 
     @PostMapping("/disconnect")
-    public String disconnectFromUser(@AuthenticationPrincipal AppUserDetails user, @RequestParam("id") Long id) {
-        connectionService.disconnect(user.getID(), id);
+    public String disconnectFromUser(@RequestParam("id") Long id) {
+        connectionService.disconnect(authService.getAuthenticatedUser().getId(), id);
         return "redirect:/user/" + id;
     }
 }

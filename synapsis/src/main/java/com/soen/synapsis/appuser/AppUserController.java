@@ -17,29 +17,35 @@ public class AppUserController {
 
     private final AppUserService appUserService;
     private final ConnectionService connectionService;
+    private final AuthService authService;
 
     @Autowired
     public AppUserController(AppUserService appUserService, ConnectionService connectionService) {
         this.appUserService = appUserService;
         this.connectionService = connectionService;
+        this.authService = new AuthService();
     }
 
-
+    public AppUserController(AppUserService appUserService, ConnectionService connectionService, AuthService authService) {
+        this.appUserService = appUserService;
+        this.connectionService = connectionService;
+        this.authService = authService;
+    }
 
     @GetMapping("/user")
-    public String redirectToAuthenticatedUserProfile(@AuthenticationPrincipal AppUserDetails user) {
-        if (!AppUser.isUserAuthenticated()) {
+    public String redirectToAuthenticatedUserProfile() {
+        if (!authService.isUserAuthenticated()) {
             return "redirect:/";
         }
 
-        String userProfileURL = "redirect:/user/" + user.getID();
+        String userProfileURL = "redirect:/user/" + authService.getAuthenticatedUser().getId();
 
         return userProfileURL;
     }
 
     @GetMapping("/user/{uid}")
-    public String getAppUser(@AuthenticationPrincipal AppUserDetails user, @PathVariable Long uid, Model model) {
-        if (!AppUser.isUserAuthenticated()) {
+    public String getAppUser(@PathVariable Long uid, Model model) {
+        if (!authService.isUserAuthenticated()) {
             return "redirect:/";
         }
 
@@ -49,7 +55,7 @@ public class AppUserController {
             return "redirect:/";
 
         AppUser appUser = optionalAppUser.get();
-        boolean isConnectedWith = connectionService.isConnectedWith(user.getID(), uid);
+        boolean isConnectedWith = connectionService.isConnectedWith(authService.getAuthenticatedUser().getId(), uid);
 
         model.addAttribute("id", appUser.getId());
         model.addAttribute("name", appUser.getName());
@@ -58,6 +64,9 @@ public class AppUserController {
 
         if (appUser.getRole() == Role.COMPANY) {
             CompanyProfile companyProfile = appUser.getCompanyProfile();
+            if (companyProfile == null)
+                companyProfile = new CompanyProfile();
+
             model.addAttribute("website", companyProfile.getWebsite());
             model.addAttribute("industry", companyProfile.getIndustry());
             model.addAttribute("companySize", companyProfile.getCompanySize());
@@ -67,6 +76,9 @@ public class AppUserController {
         }
 
         AppUserProfile profile = appUser.getAppUserProfile();
+        if (profile == null)
+            profile = new AppUserProfile();
+
         model.addAttribute("education", profile.getEducation());
         model.addAttribute("skill", profile.getSkill());
         model.addAttribute("work", profile.getWork());
@@ -82,12 +94,12 @@ public class AppUserController {
     }
 
     @GetMapping("/search")
-    public String getUsersLikeName(@AuthenticationPrincipal AppUserDetails user, @RequestParam String name, Model model) {
-        if (!AppUser.isUserAuthenticated()) {
+    public String getUsersLikeName(@RequestParam String name, Model model) {
+        if (!authService.isUserAuthenticated()) {
             return "redirect:/";
         }
 
-        List<AppUser> users = appUserService.getUsersLikeName(name, user.getId());
+        List<AppUser> users = appUserService.getUsersLikeName(name, authService.getAuthenticatedUser().getId());
         model.addAttribute("users", users);
         return "pages/usersearchpage";
     }
@@ -106,12 +118,12 @@ public class AppUserController {
 
     @PutMapping("/company/markCandidateToRecruiter")
     @ResponseBody
-    public String markCandidateToRecruiter(AppUser appUser, @AuthenticationPrincipal AppUser companyUser) {
-        if (companyUser.getRole() != Role.COMPANY) {
+    public String markCandidateToRecruiter(AppUser appUser) {
+        if (!authService.doesUserHaveRole(Role.COMPANY)) {
             return "You must be a company to mark candidates as recruiters.";
         }
         try {
-            appUserService.markCandidateToRecruiter(appUser, companyUser);
+            appUserService.markCandidateToRecruiter(appUser, authService.getAuthenticatedUser());
         } catch (IllegalStateException e) {
             return e.getMessage();
         }
@@ -120,12 +132,12 @@ public class AppUserController {
 
     @PutMapping("/company/unmarkRecruiterToCandidate")
     @ResponseBody
-    public String unmarkRecruiterToCandidate(AppUser appUser, @AuthenticationPrincipal AppUser companyUser) {
-        if (companyUser.getRole() != Role.COMPANY) {
+    public String unmarkRecruiterToCandidate(AppUser appUser) {
+        if (!authService.doesUserHaveRole(Role.COMPANY)) {
             return "You must be a company to unmark recruiters as candidates.";
         }
         try {
-            appUserService.unmarkRecruiterToCandidate(appUser, companyUser);
+            appUserService.unmarkRecruiterToCandidate(appUser, authService.getAuthenticatedUser());
         } catch (IllegalStateException e) {
             return e.getMessage();
         }
@@ -136,6 +148,4 @@ public class AppUserController {
     public String getUpdateUserProfile() {
         return "pages/updateuserpage";
     }
-
-
 }

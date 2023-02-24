@@ -1,6 +1,7 @@
 package com.soen.synapsis.appuser.registration;
 
 import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,15 +15,17 @@ import javax.servlet.http.HttpServletRequest;
 public class RegistrationController {
 
     private RegistrationService registrationService;
+    private AuthService authService;
 
     @Autowired
     public RegistrationController(RegistrationService registrationService) {
         this.registrationService = registrationService;
+        this.authService = new AuthService();
     }
 
     @GetMapping("/register")
     public String register(Model model) {
-        if (AppUser.isUserAuthenticated())
+        if (authService.isUserAuthenticated())
             return "redirect:/";
 
         model.addAttribute("registrationRequest", new RegistrationRequest());
@@ -35,7 +38,7 @@ public class RegistrationController {
                            BindingResult bindingResult,
                            HttpServletRequest servlet,
                            Model model) {
-        if (AppUser.isUserAuthenticated())
+        if (authService.isUserAuthenticated())
             return "redirect:/";
 
         try {
@@ -56,7 +59,7 @@ public class RegistrationController {
 
     @GetMapping(value = "/admincreation")
     public String registerAdmin(Model model) {
-        if (AppUser.isUserAuthenticated()) {
+        if (authService.isUserAuthenticated()) {
             model.addAttribute("registrationRequest", new RegistrationRequest());
 
             return "pages/adminCreationPage";
@@ -75,7 +78,7 @@ public class RegistrationController {
                 throw new Exception();
             }
 
-            if (AppUser.isUserAuthenticated()) {
+            if (authService.isUserAuthenticated()) {
                 String response = registrationService.registerAdmin(request);
                 return response;
             }
@@ -116,7 +119,7 @@ public class RegistrationController {
 
     @GetMapping("/login")
     public String viewLoginPage() {
-        if (AppUser.isUserAuthenticated())
+        if (authService.isUserAuthenticated())
             return "redirect:/";
 
         return "pages/login";

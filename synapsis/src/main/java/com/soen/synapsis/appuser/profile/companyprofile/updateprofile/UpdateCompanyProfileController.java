@@ -1,6 +1,7 @@
 package com.soen.synapsis.appuser.profile.companyprofile.updateprofile;
 
 import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AuthService;
 import com.soen.synapsis.appuser.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,15 +14,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class UpdateCompanyProfileController {
 
     private UpdateCompanyProfileService updateCompanyProfileService;
+    private AuthService authService;
 
     @Autowired
     public UpdateCompanyProfileController(UpdateCompanyProfileService updateCompanyProfileService) {
         this.updateCompanyProfileService = updateCompanyProfileService;
+        this.authService = new AuthService();
     }
 
     @GetMapping("/company/update")
     public String updateAppUserProfile(Model model) {
-        if (!AppUser.isUserAuthenticated() || AppUser.getAuthenticatedUser().getRole() != Role.COMPANY) {
+        if (!authService.doesUserHaveRole(Role.COMPANY)) {
             return "redirect:/";
         }
 
@@ -31,7 +34,7 @@ public class UpdateCompanyProfileController {
 
     @PostMapping("/company/update")
     public String updateAppUserProfile(UpdateCompanyProfileRequest request, BindingResult bindingResult, Model model) {
-        if (!AppUser.isUserAuthenticated() || AppUser.getAuthenticatedUser().getRole() != Role.COMPANY) {
+        if (!authService.doesUserHaveRole(Role.COMPANY)) {
             return "redirect:/";
         }
         try {
@@ -39,7 +42,7 @@ public class UpdateCompanyProfileController {
                 throw new Exception();
             }
 
-            return updateCompanyProfileService.updateProfile(request, AppUser.getAuthenticatedUser());
+            return updateCompanyProfileService.updateProfile(request, authService.getAuthenticatedUser());
         } catch (Exception e) {
             model.addAttribute("error", "There was an error updating. " + e.getMessage());
             return updateAppUserProfile(model);
