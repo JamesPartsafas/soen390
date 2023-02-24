@@ -20,4 +20,7 @@ public class IndexService {
     public String getPasswordResetPage(){
         return "pages/passwordResetForm";
     }
+
+    public String redirectHomePage() {return "pages/home";
+    }
 }

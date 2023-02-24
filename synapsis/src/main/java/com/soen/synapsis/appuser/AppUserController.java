@@ -24,6 +24,8 @@ public class AppUserController {
         this.connectionService = connectionService;
     }
 
+
+
     @GetMapping("/user")
     public String redirectToAuthenticatedUserProfile(@AuthenticationPrincipal AppUserDetails user) {
         if (!AppUser.isUserAuthenticated()) {
@@ -134,5 +136,6 @@ public class AppUserController {
     public String getUpdateUserProfile() {
         return "pages/updateuserpage";
     }
+
 
 }

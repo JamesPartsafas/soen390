@@ -121,9 +121,4 @@ public class RegistrationController {
 
         return "pages/login";
     }
-
-    @GetMapping("/logout")
-    public String viewLogoutPage() {
-        return "pages/logout";
-    }
 }
