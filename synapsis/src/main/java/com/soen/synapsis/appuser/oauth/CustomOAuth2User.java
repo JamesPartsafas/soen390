@@ -35,7 +35,7 @@ public class CustomOAuth2User implements OAuth2User, AppUserAuth {
 
     @Override
     public String getName() {
-        return appUser.getName();
+        return appUser.getId().toString();
     }
 
     public String getEmail() {
