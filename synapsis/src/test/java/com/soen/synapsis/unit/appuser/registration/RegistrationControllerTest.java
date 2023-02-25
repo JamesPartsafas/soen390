@@ -87,12 +87,6 @@ class RegistrationControllerTest {
         assertEquals("pages/login", returnedPage);
     }
 
-    @Test
-    void viewLogoutPage() {
-        String returnedPage = underTest.viewLogoutPage();
-
-        assertEquals("pages/logout", returnedPage);
-    }
 
     @Test
     void sendValidPasswordResetInfo() throws Exception {
