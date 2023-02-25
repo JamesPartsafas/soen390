@@ -3,27 +3,62 @@
 <div layout:fragment="content">
     <p th:text="${error}"></p>
     <form th:action="@{/register}" th:object="${registrationRequest}" method="post">
-        <label>Email</label>
-        <input type="email" th:field="*{email}" required />
+        <div class="flex flex-col border p-8 justify-center mx-auto mt-10 shadow-xl w-1/2 mb-20 rounded-sm">
 
-        <label>Name</label>
-        <input type="text" th:field="*{name}" required />
-
-        <label>Password</label>
-        <input type="password" th:field="*{password}" required />
-
-        <fieldset required>
-            <legend>Select which type of account you would like to use:</legend>
-            <div>
-                <input type="radio" name="role" th:field="*{role}" id="candidate-button" value="CANDIDATE" />
-                <label for="candidate-button">Candidate</label>
-
-                <input type="radio" name="role" th:field="*{role}" id="company-button" value="COMPANY" />
-                <label for="company-button">Company</label>
+            <div class="mb-4">
+                <img src="../../assets/synapsis_logo.svg" class="object-contain h-12 w-12" alt="Synapsis Logo">
             </div>
-        </fieldset>
 
-        <button type="submit">Register</button>
+            <p class="font-thin text-3xl m-2 text-black text-center">Create your Synapsis profile</p>
+
+            <div class="flex flex-col space-y-4 mt-4 md:flex-row md:justify-between md:h-14 md:space-x-4 md:space-y-0">
+                <input type="email" th:field="*{email}" placeholder="Email" class="font-thin font-serif border border-grey pl-3 justify-around rounded-md hover:bg-gray-300 md:w-1/2 w-full h-14" required />
+                <input type="text" th:field="*{name}" placeholder="Name" class="font-thin font-serif border border-grey pl-3 rounded-md hover:bg-gray-300 md:w-1/2 w-full h-14" required />
+            </div>
+
+            <div class="flex flex-col space-y-4 mt-4 md:flex-row md:justify-between md:h-14 md:space-x-4 md:space-y-0">
+                <input type="password" id="password" th:field="*{password}" placeholder="Password" class="font-thin font-serif border border-grey pl-3 content-center rounded-md hover:bg-gray-300 md:w-1/2 w-full h-14" required />
+                <input type="password" id="confirmPassword" placeholder="Confirm Password" th:onmouseout="check_password()" class="font-thin font-serif border border-grey pl-3 content-center rounded-md hover:bg-gray-300 md:w-1/2 w-full h-14" required />
+            </div>
+
+            <span id="mismatch_password" class ="text-primary hidden">The passwords provided do not match!</span>
+
+            <div class="border border-grey p-3 mt-4 rounded-md hover:bg-gray-300">
+                <fieldset required>
+                    <legend class="font-thin font-serif text-grey">Select which type of account you would like to use:</legend>
+                    <div>
+                        <input type="radio" name="role" th:field="*{role}" id="candidate-button" value="CANDIDATE" />
+                        <label for="candidate-button" class="font-thin font-serif text-grey">Candidate</label>
+                        <br/>
+
+                        <input type="radio" name="role" th:field="*{role}" id="company-button" value="COMPANY" />
+                        <label for="company-button" class="font-thin font-serif text-grey">Company</label>
+                    </div>
+                </fieldset>
+            </div>
+
+            <p class="font-thin text-2xl text-center text-grey mt-10">Security Questions</p>
+            <p class="font-thin text-center text-grey">Please answer the following questions.</p>
+            <p class="font-thin text-center text-grey mb-2">These will be used to verify your identity in the future.</p>
+
+            <p class="mt-4">Sample 1: What was the name of your first pet?</p>
+            <input type="text" placeholder="Enter your answer here"
+                   class="font-thin font-serif border border-grey pl-3 h-14 content-center rounded-md hover:bg-gray-300" required/>
+
+            <p class="mt-4">Sample 2: What is your mother's maiden name?</p>
+            <input type="text" placeholder="Enter your answer here"
+                   class="font-thin font-serif border border-grey pl-3 h-14 content-center rounded-md hover:bg-gray-300" required/>
+
+            <p class="mt-4">Sample 3: What is the middle name of your youngest child?</p>
+            <input type="text" placeholder="Enter your answer here"
+                   class="font-thin font-serif border border-grey pl-3 h-14 content-center rounded-md hover:bg-gray-300" required/>
+
+            <button type="submit" class="btn btn-primary mt-3 bg-primary text-base mx-auto p-4 rounded-2xl font-thin
+                   transition hover:-translate-y-0.5 duration-150 hover:bg-opacity-60">Register</button>
+        </div>
     </form>
+
+    <script type="text/javascript" th:src="@{/js/changePassword.js}"></script>
+
 </div>
 </html>
