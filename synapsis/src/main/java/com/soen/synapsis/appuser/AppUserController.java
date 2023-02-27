@@ -108,7 +108,7 @@ public class AppUserController {
             return "redirect:/";
         }
 
-        List<AppUser> users = appUserService.getUsersLikeName(name, authService.getAuthenticatedUser().getId());
+        List<AppUser> users = appUserService.getRegularUsersLikeName(name, authService.getAuthenticatedUser().getId());
         model.addAttribute("users", users);
         return "pages/usersearchpage";
     }

@@ -58,13 +58,13 @@ public class AppUserServiceTest {
     }
 
     @Test
-    void getUsersLikeNameReturnsListOfAppUsers() {
+    void getRegularUsersLikeNameReturnsListOfAppUsers() {
         String name = "name";
         Long id = 1L;
 
-        List<AppUser> users = underTest.getUsersLikeName(name, id);
+        List<AppUser> users = underTest.getRegularUsersLikeName(name, id);
 
-        verify(appUserRepository, times(1)).findByNameContainingIgnoreCaseAndIdNot(name, id);
+        verify(appUserRepository, times(1)).findByNameContainingIgnoreCaseAndIdNotAndRoleNot(name, id, Role.ADMIN);
     }
 
     @Test
