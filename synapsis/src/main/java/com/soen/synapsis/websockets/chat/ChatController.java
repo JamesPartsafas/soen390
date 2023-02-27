@@ -71,33 +71,33 @@ public class ChatController {
         Chat chat = retrievedChat.get();
         Long authenticatedUserId = authService.getAuthenticatedUser().getId();
 
-        if (!Objects.equals(chat.getFirstUser().getId(), authenticatedUserId) && !Objects.equals(chat.getSecondUser().getId(), authenticatedUserId)) {
+        if (!Objects.equals(chat.getCreator().getId(), authenticatedUserId) && !Objects.equals(chat.getParticipant().getId(), authenticatedUserId)) {
             return "redirect:/chats";
         }
 
         List<Message> messages = chat.getMessages();
         Long lastMessageId = messages.size() == 0 ? 0 : messages.get(messages.size() - 1).getId();
 
-        if (Objects.equals(chat.getFirstUser().getId(), authenticatedUserId)) {
+        if (Objects.equals(chat.getCreator().getId(), authenticatedUserId)) {
             MessageDTO readMessage = new MessageDTO(lastMessageId,
                     "",
                     MessageType.READ,
-                    chat.getSecondUser().getId(),
-                    chat.getFirstUser().getId());
+                    chat.getParticipant().getId(),
+                    chat.getCreator().getId());
             this.sendRead(SecurityContextHolder.getContext().getAuthentication(), chatID, readMessage);
 
-            model.addAttribute("senderId", chat.getFirstUser().getId());
-            model.addAttribute("receiverId", chat.getSecondUser().getId());
+            model.addAttribute("senderId", chat.getCreator().getId());
+            model.addAttribute("receiverId", chat.getParticipant().getId());
         } else {
             MessageDTO readMessage = new MessageDTO(lastMessageId,
                     "",
                     MessageType.READ,
-                    chat.getFirstUser().getId(),
-                    chat.getSecondUser().getId());
+                    chat.getCreator().getId(),
+                    chat.getParticipant().getId());
             this.sendRead(SecurityContextHolder.getContext().getAuthentication(), chatID, readMessage);
 
-            model.addAttribute("senderId", chat.getSecondUser().getId());
-            model.addAttribute("receiverId", chat.getFirstUser().getId());
+            model.addAttribute("senderId", chat.getParticipant().getId());
+            model.addAttribute("receiverId", chat.getCreator().getId());
         }
 
         model.addAttribute("chatId", chat.getId());

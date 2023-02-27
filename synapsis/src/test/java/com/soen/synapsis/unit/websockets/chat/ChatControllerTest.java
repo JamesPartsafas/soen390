@@ -102,7 +102,7 @@ class ChatControllerTest {
     }
 
     @Test
-    void getChatByIdCallsSendReadWithSecondUserAsReceiverWhenAuthUserIsFirstUser() {
+    void getChatByIdCallsSendReadWithParticipantAsReceiverWhenAuthUserIsCreator() {
         Chat chat = new Chat(user1, user2);
         chat.setMessages(new ArrayList<>());
 
@@ -128,7 +128,7 @@ class ChatControllerTest {
     }
 
     @Test
-    void getChatByIdCallsSendReadWithFirstUserAsReceiverWhenAuthUserIsSecondUser() {
+    void getChatByIdCallsSendReadWithCreatorAsReceiverWhenAuthUserIsParticipant() {
         Chat chat = new Chat(user1, user2);
         chat.setMessages(new ArrayList<>());
 

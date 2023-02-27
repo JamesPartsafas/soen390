@@ -4,11 +4,9 @@ import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.websockets.chat.Chat;
 import com.soen.synapsis.websockets.chat.message.Message;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,27 +46,27 @@ class ChatTest {
     }
 
     @Test
-    void getFirstUser() {
-        assertEquals(firstUser, underTest.getFirstUser());
+    void getCreator() {
+        assertEquals(firstUser, underTest.getCreator());
     }
 
     @Test
-    void setFirstUser() {
+    void setCreator() {
         AppUser newFirstUser = new AppUser(3L, "Joe Man3", "1234", "joecandidate3@mail.com", Role.CANDIDATE);
-        underTest.setFirstUser(newFirstUser);
-        assertEquals(newFirstUser, underTest.getFirstUser());
+        underTest.setCreator(newFirstUser);
+        assertEquals(newFirstUser, underTest.getCreator());
     }
 
     @Test
-    void getSecondUser() {
-        assertEquals(secondUser, underTest.getSecondUser());
+    void getParticipant() {
+        assertEquals(secondUser, underTest.getParticipant());
     }
 
     @Test
-    void setSecondUser() {
+    void setParticipant() {
         AppUser newSecondUser = new AppUser(3L, "Joe Man3", "1234", "joecandidate3@mail.com", Role.CANDIDATE);
-        underTest.setSecondUser(newSecondUser);
-        assertEquals(newSecondUser, underTest.getSecondUser());
+        underTest.setParticipant(newSecondUser);
+        assertEquals(newSecondUser, underTest.getParticipant());
     }
 
     @Test

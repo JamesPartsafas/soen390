@@ -4,7 +4,6 @@ import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.websockets.chat.message.Message;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -17,11 +16,11 @@ public class Chat {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private AppUser firstUser;
+    private AppUser creator;
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private AppUser secondUser;
+    private AppUser participant;
 
     @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY)
     @Column(nullable = false)
@@ -34,20 +33,20 @@ public class Chat {
     public Chat() {
     }
 
-    public Chat(AppUser firstUser, AppUser secondUser) {
-        this(firstUser, secondUser, new Timestamp(System.currentTimeMillis()));
+    public Chat(AppUser creator, AppUser participant) {
+        this(creator, participant, new Timestamp(System.currentTimeMillis()));
     }
 
-    public Chat(AppUser firstUser, AppUser secondUser, Timestamp lastUpdated) {
-        this.firstUser = firstUser;
-        this.secondUser = secondUser;
+    public Chat(AppUser creator, AppUser participant, Timestamp lastUpdated) {
+        this.creator = creator;
+        this.participant = participant;
         this.lastUpdated = lastUpdated;
     }
 
-    public Chat(Long id, AppUser firstUser, AppUser secondUser, Timestamp lastUpdated) {
+    public Chat(Long id, AppUser creator, AppUser participant, Timestamp lastUpdated) {
         this.id = id;
-        this.firstUser = firstUser;
-        this.secondUser = secondUser;
+        this.creator = creator;
+        this.participant = participant;
         this.lastUpdated = lastUpdated;
     }
 
@@ -59,20 +58,20 @@ public class Chat {
         this.id = id;
     }
 
-    public AppUser getFirstUser() {
-        return firstUser;
+    public AppUser getCreator() {
+        return creator;
     }
 
-    public void setFirstUser(AppUser firstUser) {
-        this.firstUser = firstUser;
+    public void setCreator(AppUser firstUser) {
+        this.creator = firstUser;
     }
 
-    public AppUser getSecondUser() {
-        return secondUser;
+    public AppUser getParticipant() {
+        return participant;
     }
 
-    public void setSecondUser(AppUser secondUser) {
-        this.secondUser = secondUser;
+    public void setParticipant(AppUser secondUser) {
+        this.participant = secondUser;
     }
 
     public List<Message> getMessages() {
@@ -95,8 +94,8 @@ public class Chat {
     public String toString() {
         return "Chat{" +
                 "id=" + id +
-                ", firstUser=" + firstUser +
-                ", secondUser=" + secondUser +
+                ", firstUser=" + creator +
+                ", secondUser=" + participant +
                 ", messages=" + messages +
                 ", lastUpdated=" + lastUpdated +
                 '}';

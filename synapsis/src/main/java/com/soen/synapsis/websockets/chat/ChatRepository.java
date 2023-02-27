@@ -10,9 +10,9 @@ import java.util.Optional;
 
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Long> {
-    @Query("SELECT c FROM Chat c WHERE c.firstUser.id =:id OR c.secondUser.id =: id ORDER BY c.lastUpdated DESC")
+    @Query("SELECT c FROM Chat c WHERE c.creator.id =:id OR c.participant.id =: id ORDER BY c.lastUpdated DESC")
     List<Chat> findAllByUserId(@Param("id") Long id);
 
-    @Query("SELECT c FROM Chat c WHERE (c.firstUser.id = :firstUserId AND c.secondUser.id = :secondUserId) OR (c.firstUser.id = :secondUserId AND c.secondUser.id = :firstUserId)")
+    @Query("SELECT c FROM Chat c WHERE (c.creator.id = :firstUserId AND c.participant.id = :secondUserId) OR (c.creator.id = :secondUserId AND c.participant.id = :firstUserId)")
     Optional<Chat> findByUserIds(@Param("firstUserId") Long firstUserId, @Param("secondUserId") Long secondUserId);
 }

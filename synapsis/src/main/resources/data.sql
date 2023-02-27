@@ -29,7 +29,7 @@ VALUES (1,'Engineeing', 'fast learner', 'developer', 'ML','5144444444','sss','xy
 INSERT INTO company_profile(app_user_id, website,industry, company_size,location,speciality)
 VALUES (3,'www.google.com', 'technology', '150k', 'Newyork','search');
 
-INSERT INTO chat (first_user_id, second_user_id, last_updated)
+INSERT INTO chat (creator_id, participant_id, last_updated)
 VALUES (1, 5, '2022-01-01'), (4, 1, '2023-01-01');
 
 INSERT INTO message (chat_id, content, sender_id, read, created_at)

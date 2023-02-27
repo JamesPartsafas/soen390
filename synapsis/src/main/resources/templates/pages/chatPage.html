@@ -8,7 +8,7 @@
         <a th:href="@{/chat/{id}(id=${chat.id})}" class="flex">
             <img class="w-[20px] h-[20px] rounded-t-2xl" src="/assets/default_user.svg">
             <div>
-                <p th:text="${chat.firstUser.id == #authentication.principal.id ? chat.secondUser.name : chat.firstUser.name}"></p>
+                <p th:text="${chat.creator.id == #authentication.principal.id ? chat.participant.name : chat.creator.name}"></p>
             </div>
         </a>
     </div>
