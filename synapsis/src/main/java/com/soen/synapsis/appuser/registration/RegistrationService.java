@@ -111,7 +111,7 @@ public class RegistrationService {
             throw new IllegalStateException("The chosen password must be at least " + MIN_PASSWORD_LENGTH + " characters long.");
         }
 
-        if (!appUserService.checkSecurityQuestions(request.getEmail(), request.getSecurityAnswer1(), request.getSecurityAnswer2(), request.getSecurityAnswer3())) {
+        if (!appUserService.checkSecurityQuestions(appUser, request.getSecurityAnswer1(), request.getSecurityAnswer2(), request.getSecurityAnswer3())) {
             throw new IllegalStateException("1 or more of the security questions was incorrect.");
         }
 

@@ -56,9 +56,16 @@ public class AppUserService {
         }
 
         appUser.setPassword(encoder.encode(appUser.getPassword()));
-        appUser.setSecurityAnswer1(encoder.encode(appUser.getSecurityAnswer1()));
-        appUser.setSecurityAnswer2(encoder.encode(appUser.getSecurityAnswer2()));
-        appUser.setSecurityAnswer3(encoder.encode(appUser.getSecurityAnswer3()));
+
+        if (appUser.getSecurityAnswer1() != null) {
+            appUser.setSecurityAnswer1(encoder.encode(appUser.getSecurityAnswer1()));
+        }
+        if (appUser.getSecurityAnswer2() != null) {
+            appUser.setSecurityAnswer2(encoder.encode(appUser.getSecurityAnswer2()));
+        }
+        if (appUser.getSecurityAnswer3() != null) {
+            appUser.setSecurityAnswer3(encoder.encode(appUser.getSecurityAnswer3()));
+        }
 
         appUserRepository.save(appUser);
 
@@ -112,7 +119,7 @@ public class AppUserService {
             appUserRepository.save(appUser);
             return "pages/login";
         } else {
-            throw new IllegalStateException("This email does not belong to any user.");
+            throw new IllegalStateException("User does not exist.");
         }
     }
 
@@ -138,8 +145,7 @@ public class AppUserService {
 
     }
 
-    public boolean checkSecurityQuestions(String email, String securityAnswer1, String securityAnswer2, String securityAnswer3) {
-        AppUser appUser = getAppUser(email);
+    public boolean checkSecurityQuestions(AppUser appUser, String securityAnswer1, String securityAnswer2, String securityAnswer3) {
 
         if (appUser != null) {
             if (!encoder.matches(securityAnswer1, appUser.getSecurityAnswer1()))

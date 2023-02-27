@@ -162,7 +162,9 @@ class RegistrationServiceTest {
         String password = "12345678";
         String newPassword = "12345679";
         Role role = Role.CANDIDATE;
-        AppUser appUser = new AppUser(name, password, email, role);
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        AppUser appUser = new AppUser(name, encoder.encode(password), email, role);
 
         underTest.updateUserPassword(appUser, password, newPassword);
 
@@ -181,8 +183,9 @@ class RegistrationServiceTest {
         String securityAnswer = encoder.encode("a");
 
         AppUser appUser = new AppUser(name, password, email, role, AuthProvider.LOCAL, securityAnswer, securityAnswer, securityAnswer);
-        RegistrationRequest request = new RegistrationRequest(name, newPassword, email, role, "a", "a", "a");
+        RegistrationRequest request = new RegistrationRequest(name, email, newPassword, role, "a", "a", "a");
         when(appUserService.getAppUser(email)).thenReturn(appUser);
+        when(appUserService.checkSecurityQuestions(appUser, request.getSecurityAnswer1(), request.getSecurityAnswer2(), request.getSecurityAnswer3())).thenReturn(true);
 
         underTest.resetUserPassword(request);
 

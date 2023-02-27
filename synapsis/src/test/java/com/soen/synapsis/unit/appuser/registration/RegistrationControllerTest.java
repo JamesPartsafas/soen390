@@ -1,6 +1,7 @@
 package com.soen.synapsis.unit.appuser.registration;
 
 import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AuthService;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.registration.PasswordUpdateRequest;
 import com.soen.synapsis.appuser.registration.RegistrationController;
@@ -25,6 +26,9 @@ class RegistrationControllerTest {
 
     @Mock
     private RegistrationService registrationService;
+    @Mock
+    private AuthService authService;
+
     private AutoCloseable autoCloseable;
     private RegistrationController underTest;
 
@@ -32,7 +36,7 @@ class RegistrationControllerTest {
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new RegistrationController(registrationService);
+        underTest = new RegistrationController(registrationService, authService);
 
     }
 
@@ -96,6 +100,8 @@ class RegistrationControllerTest {
         AppUser appUser = new AppUser("joe", "joeadmin@gmail.com", "12345678", Role.ADMIN);
         PasswordUpdateRequest request = new PasswordUpdateRequest("12345678", "12345679");
         BindingResult bindingResult = mock(BindingResult.class);
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(authService.getAuthenticatedUser()).thenReturn(appUser);
         underTest.passwordUpdate(request,
                 bindingResult,
                 Mockito.mock(Model.class));

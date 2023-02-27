@@ -141,19 +141,17 @@ public class AppUserServiceTest {
     @Test
     void updatePasswordWithExistingEmail() {
         String password = "abcd";
-        AppUser appUser = null;
-        String returnValue = underTest.updatePassword(appUser, password);
+        String email = "newjoe@mail.com";
+        String newPassword = "abcde";
+        AppUser appUser = new AppUser("New Joe", password, email, Role.CANDIDATE);
+        String returnValue = underTest.updatePassword(appUser, newPassword);
         assertEquals("pages/login", returnValue);
     }
 
     @Test
     void updatePasswordWithNewEmail() {
-        String email = "newjoe@mail.com";
-        String password = "abcd";
-        AppUser appUser = new AppUser("New Joe", "1234", email, Role.CANDIDATE);
-        when(appUserRepository.findByEmail(email)).thenReturn(null);
         Exception exception = assertThrows(IllegalStateException.class,
-                () -> underTest.updatePassword(appUser, password),
+                () -> underTest.updatePassword(null, ""),
                 "This email does not belong to any user.");
     }
 
@@ -163,8 +161,7 @@ public class AppUserServiceTest {
         String securityAnswer = encoder.encode("a");
         String email = "newjoe@mail.com";
         AppUser appUser = new AppUser("New Joe", "1234", email, Role.CANDIDATE, AuthProvider.LOCAL, securityAnswer, securityAnswer, securityAnswer);
-        when(appUserRepository.findByEmail(email)).thenReturn(appUser);
-        boolean result = underTest.checkSecurityQuestions(appUser.getEmail(), "a", "a", "a");
+        boolean result = underTest.checkSecurityQuestions(appUser, "a", "a", "a");
 
         assertTrue(result);
     }
@@ -175,8 +172,7 @@ public class AppUserServiceTest {
         String securityAnswer = encoder.encode("a");
         String email = "newjoe@mail.com";
         AppUser appUser = new AppUser("New Joe", "1234", email, Role.CANDIDATE, AuthProvider.LOCAL, securityAnswer, securityAnswer, securityAnswer);
-        when(appUserRepository.findByEmail(email)).thenReturn(appUser);
-        boolean result = underTest.checkSecurityQuestions(appUser.getEmail(), "b", "a", "a");
+        boolean result = underTest.checkSecurityQuestions(appUser, "b", "a", "a");
 
         assertFalse(result);
     }
@@ -187,8 +183,7 @@ public class AppUserServiceTest {
         String securityAnswer = encoder.encode("a");
         String email = "newjoe@mail.com";
         AppUser appUser = new AppUser("New Joe", "1234", email, Role.CANDIDATE, AuthProvider.LOCAL, securityAnswer, securityAnswer, securityAnswer);
-        when(appUserRepository.findByEmail(email)).thenReturn(appUser);
-        boolean result = underTest.checkSecurityQuestions(appUser.getEmail(), "a", "b", "a");
+        boolean result = underTest.checkSecurityQuestions(appUser, "a", "b", "a");
 
         assertFalse(result);
     }
@@ -199,8 +194,7 @@ public class AppUserServiceTest {
         String securityAnswer = encoder.encode("a");
         String email = "newjoe@mail.com";
         AppUser appUser = new AppUser("New Joe", "1234", email, Role.CANDIDATE, AuthProvider.LOCAL, securityAnswer, securityAnswer, securityAnswer);
-        when(appUserRepository.findByEmail(email)).thenReturn(appUser);
-        boolean result = underTest.checkSecurityQuestions(appUser.getEmail(), "a", "a", "b");
+        boolean result = underTest.checkSecurityQuestions(appUser, "a", "a", "b");
 
         assertFalse(result);
     }

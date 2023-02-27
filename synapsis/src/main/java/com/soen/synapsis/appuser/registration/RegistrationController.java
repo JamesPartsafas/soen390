@@ -23,6 +23,11 @@ public class RegistrationController {
         this.authService = new AuthService();
     }
 
+    public RegistrationController(RegistrationService registrationService, AuthService authService) {
+        this.registrationService = registrationService;
+        this.authService = authService;
+    }
+
     @GetMapping("/register")
     public String register(Model model) {
         if (authService.isUserAuthenticated())
