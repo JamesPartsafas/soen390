@@ -77,15 +77,15 @@ class AppUserRepositoryTest {
     }
 
     @Test
-    void itShouldFindUsersByNameIfUserIsAdmin() {
+    void itShouldNotFindUsersByNameIfUserIsAdmin() {
         String name = "oh";
-        AppUser appUser1 = new AppUser(1L,
+        AppUser appUser = new AppUser(1L,
                 "John User 1",
                 "1234",
                 "joeuser1test@mail.com",
                 Role.ADMIN);
 
-        underTest.save(appUser1);
+        underTest.save(appUser);
         List<AppUser> users = underTest.findByNameContainingIgnoreCaseAndIdNotAndRoleNot(name, 2L, Role.ADMIN);
         assertTrue(users.size() == 0);
     }
