@@ -26,11 +26,29 @@ class JobControllerTest {
     private AuthService authService;
     private AutoCloseable autoCloseable;
     private JobController underTest;
+    private List<Job> allJobs;
+    private AppUser creator;
+    private Job job1;
+    private Job job2;
+    private JobRequest request;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
         underTest = new JobController(jobService, authService);
+
+        creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
+
+        job1 = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5);
+        job2 = new Job(creator, "Mechanical Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5);
+
+        allJobs = new ArrayList<>();
+
+        allJobs.add(job1);
+        allJobs.add(job2);
+
+        request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1);
+
     }
 
     @AfterEach
@@ -40,15 +58,7 @@ class JobControllerTest {
 
     @Test
     void viewJobPostingReturnsAllJobs() {
-        AppUser creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
-
-        Job job1 = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5);
-        Job job2 = new Job(creator, "Mechanical Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5);
-
-        List<Job> allJobs = new ArrayList<>();
-        allJobs.add(job1);
-        allJobs.add(job2);
-
+        when(authService.isUserAuthenticated()).thenReturn(true);
         when(jobService.getAllJobs()).thenReturn(allJobs);
 
         String returnValue = underTest.viewJobPosting(mock(Model.class));
@@ -57,14 +67,19 @@ class JobControllerTest {
     }
 
     @Test
+    void viewJobPostingWhenNotAuthenticatedRedirects() {
+        when(jobService.getAllJobs()).thenReturn(allJobs);
+
+        String returnValue = underTest.viewJobPosting(mock(Model.class));
+
+        assertEquals("redirect:/", returnValue);
+    }
+
+    @Test
     void getJobReturnsJobInfo() {
-        AppUser creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
+        when(jobService.getJob(job1.getID())).thenReturn(Optional.of(job1));
 
-        Job job = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5);
-
-        when(jobService.getJob(job.getID())).thenReturn(Optional.of(job));
-
-        String returnValue = underTest.getJob(job.getID(),mock(Model.class));
+        String returnValue = underTest.getJob(job1.getID(),mock(Model.class));
 
         assertEquals("pages/job", returnValue);
     }
@@ -77,8 +92,7 @@ class JobControllerTest {
 
     @Test
     void sendValidCreateJobInfo() {
-        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1);
-        AppUser creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
+        request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1);
         request.setCreator(creator);
         when(authService.getAuthenticatedUser()).thenReturn(creator);
 
@@ -88,8 +102,7 @@ class JobControllerTest {
 
     @Test
     void createJobWithBindingErrors() {
-        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1);
-        AppUser creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
+        request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1);
         request.setCreator(creator);
         Model model = mock(Model.class);
         when(authService.getAuthenticatedUser()).thenReturn(creator);
