@@ -11,6 +11,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,6 +36,24 @@ class JobControllerTest {
     @AfterEach
     void tearDown() throws Exception {
         autoCloseable.close();
+    }
+
+    @Test
+    void viewJobPostingReturnsAllJobs() {
+        AppUser creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
+
+        Job job1 = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5);
+        Job job2 = new Job(creator, "Mechanical Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5);
+
+        List<Job> allJobs = new ArrayList<>();
+        allJobs.add(job1);
+        allJobs.add(job2);
+
+        when(jobService.getAllJobs()).thenReturn(allJobs);
+
+        String returnValue = underTest.viewJobPosting(mock(Model.class));
+
+        assertEquals("pages/jobs", returnValue);
     }
 
     @Test

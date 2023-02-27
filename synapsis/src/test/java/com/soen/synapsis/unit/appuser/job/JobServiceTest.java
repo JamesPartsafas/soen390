@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,6 +34,12 @@ class JobServiceTest {
     @AfterEach
     void tearDown() throws Exception {
         autoCloseable.close();
+    }
+
+    @Test
+    void getAllJobsReturnsAllJobs() {
+        undertest.getAllJobs();
+        verify(jobRepository, times(1)).findAll();
     }
 
     @Test
