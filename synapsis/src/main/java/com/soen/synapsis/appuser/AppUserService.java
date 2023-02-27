@@ -42,7 +42,7 @@ public class AppUserService {
         return appUserRepository.findByEmail(email);
     }
 
-    public List<AppUser> getUsersLikeName(String name, Long id) { return appUserRepository.findByNameContainingIgnoreCaseAndIdNot(name, id); }
+    public List<AppUser> getRegularUsersLikeName(String name, Long id) { return appUserRepository.findByNameContainingIgnoreCaseAndIdNotAndRoleNot(name, id, Role.ADMIN); }
 
     public String signUpUser(AppUser appUser) {
         boolean appUserExists = appUserRepository.findByEmail(appUser.getEmail()) != null;
