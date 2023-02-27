@@ -11,6 +11,7 @@
                 <div class="p-5 ">
                     <h5 class="text-left text-2xl font-bold tracking-tight text-gray-900"
                         th:text="${name}"></h5>
+                    <p th:text="${description}"></p>
                     <table>
                         <tr>
                             <th>
@@ -36,7 +37,7 @@
             </div>
         </div>
 
-        <div class="flex max-w-lg h-[8rem] bg-neutral-100 mr-60 absolute top-32 right-80 border-gray-200 rounded-lg shadow">
+        <div th:if="${showControls}" class="flex max-w-lg h-[8rem] bg-neutral-100 mr-60 absolute top-32 right-80 border-gray-200 rounded-lg shadow">
             <div class="pr-10 pb-10 pl-10 pt-5 ">
                 <a th:href="@{/user/update}" class=" text-left text-xl  font-normal  text-gray-900">
                     Edit Public Profile

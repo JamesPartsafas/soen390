@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UpdateCompanyProfileRequestTest {
 
+    private String description;
     private String website;
     private String industry;
     private String companySize;
@@ -17,12 +18,13 @@ class UpdateCompanyProfileRequestTest {
     private UpdateCompanyProfileRequest underTest;
     @BeforeEach
     void setUp() {
+        description = "description";
         website = "google.com";
         industry = "tech";
         companySize = "100000";
         location = "California";
         speciality = "Search engines";
-        underTest = new UpdateCompanyProfileRequest(website, industry, companySize, location, speciality);
+        underTest = new UpdateCompanyProfileRequest(description, website, industry, companySize, location, speciality);
     }
 
     @Test

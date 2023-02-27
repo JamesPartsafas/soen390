@@ -15,6 +15,9 @@ public class CompanyProfile {
     private Long id;
 
     @Column(nullable = true)
+    private String description;
+
+    @Column(nullable = true)
     private String website;
 
     @Column(nullable = true)
@@ -32,11 +35,11 @@ public class CompanyProfile {
     public CompanyProfile() {
     }
 
-    public CompanyProfile(AppUser appUser, Long id, String website, String industry, String companySize, String location,
+    public CompanyProfile(AppUser appUser, Long id, String description, String website, String industry, String companySize, String location,
                           String speciality) {
         this.appUser = appUser;
-
         this.id = id;
+        this.description = description;
         this.website = website;
         this.industry = industry;
         this.companySize = companySize;
@@ -44,10 +47,10 @@ public class CompanyProfile {
         this.speciality = speciality;
     }
 
-    public CompanyProfile(AppUser appUser, String website, String industry, String companySize, String location,
+    public CompanyProfile(AppUser appUser, String description, String website, String industry, String companySize, String location,
                           String speciality) {
         this.appUser = appUser;
-
+        this.description = description;
         this.website = website;
         this.industry = industry;
         this.companySize = companySize;
@@ -69,6 +72,14 @@ public class CompanyProfile {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getWebsite() {

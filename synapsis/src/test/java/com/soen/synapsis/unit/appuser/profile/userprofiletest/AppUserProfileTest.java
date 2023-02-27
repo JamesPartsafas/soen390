@@ -14,6 +14,7 @@ public class AppUserProfileTest {
     private AppUserProfile underTest;
     private AppUser appUser;
     private Long id;
+    private String description;
     private String education;
     private String skill;
     private String work;
@@ -28,6 +29,7 @@ public class AppUserProfileTest {
     void setUp() {
         appUser = new AppUser(2L, "joe george", "12345678", "george@gmail.com", Role.CANDIDATE);
         id = 3L;
+        description = "description";
         education = "engineering";
         skill = "self learner";
         work = "developer";
@@ -37,7 +39,7 @@ public class AppUserProfileTest {
         project = "amaznot website";
         award = "best student award";
         language = "French";
-        underTest = new AppUserProfile(appUser, id, education, skill, work,course, phone, volunteering,  project, award, language);
+        underTest = new AppUserProfile(appUser, id, description, education, skill, work,course, phone, volunteering,  project, award, language);
     }
 
     @Test
@@ -66,6 +68,20 @@ public class AppUserProfileTest {
         underTest.setAppUser(newAppUser);
 
         assertEquals(newAppUser, underTest.getAppUser());
+    }
+
+    @Test
+    void getDescription() {
+        assertEquals(description, underTest.getDescription());
+    }
+
+    @Test
+    void setDescription() {
+        String newDescription = "new description";
+
+        underTest.setDescription(newDescription);
+
+        assertEquals(newDescription, underTest.getDescription());
     }
 
     @Test
