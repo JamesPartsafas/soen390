@@ -8,7 +8,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,6 +66,7 @@ public class AppUserController {
         model.addAttribute("id", appUser.getId());
         model.addAttribute("name", appUser.getName());
         model.addAttribute("email", appUser.getEmail());
+        model.addAttribute("profilePicture", appUser.getProfilePicture() != null ? appUser.getProfilePicture().getImage() : "");
         model.addAttribute("isConnectedWith", isConnectedWith);
 
         if (authService.getAuthenticatedUser().getId() == uid)
@@ -99,7 +102,19 @@ public class AppUserController {
         model.addAttribute("language", profile.getLanguage());
 
         return "pages/userpage";
+    }
 
+    @PostMapping("/uploadProfilePicture")
+    public String uploadProfilePicture(@RequestParam("image")MultipartFile file) throws IOException {
+        if (!authService.isUserAuthenticated()) {
+            return "redirect:/";
+        }
+
+        AppUser appUser = authService.getAuthenticatedUser();
+
+        appUserService.uploadProfilePicture(file, appUser);
+
+        return "redirect:/user/" + appUser.getId();
     }
 
     @GetMapping("/search")

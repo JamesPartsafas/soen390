@@ -1,6 +1,7 @@
 package com.soen.synapsis.unit.appuser;
 
 import com.soen.synapsis.appuser.*;
+import com.soen.synapsis.appuser.profile.ProfilePictureRepository;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfileRepository;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfileRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -26,12 +27,15 @@ public class AppUserServiceTest {
     private AppUserProfileRepository appUserProfileRepository;
     @Mock
     private CompanyProfileRepository companyProfileRepository;
+    @Mock
+    private ProfilePictureRepository profilePictureRepository;
     private AutoCloseable autoCloseable;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new AppUserService(appUserRepository,appUserProfileRepository,companyProfileRepository);
+        underTest = new AppUserService(appUserRepository, appUserProfileRepository,
+                                companyProfileRepository, profilePictureRepository);
     }
 
     @AfterEach

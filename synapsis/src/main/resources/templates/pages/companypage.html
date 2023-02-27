@@ -5,13 +5,27 @@
     <div>
         <div class="pl-32 pr-5 pb-3">
             <div class="flex max-w-2xl bg-neutral-100 h-[10rem]    border-gray-200 rounded-lg shadow">
-                <div class="img">
+                <div class="img" id="profilePictureHolder">
                     <img class=" mt-3.5 rounded-full w-28 h-32   " src="../../assets/default_user.svg" alt="Default"/>
                 </div>
                 <div class="p-5 ">
                     <h5 class="text-left text-2xl  font-bold tracking-tight text-gray-900 dark:text-white"
                         th:text="${name}"></h5>
                     <p th:text="${description}"></p>
+
+                    <p th:text="${profilePicture}" id="base64Image" hidden></p>
+                    <div th:if="${showControls}">
+                        <form th:action="@{/uploadProfilePicture}"
+                              method="post"
+                              enctype="multipart/form-data"
+                        >
+                            <label>Upload new Profile Picture</label>
+                            <input type="file" name="image" accept="image/png, image/jpeg" />
+
+                            <button class=" btn bg-red-500 text-white rounded-full" type="submit">Save</button>
+                        </form>
+                    </div>
+
                     <table>
                         <tr>
                             <th>

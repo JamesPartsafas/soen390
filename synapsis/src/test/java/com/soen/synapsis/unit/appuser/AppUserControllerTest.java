@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -156,5 +157,40 @@ class AppUserControllerTest {
         String returnValue = underTest.unmarkRecruiterToCandidate(recruiterUser);
 
         assertEquals("You must be a company to unmark recruiters as candidates.", returnValue);
+    }
+
+    @Test
+    void uploadProfilePictureSucceeds() {
+        AppUser testUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.RECRUITER);
+
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(authService.getAuthenticatedUser()).thenReturn(testUser);
+
+        String returnValue = null;
+        MultipartFile mockFile = mock(MultipartFile.class);
+        try {
+            returnValue = underTest.uploadProfilePicture(mockFile);
+            verify(appUserService).uploadProfilePicture(mockFile, testUser);
+        }
+        catch (Exception e) {
+            fail();
+        }
+
+        assertEquals("redirect:/user/1", returnValue);
+    }
+
+    @Test
+    void uploadProfilePictureWithoutAuthFails() {
+        when(authService.isUserAuthenticated()).thenReturn(false);
+
+        String returnValue = null;
+        try {
+            returnValue = underTest.uploadProfilePicture(mock(MultipartFile.class));
+        }
+        catch (Exception e) {
+            fail();
+        }
+
+        assertEquals("redirect:/", returnValue);
     }
 }
