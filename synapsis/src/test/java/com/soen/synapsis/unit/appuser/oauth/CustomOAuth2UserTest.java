@@ -16,16 +16,18 @@ import static org.junit.jupiter.api.Assertions.*;
 class CustomOAuth2UserTest {
 
     private CustomOAuth2User underTest;
+    private Long id;
     private String name;
     private String email;
     private Role role;
 
     @BeforeEach
     void setUp() {
+        id = 6L;
         name = "Joe Smith";
         email = "joe@mail.com";
         role = Role.CANDIDATE;
-        underTest = new CustomOAuth2User(new AppUser(name, Constants.SSO_PASSWORD, email, role));
+        underTest = new CustomOAuth2User(new AppUser(id, name, Constants.SSO_PASSWORD, email, role));
     }
 
     @Test
@@ -48,7 +50,7 @@ class CustomOAuth2UserTest {
     void getName() {
         String retrievedName = underTest.getName();
 
-        assertEquals(name, retrievedName);
+        assertEquals(id.toString(), retrievedName);
     }
 
     @Test

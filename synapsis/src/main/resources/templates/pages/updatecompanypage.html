@@ -6,24 +6,28 @@
     <form th:action="@{/company/update}" th:object="${updateCompanyProfileRequest}" method="post">
         <div class="flex max-w-xl bg-neutral-100 border-gray-200 ml-28 rounded-lg shadow">
             <div class="p-5">
+                <label>Description</label><br>
+                <input type="text" id="description" name="description" th:value="${profile.description}"
+                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+                <br>
                 <label>Website</label><br>
-                <input type="text" id="website" th:field="*{website}"
+                <input type="text" id="website" name="website" th:value="${profile.website}"
                        class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
                 <br>
                 <label>Industry</label><br>
-                <input type="text" id="industry" th:field="*{industry}"
+                <input type="text" id="industry" name="industry" th:value="${profile.industry}"
                        class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
                 <br>
                 <label>Company Size</label><br>
-                <input type="text" id="companySize" th:field="*{companySize}"
+                <input type="text" id="companySize" name="companySize" th:value="${profile.companySize}"
                        class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
                 <br>
                 <label>Location</label><br>
-                <input type="text" id="location" th:field="*{location}"
+                <input type="text" id="location" name="location" th:value="${profile.location}"
                        class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
                 <br>
                 <label>Speciality</label><br>
-                <input type="text" id="speciality" th:field="*{speciality}"
+                <input type="text" id="speciality" name="speciality" th:value="${profile.speciality}"
                        class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
                 <br>
                 <button class=" btn bg-red-500 text-white rounded-full " type="submit">Save</button>

@@ -12,6 +12,10 @@ public class AppUserProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = true, columnDefinition="TEXT")
+    private String description;
+
     @Column(nullable = true)
     private String education;
 
@@ -42,10 +46,11 @@ public class AppUserProfile {
     public AppUserProfile() {
     }
 
-    public AppUserProfile(AppUser appUser, Long id, String education, String skill, String work, String course,
+    public AppUserProfile(AppUser appUser, Long id, String description, String education, String skill, String work, String course,
                           String phone, String volunteering, String project, String award, String language) {
         this.appUser = appUser;
         this.id = id;
+        this.description = description;
         this.education = education;
         this.skill = skill;
         this.work = work;
@@ -57,10 +62,11 @@ public class AppUserProfile {
         this.language = language;
     }
 
-    public AppUserProfile(AppUser appUser, String education, String skill, String work, String course,
+    public AppUserProfile(AppUser appUser, String description, String education, String skill, String work, String course,
                           String phone, String volunteering, String project, String award, String language) {
 
         this.appUser = appUser;
+        this.description = description;
         this.education = education;
         this.skill = skill;
         this.work = work;
@@ -86,6 +92,14 @@ public class AppUserProfile {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getEducation() {
