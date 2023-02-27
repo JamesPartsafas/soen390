@@ -24,7 +24,7 @@ public class Job {
     @Column(nullable = false)
     private String address;
 
-    @Column(nullable = false, length = 1000)
+    @Column(nullable = false, columnDefinition="TEXT")
     private String description;
 
     @Column(nullable = false)

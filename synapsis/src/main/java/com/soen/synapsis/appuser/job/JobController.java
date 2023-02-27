@@ -32,6 +32,10 @@ public class JobController {
 
     @GetMapping("/jobs")
     public String viewJobPosting(Model model) {
+        if (!authService.isUserAuthenticated()) {
+            return "redirect:/";
+        }
+
         List<Job> jobs = jobService.getAllJobs();
 
         model.addAttribute("jobs", jobs);
