@@ -26,6 +26,11 @@ INSERT INTO app_user_profile( app_user_id, description, education,skill,work,cou
                               phone, volunteering,project, award,language)
 VALUES (1, 'A standard user on Synapsis', 'Engineeing', 'fast learner', 'developer', 'ML','5144444444','sss','xyz','CARE','ARABIC');
 
-
 INSERT INTO company_profile(app_user_id, description, website,industry, company_size,location,speciality)
 VALUES (3,'A standard company on Synapsis', 'www.google.com', 'technology', '150k', 'Newyork','search');
+
+INSERT INTO chat (creator_id, participant_id, last_updated)
+VALUES (1, 5, '2022-01-01'), (4, 1, '2023-01-01');
+
+INSERT INTO message (chat_id, content, sender_id, read, created_at)
+VALUES (1, 'Hi from Joe User', 1, false, '2022-01-02'), (1, 'Hi from Joe Recruiter', 5, false, '2022-01-03');

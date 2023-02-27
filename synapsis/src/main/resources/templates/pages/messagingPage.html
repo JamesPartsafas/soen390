@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="_layout">
+<div layout:fragment="content">
+
+    <div id="chat-page">
+        <div class="chat-container">
+            <div class="connecting">
+                Connecting...
+            </div>
+
+            <ul id="messageArea">
+                <li th:each="message: ${messages}" th:text="${message.getContent()}"></li>
+            </ul>
+
+            <form id="messageForm" name="messageForm" nameForm="messageForm">
+                <input id="chat" class="hidden" th:value="${chatId}"/>
+                <input id="sender" class="hidden" th:value="${senderId}"/>
+                <input id="receiver" class="hidden" th:value="${receiverId}"/>
+                <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control"/>
+                <button type="submit" class="primary">Send</button>
+            </form>
+
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+</div>
