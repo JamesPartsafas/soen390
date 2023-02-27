@@ -14,7 +14,7 @@ public class CompanyProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = true)
+    @Column(nullable = true, columnDefinition="TEXT")
     private String description;
 
     @Column(nullable = true)
