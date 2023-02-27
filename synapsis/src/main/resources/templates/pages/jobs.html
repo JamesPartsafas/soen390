@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="_layout">
+<div layout:fragment="content">
+
+  <div class="w-1/2 mx-auto">
+    <div class="mx-auto">
+
+      <div class="col-start-5 col-end-12 row-span-1 h-10 bg-white border rounded-md mb-6 w-1/2">
+        <form th:action="@{/search}" class="h-full ml-4" method="get">
+          <input class="w-full h-full font-sans text-xl font-light" placeholder="Find Jobs" name="name">
+        </form>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3">
+        <div th:each="job: ${jobs}" class="inline-block rounded-2xl shadow w-56 min-h-min bg-white mt-4 mr-4 pb-4">
+
+          <img class="w-56 h-40">
+          <div class="font-sans text-base font-light mt-2 ml-4" th:text="${job.position}"></div>
+          <div class="font-sans text-base font-light mt-2 ml-4" th:text="${job.company}"></div>
+
+          <div class="bg-light-blue mx-auto w-11/12 rounded-2xl text-xs mt-2">
+            <div class="font-sans font-light p-2" th:text="${job.description}"></div>
+            <p class="px-2">Salary: TBD</p>
+            <button class="p-2 underline">More details</button>
+          </div>
+
+          <div class="ml-4 mr-4 mt-6 flex justify-center">
+            <form th:action="@{/job/accept}" method="post">
+              <input type="hidden" name="id" />
+              <button class="btn bg-primary btn-primary font-sans text-sm w-20 h-9 p-0" type="submit">Apply</button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</html>

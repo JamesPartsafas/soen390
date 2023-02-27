@@ -3,11 +3,13 @@ package com.soen.synapsis.appuser.job;
 import com.soen.synapsis.appuser.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.net.Authenticator;
+import java.util.List;
 import java.util.Optional;
 
-@Component
+@Service
 public class JobService {
 
     private final JobRepository jobRepository;
@@ -15,6 +17,10 @@ public class JobService {
     @Autowired
     public JobService(JobRepository jobRepository) {
         this.jobRepository = jobRepository;
+    }
+
+    public List<Job> getAllJobs() {
+        return jobRepository.findAll();
     }
 
     public Optional<Job> getJob(Long id) {
