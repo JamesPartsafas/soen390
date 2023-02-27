@@ -1,11 +1,8 @@
 package com.soen.synapsis.appuser.job;
 
 import com.soen.synapsis.appuser.AppUser;
-import com.soen.synapsis.appuser.AppUserDetails;
-import com.soen.synapsis.appuser.AppUserService;
 import com.soen.synapsis.appuser.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -33,6 +30,18 @@ public class JobController {
         this.authService = authService;
     }
 
+    @GetMapping("/jobs")
+    public String viewJobPosting(Model model) {
+        if (!authService.isUserAuthenticated()) {
+            return "redirect:/";
+        }
+
+        List<Job> jobs = jobService.getAllJobs();
+
+        model.addAttribute("jobs", jobs);
+
+        return "pages/jobs";
+    }
 
     @GetMapping("/job/{jid}")
     public String getJob(@PathVariable Long jid, Model model) {

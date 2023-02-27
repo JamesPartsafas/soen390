@@ -24,16 +24,16 @@ public class Job {
     @Column(nullable = false)
     private String address;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition="TEXT")
     private String description;
 
     @Column(nullable = false)
     private JobType type;
 
-    @Column(nullable = false)
+    @Column(name = "num_available", nullable = false)
     private int numAvailable;
 
-    @Column(nullable = false)
+    @Column(name = "num_applicants", nullable = false)
     private int numApplicants;
 
     protected Job() {}
