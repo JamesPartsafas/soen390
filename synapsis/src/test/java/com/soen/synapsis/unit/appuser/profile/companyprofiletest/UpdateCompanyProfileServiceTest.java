@@ -48,12 +48,13 @@ public class UpdateCompanyProfileServiceTest {
 
     @Test
     void updateCompanyUser() {
+        String description = "description";
         String website = "www.google.com";
         String industry = "Construction";
         String companySize = "1800";
         String location = "CANADA";
         String speciality = "Material";
-        UpdateCompanyProfileRequest request = new UpdateCompanyProfileRequest(website, industry, companySize, location, speciality);
+        UpdateCompanyProfileRequest request = new UpdateCompanyProfileRequest(description, website, industry, companySize, location, speciality);
 
         var appUser = new AppUser(1L, "google", "12345678", "google@mail.com", Role.COMPANY);
 

@@ -22,10 +22,10 @@ VALUES (3, 1, false);
 
 INSERT INTO connection (receiver_id, requester_id, pending)
 VALUES (1, 4, true);
-INSERT INTO app_user_profile( app_user_id,education,skill,work,course,
+INSERT INTO app_user_profile( app_user_id, description, education,skill,work,course,
                               phone, volunteering,project, award,language)
-VALUES (1,'Engineeing', 'fast learner', 'developer', 'ML','5144444444','sss','xyz','CARE','ARABIC');
+VALUES (1, 'A standard user on Synapsis', 'Engineeing', 'fast learner', 'developer', 'ML','5144444444','sss','xyz','CARE','ARABIC');
 
 
-INSERT INTO company_profile(app_user_id, website,industry, company_size,location,speciality)
-VALUES (3,'www.google.com', 'technology', '150k', 'Newyork','search');
+INSERT INTO company_profile(app_user_id, description, website,industry, company_size,location,speciality)
+VALUES (3,'A standard company on Synapsis', 'www.google.com', 'technology', '150k', 'Newyork','search');
