@@ -3,7 +3,6 @@ package com.soen.synapsis.unit.appuser;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AuthProvider;
 import com.soen.synapsis.appuser.Role;
-import com.soen.synapsis.utilities.SecurityUtilities;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +24,9 @@ class AppUserTest {
     private String email;
     private Role role;
     private AuthProvider authProvider;
+    private String securityAnswer1;
+    private String securityAnswer2;
+    private String securityAnswer3;
 
     @BeforeEach
     void setUp() {
@@ -34,7 +36,10 @@ class AppUserTest {
         email = "joeunittest@mail.com";
         role = Role.CANDIDATE;
         authProvider = AuthProvider.LOCAL;
-        underTest = new AppUser(id, name, password, email, role, authProvider);
+        securityAnswer1 = "a";
+        securityAnswer2 = "a";
+        securityAnswer3 = "a";
+        underTest = new AppUser(id, name, password, email, role, authProvider, securityAnswer1, securityAnswer2, securityAnswer3);
     }
 
     @AfterEach
@@ -128,6 +133,48 @@ class AppUserTest {
     }
 
     @Test
+    void getSecurityAnswer1() {
+        assertEquals(securityAnswer1, underTest.getSecurityAnswer1());
+    }
+
+    @Test
+    void setSecurityAnswer1() {
+        String newSecurityAnswer = "b";
+
+        underTest.setSecurityAnswer1(newSecurityAnswer);
+
+        assertEquals(newSecurityAnswer, underTest.getSecurityAnswer1());
+    }
+
+    @Test
+    void getSecurityAnswer2() {
+        assertEquals(securityAnswer2, underTest.getSecurityAnswer2());
+    }
+
+    @Test
+    void setSecurityAnswer2() {
+        String newSecurityAnswer = "b";
+
+        underTest.setSecurityAnswer2(newSecurityAnswer);
+
+        assertEquals(newSecurityAnswer, underTest.getSecurityAnswer2());
+    }
+
+    @Test
+    void getSecurityAnswer3() {
+        assertEquals(securityAnswer3, underTest.getSecurityAnswer3());
+    }
+
+    @Test
+    void setSecurityAnswer3() {
+        String newSecurityAnswer = "b";
+
+        underTest.setSecurityAnswer3(newSecurityAnswer);
+
+        assertEquals(newSecurityAnswer, underTest.getSecurityAnswer3());
+    }
+
+    @Test
     void testToString() {
         assertThat(underTest.toString()).isNotNull();
     }
@@ -137,12 +184,14 @@ class AppUserTest {
         underTest2 = new AppUser(id, name, password, email, Role.RECRUITER, authProvider);
         assertEquals(underTest2.getCompany(), underTest2.getCompany());
     }
+
     @Test
     void recruiterGetCompanyFails() {
         assertThrows(IllegalStateException.class,
                 () -> underTest.getCompany(),
                 "You must be a recruiter to belong to a company.");
     }
+
     @Test
     void recruiterSetCompanySucceeds() {
         underTest2 = new AppUser(id, name, password, email, Role.RECRUITER, authProvider);
@@ -153,6 +202,7 @@ class AppUserTest {
         assertEquals(companyUser, underTest2.getCompany());
 
     }
+
     @Test
     void recruiterSetCompanyFails() {
         AppUser companyUser = new AppUser(id, name, password, email, Role.COMPANY, authProvider);

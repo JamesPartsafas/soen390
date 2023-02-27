@@ -1,18 +1,25 @@
--- Password is 12345678
-INSERT INTO app_user (name, password, email, role, auth_provider)
-VALUES ('Joe User', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'joeuser@mail.com', 'CANDIDATE', 'LOCAL');
+-- Password is 12345678, all security answers = "a"
+INSERT INTO app_user (name, password, email, role, auth_provider, security_answer1, security_answer2, security_answer3)
+VALUES ('Joe User', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'joeuser@mail.com', 'CANDIDATE',
+        'LOCAL', '$2a$10$6.8QMAk88DPFHH//rEchFOZpsYqe8eJYsx0bYHQuB1QCuEp69pf1q',
+        '$2a$10$6.8QMAk88DPFHH//rEchFOZpsYqe8eJYsx0bYHQuB1QCuEp69pf1q',
+        '$2a$10$6.8QMAk88DPFHH//rEchFOZpsYqe8eJYsx0bYHQuB1QCuEp69pf1q');
 
 INSERT INTO app_user (name, password, email, role, auth_provider)
-VALUES ('Joe Admin', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'joeadmin@mail.com', 'ADMIN', 'LOCAL');
+VALUES ('Joe Admin', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'joeadmin@mail.com', 'ADMIN',
+        'LOCAL');
 
 INSERT INTO app_user (name, password, email, role, auth_provider)
-VALUES ('Joe Company', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'joecompany@mail.com', 'COMPANY', 'LOCAL');
+VALUES ('Joe Company', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'joecompany@mail.com', 'COMPANY',
+        'LOCAL');
 
 INSERT INTO app_user (name, password, email, role, auth_provider)
-VALUES ('Joe Google', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'joegoogle@mail.com', 'CANDIDATE', 'GOOGLE');
+VALUES ('Joe Google', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'joegoogle@mail.com', 'CANDIDATE',
+        'GOOGLE');
 
 INSERT INTO app_user (name, password, email, role, auth_provider)
-VALUES ('Joe Recruiter', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'joerecruiter@mail.com', 'RECRUITER', 'LOCAL');
+VALUES ('Joe Recruiter', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'joerecruiter@mail.com',
+        'RECRUITER', 'LOCAL');
 
 INSERT INTO connection (receiver_id, requester_id, pending)
 VALUES (1, 2, false);

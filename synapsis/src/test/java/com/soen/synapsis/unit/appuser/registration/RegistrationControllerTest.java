@@ -1,10 +1,14 @@
 package com.soen.synapsis.unit.appuser.registration;
 
-import com.soen.synapsis.appuser.*;
+import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.appuser.registration.PasswordUpdateRequest;
 import com.soen.synapsis.appuser.registration.RegistrationController;
 import com.soen.synapsis.appuser.registration.RegistrationRequest;
 import com.soen.synapsis.appuser.registration.RegistrationService;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -13,8 +17,7 @@ import org.springframework.validation.BindingResult;
 
 import javax.servlet.http.HttpServletRequest;
 
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
@@ -89,18 +92,19 @@ class RegistrationControllerTest {
 
 
     @Test
-    void sendValidPasswordResetInfo() throws Exception {
-        RegistrationRequest request = new RegistrationRequest("joe", "joeadmin@mail.com", "1234", Role.ADMIN);
+    void sendValidPasswordUpdateInfo() throws Exception {
+        AppUser appUser = new AppUser("joe", "joeadmin@gmail.com", "12345678", Role.ADMIN);
+        PasswordUpdateRequest request = new PasswordUpdateRequest("12345678", "12345679");
         BindingResult bindingResult = mock(BindingResult.class);
-        underTest.passwordReset(request,
+        underTest.passwordUpdate(request,
                 bindingResult,
                 Mockito.mock(Model.class));
 
-        verify(registrationService).updateUserPassword(request);
+        verify(registrationService).updateUserPassword(appUser, request.getOldPassword(), request.getNewPassword());
     }
 
     @Test
-    void sendPasswordResetInfoWithBindingError(){
+    void sendPasswordUpdateInfoWithBindingError() {
         RegistrationRequest request = new RegistrationRequest("joe", "joeadmin@gmail.com", "1234", Role.ADMIN);
         Model model = mock(Model.class);
         BindingResult bindingResult = mock(BindingResult.class);
@@ -111,5 +115,16 @@ class RegistrationControllerTest {
                 model);
 
         verify(model).addAttribute(anyString(), anyString());
+    }
+
+    @Test
+    void sendValidPasswordResetInfo() throws Exception {
+        RegistrationRequest request = new RegistrationRequest("joe", "joeadmin@mail.com", "12345678", Role.CANDIDATE, "a", "a", "a");
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(registrationService.resetUserPassword(request)).thenReturn("pages/login");
+        String result = underTest.passwordReset(request,
+                bindingResult,
+                Mockito.mock(Model.class));
+        assertEquals("pages/login", result);
     }
 }

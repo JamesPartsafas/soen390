@@ -90,6 +90,36 @@ public class RegistrationController {
     }
 
 
+    @GetMapping("/passwordupdate")
+    public String passwordUpdate(Model model) {
+
+        model.addAttribute("passwordUpdateRequest", new PasswordUpdateRequest());
+
+        return "pages/passwordUpdateForm";
+
+    }
+
+    @PostMapping("/passwordupdate")
+    public String passwordUpdate(PasswordUpdateRequest request,
+                                 BindingResult bindingResult,
+                                 Model model) {
+        if (!authService.isUserAuthenticated()) {
+            return "redirect:/";
+        }
+        try {
+            if (bindingResult.hasErrors()) {
+                throw new Exception();
+            }
+            AppUser appUser = authService.getAuthenticatedUser();
+
+            String response = registrationService.updateUserPassword(appUser, request.getOldPassword(), request.getNewPassword());
+            return response;
+        } catch (Exception e) {
+            model.addAttribute("error", "There was an error resetting your password. " + e.getMessage());
+            return passwordUpdate(model);
+        }
+    }
+
     @GetMapping("/passwordreset")
     public String passwordReset(Model model) {
 
@@ -108,7 +138,7 @@ public class RegistrationController {
                 throw new Exception();
             }
 
-            String response = registrationService.updateUserPassword(request);
+            String response = registrationService.resetUserPassword(request);
             return response;
         } catch (Exception e) {
             model.addAttribute("error", "There was an error resetting your password. " + e.getMessage());

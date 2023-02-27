@@ -8,13 +8,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class AppUserServiceTest {
@@ -31,7 +30,7 @@ public class AppUserServiceTest {
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new AppUserService(appUserRepository,appUserProfileRepository,companyProfileRepository);
+        underTest = new AppUserService(appUserRepository, appUserProfileRepository, companyProfileRepository);
     }
 
     @AfterEach
@@ -100,7 +99,7 @@ public class AppUserServiceTest {
         underTest.markCandidateToRecruiter(appUser, companyUser);
 
         assertEquals(Role.RECRUITER, appUser.getRole());
-        assertEquals(companyUser,appUser.getCompany());
+        assertEquals(companyUser, appUser.getCompany());
     }
 
     @Test
@@ -113,6 +112,7 @@ public class AppUserServiceTest {
                 "The user must be a candidate to be marked as a recruiter.");
 
     }
+
     @Test
     void signUpAdminWithUniqueEmail() {
         String email = "joeadmin@mail.com";
@@ -137,25 +137,74 @@ public class AppUserServiceTest {
                 () -> underTest.signUpUser(appUser),
                 "This email is already taken.");
     }
+
     @Test
-    void updatePasswordWithExistingEmail(){
-        String email = "joeman@mail.com";
+    void updatePasswordWithExistingEmail() {
         String password = "abcd";
-        AppUser appUser = new AppUser("Joe Man", "1234", email, Role.CANDIDATE);
-        when(appUserRepository.findByEmail(email)).thenReturn(appUser);
-        String returnValue = underTest.updatePassword(email,password);
+        AppUser appUser = null;
+        String returnValue = underTest.updatePassword(appUser, password);
         assertEquals("pages/login", returnValue);
     }
+
     @Test
-    void updatePasswordWithNewEmail(){
+    void updatePasswordWithNewEmail() {
         String email = "newjoe@mail.com";
         String password = "abcd";
         AppUser appUser = new AppUser("New Joe", "1234", email, Role.CANDIDATE);
         when(appUserRepository.findByEmail(email)).thenReturn(null);
         Exception exception = assertThrows(IllegalStateException.class,
-                () -> underTest.updatePassword(email, password),
+                () -> underTest.updatePassword(appUser, password),
                 "This email does not belong to any user.");
     }
+
+    @Test
+    void checkSecurityQuestionsSuccessful() {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String securityAnswer = encoder.encode("a");
+        String email = "newjoe@mail.com";
+        AppUser appUser = new AppUser("New Joe", "1234", email, Role.CANDIDATE, AuthProvider.LOCAL, securityAnswer, securityAnswer, securityAnswer);
+        when(appUserRepository.findByEmail(email)).thenReturn(appUser);
+        boolean result = underTest.checkSecurityQuestions(appUser.getEmail(), "a", "a", "a");
+
+        assertTrue(result);
+    }
+
+    @Test
+    void checkSecurityQuestionsFail1st() {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String securityAnswer = encoder.encode("a");
+        String email = "newjoe@mail.com";
+        AppUser appUser = new AppUser("New Joe", "1234", email, Role.CANDIDATE, AuthProvider.LOCAL, securityAnswer, securityAnswer, securityAnswer);
+        when(appUserRepository.findByEmail(email)).thenReturn(appUser);
+        boolean result = underTest.checkSecurityQuestions(appUser.getEmail(), "b", "a", "a");
+
+        assertFalse(result);
+    }
+
+    @Test
+    void checkSecurityQuestionsFail2nd() {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String securityAnswer = encoder.encode("a");
+        String email = "newjoe@mail.com";
+        AppUser appUser = new AppUser("New Joe", "1234", email, Role.CANDIDATE, AuthProvider.LOCAL, securityAnswer, securityAnswer, securityAnswer);
+        when(appUserRepository.findByEmail(email)).thenReturn(appUser);
+        boolean result = underTest.checkSecurityQuestions(appUser.getEmail(), "a", "b", "a");
+
+        assertFalse(result);
+    }
+
+    @Test
+    void checkSecurityQuestionsFail3rd() {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String securityAnswer = encoder.encode("a");
+        String email = "newjoe@mail.com";
+        AppUser appUser = new AppUser("New Joe", "1234", email, Role.CANDIDATE, AuthProvider.LOCAL, securityAnswer, securityAnswer, securityAnswer);
+        when(appUserRepository.findByEmail(email)).thenReturn(appUser);
+        boolean result = underTest.checkSecurityQuestions(appUser.getEmail(), "a", "a", "b");
+
+        assertFalse(result);
+    }
+
     @Test
     void unmarkRecruiterToCandidateSucceeds() {
         AppUser appUser = new AppUser(1L, "Joe Man", "1234", "joecandidate@mail.com", Role.CANDIDATE);
