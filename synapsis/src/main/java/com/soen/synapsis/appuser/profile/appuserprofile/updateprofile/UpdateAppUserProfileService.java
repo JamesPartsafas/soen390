@@ -16,13 +16,18 @@ public class UpdateAppUserProfileService {
         this.appUserProfileRepository = appUserProfileRepository;
     }
 
+    public AppUserProfile findAppUserProfile(AppUser appUser) {
+        return appUserProfileRepository.findByAppUser(appUser);
+    }
+
     public String updateProfile(UpdateAppUserProfileRequest request, AppUser appUser) {
-        AppUserProfile profile = appUserProfileRepository.findByAppUser(appUser);
+        AppUserProfile profile = findAppUserProfile(appUser);
 
         if (profile == null) {
             throw new IllegalStateException("The user does not have a profile.");
         }
 
+        profile.setDescription(request.getDescription());
         profile.setWork(request.getWork());
         profile.setEducation(request.getEducation());
         profile.setSkill(request.getSkill());

@@ -1,6 +1,7 @@
 package com.soen.synapsis.appuser.profile.appuserprofile.updateprofile;
 
 public class UpdateAppUserProfileRequest {
+    private String description;
     private String education;
     private String skill;
     private String work;
@@ -14,7 +15,10 @@ public class UpdateAppUserProfileRequest {
     public UpdateAppUserProfileRequest() {
     }
 
-    public UpdateAppUserProfileRequest(String education, String skill, String work, String phone, String volunteering, String course, String project, String award, String language) {
+    public UpdateAppUserProfileRequest(String description, String education, String skill,
+                                       String work, String phone, String volunteering, String course,
+                                       String project, String award, String language) {
+        this.description = description;
         this.education = education;
         this.skill = skill;
         this.work = work;
@@ -24,6 +28,14 @@ public class UpdateAppUserProfileRequest {
         this.project = project;
         this.award = award;
         this.language = language;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getEducation() {

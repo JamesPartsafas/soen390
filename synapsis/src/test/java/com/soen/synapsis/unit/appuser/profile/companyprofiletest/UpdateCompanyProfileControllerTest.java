@@ -47,7 +47,7 @@ UpdateCompanyProfileControllerTest {
 
     @Test
     void UpdateCompanyInfo() {
-        UpdateCompanyProfileRequest request = new UpdateCompanyProfileRequest("www.google.come", "technology", "10000", "USA", "Social");
+        UpdateCompanyProfileRequest request = new UpdateCompanyProfileRequest("description", "www.google.come", "technology", "10000", "USA", "Social");
 
         underTest.updateAppUserProfile(request, mock(BindingResult.class), mock(Model.class));
 
@@ -57,7 +57,7 @@ UpdateCompanyProfileControllerTest {
 
     @Test
     void updateWithErrors() {
-        UpdateCompanyProfileRequest request = new UpdateCompanyProfileRequest("www.google.come", "technology", "10000", "USA", "Social");
+        UpdateCompanyProfileRequest request = new UpdateCompanyProfileRequest("description", "www.google.come", "technology", "10000", "USA", "Social");
         Model model = mock(Model.class);
 
         BindingResult bindingResult = mock(BindingResult.class);

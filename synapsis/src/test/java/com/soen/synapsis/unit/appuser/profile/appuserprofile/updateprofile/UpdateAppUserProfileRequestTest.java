@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class UpdateAppUserProfileRequestTest {
 
     private UpdateAppUserProfileRequest underTest;
+    private String description;
     private String education;
     private String skill;
     private String work;
@@ -25,6 +26,7 @@ class UpdateAppUserProfileRequestTest {
 
     @BeforeEach
     void setUp() {
+        description = "description";
         education = "McGill";
         skill = "Programming";
         work = "Synapsis Programmer";
@@ -34,7 +36,7 @@ class UpdateAppUserProfileRequestTest {
         project = "LinkedIn Clone";
         award = "Best Programmer";
         language = "English";
-        underTest = new UpdateAppUserProfileRequest(education, skill, work, phone,
+        underTest = new UpdateAppUserProfileRequest(description, education, skill, work, phone,
                 volunteering, course, project, award, language);
     }
 

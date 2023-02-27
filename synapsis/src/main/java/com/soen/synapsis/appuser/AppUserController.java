@@ -55,6 +55,10 @@ public class AppUserController {
             return "redirect:/";
 
         AppUser appUser = optionalAppUser.get();
+        if (appUser.getRole() == Role.ADMIN) {
+            return "redirect:/";
+        }
+
         boolean isConnectedWith = connectionService.isConnectedWith(authService.getAuthenticatedUser().getId(), uid);
 
         model.addAttribute("id", appUser.getId());
@@ -62,11 +66,15 @@ public class AppUserController {
         model.addAttribute("email", appUser.getEmail());
         model.addAttribute("isConnectedWith", isConnectedWith);
 
+        if (authService.getAuthenticatedUser().getId() == uid)
+            model.addAttribute("showControls", true);
+
         if (appUser.getRole() == Role.COMPANY) {
             CompanyProfile companyProfile = appUser.getCompanyProfile();
             if (companyProfile == null)
                 companyProfile = new CompanyProfile();
 
+            model.addAttribute("description", companyProfile.getDescription());
             model.addAttribute("website", companyProfile.getWebsite());
             model.addAttribute("industry", companyProfile.getIndustry());
             model.addAttribute("companySize", companyProfile.getCompanySize());
@@ -79,6 +87,7 @@ public class AppUserController {
         if (profile == null)
             profile = new AppUserProfile();
 
+        model.addAttribute("description", profile.getDescription());
         model.addAttribute("education", profile.getEducation());
         model.addAttribute("skill", profile.getSkill());
         model.addAttribute("work", profile.getWork());

@@ -1,15 +1,22 @@
 package com.soen.synapsis.index;
 
+import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.registration.RegistrationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 @Controller
 @RequestMapping(path = "/")
 public class IndexController {
+    private AppUser appUser;
 
     private final IndexService indexService;
 
