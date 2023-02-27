@@ -1,6 +1,7 @@
 package com.soen.synapsis.appuser.profile.companyprofile.updateprofile;
 
 public class UpdateCompanyProfileRequest {
+    private String description;
     private String website;
     private String industry;
     private String companySize;
@@ -10,12 +11,21 @@ public class UpdateCompanyProfileRequest {
     public UpdateCompanyProfileRequest() {
     }
 
-    public UpdateCompanyProfileRequest(String website, String industry, String companySize, String location, String speciality) {
+    public UpdateCompanyProfileRequest(String description, String website, String industry, String companySize, String location, String speciality) {
+        this.description = description;
         this.website = website;
         this.industry = industry;
         this.companySize = companySize;
         this.location = location;
         this.speciality = speciality;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getWebsite() {

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="_layout">
+<div layout:fragment="content">
+    <p th:if="${chats.size() == 0}">Wow such empty!</p>
+
+    <div th:if="${chats.size() != 0}" th:each="chat: ${chats}">
+        <a th:href="@{/chat/{id}(id=${chat.id})}" class="flex">
+            <img class="w-[20px] h-[20px] rounded-t-2xl" src="/assets/default_user.svg">
+            <div>
+                <p th:text="${chat.creator.id == #authentication.principal.id ? chat.participant.name : chat.creator.name}"></p>
+            </div>
+        </a>
+    </div>
+</div>

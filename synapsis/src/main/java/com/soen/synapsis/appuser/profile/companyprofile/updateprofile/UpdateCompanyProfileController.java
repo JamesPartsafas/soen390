@@ -3,6 +3,8 @@ package com.soen.synapsis.appuser.profile.companyprofile.updateprofile;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AuthService;
 import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
+import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +30,13 @@ public class UpdateCompanyProfileController {
             return "redirect:/";
         }
 
+        CompanyProfile profile = updateCompanyProfileService.findAppUserProfile(authService.getAuthenticatedUser());
+        if (profile == null)
+            profile = new CompanyProfile();
+
         model.addAttribute("updateCompanyProfileRequest", new UpdateCompanyProfileRequest());
+        model.addAttribute("profile", profile);
+
         return "pages/updatecompanypage";
     }
 

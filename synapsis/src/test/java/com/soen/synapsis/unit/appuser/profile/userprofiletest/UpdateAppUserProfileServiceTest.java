@@ -45,6 +45,7 @@ public class UpdateAppUserProfileServiceTest {
 
     @Test
     void updateAppUser() {
+        String description = "description";
         String education = "engineering";
         String skill = "self learner";
         String work = "developer";
@@ -54,7 +55,7 @@ public class UpdateAppUserProfileServiceTest {
         String project = "amaznotwebsite";
         String award = "beststudentaward";
         String language = "French";
-        UpdateAppUserProfileRequest request = new UpdateAppUserProfileRequest(education, skill, work, course, phone, volunteering, project, award, language);
+        UpdateAppUserProfileRequest request = new UpdateAppUserProfileRequest(description, education, skill, work, course, phone, volunteering, project, award, language);
 
         var appUser = new AppUser(1L, "joe", "12345678", "joe@mail.com", Role.CANDIDATE);
 

@@ -48,8 +48,8 @@ public class AppUserDetailsTest {
     }
 
     @Test
-    void getUsernameReturnsEmail() {
-        assertEquals(email, underTest.getUsername());
+    void getUsernameReturnsId() {
+        assertEquals("1", underTest.getUsername());
     }
 
     @Test
