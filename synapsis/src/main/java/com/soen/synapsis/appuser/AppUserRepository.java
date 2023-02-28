@@ -10,5 +10,5 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     AppUser findByEmail(String email);
 
-    List<AppUser> findByNameContainingIgnoreCaseAndIdNot(String name, Long id);
+    List<AppUser> findByNameContainingIgnoreCaseAndIdNotAndRoleNot(String name, Long id, Role role);
 }
