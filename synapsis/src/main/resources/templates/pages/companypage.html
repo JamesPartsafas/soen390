@@ -14,17 +14,6 @@
                     <p th:text="${description}"></p>
 
                     <p th:text="${profilePicture}" id="base64Image" hidden></p>
-                    <div th:if="${showControls}">
-                        <form th:action="@{/uploadProfilePicture}"
-                              method="post"
-                              enctype="multipart/form-data"
-                        >
-                            <label>Upload new Profile Picture</label>
-                            <input type="file" name="image" accept="image/png, image/jpeg" />
-
-                            <button class=" btn bg-red-500 text-white rounded-full" type="submit">Save</button>
-                        </form>
-                    </div>
 
                     <table>
                         <tr>

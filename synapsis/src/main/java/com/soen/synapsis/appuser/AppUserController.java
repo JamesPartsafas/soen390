@@ -104,19 +104,6 @@ public class AppUserController {
         return "pages/userpage";
     }
 
-    @PostMapping("/uploadProfilePicture")
-    public String uploadProfilePicture(@RequestParam("image")MultipartFile file) throws IOException {
-        if (!authService.isUserAuthenticated()) {
-            return "redirect:/";
-        }
-
-        AppUser appUser = authService.getAuthenticatedUser();
-
-        appUserService.uploadProfilePicture(file, appUser);
-
-        return "redirect:/user/" + appUser.getId();
-    }
-
     @GetMapping("/search")
     public String getUsersLikeName(@RequestParam String name, Model model) {
         if (!authService.isUserAuthenticated()) {

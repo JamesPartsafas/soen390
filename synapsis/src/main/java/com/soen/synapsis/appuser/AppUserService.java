@@ -79,8 +79,19 @@ public class AppUserService {
 
     public void uploadProfilePicture(MultipartFile file, AppUser appUser) throws IOException {
         String encodedImage = Base64.getEncoder().encodeToString(file.getBytes());
+        if (encodedImage.isEmpty())
+            return;
 
-        profilePictureRepository.save(new ProfilePicture(appUser, encodedImage));
+        ProfilePicture newPicture = profilePictureRepository.findByAppUser(appUser);
+
+        if (newPicture != null) {
+            newPicture.setImage(encodedImage);
+        }
+        else {
+            newPicture = new ProfilePicture(appUser, encodedImage);
+        }
+
+        profilePictureRepository.save(newPicture);
     }
 
     public void markCandidateToRecruiter(AppUser appUser, @AuthenticationPrincipal AppUser companyUser) {
