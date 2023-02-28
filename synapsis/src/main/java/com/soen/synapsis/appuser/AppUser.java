@@ -1,5 +1,6 @@
 package com.soen.synapsis.appuser;
 
+import com.soen.synapsis.appuser.profile.ProfilePicture;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -45,6 +46,9 @@ public class AppUser {
 
     @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
     private CompanyProfile companyProfile;
+
+    @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
+    private ProfilePicture profilePicture;
 
     protected AppUser() {
     }
@@ -177,6 +181,14 @@ public class AppUser {
 
     public void setCompanyProfile(CompanyProfile companyProfile) {
         this.companyProfile = companyProfile;
+    }
+
+    public ProfilePicture getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(ProfilePicture profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     @Override

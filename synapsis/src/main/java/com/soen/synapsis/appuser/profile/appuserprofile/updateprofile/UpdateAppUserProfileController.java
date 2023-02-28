@@ -1,6 +1,7 @@
 package com.soen.synapsis.appuser.profile.appuserprofile.updateprofile;
 
 import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AppUserService;
 import com.soen.synapsis.appuser.AuthService;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
@@ -10,21 +11,27 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class UpdateAppUserProfileController {
     private UpdateAppUserProfileService updateAppUserProfileService;
     private AuthService authService;
+    private AppUserService appUserService;
 
     @Autowired
-    public UpdateAppUserProfileController(UpdateAppUserProfileService updateAppUserProfileService) {
+    public UpdateAppUserProfileController(UpdateAppUserProfileService updateAppUserProfileService, AppUserService appUserService) {
         this.updateAppUserProfileService = updateAppUserProfileService;
         this.authService = new AuthService();
+        this.appUserService = appUserService;
     }
 
-    public UpdateAppUserProfileController(UpdateAppUserProfileService updateAppUserProfileService, AuthService authService) {
+    public UpdateAppUserProfileController(UpdateAppUserProfileService updateAppUserProfileService,
+                                          AuthService authService, AppUserService appUserService) {
         this.updateAppUserProfileService = updateAppUserProfileService;
         this.authService = authService;
+        this.appUserService = appUserService;
     }
 
     @GetMapping("/user/update")
@@ -44,7 +51,8 @@ public class UpdateAppUserProfileController {
     }
 
     @PostMapping("/user/update")
-    public String updateAppUserProfile(UpdateAppUserProfileRequest request, BindingResult bindingResult, Model model) {
+    public String updateAppUserProfile(UpdateAppUserProfileRequest request, @RequestParam("image") MultipartFile file,
+                                       BindingResult bindingResult, Model model) {
         if (!authService.doesUserHaveRole(Role.CANDIDATE, Role.RECRUITER)) {
             return "redirect:/";
         }
@@ -53,7 +61,11 @@ public class UpdateAppUserProfileController {
                 throw new Exception();
             }
 
-            return updateAppUserProfileService.updateProfile(request, authService.getAuthenticatedUser());
+            AppUser appUser = authService.getAuthenticatedUser();
+
+            appUserService.uploadProfilePicture(file, appUser);
+
+            return updateAppUserProfileService.updateProfile(request, appUser);
         } catch (Exception e) {
             model.addAttribute("error", "There was an error updating. " + e.getMessage());
             return updateAppUserProfile(model);

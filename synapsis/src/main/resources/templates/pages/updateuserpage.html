@@ -4,9 +4,17 @@
 <div layout:fragment="content">
 
     <p th:text="${error}"></p>
-    <form th:action="@{/user/update}" th:object="${updateAppUserProfileRequest}" method="post">
+    <form th:action="@{/user/update}"
+          th:object="${updateAppUserProfileRequest}"
+          method="post"
+          enctype="multipart/form-data"
+    >
         <div class="flex max-w-xl bg-neutral-100 border-gray-200 ml-28 rounded-lg shadow">
             <div class="p-5">
+                <label>Change Profile Picture</label>
+                <input type="file" name="image" accept="image/png, image/jpeg" />
+                <br>
+
                 <label>Description</label><br>
                 <input type="text" id="description" name="description" th:value="${profile.description}"
                        class="mb-2 text-left   font-normal tracking-tight text-gray-900 dark:text-white"/>

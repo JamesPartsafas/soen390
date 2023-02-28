@@ -1,5 +1,7 @@
 package com.soen.synapsis.appuser;
 
+import com.soen.synapsis.appuser.profile.ProfilePicture;
+import com.soen.synapsis.appuser.profile.ProfilePictureRepository;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfileRepository;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
@@ -8,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +23,7 @@ public class AppUserService {
     private final AppUserRepository appUserRepository;
     private AppUserProfileRepository appUserProfileRepository;
     private CompanyProfileRepository companyProfileRepository;
+    private ProfilePictureRepository profilePictureRepository;
     private final BCryptPasswordEncoder encoder;
 
     public AppUserService(AppUserRepository appUserRepository) {
@@ -27,10 +33,11 @@ public class AppUserService {
 
     @Autowired
     public AppUserService(AppUserRepository appUserRepository, AppUserProfileRepository appUserProfileRepository,
-            CompanyProfileRepository companyProfileRepository) {
+            CompanyProfileRepository companyProfileRepository, ProfilePictureRepository profilePictureRepository) {
         this.appUserRepository = appUserRepository;
         this.appUserProfileRepository = appUserProfileRepository;
         this.companyProfileRepository = companyProfileRepository;
+        this.profilePictureRepository = profilePictureRepository;
         this.encoder = new BCryptPasswordEncoder();
     }
 
@@ -68,6 +75,23 @@ public class AppUserService {
         }
 
         return "pages/home";
+    }
+
+    public void uploadProfilePicture(MultipartFile file, AppUser appUser) throws IOException {
+        String encodedImage = Base64.getEncoder().encodeToString(file.getBytes());
+        if (encodedImage.isEmpty())
+            return;
+
+        ProfilePicture newPicture = profilePictureRepository.findByAppUser(appUser);
+
+        if (newPicture != null) {
+            newPicture.setImage(encodedImage);
+        }
+        else {
+            newPicture = new ProfilePicture(appUser, encodedImage);
+        }
+
+        profilePictureRepository.save(newPicture);
     }
 
     public void markCandidateToRecruiter(AppUser appUser, @AuthenticationPrincipal AppUser companyUser) {

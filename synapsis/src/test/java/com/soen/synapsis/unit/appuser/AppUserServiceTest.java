@@ -1,6 +1,7 @@
 package com.soen.synapsis.unit.appuser;
 
 import com.soen.synapsis.appuser.*;
+import com.soen.synapsis.appuser.profile.ProfilePictureRepository;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfileRepository;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfileRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -8,7 +9,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,12 +29,15 @@ public class AppUserServiceTest {
     private AppUserProfileRepository appUserProfileRepository;
     @Mock
     private CompanyProfileRepository companyProfileRepository;
+    @Mock
+    private ProfilePictureRepository profilePictureRepository;
     private AutoCloseable autoCloseable;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new AppUserService(appUserRepository,appUserProfileRepository,companyProfileRepository);
+        underTest = new AppUserService(appUserRepository, appUserProfileRepository,
+                                companyProfileRepository, profilePictureRepository);
     }
 
     @AfterEach
@@ -179,5 +185,15 @@ public class AppUserServiceTest {
                 () -> underTest.unmarkRecruiterToCandidate(notRecruiterUser, companyUser),
                 "The user must be a recruiter to be unmark as a candidate.");
 
+    }
+
+    @Test
+    void emptyImageUploadReturns() throws IOException {
+        MultipartFile file = mock(MultipartFile.class);
+        when(file.getBytes()).thenReturn(new byte[] {});
+
+        underTest.uploadProfilePicture(file, mock(AppUser.class));
+
+        verify(file).getBytes();
     }
 }
