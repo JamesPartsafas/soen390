@@ -15,8 +15,9 @@
                 <br>
 
                 <label>Description</label><br>
-                <input type="text" id="description" name="description" th:value="${profile.description}"
-                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+                <textarea id="description" name="description"
+                          class="w-full py-3 px-4 mb-3 h-32 resize-y font-normal tracking-tight text-gray-900 dark:text-white resize-y"
+                          th:text="${profile.description}"></textarea>
                 <br>
                 <label>Website</label><br>
                 <input type="text" id="website" name="website" th:value="${profile.website}"
@@ -27,8 +28,11 @@
                        class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
                 <br>
                 <label>Company Size</label><br>
-                <input type="text" id="companySize" name="companySize" th:value="${profile.companySize}"
-                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+                <input type="text" required  oninvalid="this.setCustomValidity(this.value.trim() == '' ? 'Please fill out this field' : 'Please enter a valid number')"
+                       onchange="try{if(!/^\d+$/.test(this.value.trim())) throw 'Please enter a valid number'; setCustomValidity('')}catch(e){setCustomValidity(e)}"
+                       oninput="setCustomValidity('')"
+                       id="companySize" name="companySize" th:value="${profile.companySize}"
+                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white "/>
                 <br>
                 <label>Location</label><br>
                 <input type="text" id="location" name="location" th:value="${profile.location}"

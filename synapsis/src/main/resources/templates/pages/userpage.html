@@ -12,8 +12,6 @@
                 <div class="p-5 ">
                     <h5 class="text-left text-2xl font-bold tracking-tight text-gray-900"
                         th:text="${name}"></h5>
-                    <p th:text="${description}"></p>
-
                     <p th:text="${profilePicture}" id="base64Image" hidden></p>
 
                     <table>
@@ -22,14 +20,14 @@
                                 <p class="font-normal text-gray-700" th:text="${work}"></p>
                             </th>
                             <th>
-                                <p class="ml-40 font-normal text-gray-700"
+                                <p class="ml-16 font-normal text-gray-700"
                                    th:text="${education}"></p>
                             </th>
                         </tr>
                         <tr>
                             <th></th>
                             <th>
-                                <p class="font-normal pl-40 text-gray-700" th:text="${phone}"></p>
+                                <p class="font-normal ml-16 text-gray-700" th:text="${phone}"></p>
                             </th>
                         </tr>
                     </table>
@@ -56,6 +54,25 @@
             </div>
         </div>
     </div>
+    <div class="pl-32 mb-5 mt-8">
+        <div class="flex max-w-xl bg-neutral-100 border-gray-200 rounded-lg shadow">
+            <table>
+                <tr>
+                    <th>
+                        <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">About us</p>
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="max-h-96 overflow-y-auto">
+                            <p class="font-normal ml-3 py-3 px-4 mr-2 mb-2 resize-y text-gray-700" th:text="${description}"></p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
     <div class="pl-32 mb-5  ">
         <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
             <table>
