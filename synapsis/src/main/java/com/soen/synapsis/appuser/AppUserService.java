@@ -96,11 +96,10 @@ public class AppUserService {
         profilePictureRepository.save(newPicture);
     }
 
-    public void markCandidateToRecruiter(AppUser appUser, @AuthenticationPrincipal AppUser companyUser) {
-
-
+    public void markCandidateToRecruiter(AppUser appUser, AppUser companyUser) {
         appUser.setRole(Role.RECRUITER);
         appUser.setCompany(companyUser);
+
         try {
             companyUser.addRecruiter(appUser);
         }
@@ -109,7 +108,6 @@ public class AppUserService {
         }
         appUserRepository.save(appUser);
         appUserRepository.save(companyUser);
-
     }
 
     public String signUpAdmin(AppUser appUser) {

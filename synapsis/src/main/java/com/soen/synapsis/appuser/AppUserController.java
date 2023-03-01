@@ -131,12 +131,23 @@ public class AppUserController {
 
     @PostMapping("/company/markCandidateToRecruiter")
     public String markCandidateToRecruiter(@RequestParam("appUserId") Long id) {
+        if(!authService.doesUserHaveRole(Role.COMPANY)) {
+            throw new IllegalStateException("You must be a company to mark candidates as recruiters.");
+        }
 
         Optional<AppUser> optionalAppUser = appUserService.getAppUser(id);
+
+        if(optionalAppUser.isEmpty()) {
+            return "redirect:/";
+        }
+
         AppUser appUser = optionalAppUser.get();
 
-        appUserService.markCandidateToRecruiter(appUser, authService.getAuthenticatedUser());
+        if(appUser.getRole() != Role.CANDIDATE) {
+            throw new IllegalStateException("The user must be a candidate to be marked as a recruiter.");
+        }
 
+        appUserService.markCandidateToRecruiter(appUser, authService.getAuthenticatedUser());
         String userProfileURL = "redirect:/user/" + id;
 
         return userProfileURL;

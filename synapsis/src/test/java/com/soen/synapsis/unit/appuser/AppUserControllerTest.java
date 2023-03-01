@@ -113,6 +113,43 @@ class AppUserControllerTest {
 
         assertEquals(expected, underTest.getAdminData());
     }
+    @Test
+    void isCompanyForMarkingIsCandidateToRecruiter() {
+        AppUser companyUser = new AppUser(1L, "Joe Company", "1234", "joecompany@mail.com", Role.COMPANY);
+        AppUser candidateUser = new AppUser(2L, "Joe Candidate", "1234", "joecandidate@mail.com", Role.CANDIDATE);
+        when(authService.getAuthenticatedUser()).thenReturn(companyUser);
+        when(authService.doesUserHaveRole(Role.COMPANY)).thenReturn(true);
+        when(appUserService.getAppUser(candidateUser.getId())).thenReturn(Optional.of(candidateUser));
+
+        String returnValue = underTest.markCandidateToRecruiter(candidateUser.getId());
+
+        assertEquals(Role.CANDIDATE, candidateUser.getRole());
+        assertEquals("redirect:/user/" + candidateUser.getId(), returnValue);
+    }
+
+    @Test
+    void isNotCompanyForMarkingCandidateToRecruiter() {
+        AppUser NotCompanyUser = new AppUser(1L, "Joe Recruiter", "1234", "joerecruiter@mail.com", Role.RECRUITER);
+        AppUser candidateUser = new AppUser(2L, "Joe Candidate", "1234", "joecandidate@mail.com", Role.CANDIDATE);
+        when(authService.getAuthenticatedUser()).thenReturn(NotCompanyUser);
+
+        assertThrows(IllegalStateException.class,
+                () -> underTest.markCandidateToRecruiter(candidateUser.getId()),
+                "You must be a company to mark candidates as recruiters.");
+    }
+
+    @Test
+    void isCompanyForMarkingIsNotCandidateToRecruiter() {
+        AppUser companyUser = new AppUser(1L, "Joe Company", "1234", "joecompany@mail.com", Role.COMPANY);
+        AppUser recruiterUser = new AppUser(2L, "Joe Recruiter", "1234", "joerecruiter@mail.com", Role.RECRUITER);
+        when(authService.getAuthenticatedUser()).thenReturn(companyUser);
+        when(authService.doesUserHaveRole(Role.COMPANY)).thenReturn(true);
+        when(appUserService.getAppUser(recruiterUser.getId())).thenReturn(Optional.of(recruiterUser));
+
+        assertThrows(IllegalStateException.class,
+                () -> underTest.markCandidateToRecruiter(recruiterUser.getId()),
+                "The user must be a candidate to be marked as a recruiter.");
+    }
 
     @Test
     void isCompanyForSetRecruiterToCandidate() {
