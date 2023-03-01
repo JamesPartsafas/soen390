@@ -56,6 +56,9 @@
             </div>
         </div>
     </div>
+
+    <div class="flex">
+    <div class="w-1/2">
     <div class="pl-32 mb-5 mt-8">
         <div class="flex max-w-xl bg-neutral-100 border-gray-200 rounded-lg shadow">
             <table>
@@ -75,23 +78,7 @@
         </div>
     </div>
 
-    <div class="pl-32 mb-5  ">
-        <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
-            <table>
-                <tr>
-                    <th>
-                        <p class="text-left text-2xl ml-8 font-bold text-gray-900">Volunteering</p>
-                    </th>
-                </tr>
-                <td>
-                    <p class="font-normal ml-10 text-gray-700" th:text="${volunteering}"></p>
-                </td>
-            </table>
-        </div>
-    </div>
-    <div class="flex">
-        <div class="w-1/2">
-            <div class="pl-32 mb-5 mt-12  ">
+            <div class="pl-32 mb-5">
                 <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
                     <table>
                         <tr>
@@ -181,10 +168,10 @@
             </div>
         </div>
 
-        <div th:if="${role.toString() =='RECRUITER'}" class="w-1/2 mt-12 ">
-            <div class="flex max-w-lg  bg-neutral-100 h-[11rem]  border-gray-200 rounded-lg shadow">
+        <div th:if="${role.toString() =='RECRUITER'}" class="w-1/2 mt-8 ml-80 ">
+            <div class="flex max-w-md  bg-neutral-100 h-[11rem]  border-gray-200 rounded-lg shadow">
                 <a th:href="@{/createjob}">
-                    <p class="text-xl font-normal mt-6 ml-80  text-gray-900">
+                    <p class="text-xl font-normal mt-6 ml-72  text-gray-900">
                         Create a job
                         <a th:href="@{/createjob}">
                             <i class="fa-regular fa-square-plus"></i>
