@@ -1,43 +1,67 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.ultraq.net.nz/thymeleaf/layout">
-<head>
-  <meta charset="UTF-8">
-  <title>Synapsis</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'primary': '#fa2742',
-            'primary-variant': '#fc9ca8',
-            'black': '#1d2228',
-            'black-variant': '#3c4653',
-            'grey': '#8f949b',
-            'light': '#e1e2e2',
-            'facebook-blue': '#1877F2',
-            'true-black': '#000000'
-          },
-          fontFamily: {
-            sans: ['Merriweather Sans', 'sans-serif'],
-            serif: ['Catamaran', 'serif'],
-          }
-        }
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="_layout">
+<div layout:fragment="content">
 
-      }
-    }
-  </script>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<div>
+  <div class="flex flex-col p-4 border border-light mx-auto mt-10 shadow-2xl w-2/3 mb-20 rounded-xl bg-white">
 
-  <p th:text="${position}"></p>
-  <p th:text="${company}"></p>
-  <p th:text="${address}"></p>
-  <p th:text="${description}"></p>
-  <p th:text="${type}"></p>
-  <p th:text="${numAvailable}"></p>
-  <p th:text="${numApplicants}"></p>
+    <div class="flex justify-between m-4">
+      <div>
+        <p th:text="${position}" class="text-3xl font-serif font-bold"></p>
+        <p th:text="${company}" class="inline text-2xl font-serif font-thin"></p>
+        <p class="inline text-2xl font-serif font-thin">,</p>
+        <p th:text="${address}" class="inline text-2xl font-serif font-thin mb-4"></p>
+      </div>
+
+      <div class="m-4 transition hover:-translate-y-0.5 duration-150">
+        <!--Add link below-->
+        <a class="p-4 bg-light text-black text-base-variant mx-auto rounded-2xl font-bold
+                 hover:bg-opacity-60">Save</a>
+      </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row justify-between m-4 bg-light rounded-md p-4 space-x-0 md:space-x-4">
+
+      <div class="flex flex-col md:max-w-xl space-y-2">
+        <div>
+          <p class="font-bold">Description</p>
+          <p th:text="${description}" class="font-thin font-serif break-words"></p>
+        </div>
+        <div>
+          <p class="font-bold">Mandatory Documents:</p>
+          <!--Hard-coded for now.-->
+          <p class="font-thin font-serif break-words">Resume, Cover Letter</p>
+        </div>
+      </div>
+
+      <div class="flex flex-col mt-2 md:mt-0 space-y-2">
+        <div>
+          <p class="font-bold">Job Type</p>
+          <p th:text="${type}" class="font-serif"></p>
+        </div>
+        <div>
+          <p class="font-bold">Number of Positions Available</p>
+          <p th:text="${num_available}" class="font-serif"></p>
+        </div>
+        <div>
+          <p class="font-bold">Number of Applicants</p>
+          <p th:text="${num_applicants}" class="font-serif"></p>
+        </div>
+        <div>
+          <p class="font-bold">Job Posting</p>
+          <!--Hard-coded for now-->
+          <p class="font-thin font-serif break-words">Internal/External</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="mx-auto my-4 transition hover:-translate-y-0.5 duration-150 ">
+      <!--Add link below-->
+      <a class="mb-4 bg-primary text-base mx-auto p-4 rounded-2xl font-thin
+            hover:bg-opacity-60">Apply Now at Synapsis</a>
+    </div>
+
+  </div>
 
 </div>
 </html>
