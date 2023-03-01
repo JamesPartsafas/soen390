@@ -61,6 +61,7 @@ public class AppUserController {
             return "redirect:/";
         }
 
+        model.addAttribute("role", appUser.getRole());
         boolean isConnectedWith = connectionService.isConnectedWith(authService.getAuthenticatedUser().getId(), uid);
 
         model.addAttribute("id", appUser.getId());
