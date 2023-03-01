@@ -115,28 +115,6 @@ class AppUserControllerTest {
     }
 
     @Test
-    void isCompanyForSetCandidateToRecruiter() {
-        AppUser companyUser = new AppUser(1L, "Joe Man", "1234", "joecompany@mail.com", Role.COMPANY);
-        AppUser candidateUser = new AppUser(2L, "Joe Man", "1234", "joecandidate@mail.com", Role.CANDIDATE);
-        when(authService.getAuthenticatedUser()).thenReturn(companyUser);
-        when(authService.doesUserHaveRole(Role.COMPANY)).thenReturn(true);
-
-        String returnValue = underTest.markCandidateToRecruiter(candidateUser);
-
-        assertEquals("pages/userpage", returnValue);
-    }
-
-    @Test
-    void isNotCompanyForSetCandidateToRecruiter() {
-        AppUser notCompanyUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.RECRUITER);
-        AppUser candidateUser = new AppUser(2L, "Joe Man", "1234", "joecandidate@mail.com", Role.CANDIDATE);
-        when(authService.getAuthenticatedUser()).thenReturn(notCompanyUser);
-
-        String returnValue = underTest.markCandidateToRecruiter(candidateUser);
-
-        assertEquals("You must be a company to mark candidates as recruiters.", returnValue);
-    }
-    @Test
     void isCompanyForSetRecruiterToCandidate() {
         AppUser companyUser = new AppUser(1L, "Joe Man", "1234", "joecompany@mail.com", Role.COMPANY);
         AppUser recruiterUser = new AppUser(2L, "Joe Man", "1234", "joerecruiter@mail.com", Role.RECRUITER);

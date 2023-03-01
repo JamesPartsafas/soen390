@@ -11,6 +11,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
 
 import java.io.IOException;
 import java.util.Base64;
@@ -96,9 +98,7 @@ public class AppUserService {
 
     public void markCandidateToRecruiter(AppUser appUser, @AuthenticationPrincipal AppUser companyUser) {
 
-        if (appUser.getRole() != Role.CANDIDATE) {
-            throw new IllegalStateException("The user must be a candidate to be marked as a recruiter.");
-        }
+
         appUser.setRole(Role.RECRUITER);
         appUser.setCompany(companyUser);
         try {

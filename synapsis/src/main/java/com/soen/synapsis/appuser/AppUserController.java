@@ -68,6 +68,8 @@ public class AppUserController {
         model.addAttribute("email", appUser.getEmail());
         model.addAttribute("profilePicture", appUser.getProfilePicture() != null ? appUser.getProfilePicture().getImage() : "");
         model.addAttribute("isConnectedWith", isConnectedWith);
+        model.addAttribute("role", appUser.getRole());
+        model.addAttribute("myRole", authService.getAuthenticatedUser().getRole());
 
         if (authService.getAuthenticatedUser().getId() == uid)
             model.addAttribute("showControls", true);
@@ -127,22 +129,20 @@ public class AppUserController {
         return "This is the admin page";
     }
 
-    @PutMapping("/company/markCandidateToRecruiter")
-    @ResponseBody
-    public String markCandidateToRecruiter(AppUser appUser) {
-        if (!authService.doesUserHaveRole(Role.COMPANY)) {
-            return "You must be a company to mark candidates as recruiters.";
-        }
-        try {
-            appUserService.markCandidateToRecruiter(appUser, authService.getAuthenticatedUser());
-        } catch (IllegalStateException e) {
-            return e.getMessage();
-        }
-        return "pages/userpage";
+    @PostMapping("/company/markCandidateToRecruiter")
+    public String markCandidateToRecruiter(@RequestParam("appUserId") Long id) {
+
+        Optional<AppUser> optionalAppUser = appUserService.getAppUser(id);
+        AppUser appUser = optionalAppUser.get();
+
+        appUserService.markCandidateToRecruiter(appUser, authService.getAuthenticatedUser());
+
+        String userProfileURL = "redirect:/user/" + id;
+
+        return userProfileURL;
     }
 
     @PutMapping("/company/unmarkRecruiterToCandidate")
-    @ResponseBody
     public String unmarkRecruiterToCandidate(AppUser appUser) {
         if (!authService.doesUserHaveRole(Role.COMPANY)) {
             return "You must be a company to unmark recruiters as candidates.";

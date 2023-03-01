@@ -42,6 +42,11 @@
                     <input type="hidden" name="id" th:value="${id}" />
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Chat</button>
                 </form>
+                <p th:text="${role}"></p>
+                <form th:if="${role.toString() == 'CANDIDATE' and myRole.toString() == 'COMPANY'}" th:action="@{/company/markCandidateToRecruiter}" method="post">
+                    <input type="hidden" name="appUserId" th:value="${id}" />
+                    <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Mark</button>
+                </form>
             </div>
         </div>
 
