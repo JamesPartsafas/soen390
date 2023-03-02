@@ -44,7 +44,7 @@ public class JobApplicationTest {
         job = new Job(companyUser, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5);
         applicant = applicantUser;
         dateApplied = new Timestamp(System.currentTimeMillis());;
-        status = JobApplicationStatus.NEW;
+        status = JobApplicationStatus.SUBMITTED;
         email = "joueuser@mail.com";
         firstName = "Joe";
         lastName = "User";

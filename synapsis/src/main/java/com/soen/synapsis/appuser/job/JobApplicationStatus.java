@@ -1,7 +1,7 @@
 package com.soen.synapsis.appuser.job;
 
 public enum JobApplicationStatus {
-    NEW,
+    SUBMITTED,
     IN_REVIEW,
     SELECTED,
     INTERVIEWED,

@@ -61,7 +61,7 @@ public class JobService {
                 job,
                 applicant,
                 new Timestamp(System.currentTimeMillis()),
-                JobApplicationStatus.NEW,
+                JobApplicationStatus.SUBMITTED,
                 request.getEmail(),
                 request.getFirstName(),
                 request.getLastName(),
