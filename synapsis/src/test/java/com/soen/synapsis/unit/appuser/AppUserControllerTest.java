@@ -119,6 +119,7 @@ class AppUserControllerTest {
         AppUser candidateUser = new AppUser(2L, "Joe Candidate", "1234", "joecandidate@mail.com", Role.CANDIDATE);
         when(authService.getAuthenticatedUser()).thenReturn(companyUser);
         when(authService.doesUserHaveRole(Role.COMPANY)).thenReturn(true);
+        when(authService.isUserAuthenticated()).thenReturn(true);
         when(appUserService.getAppUser(candidateUser.getId())).thenReturn(Optional.of(candidateUser));
 
         String returnValue = underTest.markCandidateToRecruiter(candidateUser.getId());
