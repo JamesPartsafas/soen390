@@ -46,4 +46,9 @@ public class JobService {
 
         return "redirect:/job/" + job.getID();
     }
+
+    public String deleteJob (Long id) {
+        jobRepository.deleteById(id);
+        return "redirect:/jobs";
+    }
 }
