@@ -120,6 +120,7 @@ class AppUserControllerTest {
         AppUser candidateUser = new AppUser(2L, "Joe Candidate", "1234", "joecandidate@mail.com", Role.CANDIDATE);
         when(authService.getAuthenticatedUser()).thenReturn(companyUser);
         when(authService.doesUserHaveRole(Role.COMPANY)).thenReturn(true);
+        when(authService.isUserAuthenticated()).thenReturn(true);
         when(appUserService.getAppUser(candidateUser.getId())).thenReturn(Optional.of(candidateUser));
 
         String returnValue = underTest.markCandidateToRecruiter(candidateUser.getId());
@@ -133,7 +134,7 @@ class AppUserControllerTest {
         AppUser candidateUser = new AppUser(2L, "Joe Candidate", "1234", "joecandidate@mail.com", Role.CANDIDATE);
         when(authService.getAuthenticatedUser()).thenReturn(NotCompanyUser);
 
-        assertEquals("You must be a company to mark candidates as recruiters.", underTest.markCandidateToRecruiter(candidateUser.getId()));
+        assertEquals("redirect:/", underTest.markCandidateToRecruiter(candidateUser.getId()));
     }
 
     @Test
@@ -158,6 +159,7 @@ class AppUserControllerTest {
         String returnValue = underTest.unmarkRecruiterToCandidate(recruiterUser.getId());
 
         assertEquals("redirect:/user/" + recruiterUser.getId(), returnValue);
+        assertEquals("redirect:/", underTest.markCandidateToRecruiter(recruiterUser.getId()));
     }
 
     @Test
