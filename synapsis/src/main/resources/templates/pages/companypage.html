@@ -5,13 +5,14 @@
     <div>
         <div class="pl-32 pr-5 pb-3">
             <div class="flex max-w-2xl bg-neutral-100 h-[10rem]    border-gray-200 rounded-lg shadow">
-                <div class="img">
+                <div class="img" id="profilePictureHolder">
                     <img class=" mt-3.5 rounded-full w-28 h-32   " src="../../assets/default_user.svg" alt="Default"/>
                 </div>
                 <div class="p-5 ">
                     <h5 class="text-left text-2xl  font-bold tracking-tight text-gray-900 dark:text-white"
                         th:text="${name}"></h5>
-                    <p th:text="${description}"></p>
+                    <p th:text="${profilePicture}" id="base64Image" hidden></p>
+
                     <table>
                         <tr>
                             <th>
@@ -37,10 +38,16 @@
                         </tr>
                     </table>
                 </div>
+
+
                 <form th:if="${isConnectedWith}" th:action="@{/disconnect}" method="post">
                     <input type="hidden" name="id" th:value="${id}"/>
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Disconnect
                     </button>
+                </form>
+                <form th:action="@{/chat/create}" method="post">
+                    <input type="hidden" name="id" th:value="${id}" />
+                    <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Chat</button>
                 </form>
             </div>
         </div>
@@ -56,5 +63,31 @@
             </div>
         </div>
     </div>
+
+
+
+
+
+    <div class="pl-32 mb-5 mt-8">
+        <div class="flex max-w-2xl bg-neutral-100 border-gray-200 rounded-lg shadow">
+            <table>
+                <tr>
+                    <th>
+                        <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">About us</p>
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="max-h-96 overflow-y-auto">
+                            <p class="font-normal ml-3 py-3 px-4 mr-2 mb-2 resize-y text-gray-700" th:text="${description}"></p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+
 </div>
 </html>

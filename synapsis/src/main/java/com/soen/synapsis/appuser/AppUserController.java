@@ -8,7 +8,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,11 +61,13 @@ public class AppUserController {
             return "redirect:/";
         }
 
+        model.addAttribute("role", appUser.getRole());
         boolean isConnectedWith = connectionService.isConnectedWith(authService.getAuthenticatedUser().getId(), uid);
 
         model.addAttribute("id", appUser.getId());
         model.addAttribute("name", appUser.getName());
         model.addAttribute("email", appUser.getEmail());
+        model.addAttribute("profilePicture", appUser.getProfilePicture() != null ? appUser.getProfilePicture().getImage() : "");
         model.addAttribute("isConnectedWith", isConnectedWith);
 
         if (authService.getAuthenticatedUser().getId() == uid)
@@ -99,7 +103,6 @@ public class AppUserController {
         model.addAttribute("language", profile.getLanguage());
 
         return "pages/userpage";
-
     }
 
     @GetMapping("/search")
@@ -108,7 +111,7 @@ public class AppUserController {
             return "redirect:/";
         }
 
-        List<AppUser> users = appUserService.getUsersLikeName(name, authService.getAuthenticatedUser().getId());
+        List<AppUser> users = appUserService.getRegularUsersLikeName(name, authService.getAuthenticatedUser().getId());
         model.addAttribute("users", users);
         return "pages/usersearchpage";
     }

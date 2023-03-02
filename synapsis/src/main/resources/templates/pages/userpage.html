@@ -5,27 +5,29 @@
     <div>
         <div class="pl-32 pr-5 pb-3">
             <div class="flex max-w-xl bg-neutral-100 h-[10rem] border-gray-200 rounded-lg shadow">
-                <div class="img">
+                <div class="img" id="profilePictureHolder">
                     <img class="mt-3.5 rounded-full w-28 h-32" src="../../assets/default_user.svg" alt="Default"/>
                 </div>
+
                 <div class="p-5 ">
                     <h5 class="text-left text-2xl font-bold tracking-tight text-gray-900"
                         th:text="${name}"></h5>
-                    <p th:text="${description}"></p>
+                    <p th:text="${profilePicture}" id="base64Image" hidden></p>
+
                     <table>
                         <tr>
                             <th>
                                 <p class="font-normal text-gray-700" th:text="${work}"></p>
                             </th>
                             <th>
-                                <p class="ml-40 font-normal text-gray-700"
+                                <p class="ml-16 font-normal text-gray-700"
                                    th:text="${education}"></p>
                             </th>
                         </tr>
                         <tr>
                             <th></th>
                             <th>
-                                <p class="font-normal pl-40 text-gray-700" th:text="${phone}"></p>
+                                <p class="font-normal ml-16 text-gray-700" th:text="${phone}"></p>
                             </th>
                         </tr>
                     </table>
@@ -35,10 +37,18 @@
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Disconnect
                     </button>
                 </form>
+                <form th:action="@{/chat/create}" method="post">
+                    <input type="hidden" name="id" th:value="${id}"/>
+                    <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Chat</button>
+                    <input type="hidden" name="id" th:value="${id}"/>
+                    <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Disconnect
+                    </button>
+                </form>
             </div>
         </div>
 
-        <div th:if="${showControls}" class="flex max-w-lg h-[8rem] bg-neutral-100 mr-60 absolute top-32 right-80 border-gray-200 rounded-lg shadow">
+        <div th:if="${showControls}"
+             class="flex max-w-lg h-[8rem] bg-neutral-100 mr-60 absolute top-32 right-80 border-gray-200 rounded-lg shadow">
             <div class="pr-10 pb-10 pl-10 pt-5 ">
                 <a th:href="@{/user/update}" class=" text-left text-xl  font-normal  text-gray-900">
                     Edit Public Profile
@@ -49,93 +59,129 @@
             </div>
         </div>
     </div>
-    <div class="pl-32 mb-5  ">
-        <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
+
+    <div class="flex">
+    <div class="w-1/2">
+    <div class="pl-32 mb-5 mt-8">
+        <div class="flex max-w-xl bg-neutral-100 border-gray-200 rounded-lg shadow">
             <table>
                 <tr>
                     <th>
-                        <p class="text-left text-2xl ml-8 font-bold text-gray-900">Volunteering</p>
+                        <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">About us</p>
                     </th>
                 </tr>
-                <td>
-                    <p class="font-normal ml-10 text-gray-700" th:text="${volunteering}"></p>
-                </td>
+                <tr>
+                    <td>
+                        <div class="max-h-96 overflow-y-auto">
+                            <p class="font-normal ml-3 py-3 px-4 mr-2 mb-2 resize-y text-gray-700" th:text="${description}"></p>
+                        </div>
+                    </td>
+                </tr>
             </table>
         </div>
     </div>
 
-    <div class="pl-32 mb-5 ">
-        <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
-            <table>
-                <tr>
-                    <th>
-                        <p class="text-left text-2xl ml-8 font-bold text-gray-900">Course(s)</p>
-                    </th>
-                </tr>
-                <td>
-                    <p class="font-normal ml-10 text-gray-700" th:text="${course}"></p>
-                </td>
-            </table>
-        </div>
-    </div>
+            <div class="pl-32 mb-5">
+                <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
+                    <table>
+                        <tr>
+                            <th>
+                                <p class="text-left text-2xl ml-8 font-bold text-gray-900">Volunteering</p>
+                            </th>
+                        </tr>
+                        <td>
+                            <p class="font-normal ml-10 text-gray-700" th:text="${volunteering}"></p>
+                        </td>
+                    </table>
+                </div>
+            </div>
+            <div class="pl-32 mb-5 ">
+                <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
+                    <table>
+                        <tr>
+                            <th>
+                                <p class="text-left text-2xl ml-8 font-bold text-gray-900">Course(s)</p>
+                            </th>
+                        </tr>
+                        <td>
+                            <p class="font-normal ml-10 text-gray-700" th:text="${course}"></p>
+                        </td>
+                    </table>
+                </div>
+            </div>
 
-    <div class="pl-32 mb-5 ">
-        <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
-            <table>
-                <tr>
-                    <th>
-                        <p class="text-left text-2xl ml-8 font-bold text-gray-900">Project(s)</p>
-                    </th>
-                </tr>
-                <td>
-                    <p class="font-normal ml-10 text-gray-700" th:text="${project}"></p>
-                </td>
-            </table>
-        </div>
-    </div>
+            <div class="pl-32 mb-5 ">
+                <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
+                    <table>
+                        <tr>
+                            <th>
+                                <p class="text-left text-2xl ml-8 font-bold text-gray-900">Project(s)</p>
+                            </th>
+                        </tr>
+                        <td>
+                            <p class="font-normal ml-10 text-gray-700" th:text="${project}"></p>
+                        </td>
+                    </table>
+                </div>
+            </div>
 
-    <div class="pl-32 mb-5 ">
-        <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
-            <table>
-                <tr>
-                    <th>
-                        <p class="text-left text-2xl ml-8 font-bold text-gray-900">Award(s)</p>
-                    </th>
-                </tr>
-                <td>
-                    <p class="font-normal ml-10 text-gray-700" th:text="${award}"></p>
-                </td>
-            </table>
-        </div>
-    </div>
+            <div class="pl-32 mb-5 ">
+                <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
+                    <table>
+                        <tr>
+                            <th>
+                                <p class="text-left text-2xl ml-8 font-bold text-gray-900">Award(s)</p>
+                            </th>
+                        </tr>
+                        <td>
+                            <p class="font-normal ml-10 text-gray-700" th:text="${award}"></p>
+                        </td>
+                    </table>
+                </div>
+            </div>
 
-    <div class="pl-32  mb-5 ">
-        <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
-            <table>
-                <tr>
-                    <th>
-                        <p class="text-left text-2xl ml-8 font-bold text-gray-900">Skill(s)</p>
-                    </th>
-                </tr>
-                <td>
-                    <p class="font-normal ml-10 text-gray-700" th:text="${skill}"></p>
-                </td>
-            </table>
-        </div>
-    </div>
+            <div class="pl-32  mb-5 ">
+                <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
+                    <table>
+                        <tr>
+                            <th>
+                                <p class="text-left text-2xl ml-8 font-bold text-gray-900">Skill(s)</p>
+                            </th>
+                        </tr>
+                        <td>
+                            <p class="font-normal ml-10 text-gray-700" th:text="${skill}"></p>
+                        </td>
+                    </table>
+                </div>
+            </div>
 
-    <div class="pl-32 mb-44 ">
-        <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
-            <table>
-                <tr>
-                    <th>
-                        <p class="text-left text-2xl ml-8 font-bold text-gray-900">Language(s)</p>
-                    </th>
-                </tr>
-                <td>
-                    <p class="font-normal ml-10 text-gray-700" th:text="${language}"></p>
-                </td>
-            </table>
+            <div class="pl-32 mb-44 ">
+                <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
+                    <table>
+                        <tr>
+                            <th>
+                                <p class="text-left text-2xl ml-8 font-bold text-gray-900">Language(s)</p>
+                            </th>
+                        </tr>
+                        <td>
+                            <p class="font-normal ml-10 text-gray-700" th:text="${language}"></p>
+                        </td>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${role.toString() =='RECRUITER'}" class="w-1/2 mt-8 ml-80 ">
+            <div class="flex max-w-md  bg-neutral-100 h-[11rem]  border-gray-200 rounded-lg shadow">
+                <a th:href="@{/createjob}">
+                    <p class="text-xl font-normal mt-6 ml-72  text-gray-900">
+                        Create a job
+                        <a th:href="@{/createjob}">
+                            <i class="fa-regular fa-square-plus"></i>
+                        </a>
+                </a>
+                </p>
+            </div>
         </div>
     </div>
 </div>

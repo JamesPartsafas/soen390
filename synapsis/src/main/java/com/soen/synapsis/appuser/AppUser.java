@@ -1,5 +1,6 @@
 package com.soen.synapsis.appuser;
 
+import com.soen.synapsis.appuser.profile.ProfilePicture;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
 
@@ -53,6 +54,9 @@ public class AppUser {
     @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
     private CompanyProfile companyProfile;
 
+    @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
+    private ProfilePicture profilePicture;
+
     protected AppUser() {
     }
 
@@ -94,7 +98,7 @@ public class AppUser {
     public AppUser(String name, String password, String email, Role role) {
         this(name, password, email, role, AuthProvider.LOCAL);
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -222,6 +226,14 @@ public class AppUser {
 
     public void setSecurityAnswer3(String securityAnswer3) {
         this.securityAnswer3 = securityAnswer3;
+    }
+
+    public ProfilePicture getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(ProfilePicture profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     @Override

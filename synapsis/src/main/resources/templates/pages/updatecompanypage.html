@@ -3,12 +3,21 @@
       layout:decorate="_layout">
 <div layout:fragment="content">
     <p th:text="${error}"></p>
-    <form th:action="@{/company/update}" th:object="${updateCompanyProfileRequest}" method="post">
+    <form th:action="@{/company/update}"
+          th:object="${updateCompanyProfileRequest}"
+          method="post"
+          enctype="multipart/form-data"
+    >
         <div class="flex max-w-xl bg-neutral-100 border-gray-200 ml-28 rounded-lg shadow">
             <div class="p-5">
+                <label>Change Profile Picture</label>
+                <input type="file" name="image" accept="image/png, image/jpeg" />
+                <br>
+
                 <label>Description</label><br>
-                <input type="text" id="description" name="description" th:value="${profile.description}"
-                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+                <textarea id="description" name="description"
+                          class="w-full py-3 px-4 mb-3 h-32 resize-y font-normal tracking-tight text-gray-900 dark:text-white resize-y"
+                          th:text="${profile.description}"></textarea>
                 <br>
                 <label>Website</label><br>
                 <input type="text" id="website" name="website" th:value="${profile.website}"
@@ -19,8 +28,11 @@
                        class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
                 <br>
                 <label>Company Size</label><br>
-                <input type="text" id="companySize" name="companySize" th:value="${profile.companySize}"
-                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+                <input type="text" required  oninvalid="this.setCustomValidity(this.value.trim() == '' ? 'Please fill out this field' : 'Please enter a valid number')"
+                       onchange="try{if(!/^\d+$/.test(this.value.trim())) throw 'Please enter a valid number'; setCustomValidity('')}catch(e){setCustomValidity(e)}"
+                       oninput="setCustomValidity('')"
+                       id="companySize" name="companySize" th:value="${profile.companySize}"
+                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white "/>
                 <br>
                 <label>Location</label><br>
                 <input type="text" id="location" name="location" th:value="${profile.location}"

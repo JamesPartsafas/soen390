@@ -35,9 +35,7 @@ public class AppUserDetails implements UserDetails, AppUserAuth {
     }
 
     @Override
-    public String getUsername() {
-        return appUser.getEmail();
-    }
+    public String getUsername() { return appUser.getId().toString(); }
 
     @Override
     public boolean isAccountNonExpired() {
