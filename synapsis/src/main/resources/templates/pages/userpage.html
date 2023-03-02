@@ -12,6 +12,11 @@
                 <div class="p-5 ">
                     <h5 class="text-left text-2xl font-bold tracking-tight text-gray-900"
                         th:text="${name}"></h5>
+
+                    <p th:if="${role.toString() == 'RECRUITER'}">&#10004;</p>
+
+                    <p th:text="${description}"></p>
+
                     <p th:text="${profilePicture}" id="base64Image" hidden></p>
 
                     <table>
@@ -43,6 +48,7 @@
                     <input type="hidden" name="id" th:value="${id}"/>
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Disconnect
                     </button>
+                </form>
                 </form>
                 <p th:text="${role}"></p>
                 <form th:if="${role.toString() == 'CANDIDATE' and myRole.toString() == 'COMPANY'}" th:action="@{/company/markCandidateToRecruiter}" method="post">

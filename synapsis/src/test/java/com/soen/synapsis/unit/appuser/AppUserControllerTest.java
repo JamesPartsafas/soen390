@@ -133,9 +133,7 @@ class AppUserControllerTest {
         AppUser candidateUser = new AppUser(2L, "Joe Candidate", "1234", "joecandidate@mail.com", Role.CANDIDATE);
         when(authService.getAuthenticatedUser()).thenReturn(NotCompanyUser);
 
-        assertThrows(IllegalStateException.class,
-                () -> underTest.markCandidateToRecruiter(candidateUser.getId()),
-                "You must be a company to mark candidates as recruiters.");
+        assertEquals("You must be a company to mark candidates as recruiters.", underTest.markCandidateToRecruiter(candidateUser.getId()));
     }
 
     @Test
@@ -146,9 +144,7 @@ class AppUserControllerTest {
         when(authService.doesUserHaveRole(Role.COMPANY)).thenReturn(true);
         when(appUserService.getAppUser(recruiterUser.getId())).thenReturn(Optional.of(recruiterUser));
 
-        assertThrows(IllegalStateException.class,
-                () -> underTest.markCandidateToRecruiter(recruiterUser.getId()),
-                "The user must be a candidate to be marked as a recruiter.");
+        assertEquals("The user must be a candidate to be marked as a recruiter.", underTest.markCandidateToRecruiter(recruiterUser.getId()));
     }
 
     @Test

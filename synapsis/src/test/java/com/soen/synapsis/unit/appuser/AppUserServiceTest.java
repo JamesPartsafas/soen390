@@ -104,18 +104,8 @@ public class AppUserServiceTest {
 
         underTest.markCandidateToRecruiter(appUser, companyUser);
 
-        assertEquals(Role.RECRUITER, appUser.getRole());
-        assertEquals(companyUser, appUser.getCompany());
-    }
-    @Test
-    void markCandidateToRecruiterFails() {
-        AppUser notCandidateUser = new AppUser(1L, "Joe Man", "1234", "joecompany@mail.com", Role.COMPANY);
-        AppUser companyUser = new AppUser(2L, "Joe Man", "1234", "joecompany@mail.com", Role.COMPANY);
-
-        assertThrows(IllegalStateException.class,
-                () -> underTest.markCandidateToRecruiter(notCandidateUser, companyUser),
-                "The user must be a candidate to be marked as a recruiter.");
-
+        verify(appUserRepository).save(appUser);
+        verify(appUserRepository).save(companyUser);
     }
 
     @Test

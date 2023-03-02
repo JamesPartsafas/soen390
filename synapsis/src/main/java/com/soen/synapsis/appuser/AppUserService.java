@@ -111,11 +111,8 @@ public class AppUserService {
         appUser.setRole(Role.RECRUITER);
         appUser.setCompany(companyUser);
 
-        try {
-            companyUser.addRecruiter(appUser);
-        } catch (IllegalStateException e) {
-            e.getMessage();
-        }
+        companyUser.addRecruiter(appUser);
+
         appUserRepository.save(appUser);
         appUserRepository.save(companyUser);
     }

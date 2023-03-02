@@ -132,26 +132,52 @@ public class AppUserController {
 
     @PostMapping("/company/markCandidateToRecruiter")
     public String markCandidateToRecruiter(@RequestParam("appUserId") Long id) {
-        if(!authService.doesUserHaveRole(Role.COMPANY)) {
-            throw new IllegalStateException("You must be a company to mark candidates as recruiters.");
+        try {
+            if(!authService.doesUserHaveRole(Role.COMPANY)) {
+                throw new IllegalStateException("You must be a company to mark candidates as recruiters.");
+            }
+            Optional<AppUser> optionalAppUser = appUserService.getAppUser(id);
+
+            if(optionalAppUser.isEmpty()) {
+                return "redirect:/";
+            }
+
+            AppUser appUser = optionalAppUser.get();
+
+            if(appUser.getRole() != Role.CANDIDATE) {
+                throw new IllegalStateException("The user must be a candidate to be marked as a recruiter.");
+            }
+
+            appUserService.markCandidateToRecruiter(appUser, authService.getAuthenticatedUser());
+            String userProfileURL = "redirect:/user/" + id;
+
+            return userProfileURL;
+        }
+        catch (IllegalStateException e) {
+            return e.getMessage();
         }
 
-        Optional<AppUser> optionalAppUser = appUserService.getAppUser(id);
-
-        if(optionalAppUser.isEmpty()) {
-            return "redirect:/";
-        }
-
-        AppUser appUser = optionalAppUser.get();
-
-        if(appUser.getRole() != Role.CANDIDATE) {
-            throw new IllegalStateException("The user must be a candidate to be marked as a recruiter.");
-        }
-
-        appUserService.markCandidateToRecruiter(appUser, authService.getAuthenticatedUser());
-        String userProfileURL = "redirect:/user/" + id;
-
-        return userProfileURL;
+//        Optional<AppUser> optionalAppUser = appUserService.getAppUser(id);
+//
+//        if(optionalAppUser.isEmpty()) {
+//            return "redirect:/";
+//        }
+//
+//        AppUser appUser = optionalAppUser.get();
+//
+//        try {
+//            if(appUser.getRole() != Role.CANDIDATE) {
+//                throw new IllegalStateException("The user must be a candidate to be marked as a recruiter.");
+//            }
+//        }
+//        catch(IllegalStateException e) {
+//            return e.getMessage();
+//        }
+//
+//        appUserService.markCandidateToRecruiter(appUser, authService.getAuthenticatedUser());
+//        String userProfileURL = "redirect:/user/" + id;
+//
+//        return userProfileURL;
     }
 
     @PutMapping("/company/unmarkRecruiterToCandidate")
