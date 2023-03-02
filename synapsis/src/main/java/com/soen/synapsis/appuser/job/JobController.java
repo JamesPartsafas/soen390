@@ -95,7 +95,7 @@ public class JobController {
     }
 
     @GetMapping("/deletejob/{jid}")
-    private String deleteJob(@PathVariable Long jid, Model model) {
+    public String deleteJob(@PathVariable Long jid, Model model) {
         Optional<Job> optionalJob = jobService.getJob(jid);
 
         model.addAttribute("role", authService.getAuthenticatedUser().getRole());
