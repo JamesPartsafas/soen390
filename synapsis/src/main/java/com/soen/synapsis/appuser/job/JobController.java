@@ -114,6 +114,10 @@ public class JobController {
     @PostMapping("/jobapplication")
     public String createJobApplication(JobApplication request, BindingResult bindingResult, Model model, @RequestParam("jobid") Long jobID) {
         try {
+            if (!authService.isUserAuthenticated()) {
+                return "redirect:/";
+            }
+
             if (bindingResult.hasErrors()) {
                 throw new Exception("There was a problem processing your application. Try again later.");
             }
