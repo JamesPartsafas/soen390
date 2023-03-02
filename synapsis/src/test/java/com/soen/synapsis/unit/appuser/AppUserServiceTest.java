@@ -9,15 +9,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class AppUserServiceTest {
@@ -37,7 +36,7 @@ public class AppUserServiceTest {
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
         underTest = new AppUserService(appUserRepository, appUserProfileRepository,
-                                companyProfileRepository, profilePictureRepository);
+                companyProfileRepository, profilePictureRepository);
     }
 
     @AfterEach
@@ -106,7 +105,7 @@ public class AppUserServiceTest {
         underTest.markCandidateToRecruiter(appUser, companyUser);
 
         assertEquals(Role.RECRUITER, appUser.getRole());
-        assertEquals(companyUser,appUser.getCompany());
+        assertEquals(companyUser, appUser.getCompany());
     }
 
     @Test
@@ -119,6 +118,7 @@ public class AppUserServiceTest {
                 "The user must be a candidate to be marked as a recruiter.");
 
     }
+
     @Test
     void signUpAdminWithUniqueEmail() {
         String email = "joeadmin@mail.com";
@@ -143,25 +143,68 @@ public class AppUserServiceTest {
                 () -> underTest.signUpUser(appUser),
                 "This email is already taken.");
     }
+
     @Test
-    void updatePasswordWithExistingEmail(){
-        String email = "joeman@mail.com";
+    void updatePasswordWithExistingEmail() {
         String password = "abcd";
-        AppUser appUser = new AppUser("Joe Man", "1234", email, Role.CANDIDATE);
-        when(appUserRepository.findByEmail(email)).thenReturn(appUser);
-        String returnValue = underTest.updatePassword(email,password);
+        String email = "newjoe@mail.com";
+        String newPassword = "abcde";
+        AppUser appUser = new AppUser("New Joe", password, email, Role.CANDIDATE);
+        String returnValue = underTest.updatePassword(appUser, newPassword);
         assertEquals("pages/login", returnValue);
     }
+
     @Test
-    void updatePasswordWithNewEmail(){
-        String email = "newjoe@mail.com";
-        String password = "abcd";
-        AppUser appUser = new AppUser("New Joe", "1234", email, Role.CANDIDATE);
-        when(appUserRepository.findByEmail(email)).thenReturn(null);
+    void updatePasswordWithNewEmail() {
         Exception exception = assertThrows(IllegalStateException.class,
-                () -> underTest.updatePassword(email, password),
+                () -> underTest.updatePassword(null, ""),
                 "This email does not belong to any user.");
     }
+
+    @Test
+    void checkSecurityQuestionsSuccessful() {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String securityAnswer = encoder.encode("a");
+        String email = "newjoe@mail.com";
+        AppUser appUser = new AppUser("New Joe", "1234", email, Role.CANDIDATE, AuthProvider.LOCAL, securityAnswer, securityAnswer, securityAnswer);
+        boolean result = underTest.checkSecurityQuestions(appUser, "a", "a", "a");
+
+        assertTrue(result);
+    }
+
+    @Test
+    void checkSecurityQuestionsFail1st() {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String securityAnswer = encoder.encode("a");
+        String email = "newjoe@mail.com";
+        AppUser appUser = new AppUser("New Joe", "1234", email, Role.CANDIDATE, AuthProvider.LOCAL, securityAnswer, securityAnswer, securityAnswer);
+        boolean result = underTest.checkSecurityQuestions(appUser, "b", "a", "a");
+
+        assertFalse(result);
+    }
+
+    @Test
+    void checkSecurityQuestionsFail2nd() {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String securityAnswer = encoder.encode("a");
+        String email = "newjoe@mail.com";
+        AppUser appUser = new AppUser("New Joe", "1234", email, Role.CANDIDATE, AuthProvider.LOCAL, securityAnswer, securityAnswer, securityAnswer);
+        boolean result = underTest.checkSecurityQuestions(appUser, "a", "b", "a");
+
+        assertFalse(result);
+    }
+
+    @Test
+    void checkSecurityQuestionsFail3rd() {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String securityAnswer = encoder.encode("a");
+        String email = "newjoe@mail.com";
+        AppUser appUser = new AppUser("New Joe", "1234", email, Role.CANDIDATE, AuthProvider.LOCAL, securityAnswer, securityAnswer, securityAnswer);
+        boolean result = underTest.checkSecurityQuestions(appUser, "a", "a", "b");
+
+        assertFalse(result);
+    }
+
     @Test
     void unmarkRecruiterToCandidateSucceeds() {
         AppUser appUser = new AppUser(1L, "Joe Man", "1234", "joecandidate@mail.com", Role.CANDIDATE);
@@ -190,7 +233,7 @@ public class AppUserServiceTest {
     @Test
     void emptyImageUploadReturns() throws IOException {
         MultipartFile file = mock(MultipartFile.class);
-        when(file.getBytes()).thenReturn(new byte[] {});
+        when(file.getBytes()).thenReturn(new byte[]{});
 
         underTest.uploadProfilePicture(file, mock(AppUser.class));
 

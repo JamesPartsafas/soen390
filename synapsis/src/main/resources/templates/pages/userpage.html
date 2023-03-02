@@ -40,6 +40,9 @@
                 <form th:action="@{/chat/create}" method="post">
                     <input type="hidden" name="id" th:value="${id}"/>
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Chat</button>
+                    <input type="hidden" name="id" th:value="${id}"/>
+                    <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Disconnect
+                    </button>
                 </form>
             </div>
         </div>
@@ -51,7 +54,7 @@
                     Edit Public Profile
                 </a>
                 <br>
-                <a th:href="@{/passwordresetpage}" class="mb-3 text-left text-xl font normal text-gray-900"> Reset
+                <a th:href="@{/passwordupdate}" class="mb-3 text-left text-xl font normal text-gray-900"> Reset
                     Password</a>
             </div>
         </div>

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static com.soen.synapsis.utility.Constants.MIN_PASSWORD_LENGTH;
 import static org.junit.jupiter.api.Assertions.*;
@@ -153,17 +154,42 @@ class RegistrationServiceTest {
         assertThrows(IllegalStateException.class,
                 () -> underTest.registerAdmin(request), expectedMessage);
     }
+
     @Test
     void updateUserPasswordTest() {
         String email = "joe@mail.com";
-        String name="Joe";
+        String name = "Joe";
         String password = "12345678";
+        String newPassword = "12345679";
         Role role = Role.CANDIDATE;
-        RegistrationRequest request = new RegistrationRequest(name, email, password, role);
 
-        underTest.updateUserPassword(request);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        AppUser appUser = new AppUser(name, encoder.encode(password), email, role);
+
+        underTest.updateUserPassword(appUser, password, newPassword);
 
         verify(appUserService, times(1))
-                .updatePassword(request.getEmail(), request.getPassword());
+                .updatePassword(appUser, newPassword);
+    }
+
+    @Test
+    void resetUserPasswordTest() {
+        String email = "joe@mail.com";
+        String name = "Joe";
+        String password = "12345678";
+        String newPassword = "12345679";
+        Role role = Role.CANDIDATE;
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String securityAnswer = encoder.encode("a");
+
+        AppUser appUser = new AppUser(name, password, email, role, AuthProvider.LOCAL, securityAnswer, securityAnswer, securityAnswer);
+        RegistrationRequest request = new RegistrationRequest(name, email, newPassword, role, "a", "a", "a");
+        when(appUserService.getAppUser(email)).thenReturn(appUser);
+        when(appUserService.checkSecurityQuestions(appUser, request.getSecurityAnswer1(), request.getSecurityAnswer2(), request.getSecurityAnswer3())).thenReturn(true);
+
+        underTest.resetUserPassword(request);
+
+        verify(appUserService, times(1))
+                .updatePassword(appUser, newPassword);
     }
 }
