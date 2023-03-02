@@ -97,6 +97,9 @@ public class RegistrationController {
 
     @GetMapping("/passwordupdate")
     public String passwordUpdate(Model model) {
+        if (!authService.isUserAuthenticated()) {
+            return "redirect:/";
+        }
 
         model.addAttribute("passwordUpdateRequest", new PasswordUpdateRequest());
 
