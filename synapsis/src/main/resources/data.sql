@@ -17,9 +17,13 @@ INSERT INTO app_user (name, password, email, role, auth_provider)
 VALUES ('Joe Google', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'joegoogle@mail.com', 'CANDIDATE',
         'GOOGLE');
 
-INSERT INTO app_user (name, password, email, role, auth_provider)
+INSERT INTO app_user (name, password, email, role, auth_provider, company_id)
 VALUES ('Joe Recruiter', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'joerecruiter@mail.com',
-        'RECRUITER', 'LOCAL');
+        'RECRUITER', 'LOCAL', 3);
+
+INSERT INTO app_user (name, password, email, role, auth_provider, company_id)
+VALUES ('Joe Recruiter2', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'joerecruiter2@mail.com',
+        'RECRUITER', 'LOCAL', 5);
 
 INSERT INTO connection (receiver_id, requester_id, pending)
 VALUES (1, 2, false);
