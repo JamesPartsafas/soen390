@@ -4,9 +4,9 @@ import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AppUserService;
 import com.soen.synapsis.appuser.AuthProvider;
 import com.soen.synapsis.appuser.Role;
-import com.soen.synapsis.appuser.oauth.CustomOAuth2User;
 import com.soen.synapsis.utility.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import static com.soen.synapsis.utility.Constants.MIN_PASSWORD_LENGTH;
@@ -45,7 +45,10 @@ public class RegistrationService {
                         request.getPassword(),
                         request.getEmail(),
                         requestedRole,
-                        AuthProvider.LOCAL)
+                        AuthProvider.LOCAL,
+                        request.getSecurityAnswer1(),
+                        request.getSecurityAnswer2(),
+                        request.getSecurityAnswer3())
         );
     }
 
@@ -77,12 +80,29 @@ public class RegistrationService {
                 new AppUser(request.getName(),
                         request.getPassword(),
                         request.getEmail(),
-                        Role.ADMIN)
+                        Role.ADMIN,
+                        AuthProvider.LOCAL,
+                        request.getSecurityAnswer1(),
+                        request.getSecurityAnswer2(),
+                        request.getSecurityAnswer3())
         );
     }
 
-    public String updateUserPassword(RegistrationRequest request){
+    public String updateUserPassword(AppUser appUser, String oldPassword, String newPassword) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if (!encoder.matches(oldPassword, appUser.getPassword())) {
+            throw new IllegalStateException("Old password is incorrect");
+        }
+        if (newPassword.length() < MIN_PASSWORD_LENGTH) {
+            throw new IllegalStateException("The chosen password must be at least " + MIN_PASSWORD_LENGTH + " characters long.");
+        }
+
+        return appUserService.updatePassword(appUser, newPassword);
+    }
+
+    public String resetUserPassword(RegistrationRequest request) {
         boolean isValidEmail = emailValidator.validateEmail(request.getEmail());
+        AppUser appUser = appUserService.getAppUser(request.getEmail());
 
         if (!isValidEmail) {
             throw new IllegalStateException("The provided email is not valid.");
@@ -91,7 +111,10 @@ public class RegistrationService {
             throw new IllegalStateException("The chosen password must be at least " + MIN_PASSWORD_LENGTH + " characters long.");
         }
 
-        return appUserService.updatePassword(request.getEmail(), request.getPassword());
+        if (!appUserService.checkSecurityQuestions(appUser, request.getSecurityAnswer1(), request.getSecurityAnswer2(), request.getSecurityAnswer3())) {
+            throw new IllegalStateException("1 or more of the security questions was incorrect.");
+        }
 
+        return appUserService.updatePassword(appUser, request.getPassword());
     }
 }
