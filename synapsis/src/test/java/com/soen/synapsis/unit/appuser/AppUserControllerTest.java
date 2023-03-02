@@ -133,7 +133,7 @@ class AppUserControllerTest {
         AppUser candidateUser = new AppUser(2L, "Joe Candidate", "1234", "joecandidate@mail.com", Role.CANDIDATE);
         when(authService.getAuthenticatedUser()).thenReturn(NotCompanyUser);
 
-        assertEquals("You must be a company to mark candidates as recruiters.", underTest.markCandidateToRecruiter(candidateUser.getId()));
+        assertEquals("redirect:/", underTest.markCandidateToRecruiter(candidateUser.getId()));
     }
 
     @Test
@@ -144,7 +144,7 @@ class AppUserControllerTest {
         when(authService.doesUserHaveRole(Role.COMPANY)).thenReturn(true);
         when(appUserService.getAppUser(recruiterUser.getId())).thenReturn(Optional.of(recruiterUser));
 
-        assertEquals("The user must be a candidate to be marked as a recruiter.", underTest.markCandidateToRecruiter(recruiterUser.getId()));
+        assertEquals("redirect:/", underTest.markCandidateToRecruiter(recruiterUser.getId()));
     }
 
     @Test

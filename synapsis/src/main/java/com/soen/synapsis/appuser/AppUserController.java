@@ -133,7 +133,7 @@ public class AppUserController {
     @PostMapping("/company/markCandidateToRecruiter")
     public String markCandidateToRecruiter(@RequestParam("appUserId") Long id) {
         try {
-            if(!authService.doesUserHaveRole(Role.COMPANY) && authService.isUserAuthenticated()) {
+            if(!authService.doesUserHaveRole(Role.COMPANY) || authService.isUserAuthenticated()) {
                 throw new IllegalStateException("You must be a company to mark candidates as recruiters.");
             }
             Optional<AppUser> optionalAppUser = appUserService.getAppUser(id);
