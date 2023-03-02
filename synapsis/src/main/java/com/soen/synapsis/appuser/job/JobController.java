@@ -123,11 +123,6 @@ public class JobController {
 
             jobService.createJobApplication(request, applicant, jobID);
 
-            model.addAttribute("firstname", request.getFirstName());
-            model.addAttribute("lastname", request.getLastName());
-            model.addAttribute("email", request.getEmail());
-            model.addAttribute("jobid", jobID);
-
             return "redirect:/applicationsuccess";
 
         } catch (Exception e) {
