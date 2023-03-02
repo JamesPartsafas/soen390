@@ -2,7 +2,10 @@
 <html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
 <div layout:fragment="content">
-    <form method="post">
+
+    <p th:if="${error}" th:text="${error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"></p>
+
+    <form th:action="@{/jobapplication}" method="post">
 
         <div class="flex flex-col border p-8 mx-auto mt-10 shadow-xl w-1/2 mb-20 rounded-sm">
 
@@ -10,52 +13,51 @@
                 <img src="../../assets/synapsis_logo.svg" class="object-contain h-12 w-12" alt="Synapsis Logo">
             </div>
 
-            <p class="font-bold text-3xl text-black-variant text-center">Application</p>
+            <p class="font-bold text-3xl text-black-variant text-center">Application for [[${company}]] - [[${position}]]</p>
             <p class="font-thin text-grey text-center mb-4">Please complete the form below to apply for this position.</p>
 
-            <input type="email" placeholder="Email" class="font-thin font-serif border border-grey pl-3 justify-around rounded-md hover:bg-light h-14" required />
+            <input type="hidden" name="jobid" th:value="${jobid}">
+
+            <input th:value="${email}" name="email" type="email" placeholder="Email" class="font-thin font-serif border border-grey pl-3 justify-around rounded-md hover:bg-light h-14" required />
 
             <div class="flex flex-col space-y-4 mt-4 md:flex-row md:justify-between md:h-14 md:space-x-4 md:space-y-0">
-                <input type="text" placeholder="First Name" class="font-thin font-serif border border-grey pl-3 rounded-md hover:bg-light md:w-1/2 w-full h-14" required />
-                <input type="text" placeholder="Last Name" class="font-thin font-serif border border-grey pl-3 justify-around rounded-md hover:bg-light md:w-1/2 w-full h-14" required />
+                <input name="firstName" type="text" placeholder="First Name" class="font-thin font-serif border border-grey pl-3 rounded-md hover:bg-light md:w-1/2 w-full h-14" required />
+                <input name="lastName" type="text" placeholder="Last Name" class="font-thin font-serif border border-grey pl-3 justify-around rounded-md hover:bg-light md:w-1/2 w-full h-14" required />
             </div>
 
             <div class="flex flex-col space-y-4 mt-4 md:flex-row md:justify-between md:h-14 md:space-x-4 md:space-y-0">
-                <input type="tel" placeholder="Phone Number, e.g. 123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="font-thin font-serif border border-grey md:w-1/2 w-full h-14 pl-3 rounded-md hover:bg-light" required/>
-                <input type="text" placeholder="Address" class="font-thin font-serif border border-grey pl-3 rounded-md hover:bg-light md:w-1/2 w-full h-14" required />
+                <input name="phone" type="tel" placeholder="Phone Number, e.g. 123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="font-thin font-serif border border-grey md:w-1/2 w-full h-14 pl-3 rounded-md hover:bg-light" required/>
+                <input name="address" type="text" placeholder="Address" class="font-thin font-serif border border-grey pl-3 rounded-md hover:bg-light md:w-1/2 w-full h-14" required />
             </div>
 
             <div class="flex flex-col space-y-4 mt-4 md:flex-row md:justify-between md:h-14 md:space-x-4 md:space-y-0">
-                <input type="text" placeholder="City" class="font-thin font-serif border border-grey pl-3 rounded-md hover:bg-light md:w-1/2 w-full h-14" required />
-                <input type="text" placeholder="Country" class="font-thin font-serif border border-grey pl-3 rounded-md hover:bg-light md:w-1/2 w-full h-14" required />
+                <input name="city" type="text" placeholder="City" class="font-thin font-serif border border-grey pl-3 rounded-md hover:bg-light md:w-1/2 w-full h-14" required />
+                <input name="country" type="text" placeholder="Country" class="font-thin font-serif border border-grey pl-3 rounded-md hover:bg-light md:w-1/2 w-full h-14" required />
             </div>
 
             <!-- Upload Resume -->
             <div class="mt-4">
-                <p class="font-thin font-serif text-grey">Upload Resume</p>
-                <input class="w-full text-lg file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" id="resume" type="file" required />
+                <p class="font-thin font-serif text-grey">Upload Resume *</p>
+                <input name="resume" class="w-full text-lg file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" id="resume" type="file" accept=".pdf,.docx" required/>
             </div>
 
             <!-- Upload Cover Letter -->
             <div class="mt-4">
                 <p class="font-thin font-serif text-grey">Upload Cover Letter</p>
-                <input class="w-full text-lg file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" id="cover_letter" type="file">
+                <input name="coverLetter" class="w-full text-lg file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" id="cover_letter" type="file" accept=".pdf,.docx">
             </div>
 
             <div class="border border-grey p-3 mt-4 rounded-md hover:bg-light text-black-variant">
-                <p>Are you legally allowed to work in Canada?</p>
-                <input type="radio" id="yes" name="work" value="yes">
+                <p>Are you legally allowed to work in Canada? *</p>
+                <input type="radio" id="yes" name="legallyAllowedToWork" value="true" required>
                 <label for="yes">Yes</label><br>
-                <input type="radio" id="no" name="work" value="no">
+                <input type="radio" id="no" name="legallyAllowedToWork" value="false" required>
                 <label for="no">No</label><br>
             </div>
 
-            <input type="text" placeholder="Website, Blog or Portfolio Link" class="font-thin font-serif border border-grey my-4 pl-3 rounded-md hover:bg-light h-14" />
+            <input name="links" type="text" placeholder="Website, Blog or Portfolio Link" class="font-thin font-serif border border-grey my-4 pl-3 rounded-md hover:bg-light h-14" />
 
-            <input type="month" id="dateAvailable" class="font-thin font-serif border border-grey pl-3 rounded-md hover:bg-light h-14" required />
-
-            <button type="submit" class="btn btn-primary mt-3 bg-primary text-base mx-auto p-4 rounded-2xl font-thin
-            transition hover:-translate-y-0.5 duration-150 hover:bg-opacity-60">Apply</button>
+            <button type="submit" class="btn btn-primary mt-3 bg-primary text-base mx-auto p-4 rounded-2xl font-thin transition hover:-translate-y-0.5 duration-150 hover:bg-opacity-60">Apply</button>
 
         </div>
     </form>

@@ -1,7 +1,6 @@
 package com.soen.synapsis.unit.appuser.job;
 
 import com.soen.synapsis.appuser.AppUser;
-import com.soen.synapsis.appuser.AppUserService;
 import com.soen.synapsis.appuser.AuthProvider;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.job.*;
@@ -9,26 +8,28 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class JobServiceTest {
 
     @Mock
     private JobRepository jobRepository;
+    @Mock
+    private JobApplicationRepository jobApplicationRepository;
     private AutoCloseable autoCloseable;
-    private JobService undertest;
+    private JobService underTest;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        undertest = new JobService(jobRepository);
+        underTest = new JobService(jobRepository, jobApplicationRepository);
     }
 
     @AfterEach
@@ -38,7 +39,7 @@ class JobServiceTest {
 
     @Test
     void getAllJobsReturnsAllJobs() {
-        undertest.getAllJobs();
+        underTest.getAllJobs();
         verify(jobRepository, times(1)).findAll();
     }
 
@@ -46,7 +47,7 @@ class JobServiceTest {
     void getJobReturnsJob() {
         Long id = 1L;
 
-        Optional<Job> optionalJob = undertest.getJob(id);
+        Optional<Job> optionalJob = underTest.getJob(id);
 
         verify(jobRepository, times(1)).findById(id);
     }
@@ -57,7 +58,7 @@ class JobServiceTest {
         AppUser creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
         request.setCreator(creator);
 
-        String returnValue = undertest.createJob(request);
+        String returnValue = underTest.createJob(request);
 
         assertEquals("redirect:/job/null", returnValue);
     }
@@ -68,6 +69,24 @@ class JobServiceTest {
         AppUser creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
         request.setCreator(creator);
 
-        Exception exception = assertThrows(IllegalStateException.class, () -> undertest.createJob(request), "This user is not a recruiter.");
+        Exception exception = assertThrows(IllegalStateException.class, () -> underTest.createJob(request), "This user is not a recruiter.");
     }
+
+    @Test
+    void createJobApplicationThrowsWhenRoleIsNotCandidate() {
+        AppUser notCandidate = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.COMPANY, AuthProvider.LOCAL);
+
+        assertThrows(IllegalStateException.class,
+                () -> underTest.createJobApplication(mock(JobApplication.class), notCandidate, 1L));
+    }
+
+    @Test
+    void createJobApplicationCreatesJobApplicationSuccessfully() {
+        AppUser candidate = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
+
+        underTest.createJobApplication(mock(JobApplication.class), candidate, 1L);
+
+        verify(jobApplicationRepository).save(any(JobApplication.class));
+    }
+
 }

@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -88,6 +86,59 @@ public class JobController {
             model.addAttribute("error", "There was an error creating a new job. " + e.getMessage());
             return createJob(model);
         }
+    }
+
+    @GetMapping("/jobapplication/{jobID}")
+    public String getJobApplication(@PathVariable Long jobID, Model model) {
+        if (!authService.isUserAuthenticated()) {
+            return "redirect:/";
+        }
+
+        Optional<Job> retrievedJob = jobService.getJob(jobID);
+
+        if (retrievedJob.isEmpty()) {
+            return "redirect:/jobs";
+        }
+
+        Job job = retrievedJob.get();
+        AppUser authenticatedUserId = authService.getAuthenticatedUser();
+
+        model.addAttribute("email", authenticatedUserId.getEmail());
+        model.addAttribute("jobid", job.getID());
+        model.addAttribute("company", job.getCompany());
+        model.addAttribute("position", job.getPosition());
+
+        return "pages/jobapplicationform";
+    }
+
+    @PostMapping("/jobapplication")
+    public String createJobApplication(JobApplication request, BindingResult bindingResult, Model model, @RequestParam("jobid") Long jobID) {
+        try {
+            if (bindingResult.hasErrors()) {
+                throw new Exception("There was a problem processing your application. Try again later.");
+            }
+
+            AppUser applicant = authService.getAuthenticatedUser();
+            request.setApplicant(applicant);
+
+            jobService.createJobApplication(request, applicant, jobID);
+
+            model.addAttribute("firstname", request.getFirstName());
+            model.addAttribute("lastname", request.getLastName());
+            model.addAttribute("email", request.getEmail());
+            model.addAttribute("jobid", jobID);
+
+            return "redirect:/applicationsuccess";
+
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return getJobApplication(jobID, model);
+        }
+    }
+
+    @GetMapping("/applicationsuccess")
+    public String returnJobApplicationSuccess() {
+        return "pages/applicationsuccess";
     }
 
 }
