@@ -36,7 +36,11 @@ public class JobController {
 
         List<Job> jobs = jobService.getAllJobs();
 
+        AppUser candidate = authService.getAuthenticatedUser();
+        List<Job> jobsSubmitted = jobService.getAllJobsAlreadySubmittedByUser(candidate);
+
         model.addAttribute("jobs", jobs);
+        model.addAttribute("jobsSubmitted", jobsSubmitted);
 
         return "pages/jobs";
     }

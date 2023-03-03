@@ -25,6 +25,10 @@ public class JobService {
         return jobRepository.findAll();
     }
 
+    public List<Job> getAllJobsAlreadySubmittedByUser(AppUser user) {
+        return jobRepository.findAllJobApplicationsSubmittedByUserID(user.getId());
+    }
+
     public Optional<Job> getJob(Long id) {
         return jobRepository.findById(id);
     }
