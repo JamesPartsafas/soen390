@@ -126,6 +126,20 @@ class JobControllerTest {
     }
 
     @Test
+    void getJobApplicationByIdRedirectToJobsPageWhenJobIsEmpty() {
+        when(authService.isUserAuthenticated()).thenReturn(true);
+
+        assertEquals("redirect:/jobs", underTest.getJobApplication(1L, Mockito.mock(Model.class)));
+    }
+
+    @Test
+    void getJobApplicationByIdRedirectToJobsPageWhenUserAlreadySubmittedApplication() {
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(jobService.getJob(any(Long.class))).thenReturn(Optional.empty());
+        assertEquals("redirect:/jobs", underTest.getJobApplication(1L, Mockito.mock(Model.class)));
+    }
+
+    @Test
     void getJobApplicationByIdRedirectToApplicationForm() {
         when(authService.isUserAuthenticated()).thenReturn(true);
         when(jobService.getJob(any(Long.class))).thenReturn(Optional.of(job1));
