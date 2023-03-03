@@ -106,11 +106,10 @@ public class JobController {
 
         AppUser applicant = authService.getAuthenticatedUser();
 
-        List<Job> jobsSubmitted = jobService.getAllJobsAlreadySubmittedByUser(applicant);
-        for (Job job : jobsSubmitted) {
-            if (job.getID() == jobID) {
-                return "redirect:/jobs";
-            }
+        try {
+            jobService.checkIfUserAlreadySubmittedApplication(applicant, jobID);
+        } catch(Exception e) {
+            return "redirect:/jobs";
         }
 
         Job job = retrievedJob.get();

@@ -33,7 +33,7 @@ public class JobService {
         return jobRepository.findById(id);
     }
 
-    public String createJob (JobRequest request) {
+    public String createJob(JobRequest request) {
 
         if (request.getCreator().getRole() != Role.RECRUITER) {
             throw new IllegalStateException("This user is not a recruiter.");
@@ -53,7 +53,9 @@ public class JobService {
         return "redirect:/job/" + job.getID();
     }
 
-    public void createJobApplication (JobApplication request, AppUser applicant, Long jobID) {
+    public void createJobApplication(JobApplication request, AppUser applicant, Long jobID) {
+
+        checkIfUserAlreadySubmittedApplication(applicant, jobID);
 
         if (applicant.getRole() != Role.CANDIDATE) {
             throw new IllegalStateException("You are not a candidate. Only candidates can submit application forms.");
@@ -81,4 +83,14 @@ public class JobService {
 
         jobApplicationRepository.save(jobApplication);
     }
+
+    public void checkIfUserAlreadySubmittedApplication(AppUser applicant, Long jobID) {
+        List<Job> jobsSubmitted = getAllJobsAlreadySubmittedByUser(applicant);
+        for (Job job : jobsSubmitted) {
+            if (job.getID() == jobID) {
+                throw new IllegalStateException("You already submitted an application form for this job.");
+            }
+        }
+    }
+
 }
