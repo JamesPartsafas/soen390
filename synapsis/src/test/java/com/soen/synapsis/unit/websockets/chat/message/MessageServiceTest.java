@@ -16,7 +16,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 class MessageServiceTest {
@@ -34,7 +34,7 @@ class MessageServiceTest {
         autoCloseable = MockitoAnnotations.openMocks(this);
         underTest = new MessageService(messageRepository);
         chat = new Chat();
-        sender =  new AppUser(1L, "Joe Man", "1234", "joecandidate@mail.com", Role.CANDIDATE);
+        sender = new AppUser(1L, "Joe Man", "1234", "joecandidate@mail.com", Role.CANDIDATE);
     }
 
     @AfterEach

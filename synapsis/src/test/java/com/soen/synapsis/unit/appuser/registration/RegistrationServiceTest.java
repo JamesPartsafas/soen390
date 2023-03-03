@@ -153,10 +153,11 @@ class RegistrationServiceTest {
         assertThrows(IllegalStateException.class,
                 () -> underTest.registerAdmin(request), expectedMessage);
     }
+
     @Test
     void updateUserPasswordTest() {
         String email = "joe@mail.com";
-        String name="Joe";
+        String name = "Joe";
         String password = "12345678";
         Role role = Role.CANDIDATE;
         RegistrationRequest request = new RegistrationRequest(name, email, password, role);

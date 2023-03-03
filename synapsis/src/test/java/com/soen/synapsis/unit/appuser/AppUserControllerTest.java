@@ -3,7 +3,6 @@ package com.soen.synapsis.unit.appuser;
 import com.soen.synapsis.appuser.*;
 import com.soen.synapsis.appuser.connection.ConnectionService;
 import com.soen.synapsis.utilities.SecurityUtilities;
-import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,11 +10,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class AppUserControllerTest {
@@ -136,6 +134,7 @@ class AppUserControllerTest {
 
         assertEquals("You must be a company to mark candidates as recruiters.", returnValue);
     }
+
     @Test
     void isCompanyForSetRecruiterToCandidate() {
         AppUser companyUser = new AppUser(1L, "Joe Man", "1234", "joecompany@mail.com", Role.COMPANY);

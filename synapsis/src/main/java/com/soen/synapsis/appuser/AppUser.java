@@ -3,9 +3,6 @@ package com.soen.synapsis.appuser;
 import com.soen.synapsis.appuser.profile.ProfilePicture;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -34,11 +31,14 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 
-    @ManyToOne(cascade={CascadeType.ALL})
-    @JoinColumn(name="company_id")
+    @Column(columnDefinition = "boolean default true")
+    private boolean emailNotificationsOn;
+
+    @ManyToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "company_id")
     private AppUser company;
 
-    @OneToMany(mappedBy="company")
+    @OneToMany(mappedBy = "company")
     private Set<AppUser> recruiters;
 
     @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
@@ -127,41 +127,41 @@ public class AppUser {
     }
 
     public Set<AppUser> getRecruiter() {
-        if(this.getRole() != Role.COMPANY) {
+        if (this.getRole() != Role.COMPANY) {
             throw new IllegalStateException("You must be company to have recruiters.");
         }
         return recruiters;
     }
 
     public void addRecruiter(AppUser recruiter) {
-        if(this.getRole() != Role.COMPANY) {
+        if (this.getRole() != Role.COMPANY) {
             throw new IllegalStateException("You must be a company to add a recruiter.");
         }
-        if(this.recruiters == null) {
+        if (this.recruiters == null) {
             this.recruiters = new HashSet<AppUser>();
         }
         recruiters.add(recruiter);
     }
 
     public void removeRecruiter(AppUser recruiter) {
-        if(this.getRole() != Role.COMPANY) {
+        if (this.getRole() != Role.COMPANY) {
             throw new IllegalStateException("You must be a company to remove a recruiter.");
         }
-        if(this.recruiters == null) {
+        if (this.recruiters == null) {
             throw new IllegalStateException("Your company does not have recruiters to be removed.");
         }
         recruiters.remove(recruiter);
     }
 
     public AppUser getCompany() {
-        if(this.getRole() != Role.RECRUITER) {
+        if (this.getRole() != Role.RECRUITER) {
             throw new IllegalStateException("You must be a recruiter to belong to a company.");
         }
         return company;
     }
 
     public void setCompany(AppUser company) {
-        if(this.getRole() != Role.RECRUITER) {
+        if (this.getRole() != Role.RECRUITER) {
             throw new IllegalStateException("You must be a recruiter to be part of a company.");
         }
         this.company = company;
@@ -191,14 +191,24 @@ public class AppUser {
         this.profilePicture = profilePicture;
     }
 
+    public boolean isEmailNotificationsOn() {
+        return emailNotificationsOn;
+    }
+
+    public void setEmailNotificationsOn(boolean emailNotificationsOn) {
+        this.emailNotificationsOn = emailNotificationsOn;
+    }
+
     @Override
     public String toString() {
         return "AppUser{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", role=" + role +
                 ", authProvider=" + authProvider +
+                ", emailNotificationsOn=" + emailNotificationsOn +
                 '}';
     }
 }

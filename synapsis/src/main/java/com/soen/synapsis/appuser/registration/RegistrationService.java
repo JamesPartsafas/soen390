@@ -4,7 +4,6 @@ import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AppUserService;
 import com.soen.synapsis.appuser.AuthProvider;
 import com.soen.synapsis.appuser.Role;
-import com.soen.synapsis.appuser.oauth.CustomOAuth2User;
 import com.soen.synapsis.utility.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,7 +80,7 @@ public class RegistrationService {
         );
     }
 
-    public String updateUserPassword(RegistrationRequest request){
+    public String updateUserPassword(RegistrationRequest request) {
         boolean isValidEmail = emailValidator.validateEmail(request.getEmail());
 
         if (!isValidEmail) {

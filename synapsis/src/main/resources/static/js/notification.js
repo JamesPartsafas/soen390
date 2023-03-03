@@ -16,11 +16,12 @@ function onError(error) {
     console.log(error);
 }
 
-function sendNotification(content, url, recipientId) {
+function sendNotification(content, url, recipientId, type) {
     if (notificationStompClient) {
         const notification = {
             id: 0,
             recipient_id: recipientId,
+            type: type,
             text: content,
             url: url,
             seen: false,

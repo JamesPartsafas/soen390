@@ -1,6 +1,9 @@
 package com.soen.synapsis.unit.appuser.job;
 
-import com.soen.synapsis.appuser.*;
+import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AuthProvider;
+import com.soen.synapsis.appuser.AuthService;
+import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.job.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class JobControllerTest {
@@ -79,7 +82,7 @@ class JobControllerTest {
     void getJobReturnsJobInfo() {
         when(jobService.getJob(job1.getID())).thenReturn(Optional.of(job1));
 
-        String returnValue = underTest.getJob(job1.getID(),mock(Model.class));
+        String returnValue = underTest.getJob(job1.getID(), mock(Model.class));
 
         assertEquals("pages/job", returnValue);
     }

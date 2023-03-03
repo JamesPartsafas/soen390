@@ -5,7 +5,6 @@ import com.soen.synapsis.appuser.AppUserAuth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,20 +17,16 @@ import java.util.Objects;
 @Controller
 public class NotificationController {
 
-    private SimpMessagingTemplate simpMessagingTemplate;
     private NotificationService notificationService;
 
     @Autowired
-    public NotificationController(SimpMessagingTemplate simpMessagingTemplate, NotificationService notificationService) {
-        this.simpMessagingTemplate = simpMessagingTemplate;
+    public NotificationController(NotificationService notificationService) {
         this.notificationService = notificationService;
     }
 
     @MessageMapping("/notification/{recipientId}")
     public void sendNotification(Authentication authentication, @DestinationVariable Long recipientId, NotificationDTO notification) {
-        Long notificationId = notificationService.saveNotification(notification);
-        notification.setId(notificationId);
-        simpMessagingTemplate.convertAndSendToUser(recipientId.toString(), "/specific/notification/" + recipientId, notification);
+        notificationService.saveNotification(notification);
     }
 
     @MessageMapping("/notification/{recipientId}/seen")
@@ -45,10 +40,9 @@ public class NotificationController {
             }
 
             notificationService.updateSeen(notification, true);
-            simpMessagingTemplate.convertAndSendToUser(recipientId.toString(), "/specific/notification/" + recipientId, notification);
+
         } catch (Exception e) {
-            notification.setSeen(false);
-            simpMessagingTemplate.convertAndSendToUser(recipientId.toString(), "/specific/notification/" + recipientId, notification);
+            notificationService.updateSeen(notification, false);
         }
     }
 

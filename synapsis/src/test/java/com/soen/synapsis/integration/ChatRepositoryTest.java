@@ -5,8 +5,6 @@ import com.soen.synapsis.appuser.AppUserRepository;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.websockets.chat.Chat;
 import com.soen.synapsis.websockets.chat.ChatRepository;
-import com.soen.synapsis.websockets.chat.message.MessageRepository;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 class ChatRepositoryTest {

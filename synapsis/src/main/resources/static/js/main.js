@@ -44,7 +44,7 @@ function sendMessage(event) {
 
         try {
             stompClient.send(`/app/chat/${chatId}`, {}, JSON.stringify(chatMessage));
-            sendNotification("You have a message.", `/chat/${chatId}`, receiverId);
+            sendNotification("You have a message.", `/chat/${chatId}`, receiverId, 'MESSAGE');
             showMessage(chatMessage);
         } catch (e) {
             onError(e);

@@ -1,7 +1,6 @@
 package com.soen.synapsis.unit.appuser.connection;
 
 import com.soen.synapsis.appuser.AppUser;
-import com.soen.synapsis.appuser.AppUserDetails;
 import com.soen.synapsis.appuser.AuthService;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.connection.ConnectionController;

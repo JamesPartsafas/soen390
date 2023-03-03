@@ -8,8 +8,7 @@ import com.soen.synapsis.appuser.job.JobType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JobTest {
 
@@ -40,7 +39,9 @@ class JobTest {
     }
 
     @Test
-    void getID() { assertEquals(id, undertest.getID());}
+    void getID() {
+        assertEquals(id, undertest.getID());
+    }
 
     @Test
     void setID() {
@@ -50,7 +51,9 @@ class JobTest {
     }
 
     @Test
-    void getCreator() { assertEquals(creator, undertest.getCreator());}
+    void getCreator() {
+        assertEquals(creator, undertest.getCreator());
+    }
 
     @Test
     void getPosition() {

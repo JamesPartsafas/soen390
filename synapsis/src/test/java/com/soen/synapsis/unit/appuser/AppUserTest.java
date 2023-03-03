@@ -4,11 +4,9 @@ import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AuthProvider;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.profile.ProfilePicture;
-import com.soen.synapsis.utilities.SecurityUtilities;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -139,12 +137,14 @@ class AppUserTest {
         underTest2 = new AppUser(id, name, password, email, Role.RECRUITER, authProvider);
         assertEquals(underTest2.getCompany(), underTest2.getCompany());
     }
+
     @Test
     void recruiterGetCompanyFails() {
         assertThrows(IllegalStateException.class,
                 () -> underTest.getCompany(),
                 "You must be a recruiter to belong to a company.");
     }
+
     @Test
     void recruiterSetCompanySucceeds() {
         underTest2 = new AppUser(id, name, password, email, Role.RECRUITER, authProvider);
@@ -155,6 +155,7 @@ class AppUserTest {
         assertEquals(companyUser, underTest2.getCompany());
 
     }
+
     @Test
     void recruiterSetCompanyFails() {
         AppUser companyUser = new AppUser(id, name, password, email, Role.COMPANY, authProvider);

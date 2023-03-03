@@ -11,7 +11,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ChatTest {
 
@@ -26,7 +27,7 @@ class ChatTest {
     void setUp() {
         id = 1L;
         firstUser = new AppUser(1L, "Joe Man1", "1234", "joecandidate1@mail.com", Role.CANDIDATE);
-        secondUser =  new AppUser(2L, "Joe Man2", "1234", "joecandidate2@mail.com", Role.CANDIDATE);
+        secondUser = new AppUser(2L, "Joe Man2", "1234", "joecandidate2@mail.com", Role.CANDIDATE);
         messages = new ArrayList<>();
         messages.add(new Message());
         lastUpdated = new Timestamp(System.currentTimeMillis());

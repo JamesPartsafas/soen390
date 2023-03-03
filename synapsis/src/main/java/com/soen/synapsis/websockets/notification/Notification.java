@@ -17,6 +17,9 @@ public class Notification {
     private AppUser recipient;
 
     @Column
+    private NotificationType type;
+
+    @Column
     private String text;
 
     @Column
@@ -31,8 +34,9 @@ public class Notification {
     public Notification() {
     }
 
-    public Notification(AppUser recipient, String text, String url, boolean seen, Timestamp creationTime) {
+    public Notification(AppUser recipient, NotificationType type, String text, String url, boolean seen, Timestamp creationTime) {
         this.recipient = recipient;
+        this.type = type;
         this.text = text;
         this.url = url;
         this.seen = seen;
@@ -40,13 +44,13 @@ public class Notification {
 
     }
 
-    public Notification(Long id, AppUser recipient, String text, String url, boolean seen, Timestamp creationTime) {
-        this(recipient, text, url, seen, creationTime);
+    public Notification(Long id, AppUser recipient, NotificationType type, String text, String url, boolean seen, Timestamp creationTime) {
+        this(recipient, type, text, url, seen, creationTime);
         this.id = id;
     }
 
-    public Notification(AppUser recipient, String text, String url, boolean seen) {
-        this(recipient, text, url, seen, new Timestamp(System.currentTimeMillis()));
+    public Notification(AppUser recipient, NotificationType type, String text, String url, boolean seen) {
+        this(recipient, type, text, url, seen, new Timestamp(System.currentTimeMillis()));
     }
 
     public void setId(Long id) {
@@ -97,11 +101,20 @@ public class Notification {
         this.creationTime = creationTime;
     }
 
+    public NotificationType getType() {
+        return type;
+    }
+
+    public void setType(NotificationType type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "Notification{" +
                 "id=" + id +
                 ", recipient=" + recipient +
+                ", type=" + type +
                 ", text='" + text + '\'' +
                 ", url='" + url + '\'' +
                 ", seen=" + seen +

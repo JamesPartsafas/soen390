@@ -4,7 +4,6 @@ package com.soen.synapsis.unit.appuser.profile.companyprofiletest;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AppUserService;
 import com.soen.synapsis.appuser.Role;
-import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.updateprofile.UpdateCompanyProfileController;
 import com.soen.synapsis.appuser.profile.companyprofile.updateprofile.UpdateCompanyProfileRequest;
 import com.soen.synapsis.appuser.profile.companyprofile.updateprofile.UpdateCompanyProfileService;
@@ -19,8 +18,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class
 UpdateCompanyProfileControllerTest {

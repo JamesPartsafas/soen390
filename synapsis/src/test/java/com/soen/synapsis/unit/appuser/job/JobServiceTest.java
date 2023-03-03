@@ -1,20 +1,21 @@
 package com.soen.synapsis.unit.appuser.job;
 
 import com.soen.synapsis.appuser.AppUser;
-import com.soen.synapsis.appuser.AppUserService;
+import com.soen.synapsis.appuser.AppUserRepository;
 import com.soen.synapsis.appuser.AuthProvider;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.job.*;
+import com.soen.synapsis.websockets.notification.NotificationService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -22,13 +23,17 @@ class JobServiceTest {
 
     @Mock
     private JobRepository jobRepository;
+    @Mock
+    AppUserRepository appUserRepository;
+    @Mock
+    NotificationService notificationService;
     private AutoCloseable autoCloseable;
     private JobService undertest;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        undertest = new JobService(jobRepository);
+        undertest = new JobService(jobRepository, appUserRepository, notificationService);
     }
 
     @AfterEach

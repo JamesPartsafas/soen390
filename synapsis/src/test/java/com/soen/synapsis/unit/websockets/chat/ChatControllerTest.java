@@ -1,8 +1,10 @@
 package com.soen.synapsis.unit.websockets.chat;
 
-import com.soen.synapsis.appuser.*;
+import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AppUserDetails;
+import com.soen.synapsis.appuser.AuthService;
+import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.websockets.chat.*;
-import com.soen.synapsis.websockets.chat.message.Message;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +20,7 @@ import org.springframework.ui.Model;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 

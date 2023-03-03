@@ -3,6 +3,7 @@ package com.soen.synapsis.websockets.notification;
 public class NotificationDTO {
     private Long id;
     private Long recipient_id;
+    private NotificationType type;
     private String text;
     private String url;
     private boolean seen;
@@ -11,9 +12,10 @@ public class NotificationDTO {
     public NotificationDTO() {
     }
 
-    public NotificationDTO(Long id, Long recipient_id, String text, String url, boolean seen, String timestamp) {
+    public NotificationDTO(Long id, Long recipient_id, NotificationType type, String text, String url, boolean seen, String timestamp) {
         this.id = id;
         this.recipient_id = recipient_id;
+        this.type = type;
         this.text = text;
         this.url = url;
         this.seen = seen;
@@ -34,6 +36,14 @@ public class NotificationDTO {
 
     public void setRecipient_id(Long recipient_id) {
         this.recipient_id = recipient_id;
+    }
+
+    public NotificationType getType() {
+        return type;
+    }
+
+    public void setType(NotificationType type) {
+        this.type = type;
     }
 
     public String getText() {
@@ -60,16 +70,6 @@ public class NotificationDTO {
         this.seen = seen;
     }
 
-    public static NotificationDTO notificationToDTO(Notification notification) {
-        return new NotificationDTO(
-                notification.getId(),
-                notification.getRecipient().getId(),
-                notification.getText(), notification.getUrl(),
-                notification.isSeen(),
-                notification.getCreationTime().toString()
-        );
-    }
-
     public String getCreation_time() {
         return creation_time;
     }
@@ -78,11 +78,24 @@ public class NotificationDTO {
         this.creation_time = creation_time;
     }
 
+    public static NotificationDTO notificationToDTO(Notification notification) {
+        return new NotificationDTO(
+                notification.getId(),
+                notification.getRecipient().getId(),
+                notification.getType(),
+                notification.getText(),
+                notification.getUrl(),
+                notification.isSeen(),
+                notification.getCreationTime().toString()
+        );
+    }
+
     @Override
     public String toString() {
         return "NotificationDTO{" +
-                "id='" + id + '\'' +
-                ", recipient_id='" + recipient_id + '\'' +
+                "id=" + id +
+                ", recipient_id=" + recipient_id +
+                ", type=" + type +
                 ", text='" + text + '\'' +
                 ", url='" + url + '\'' +
                 ", seen=" + seen +

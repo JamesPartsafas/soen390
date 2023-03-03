@@ -67,7 +67,7 @@ public class JobController {
     @GetMapping(value = "/createjob")
     public String createJob(Model model) {
         model.addAttribute("jobRequest", new JobRequest());
-        return "pages/createjob";
+        return "pages/createJob";
     }
 
     @PostMapping("/createjob")
@@ -83,8 +83,7 @@ public class JobController {
 
             return response;
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             model.addAttribute("error", "There was an error creating a new job. " + e.getMessage());
             return createJob(model);
         }
