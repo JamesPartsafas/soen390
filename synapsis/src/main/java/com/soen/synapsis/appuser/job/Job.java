@@ -42,9 +42,18 @@ public class Job {
     @Column(name = "external_link")
     private String externalLink;
 
+    @Column(name = "need_resume")
+    private boolean needResume;
+
+    @Column(name = "need_cover")
+    private boolean needCover;
+
+    @Column(name = "need_portfolio")
+    private boolean needPortfolio;
+
     protected Job() {}
 
-    public Job(AppUser creator, String position, String company, String address, String description, JobType type, int numAvailable, Boolean isExternal, String externalLink) {
+    public Job(AppUser creator, String position, String company, String address, String description, JobType type, int numAvailable, boolean isExternal, String externalLink, boolean needResume, boolean needCover, boolean needPortfolio) {
         this.creator = creator;
         this.position = position;
         this.company = company;
@@ -55,6 +64,9 @@ public class Job {
         this.numApplicants = 0;
         this.isExternal = isExternal;
         this.externalLink = externalLink;
+        this.needResume = needResume;
+        this.needCover = needCover;
+        this.needPortfolio = needPortfolio;
     }
 
     public Long getID() {
@@ -151,5 +163,29 @@ public class Job {
 
     public void setExternalLink(String externalLink) {
         this.externalLink = externalLink;
+    }
+
+    public boolean getNeedResume() {
+        return needResume;
+    }
+
+    public void setNeedResume(boolean needResume) {
+        this.needResume = needResume;
+    }
+
+    public boolean getNeedCover() {
+        return needCover;
+    }
+
+    public void setNeedCover(boolean needCover) {
+        this.needCover = needCover;
+    }
+
+    public boolean getNeedPortfolio() {
+        return needPortfolio;
+    }
+
+    public void setNeedPortfolio(boolean needPortfolio) {
+        this.needPortfolio = needPortfolio;
     }
 }
