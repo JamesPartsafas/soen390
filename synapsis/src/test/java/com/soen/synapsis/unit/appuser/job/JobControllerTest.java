@@ -124,7 +124,7 @@ class JobControllerTest {
     @Test
     void deleteJobRedirects() {
         when(authService.getAuthenticatedUser()).thenReturn(creator);
-        String returnedPage = underTest.deleteJob(1L, Mockito.mock(Model.class));
+        String returnedPage = underTest.deleteJob(1L);
 
         assertEquals("redirect:/", returnedPage);
     }

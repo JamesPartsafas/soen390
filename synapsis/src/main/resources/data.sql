@@ -21,6 +21,10 @@ INSERT INTO app_user (name, password, email, role, auth_provider)
 VALUES ('Joe Recruiter', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'joerecruiter@mail.com',
         'RECRUITER', 'LOCAL');
 
+INSERT INTO app_user (name, password, email, role, auth_provider)
+VALUES ('Tony Recruiter', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'tonyrecruiter@mail.com',
+        'RECRUITER', 'LOCAL');
+
 INSERT INTO connection (receiver_id, requester_id, pending)
 VALUES (1, 2, false);
 
