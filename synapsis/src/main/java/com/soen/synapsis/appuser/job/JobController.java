@@ -104,10 +104,18 @@ public class JobController {
             return "redirect:/jobs";
         }
 
-        Job job = retrievedJob.get();
-        AppUser authenticatedUserId = authService.getAuthenticatedUser();
+        AppUser applicant = authService.getAuthenticatedUser();
 
-        model.addAttribute("email", authenticatedUserId.getEmail());
+        List<Job> jobsSubmitted = jobService.getAllJobsAlreadySubmittedByUser(applicant);
+        for (Job job : jobsSubmitted) {
+            if (job.getID() == jobID) {
+                return "redirect:/jobs";
+            }
+        }
+
+        Job job = retrievedJob.get();
+
+        model.addAttribute("email", applicant.getEmail());
         model.addAttribute("jobid", job.getID());
         model.addAttribute("company", job.getCompany());
         model.addAttribute("position", job.getPosition());
