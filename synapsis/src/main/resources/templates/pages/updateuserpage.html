@@ -16,8 +16,9 @@
                 <br>
 
                 <label>Description</label><br>
-                <input type="text" id="description" name="description" th:value="${profile.description}"
-                       class="mb-2 text-left   font-normal tracking-tight text-gray-900 dark:text-white"/>
+                <textarea id="description" name="description"
+                          class="w-full py-3 px-4 mb-3 h-32 resize-y font-normal tracking-tight text-gray-900 dark:text-white resize-y"
+                          th:text="${profile.description}"></textarea>
                 <br>
                 <label>Education</label><br>
                 <input type="text" id="education" name="education" th:value="${profile.education}"
@@ -36,8 +37,9 @@
                        class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
                 <br>
                 <label>Phone</label><br>
-                <input type="text" id="phone" name="phone" th:value="${profile.phone}"
+                <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" th:value="${profile.phone}"
                        class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+                <br><span class="help-block">Format: 123-456-7890</span><br>
                 <br>
                 <label>Volunteering</label><br>
                 <input type="text" id="volunteering" name="volunteering" th:value="${profile.volunteering}"

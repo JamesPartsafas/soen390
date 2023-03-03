@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
@@ -80,6 +83,9 @@ class JobControllerTest {
 
     @Test
     void getJobReturnsJobInfo() {
+
+        when(authService.getAuthenticatedUser()).thenReturn(creator);
+
         when(jobService.getJob(job1.getID())).thenReturn(Optional.of(job1));
 
         String returnValue = underTest.getJob(job1.getID(),mock(Model.class));

@@ -11,6 +11,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
 
 import java.io.IOException;
 import java.util.Base64;
@@ -33,7 +35,7 @@ public class AppUserService {
 
     @Autowired
     public AppUserService(AppUserRepository appUserRepository, AppUserProfileRepository appUserProfileRepository,
-            CompanyProfileRepository companyProfileRepository, ProfilePictureRepository profilePictureRepository) {
+                          CompanyProfileRepository companyProfileRepository, ProfilePictureRepository profilePictureRepository) {
         this.appUserRepository = appUserRepository;
         this.appUserProfileRepository = appUserProfileRepository;
         this.companyProfileRepository = companyProfileRepository;
@@ -49,7 +51,9 @@ public class AppUserService {
         return appUserRepository.findByEmail(email);
     }
 
-    public List<AppUser> getRegularUsersLikeName(String name, Long id) { return appUserRepository.findByNameContainingIgnoreCaseAndIdNotAndRoleNot(name, id, Role.ADMIN); }
+    public List<AppUser> getRegularUsersLikeName(String name, Long id) {
+        return appUserRepository.findByNameContainingIgnoreCaseAndIdNotAndRoleNot(name, id, Role.ADMIN);
+    }
 
     public String signUpUser(AppUser appUser) {
         boolean appUserExists = appUserRepository.findByEmail(appUser.getEmail()) != null;
@@ -61,6 +65,16 @@ public class AppUserService {
         }
 
         appUser.setPassword(encoder.encode(appUser.getPassword()));
+
+        if (appUser.getSecurityAnswer1() != null) {
+            appUser.setSecurityAnswer1(encoder.encode(appUser.getSecurityAnswer1()));
+        }
+        if (appUser.getSecurityAnswer2() != null) {
+            appUser.setSecurityAnswer2(encoder.encode(appUser.getSecurityAnswer2()));
+        }
+        if (appUser.getSecurityAnswer3() != null) {
+            appUser.setSecurityAnswer3(encoder.encode(appUser.getSecurityAnswer3()));
+        }
 
         appUserRepository.save(appUser);
 
@@ -86,30 +100,21 @@ public class AppUserService {
 
         if (newPicture != null) {
             newPicture.setImage(encodedImage);
-        }
-        else {
+        } else {
             newPicture = new ProfilePicture(appUser, encodedImage);
         }
 
         profilePictureRepository.save(newPicture);
     }
 
-    public void markCandidateToRecruiter(AppUser appUser, @AuthenticationPrincipal AppUser companyUser) {
-
-        if (appUser.getRole() != Role.CANDIDATE) {
-            throw new IllegalStateException("The user must be a candidate to be marked as a recruiter.");
-        }
+    public void markCandidateToRecruiter(AppUser appUser, AppUser companyUser) {
         appUser.setRole(Role.RECRUITER);
         appUser.setCompany(companyUser);
-        try {
-            companyUser.addRecruiter(appUser);
-        }
-        catch (IllegalStateException e) {
-            e.getMessage();
-        }
+
+        companyUser.addRecruiter(appUser);
+
         appUserRepository.save(appUser);
         appUserRepository.save(companyUser);
-
     }
 
     public String signUpAdmin(AppUser appUser) {
@@ -126,37 +131,51 @@ public class AppUserService {
         return "pages/adminCreationSuccess";
     }
 
-    public String updatePassword(String email, String password) {
-        AppUser appUser = appUserRepository.findByEmail(email);
-        boolean appUserExists = appUser != null;
-        if (appUserExists) {
+    public String updatePassword(AppUser appUser, String password) {
+        if (appUser != null) {
             appUser.setPassword(encoder.encode(password));
             appUserRepository.save(appUser);
             return "pages/login";
         } else {
-            throw new IllegalStateException("This email does not belong to any user.");
+            throw new IllegalStateException("User does not exist.");
         }
     }
+
     public void unmarkRecruiterToCandidate(AppUser appUser, @AuthenticationPrincipal AppUser companyUser) {
 
-        if(appUser.getRole() != Role.RECRUITER) {
+        if (appUser.getRole() != Role.RECRUITER) {
             throw new IllegalStateException("The user must be a recruiter to be unmark as a candidate.");
         }
-        if(companyUser != appUser.getCompany()) {
+        if (companyUser != appUser.getCompany()) {
             throw new IllegalStateException("The recruiter is not part of your company.");
         }
 
         appUser.setCompany(null);
         appUser.setRole(Role.CANDIDATE);
 
-        try{
+        try {
             companyUser.removeRecruiter(appUser);
-        }
-        catch(IllegalStateException e) {
+        } catch (IllegalStateException e) {
             e.getMessage();
         }
         appUserRepository.save(appUser);
         appUserRepository.save(companyUser);
 
+    }
+
+    public boolean checkSecurityQuestions(AppUser appUser, String securityAnswer1, String securityAnswer2, String securityAnswer3) {
+
+        if (appUser != null) {
+            if (!encoder.matches(securityAnswer1, appUser.getSecurityAnswer1()))
+                return false;
+            if (!encoder.matches(securityAnswer2, appUser.getSecurityAnswer2()))
+                return false;
+            if (!encoder.matches(securityAnswer3, appUser.getSecurityAnswer3()))
+                return false;
+
+            return true;
+        } else {
+            throw new IllegalStateException("This email does not belong to any user.");
+        }
     }
 }
