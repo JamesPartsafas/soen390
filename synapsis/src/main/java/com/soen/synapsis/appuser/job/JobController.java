@@ -54,6 +54,7 @@ public class JobController {
 
         Job job = optionalJob.get();
 
+        model.addAttribute("authorization", authService.getAuthenticatedUser().getId() == optionalJob.get().getID());
         model.addAttribute("creator", job.getCreator().getName());
         model.addAttribute("company", job.getCompany());
         model.addAttribute("address", job.getAddress());
@@ -94,11 +95,9 @@ public class JobController {
         }
     }
 
-    @GetMapping("/deletejob/{jid}")
+    @PostMapping("/deletejob/{jid}")
     public String deleteJob(@PathVariable Long jid, Model model) {
         Optional<Job> optionalJob = jobService.getJob(jid);
-
-        model.addAttribute("role", authService.getAuthenticatedUser().getRole());
 
         if (optionalJob.isEmpty() || authService.getAuthenticatedUser().getId() != optionalJob.get().getID())
             return "redirect:/";
