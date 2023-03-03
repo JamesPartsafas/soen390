@@ -69,6 +69,8 @@ public class AppUserController {
         model.addAttribute("email", appUser.getEmail());
         model.addAttribute("profilePicture", appUser.getProfilePicture() != null ? appUser.getProfilePicture().getImage() : "");
         model.addAttribute("isConnectedWith", isConnectedWith);
+        model.addAttribute("role", appUser.getRole());
+        model.addAttribute("myRole", authService.getAuthenticatedUser().getRole());
 
         if (authService.getAuthenticatedUser().getId() == uid)
             model.addAttribute("showControls", true);
@@ -128,22 +130,35 @@ public class AppUserController {
         return "This is the admin page";
     }
 
-    @PutMapping("/company/markCandidateToRecruiter")
-    @ResponseBody
-    public String markCandidateToRecruiter(AppUser appUser) {
-        if (!authService.doesUserHaveRole(Role.COMPANY)) {
-            return "You must be a company to mark candidates as recruiters.";
-        }
+    @PostMapping("/company/markCandidateToRecruiter")
+    public String markCandidateToRecruiter(@RequestParam("appUserId") Long id) {
         try {
+            if(!authService.doesUserHaveRole(Role.COMPANY) || !authService.isUserAuthenticated()) {
+                throw new IllegalStateException("You must be a company to mark candidates as recruiters.");
+            }
+            Optional<AppUser> optionalAppUser = appUserService.getAppUser(id);
+
+            if(optionalAppUser.isEmpty()) {
+                return "redirect:/";
+            }
+
+            AppUser appUser = optionalAppUser.get();
+
+            if(appUser.getRole() != Role.CANDIDATE) {
+                throw new IllegalStateException("The user must be a candidate to be marked as a recruiter.");
+            }
+
             appUserService.markCandidateToRecruiter(appUser, authService.getAuthenticatedUser());
-        } catch (IllegalStateException e) {
-            return e.getMessage();
+            String userProfileURL = "redirect:/user/" + id;
+
+            return userProfileURL;
         }
-        return "pages/userpage";
+        catch (IllegalStateException e) {
+            return "redirect:/";
+        }
     }
 
     @PutMapping("/company/unmarkRecruiterToCandidate")
-    @ResponseBody
     public String unmarkRecruiterToCandidate(AppUser appUser) {
         if (!authService.doesUserHaveRole(Role.COMPANY)) {
             return "You must be a company to unmark recruiters as candidates.";

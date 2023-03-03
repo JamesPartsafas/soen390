@@ -45,7 +45,7 @@ public class AppUser {
     @JoinColumn(name = "company_id")
     private AppUser company;
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy="company", fetch = FetchType.EAGER)
     private Set<AppUser> recruiters;
 
     @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
