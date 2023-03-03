@@ -100,7 +100,7 @@ public class JobController {
 
         model.addAttribute("role", authService.getAuthenticatedUser().getRole());
 
-        if (optionalJob.isEmpty())
+        if (optionalJob.isEmpty() || authService.getAuthenticatedUser().getId() != optionalJob.get().getID())
             return "redirect:/";
 
         return jobService.deleteJob(jid);
