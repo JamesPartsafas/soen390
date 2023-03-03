@@ -65,8 +65,11 @@
     <!--Add link below. Only RECRUITERS can edit jobs.-->
       <a th:if="${authorization.toString()=='true'}" class="mb-4 text-white font-thin bg-primary mx-auto p-4 rounded-2xl
             hover:bg-opacity-60">Edit</a>
-      <a th:href="@{/deletejob/} + ${jid}" th:if="${authorization.toString()=='true'}" class="mb-4 text-white font-thin bg-primary mx-auto p-4 rounded-2xl
-            hover:bg-opacity-60">Delete</a>
+      <form th:action="@{/deletejob}" method="post">
+        <input type="hidden" name="jid" th:value="${jid}" />
+        <button th:if="${authorization.toString()=='true'}" class="mb-4 text-white font-thin bg-primary mx-auto p-4 rounded-2xl
+              hover:bg-opacity-60" type="submit">Delete</button>
+      </form>
     </div>
 
   </div>
