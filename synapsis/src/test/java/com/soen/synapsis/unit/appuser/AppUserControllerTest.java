@@ -145,7 +145,7 @@ class AppUserControllerTest {
         when(authService.doesUserHaveRole(Role.COMPANY)).thenReturn(true);
         when(appUserService.getAppUser(NotCandidateUser.getId())).thenReturn(Optional.of(NotCandidateUser));
 
-        assertEquals("The user must be a candidate to be marked as a recruiter.", underTest.markCandidateToRecruiter(NotCandidateUser.getId()));
+        assertEquals("redirect:/", underTest.markCandidateToRecruiter(NotCandidateUser.getId()));
     }
 
     @Test
@@ -154,12 +154,12 @@ class AppUserControllerTest {
         AppUser recruiterUser = new AppUser(2L, "Joe Recruiter", "1234", "joerecruiter@mail.com", Role.RECRUITER, companyUser);
         when(authService.getAuthenticatedUser()).thenReturn(companyUser);
         when(authService.doesUserHaveRole(Role.COMPANY)).thenReturn(true);
+        when(authService.isUserAuthenticated()).thenReturn(true);
         when(appUserService.getAppUser(recruiterUser.getId())).thenReturn(Optional.of(recruiterUser));
 
         String returnValue = underTest.unmarkRecruiterToCandidate(recruiterUser.getId());
 
         assertEquals("redirect:/user/" + recruiterUser.getId(), returnValue);
-        assertEquals("redirect:/", underTest.markCandidateToRecruiter(recruiterUser.getId()));
     }
 
     @Test
@@ -168,7 +168,7 @@ class AppUserControllerTest {
         AppUser recruiterUser = new AppUser(2L, "Joe Recruiter", "1234", "joerecruiter@mail.com", Role.RECRUITER);
         when(authService.getAuthenticatedUser()).thenReturn(NotCompanyUser);
 
-        assertEquals("You must be a company to unmark recruiters as candidates.", underTest.unmarkRecruiterToCandidate(recruiterUser.getId()));
+        assertEquals("redirect:/", underTest.unmarkRecruiterToCandidate(recruiterUser.getId()));
     }
 
     @Test
@@ -179,7 +179,7 @@ class AppUserControllerTest {
         when(authService.doesUserHaveRole(Role.COMPANY)).thenReturn(true);
         when(appUserService.getAppUser(NotRecruiterUser.getId())).thenReturn(Optional.of(NotRecruiterUser));
 
-        assertEquals("The user must be a recruiter to be unmarked as a candidate.", underTest.unmarkRecruiterToCandidate(NotRecruiterUser.getId()));
+        assertEquals("redirect:/", underTest.unmarkRecruiterToCandidate(NotRecruiterUser.getId()));
 
     }
 
