@@ -63,9 +63,9 @@
 
     <div th:if="${role.toString()=='RECRUITER'}" class="mx-auto my-4 transition hover:-translate-y-0.5 duration-150 ">
     <!--Add link below. Only RECRUITERS can edit jobs.-->
-      <a th:if="${role.toString()=='RECRUITER'}" class="mb-4 text-white font-thin bg-primary mx-auto p-4 rounded-2xl
+      <a th:if="${authorization.toString()=='true'}" class="mb-4 text-white font-thin bg-primary mx-auto p-4 rounded-2xl
             hover:bg-opacity-60">Edit</a>
-      <a th:if="${role.toString()=='RECRUITER'}" class="mb-4 text-white font-thin bg-primary mx-auto p-4 rounded-2xl
+      <a th:href="@{/deletejob/} + ${jid}" th:if="${authorization.toString()=='true'}" class="mb-4 text-white font-thin bg-primary mx-auto p-4 rounded-2xl
             hover:bg-opacity-60">Delete</a>
     </div>
 
