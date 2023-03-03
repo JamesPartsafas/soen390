@@ -75,15 +75,15 @@
         <fieldset required>
           <legend class="font-thin font-serif text-grey">Is this job hosted elsewhere?</legend>
           <div>
-            <input type="radio" name="type" id="external" onclick="EnableLinkBox()"/>
+            <input th:value="${true}" type="radio" name="isExternal" id="external" onclick="EnableLinkBox()"/>
             <label for="external" class="font-thin font-serif text-grey">Yes (Third Party Platform)</label>
             <br/>
 
-            <input type="radio" name="type" id="internal" onclick="EnableLinkBox()"/>
+            <input th:value="${false}" type="radio" name="isExternal" id="internal" onclick="EnableLinkBox()"/>
             <label for="internal" class="font-thin font-serif text-grey">No (on Synapsis)</label>
           </div>
 
-          <input id="linkbox" name="linkbox" placeholder="If yes, enter the link to the third party website" class="font-thin font-serif
+          <input id="externalLink" name="externalLink" placeholder="If yes, enter the link to the third party website" class="font-thin font-serif
                  border border-grey mt-4 pl-3 h-14 content-center rounded-md hover:bg-light w-full" disabled />
         </fieldset>
       </div>

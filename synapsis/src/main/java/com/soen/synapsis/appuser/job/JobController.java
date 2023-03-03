@@ -62,6 +62,8 @@ public class JobController {
         model.addAttribute("num_applicants", job.getNumApplicants());
         model.addAttribute("role",authService.getAuthenticatedUser().getRole());
         model.addAttribute("jid", job.getID());
+        model.addAttribute("is_external", job.getIsExternal());
+        model.addAttribute("external_link", job.getExternalLink());
 
 
         return "pages/job";

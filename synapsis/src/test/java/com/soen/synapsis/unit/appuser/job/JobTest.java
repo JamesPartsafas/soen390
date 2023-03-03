@@ -23,6 +23,8 @@ class JobTest {
     private JobType type;
     private int numAvailable;
     private int numApplicants;
+    private boolean isExternal;
+    private String externalLink;
 
     @BeforeEach
     void setUp() {
@@ -35,7 +37,9 @@ class JobTest {
         type = JobType.FULLTIME;
         numAvailable = 5;
         numApplicants = 0;
-        undertest = new Job(creator, position, company, address, description, type, numAvailable);
+        isExternal = false;
+        externalLink = "";
+        undertest = new Job(creator, position, company, address, description, type, numAvailable, isExternal, externalLink);
         undertest.setID(id);
     }
 
@@ -135,4 +139,29 @@ class JobTest {
         undertest.setNumApplicants(newNumApplicants);
         assertEquals(newNumApplicants, undertest.getNumApplicants());
     }
+
+    @Test
+    void getIsExternal() {
+        assertEquals(isExternal, undertest.getIsExternal());
+    }
+
+    @Test
+    void setIsExternal() {
+        boolean newIsExternal = true;
+        undertest.setIsExternal(newIsExternal);
+        assertEquals(newIsExternal, undertest.getIsExternal());
+    }
+
+    @Test
+    void getExternalLink() {
+        assertEquals(externalLink, undertest.getExternalLink());
+    }
+
+    @Test
+    void setExternalLink() {
+        String newExternalLink = "https://www.google.com/";
+        undertest.setExternalLink(newExternalLink);
+        assertEquals(newExternalLink, undertest.getExternalLink());
+    }
+
 }

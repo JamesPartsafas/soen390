@@ -49,7 +49,9 @@
         <div>
           <p class="font-bold">Job Posting</p>
           <!--Hard-coded for now-->
-          <p class="font-thin font-serif break-words">Internal/External</p>
+          <p th:if="${is_external}" class="font-thin font-serif break-words">External</p>
+          <p th:if="${is_external}" th:text="${external_link}" class="font-serif"></p>
+          <p th:if="${!is_external}" class="font-thin font-serif break-words">Internal</p>
         </div>
       </div>
 
