@@ -43,6 +43,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin").hasAuthority(Role.ADMIN.toString())
                 .antMatchers("/admincreationpage").hasAuthority(Role.ADMIN.toString())
                 .antMatchers("/deletejob").hasAuthority(Role.RECRUITER.toString())
+                .antMatchers("/editjob").hasAuthority(Role.RECRUITER.toString())
                 .antMatchers("/passwordresetpage").authenticated()
                 .antMatchers("/**").permitAll()
                 .antMatchers("/oauth2/**").permitAll()
