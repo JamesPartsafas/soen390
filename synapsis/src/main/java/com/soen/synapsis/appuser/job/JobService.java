@@ -46,12 +46,19 @@ public class JobService {
         String description = request.getDescription();
         JobType type = request.getType();
         int numAvailable = request.getNumAvailable();
+        boolean isExternal = request.getIsExternal();
+        String externalLink = request.getExternalLink();
+        boolean needResume = request.getNeedResume();
+        boolean needCover = request.getNeedCover();
+        boolean needPortfolio = request.getNeedPortfolio();
 
-        Job job = new Job(creator, position, company, address, description, type, numAvailable);
+
+        Job job = new Job(creator, position, company, address, description, type, numAvailable, isExternal, externalLink, needResume, needCover, needPortfolio);
         jobRepository.save(job);
 
         return "redirect:/job/" + job.getID();
     }
+
 
     public void createJobApplication(JobApplication request, AppUser applicant, Long jobID) {
 
@@ -91,6 +98,12 @@ public class JobService {
                 throw new IllegalStateException("You already submitted an application form for this job.");
             }
         }
+    }
+
+
+    public String deleteJob (Long id) {
+        jobRepository.deleteById(id);
+        return "redirect:/jobs";
     }
 
 }

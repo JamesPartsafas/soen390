@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.ui.Model;
 
 import java.util.Optional;
 
@@ -54,7 +55,7 @@ class JobServiceTest {
 
     @Test
     void createValidJob() {
-        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1);
+        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
         AppUser creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
         request.setCreator(creator);
 
@@ -65,7 +66,7 @@ class JobServiceTest {
 
     @Test
     void nonRecruiterCreateJobThrows() {
-        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1);
+        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
         AppUser creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
         request.setCreator(creator);
 
@@ -90,3 +91,11 @@ class JobServiceTest {
     }
 
 }
+    @Test
+    void deleteJob() {
+        String returnedPage = undertest.deleteJob(1L);
+        assertEquals("redirect:/jobs", returnedPage);
+        verify(jobRepository, never()).findById(1L);
+    }
+}
+

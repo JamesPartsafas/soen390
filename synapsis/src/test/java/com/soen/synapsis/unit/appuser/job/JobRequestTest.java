@@ -31,7 +31,7 @@ class JobRequestTest {
         description = "Sample Description";
         type = JobType.FULLTIME;
         numAvailable = 5;
-        underTest = new JobRequest(position, company, address, description, type, numAvailable);
+        underTest = new JobRequest(position, company, address, description, type, numAvailable, true, "", true, true, true);
         underTest.setCreator(creator);
     }
 

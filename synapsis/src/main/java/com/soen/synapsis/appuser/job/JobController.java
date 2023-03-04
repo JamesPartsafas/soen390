@@ -55,6 +55,7 @@ public class JobController {
 
         Job job = optionalJob.get();
 
+        model.addAttribute("authorization", authService.getAuthenticatedUser().getId() == optionalJob.get().getCreator().getId());
         model.addAttribute("creator", job.getCreator().getName());
         model.addAttribute("company", job.getCompany());
         model.addAttribute("address", job.getAddress());
@@ -64,7 +65,12 @@ public class JobController {
         model.addAttribute("num_available", job.getNumAvailable());
         model.addAttribute("num_applicants", job.getNumApplicants());
         model.addAttribute("role",authService.getAuthenticatedUser().getRole());
-
+        model.addAttribute("jid", job.getID());
+        model.addAttribute("is_external", job.getIsExternal());
+        model.addAttribute("external_link", job.getExternalLink());
+        model.addAttribute("need_resume", job.getNeedResume());
+        model.addAttribute("need_cover", job.getNeedCover());
+        model.addAttribute("need_portfolio", job.getNeedPortfolio());
 
         return "pages/job";
     }
@@ -94,6 +100,7 @@ public class JobController {
             return createJob(model);
         }
     }
+
 
     @GetMapping("/jobapplication/{jobID}")
     public String getJobApplication(@PathVariable Long jobID, Model model) {
@@ -152,6 +159,16 @@ public class JobController {
     @GetMapping("/applicationsuccess")
     public String returnJobApplicationSuccess() {
         return "pages/applicationsuccess";
+
+    @PostMapping("/deletejob")
+    public String deleteJob(@RequestParam("jid") Long jid) {
+        Optional<Job> optionalJob = jobService.getJob(jid);
+
+        if (optionalJob.isEmpty() || authService.getAuthenticatedUser().getId() != optionalJob.get().getCreator().getId())
+            return "redirect:/";
+
+        return jobService.deleteJob(jid);
+
     }
 
 }
