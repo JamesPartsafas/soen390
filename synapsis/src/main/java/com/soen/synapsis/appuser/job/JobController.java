@@ -119,8 +119,10 @@ public class JobController {
 
     @GetMapping("/editjob")
     public String editJob(@RequestParam("jid") Long jid, Model model) {
+        if (jid == null)
+            return "redirect:/";
         Optional<Job> optionalJob = jobService.getJob(jid);
-        if (jid == null || optionalJob.isEmpty())
+        if (optionalJob.isEmpty())
             return "redirect:/";
         if (authService.getAuthenticatedUser().getId() != optionalJob.get().getCreator().getId())
             return "redirect:/job/" + jid;
