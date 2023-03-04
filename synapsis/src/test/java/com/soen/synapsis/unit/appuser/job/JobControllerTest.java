@@ -158,4 +158,11 @@ class JobControllerTest {
 
         verify(model).addAttribute(anyString(), anyString());
     }
+
+    @Test
+    void jobController() {
+        underTest = new JobController(jobService);
+        assertEquals(jobService, this.jobService);
+        assertEquals(authService, this.authService);
+    }
 }
