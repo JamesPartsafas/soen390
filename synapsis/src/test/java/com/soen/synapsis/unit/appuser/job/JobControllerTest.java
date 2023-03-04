@@ -87,7 +87,7 @@ class JobControllerTest {
 
         String returnValue = underTest.getJob(job1.getID(),mock(Model.class));
 
-        assertEquals("pages/job", returnValue);
+        assertEquals("redirect:/", returnValue);
     }
 
     @Test
