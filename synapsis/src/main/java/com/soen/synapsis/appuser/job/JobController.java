@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -53,6 +51,7 @@ public class JobController {
 
         Job job = optionalJob.get();
 
+        model.addAttribute("authorization", authService.getAuthenticatedUser().getId() == optionalJob.get().getCreator().getId());
         model.addAttribute("creator", job.getCreator().getName());
         model.addAttribute("company", job.getCompany());
         model.addAttribute("address", job.getAddress());
@@ -62,6 +61,9 @@ public class JobController {
         model.addAttribute("num_available", job.getNumAvailable());
         model.addAttribute("num_applicants", job.getNumApplicants());
         model.addAttribute("role",authService.getAuthenticatedUser().getRole());
+        model.addAttribute("jid", job.getID());
+        model.addAttribute("is_external", job.getIsExternal());
+        model.addAttribute("external_link", job.getExternalLink());
 
 
         return "pages/job";
@@ -91,6 +93,16 @@ public class JobController {
             model.addAttribute("error", "There was an error creating a new job. " + e.getMessage());
             return createJob(model);
         }
+    }
+
+    @PostMapping("/deletejob")
+    public String deleteJob(@RequestParam("jid") Long jid) {
+        Optional<Job> optionalJob = jobService.getJob(jid);
+
+        if (optionalJob.isEmpty() || authService.getAuthenticatedUser().getId() != optionalJob.get().getCreator().getId())
+            return "redirect:/";
+
+        return jobService.deleteJob(jid);
     }
 
 }

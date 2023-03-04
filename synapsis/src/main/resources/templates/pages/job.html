@@ -49,7 +49,9 @@
         <div>
           <p class="font-bold">Job Posting</p>
           <!--Hard-coded for now-->
-          <p class="font-thin font-serif break-words">Internal/External</p>
+          <p th:if="${is_external}" class="font-thin font-serif break-words">External</p>
+          <p th:if="${is_external}" th:text="${external_link}" class="font-serif"></p>
+          <p th:if="${!is_external}" class="font-thin font-serif break-words">Internal</p>
         </div>
       </div>
 
@@ -63,10 +65,13 @@
 
     <div th:if="${role.toString()=='RECRUITER'}" class="mx-auto my-4 transition hover:-translate-y-0.5 duration-150 ">
     <!--Add link below. Only RECRUITERS can edit jobs.-->
-      <a th:if="${role.toString()=='RECRUITER'}" class="mb-4 text-white font-thin bg-primary mx-auto p-4 rounded-2xl
+      <a th:if="${authorization.toString()=='true'}" class="mb-4 text-white font-thin bg-primary mx-auto p-4 rounded-2xl
             hover:bg-opacity-60">Edit</a>
-      <a th:if="${role.toString()=='RECRUITER'}" class="mb-4 text-white font-thin bg-primary mx-auto p-4 rounded-2xl
-            hover:bg-opacity-60">Delete</a>
+      <form th:action="@{/deletejob}" th:if="${authorization}" method="post">
+        <input type="hidden" name="jid" th:value="${jid}" />
+        <button class="mb-4 text-white font-thin bg-primary mx-auto p-4 rounded-2xl
+              hover:bg-opacity-60" type="submit">Delete</button>
+      </form>
     </div>
 
   </div>

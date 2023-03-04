@@ -36,9 +36,15 @@ public class Job {
     @Column(name = "num_applicants", nullable = false)
     private int numApplicants;
 
+    @Column(name = "is_external", nullable = false)
+    private boolean isExternal;
+
+    @Column(name = "external_link")
+    private String externalLink;
+
     protected Job() {}
 
-    public Job(AppUser creator, String position, String company, String address, String description, JobType type, int numAvailable) {
+    public Job(AppUser creator, String position, String company, String address, String description, JobType type, int numAvailable, Boolean isExternal, String externalLink) {
         this.creator = creator;
         this.position = position;
         this.company = company;
@@ -47,6 +53,8 @@ public class Job {
         this.type = type;
         this.numAvailable = numAvailable;
         this.numApplicants = 0;
+        this.isExternal = isExternal;
+        this.externalLink = externalLink;
     }
 
     public Long getID() {
@@ -127,5 +135,21 @@ public class Job {
                 ", numAvailable=" + numAvailable +
                 ", numApplicants=" + numApplicants +
                 '}';
+    }
+
+    public boolean getIsExternal() {
+        return isExternal;
+    }
+
+    public void setIsExternal(boolean external) {
+        isExternal = external;
+    }
+
+    public String getExternalLink() {
+        return externalLink;
+    }
+
+    public void setExternalLink(String externalLink) {
+        this.externalLink = externalLink;
     }
 }
