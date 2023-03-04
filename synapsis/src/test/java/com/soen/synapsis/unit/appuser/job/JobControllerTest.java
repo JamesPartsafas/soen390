@@ -93,7 +93,7 @@ class JobControllerTest {
     @Test
     void viewJobCreationPage() {
         String returnedPage = underTest.createJob(Mockito.mock(Model.class));
-        assertEquals("pages/createjob", returnedPage);
+        assertEquals("redirect:/", returnedPage);
     }
 
     @Test
