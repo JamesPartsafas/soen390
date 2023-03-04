@@ -105,7 +105,7 @@ class JobServiceTest {
         AppUser creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
         request.setCreator(creator);
 
-        String returnValue = undertest.editJob(Mockito.mock(Optional.class), request);
+        String returnValue = underTest.editJob(Mockito.mock(Optional.class), request);
 
         assertEquals("redirect:/", returnValue);
     }
