@@ -1,4 +1,4 @@
-linkbox=document.getElementById("linkbox");
+linkbox=document.getElementById("externalLink");
 radioExternal = document.getElementById("external");
 function EnableLinkBox(){
     if(radioExternal.checked){

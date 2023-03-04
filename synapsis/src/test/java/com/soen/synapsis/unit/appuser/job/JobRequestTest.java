@@ -21,6 +21,11 @@ class JobRequestTest {
     private String description;
     private JobType type;
     private int numAvailable;
+    private boolean isExternal;
+    private String externalLink;
+    private boolean needResume;
+    private boolean needCover;
+    private boolean needPortfolio;
 
     @BeforeEach
     void setUp() {
@@ -31,7 +36,12 @@ class JobRequestTest {
         description = "Sample Description";
         type = JobType.FULLTIME;
         numAvailable = 5;
-        underTest = new JobRequest(position, company, address, description, type, numAvailable);
+        isExternal = true;
+        externalLink = "";
+        needResume = true;
+        needCover = true;
+        needPortfolio = true;
+        underTest = new JobRequest(position, company, address, description, type, numAvailable, isExternal, externalLink, needResume, needCover, needPortfolio);
         underTest.setCreator(creator);
     }
 
@@ -117,5 +127,65 @@ class JobRequestTest {
         int newNumAvailable = 2;
         underTest.setNumAvailable(newNumAvailable);
         assertEquals(newNumAvailable, underTest.getNumAvailable());
+    }
+
+    @Test
+    void getIsExternal() {
+        assertEquals(isExternal, underTest.getIsExternal());
+    }
+
+    @Test
+    void setIsExternal() {
+        boolean newIsExternal = true;
+        underTest.setIsExternal(newIsExternal);
+        assertEquals(newIsExternal, underTest.getIsExternal());
+    }
+
+    @Test
+    void getExternalLink() {
+        assertEquals(externalLink, underTest.getExternalLink());
+    }
+
+    @Test
+    void setExternalLink() {
+        String newExternalLink = "https://www.google.com/";
+        underTest.setExternalLink(newExternalLink);
+        assertEquals(newExternalLink, underTest.getExternalLink());
+    }
+
+    @Test
+    void getNeedResume() {
+        assertEquals(needResume, underTest.getNeedResume());
+    }
+
+    @Test
+    void setNeedResume() {
+        boolean newNeedResume = false;
+        underTest.setNeedResume(newNeedResume);
+        assertEquals(newNeedResume, underTest.getNeedResume());
+    }
+
+    @Test
+    void getNeedCover() {
+        assertEquals(needCover, underTest.getNeedCover());
+    }
+
+    @Test
+    void setNeedCover() {
+        boolean newNeedCover = false;
+        underTest.setNeedCover(newNeedCover);
+        assertEquals(newNeedCover, underTest.getNeedCover());
+    }
+
+    @Test
+    void getNeedPortfolio() {
+        assertEquals(needCover, underTest.getNeedCover());
+    }
+
+    @Test
+    void setNeedPortfolio() {
+        boolean newNeedPortfolio = false;
+        underTest.setNeedPortfolio(newNeedPortfolio);
+        assertEquals(newNeedPortfolio, underTest.getNeedPortfolio());
     }
 }
