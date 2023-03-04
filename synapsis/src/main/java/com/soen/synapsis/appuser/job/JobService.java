@@ -40,10 +40,14 @@ public class JobService {
         String description = request.getDescription();
         JobType type = request.getType();
         int numAvailable = request.getNumAvailable();
-        Boolean isExternal = request.getIsExternal();
+        boolean isExternal = request.getIsExternal();
         String externalLink = request.getExternalLink();
+        boolean needResume = request.getNeedResume();
+        boolean needCover = request.getNeedCover();
+        boolean needPortfolio = request.getNeedPortfolio();
 
-        Job job = new Job(creator, position, company, address, description, type, numAvailable, isExternal, externalLink);
+
+        Job job = new Job(creator, position, company, address, description, type, numAvailable, isExternal, externalLink, needResume, needCover, needPortfolio);
         jobRepository.save(job);
 
         return "redirect:/job/" + job.getID();

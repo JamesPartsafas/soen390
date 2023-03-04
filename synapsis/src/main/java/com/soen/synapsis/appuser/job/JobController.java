@@ -68,7 +68,9 @@ public class JobController {
         model.addAttribute("jid", job.getID());
         model.addAttribute("is_external", job.getIsExternal());
         model.addAttribute("external_link", job.getExternalLink());
-
+        model.addAttribute("need_resume", job.getNeedResume());
+        model.addAttribute("need_cover", job.getNeedCover());
+        model.addAttribute("need_portfolio", job.getNeedPortfolio());
 
         return "pages/job";
     }
