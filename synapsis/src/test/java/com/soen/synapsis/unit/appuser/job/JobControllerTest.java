@@ -44,6 +44,7 @@ class JobControllerTest {
 
         job1 = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true, true);
         job2 = new Job(creator, "Mechanical Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true, true);
+        job1.setID(1L);
 
         allJobs = new ArrayList<>();
 
@@ -96,7 +97,7 @@ class JobControllerTest {
 
         when(jobService.getJob(job1.getID())).thenReturn(Optional.of(job1));
 
-        String returnValue = underTest.getJob(1L,mock(Model.class));
+        String returnValue = underTest.getJob(5L,mock(Model.class));
 
         assertEquals("redirect:/", returnValue);
     }
@@ -150,6 +151,16 @@ class JobControllerTest {
     void editJobRedirectsNullJID() {
         String returnedPage = underTest.editJob(null, Mockito.mock(Model.class));
         assertEquals("redirect:/", returnedPage);
+    }
+
+    @Test
+    void editJobGet() {
+        request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
+        request.setCreator(creator);
+        when(authService.getAuthenticatedUser()).thenReturn(creator);
+        when(jobService.getJob(any(Long.class))).thenReturn(Optional.of(job1));
+        String returnedPage = underTest.editJob(job1.getID(), mock(Model.class));
+        assertEquals("pages/editjob", returnedPage);
     }
 
     @Test
