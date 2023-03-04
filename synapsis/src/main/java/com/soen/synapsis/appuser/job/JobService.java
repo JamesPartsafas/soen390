@@ -60,6 +60,7 @@ public class JobService {
     }
 
 
+
     public void createJobApplication(JobApplication request, AppUser applicant, Long jobID) {
 
         checkIfUserAlreadySubmittedApplication(applicant, jobID);
@@ -100,10 +101,33 @@ public class JobService {
         }
     }
 
-
-    public String deleteJob (Long id) {
+    public String deleteJob(Long id) {
         jobRepository.deleteById(id);
         return "redirect:/jobs";
+    }
+
+    public String editJob(Optional<Job> optionalJob, JobRequest request) {
+
+        Job job = optionalJob.get();
+
+        if (job == null)
+            return "redirect:/";
+
+        job.setPosition(request.getPosition());
+        job.setCompany(request.getCompany());
+        job.setAddress(request.getAddress());
+        job.setDescription(request.getDescription());
+        job.setNumAvailable(request.getNumAvailable());
+        job.setIsExternal(request.getIsExternal());
+        job.setExternalLink(request.getExternalLink());
+        job.setType(request.getType());
+        job.setNeedResume(request.getNeedResume());
+        job.setNeedCover(request.getNeedCover());
+        job.setNeedPortfolio(request.getNeedPortfolio());
+
+        jobRepository.save(job);
+
+        return "redirect:/job/" + job.getID();
     }
 
 }

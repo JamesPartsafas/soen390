@@ -96,5 +96,18 @@ class JobServiceTest {
         assertEquals("redirect:/jobs", returnedPage);
         verify(jobRepository, never()).findById(1L);
     }
+
+    @Test
+    void editJob() {
+        Long id = 1L;
+
+        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
+        AppUser creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
+        request.setCreator(creator);
+
+        String returnValue = undertest.editJob(Mockito.mock(Optional.class), request);
+
+        assertEquals("redirect:/", returnValue);
+    }
 }
 
