@@ -2,10 +2,8 @@ package com.soen.synapsis.appuser.job;
 
 import com.soen.synapsis.appuser.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.net.Authenticator;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,8 +51,32 @@ public class JobService {
         return "redirect:/job/" + job.getID();
     }
 
-    public String deleteJob (Long id) {
+    public String deleteJob(Long id) {
         jobRepository.deleteById(id);
         return "redirect:/jobs";
+    }
+
+    public String editJob(Optional<Job> optionalJob, JobRequest request) {
+
+        Job job = optionalJob.get();
+
+        if (job == null)
+            return "redirect:/";
+
+        job.setPosition(request.getPosition());
+        job.setCompany(request.getCompany());
+        job.setAddress(request.getAddress());
+        job.setDescription(request.getDescription());
+        job.setNumAvailable(request.getNumAvailable());
+        job.setIsExternal(request.getIsExternal());
+        job.setExternalLink(request.getExternalLink());
+        job.setType(request.getType());
+        job.setNeedResume(request.getNeedResume());
+        job.setNeedCover(request.getNeedCover());
+        job.setNeedPortfolio(request.getNeedPortfolio());
+
+        jobRepository.save(job);
+
+        return "redirect:/job/" + job.getID();
     }
 }

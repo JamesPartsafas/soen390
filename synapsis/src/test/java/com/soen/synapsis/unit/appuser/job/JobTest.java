@@ -205,4 +205,19 @@ class JobTest {
         undertest.setNeedPortfolio(newNeedPortfolio);
         assertEquals(newNeedPortfolio, undertest.getNeedPortfolio());
     }
+
+    @Test
+    void testToString() {
+        String s = "Job{" +
+                "id=" + id +
+                ", position='" + position + '\'' +
+                ", company='" + company + '\'' +
+                ", address=" + address +
+                ", description=" + description +
+                ", type=" + type +
+                ", numAvailable=" + numAvailable +
+                ", numApplicants=" + numApplicants +
+                '}';
+        assertEquals(s, undertest.toString());
+    }
 }
