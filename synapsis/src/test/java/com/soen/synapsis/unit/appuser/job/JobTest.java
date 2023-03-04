@@ -25,6 +25,9 @@ class JobTest {
     private int numApplicants;
     private boolean isExternal;
     private String externalLink;
+    private boolean needResume;
+    private boolean needCover;
+    private boolean needPortfolio;
 
     @BeforeEach
     void setUp() {
@@ -39,7 +42,10 @@ class JobTest {
         numApplicants = 0;
         isExternal = false;
         externalLink = "";
-        undertest = new Job(creator, position, company, address, description, type, numAvailable, isExternal, externalLink);
+        needResume = true;
+        needCover = true;
+        needPortfolio = true;
+        undertest = new Job(creator, position, company, address, description, type, numAvailable, isExternal, externalLink, needResume, needCover, needPortfolio);
         undertest.setID(id);
     }
 
@@ -164,4 +170,39 @@ class JobTest {
         assertEquals(newExternalLink, undertest.getExternalLink());
     }
 
+    @Test
+    void getNeedResume() {
+        assertEquals(needResume, undertest.getNeedResume());
+    }
+
+    @Test
+    void setNeedResume() {
+        boolean newNeedResume = false;
+        undertest.setNeedResume(newNeedResume);
+        assertEquals(newNeedResume, undertest.getNeedResume());
+    }
+
+    @Test
+    void getNeedCover() {
+        assertEquals(needCover, undertest.getNeedCover());
+    }
+
+    @Test
+    void setNeedCover() {
+        boolean newNeedCover = false;
+        undertest.setNeedCover(newNeedCover);
+        assertEquals(newNeedCover, undertest.getNeedCover());
+    }
+
+    @Test
+    void getNeedPortfolio() {
+        assertEquals(needCover, undertest.getNeedCover());
+    }
+
+    @Test
+    void setNeedPortfolio() {
+        boolean newNeedPortfolio = false;
+        undertest.setNeedPortfolio(newNeedPortfolio);
+        assertEquals(newNeedPortfolio, undertest.getNeedPortfolio());
+    }
 }

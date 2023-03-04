@@ -13,10 +13,13 @@ public class JobRequest {
     private int numAvailable;
     private boolean isExternal;
     private String externalLink;
+    private boolean needResume;
+    private boolean needCover;
+    private boolean needPortfolio;
 
     public JobRequest() {}
 
-    public JobRequest(String position, String company, String address, String description, JobType type, int numAvailable, boolean isExternal, String externalLink) {
+    public JobRequest(String position, String company, String address, String description, JobType type, int numAvailable, boolean isExternal, String externalLink, boolean needResume, boolean needCover, boolean needPortfolio) {
         this.position = position;
         this.company = company;
         this.address = address;
@@ -25,6 +28,9 @@ public class JobRequest {
         this.numAvailable = numAvailable;
         this.isExternal = isExternal;
         this.externalLink = externalLink;
+        this.needResume = needResume;
+        this.needCover = needCover;
+        this.needPortfolio = needPortfolio;
     }
 
     public AppUser getCreator() {
@@ -97,5 +103,29 @@ public class JobRequest {
 
     public void setExternalLink(String externalLink) {
         this.externalLink = externalLink;
+    }
+
+    public boolean getNeedResume() {
+        return needResume;
+    }
+
+    public void setNeedResume(boolean needResume) {
+        this.needResume = needResume;
+    }
+
+    public boolean getNeedCover() {
+        return needCover;
+    }
+
+    public void setNeedCover(boolean needCover) {
+        this.needCover = needCover;
+    }
+
+    public boolean getNeedPortfolio() {
+        return needPortfolio;
+    }
+
+    public void setNeedPortfolio(boolean needPortfolio) {
+        this.needPortfolio = needPortfolio;
     }
 }
