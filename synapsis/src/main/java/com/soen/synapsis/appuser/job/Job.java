@@ -42,13 +42,13 @@ public class Job {
     @Column(name = "external_link")
     private String externalLink;
 
-    @Column(name = "need_resume")
+    @Column(name = "need_resume", nullable = false)
     private boolean needResume;
 
-    @Column(name = "need_cover")
+    @Column(name = "need_cover", nullable = false)
     private boolean needCover;
 
-    @Column(name = "need_portfolio")
+    @Column(name = "need_portfolio", nullable = false)
     private boolean needPortfolio;
 
     protected Job() {}
