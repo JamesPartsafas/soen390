@@ -80,9 +80,7 @@ public class JobController {
 
     @GetMapping(value = "/createjob")
     public String createJob(Model model) {
-        if (!authService.isUserAuthenticated())
-            return "redirect:/";
-        if (authService.getAuthenticatedUser().getRole() != Role.RECRUITER)
+        if (!authService.isUserAuthenticated() || authService.getAuthenticatedUser().getRole() != Role.RECRUITER)
             return "redirect:/";
 
         model.addAttribute("jobRequest", new JobRequest());
@@ -121,10 +119,8 @@ public class JobController {
 
     @GetMapping("/editjob")
     public String editJob(@RequestParam("jid") Long jid, Model model) {
-        if (jid == null)
-            return "redirect:/";
         Optional<Job> optionalJob = jobService.getJob(jid);
-        if (optionalJob.isEmpty())
+        if (jid == null || optionalJob.isEmpty())
             return "redirect:/";
         if (authService.getAuthenticatedUser().getId() != optionalJob.get().getCreator().getId())
             return "redirect:/job/" + jid;

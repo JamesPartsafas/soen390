@@ -143,4 +143,19 @@ class JobControllerTest {
         String returnedPage = underTest.editJob(1L, request, mock(BindingResult.class), mock(Model.class));
         assertEquals("redirect:/", returnedPage);
     }
+
+    @Test
+    void editJobWithBindingErrors() {
+        request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
+        request.setCreator(creator);
+        Model model = mock(Model.class);
+        when(authService.getAuthenticatedUser()).thenReturn(creator);
+
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(true);
+
+        underTest.editJob(1L, request, bindingResult, model);
+
+        verify(model).addAttribute(anyString(), anyString());
+    }
 }
