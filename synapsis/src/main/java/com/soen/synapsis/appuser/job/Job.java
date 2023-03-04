@@ -39,7 +39,7 @@ public class Job {
     @Column(name = "is_external", nullable = false)
     private boolean isExternal;
 
-    @Column(name = "external_link")
+    @Column(name = "external_link", nullable = false)
     private String externalLink;
 
     protected Job() {}
