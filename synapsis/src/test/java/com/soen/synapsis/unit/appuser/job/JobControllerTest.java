@@ -136,6 +136,12 @@ class JobControllerTest {
     }
 
     @Test
+    void editJobRedirectsNullJID() {
+        String returnedPage = underTest.editJob(null, Mockito.mock(Model.class));
+        assertEquals("redirect:/", returnedPage);
+    }
+
+    @Test
     void editJob() {
         request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
         request.setCreator(creator);
