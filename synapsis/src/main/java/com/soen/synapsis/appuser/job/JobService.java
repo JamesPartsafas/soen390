@@ -57,7 +57,11 @@ public class JobService {
     }
 
     public String editJob(Optional<Job> optionalJob, JobRequest request) {
+
         Job job = optionalJob.get();
+
+        if (job == null)
+            return "redirect:/";
 
         job.setPosition(request.getPosition());
         job.setCompany(request.getCompany());

@@ -128,4 +128,19 @@ class JobControllerTest {
 
         assertEquals("redirect:/", returnedPage);
     }
+
+    @Test
+    void editJobRedirects() {
+        String returnedPage = underTest.editJob(1L, Mockito.mock(Model.class));
+        assertEquals("redirect:/", returnedPage);
+    }
+
+    @Test
+    void editJob() {
+        request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
+        request.setCreator(creator);
+        when(authService.getAuthenticatedUser()).thenReturn(creator);
+        String returnedPage = underTest.editJob(1L, request, mock(BindingResult.class), mock(Model.class));
+        assertEquals("redirect:/", returnedPage);
+    }
 }
