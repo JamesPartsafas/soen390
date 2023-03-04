@@ -46,19 +46,14 @@ public class JobController {
         Optional<Job> optionalJob = jobService.getJob(jid);
 
 
-        if (optionalJob.isEmpty())
+        if (optionalJob.isEmpty() || !authService.isUserAuthenticated())
             return "redirect:/";
 
         Job job = optionalJob.get();
 
-        if (authService.isUserAuthenticated()) {
-            model.addAttribute("authorization", authService.getAuthenticatedUser().getId() == optionalJob.get().getCreator().getId());
-            model.addAttribute("role", authService.getAuthenticatedUser().getRole());
-        }
-        else {
-            model.addAttribute("authorization", false);
-            model.addAttribute("role", "GUEST");
-        }
+
+        model.addAttribute("authorization", authService.getAuthenticatedUser().getId() == optionalJob.get().getCreator().getId());
+        model.addAttribute("role", authService.getAuthenticatedUser().getRole());
         model.addAttribute("creator", job.getCreator().getName());
         model.addAttribute("company", job.getCompany());
         model.addAttribute("address", job.getAddress());
