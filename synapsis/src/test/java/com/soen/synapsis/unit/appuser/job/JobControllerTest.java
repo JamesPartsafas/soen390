@@ -91,6 +91,17 @@ class JobControllerTest {
     }
 
     @Test
+    void getJobRedirects() {
+        when(authService.getAuthenticatedUser()).thenReturn(creator);
+
+        when(jobService.getJob(job1.getID())).thenReturn(Optional.of(job1));
+
+        String returnValue = underTest.getJob(1L,mock(Model.class));
+
+        assertEquals("redirect:/", returnValue);
+    }
+
+    @Test
     void viewJobCreationPage() {
         String returnedPage = underTest.createJob(Mockito.mock(Model.class));
         assertEquals("redirect:/", returnedPage);
@@ -147,6 +158,15 @@ class JobControllerTest {
         request.setCreator(creator);
         when(authService.getAuthenticatedUser()).thenReturn(creator);
         String returnedPage = underTest.editJob(1L, request, mock(BindingResult.class), mock(Model.class));
+        assertEquals("redirect:/", returnedPage);
+    }
+
+    @Test
+    void editJobRedirectsNoAuth() {
+        request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
+        request.setCreator(creator);
+        when(authService.getAuthenticatedUser()).thenReturn(creator);
+        String returnedPage = underTest.editJob(job1.getID(), request, mock(BindingResult.class), mock(Model.class));
         assertEquals("redirect:/", returnedPage);
     }
 
