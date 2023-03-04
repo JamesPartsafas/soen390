@@ -90,10 +90,9 @@ class JobServiceTest {
         verify(jobApplicationRepository).save(any(JobApplication.class));
     }
 
-}
     @Test
     void deleteJob() {
-        String returnedPage = undertest.deleteJob(1L);
+        String returnedPage = underTest.deleteJob(1L);
         assertEquals("redirect:/jobs", returnedPage);
         verify(jobRepository, never()).findById(1L);
     }

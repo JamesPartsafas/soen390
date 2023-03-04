@@ -159,6 +159,7 @@ public class JobController {
     @GetMapping("/applicationsuccess")
     public String returnJobApplicationSuccess() {
         return "pages/applicationsuccess";
+    }
 
     @PostMapping("/deletejob")
     public String deleteJob(@RequestParam("jid") Long jid) {
