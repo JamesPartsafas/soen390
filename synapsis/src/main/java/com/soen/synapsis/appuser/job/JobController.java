@@ -113,4 +113,37 @@ public class JobController {
         return jobService.deleteJob(jid);
     }
 
+    @GetMapping("/editjob")
+    public String editJob(Model model) {
+        model.addAttribute("jobRequest", new JobRequest());
+        return "pages/editjob";
+    }
+
+    @PostMapping("/editjob")
+    public String editJob(@RequestParam("jid") Long jid, JobRequest request, BindingResult bindingResult, Model model) {
+        try {
+            if (bindingResult.hasErrors()) {
+                throw new Exception();
+            }
+
+            Optional<Job> optionalJob = jobService.getJob(jid);
+            if (optionalJob.isEmpty())
+                return "redirect:/";
+            if (authService.getAuthenticatedUser().getId() != optionalJob.get().getCreator().getId())
+                return "redirect:/job/" + jid;
+
+
+            AppUser creator = authService.getAuthenticatedUser();
+            request.setCreator(creator);
+            String response = jobService.editJob(optionalJob, request);
+
+            return response;
+
+        }
+        catch (Exception e) {
+            model.addAttribute("error", "There was an error editing the job. " + e.getMessage());
+            return editJob(model);
+        }
+    }
+
 }
