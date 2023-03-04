@@ -180,7 +180,7 @@ class JobControllerTest {
         assertEquals("pages/applicationsuccess", underTest.returnJobApplicationSuccess());
     }
 
-}
+
     @Test
     void deleteJobRedirects() {
         when(authService.getAuthenticatedUser()).thenReturn(creator);

@@ -41,7 +41,7 @@ public class JobApplicationTest {
         AppUser companyUser = new AppUser(2L, "Joe Company", "1234", "joecompany@mail.com", Role.COMPANY);
 
         id = 1L;
-        job = new Job(companyUser, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5);
+        job = new Job(companyUser, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, false, "", true, true, false);
         applicant = applicantUser;
         dateApplied = new Timestamp(System.currentTimeMillis());;
         status = JobApplicationStatus.SUBMITTED;
@@ -76,7 +76,7 @@ public class JobApplicationTest {
     @Test
     void setJob() {
         AppUser newCompanyUser = new AppUser(3L, "Joe NewCompany", "1234", "joenewcompany@mail.com", Role.COMPANY);
-        Job newJob = new Job(newCompanyUser, "Mechanical Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5);
+        Job newJob = new Job(newCompanyUser, "Mechanical Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, false, "", true, true, false);
 
         underTest.setJob(newJob);
         assertEquals(newJob, underTest.getJob());
