@@ -37,7 +37,11 @@ public class JobController {
 
         List<Job> jobs = jobService.getAllJobs();
 
+        AppUser candidate = authService.getAuthenticatedUser();
+        List<Job> jobsSubmitted = jobService.getAllJobsAlreadySubmittedByUser(candidate);
+
         model.addAttribute("jobs", jobs);
+        model.addAttribute("jobsSubmitted", jobsSubmitted);
 
         return "pages/jobs";
     }
@@ -102,6 +106,66 @@ public class JobController {
         }
     }
 
+
+    @GetMapping("/jobapplication/{jobID}")
+    public String getJobApplication(@PathVariable Long jobID, Model model) {
+        if (!authService.isUserAuthenticated()) {
+            return "redirect:/";
+        }
+
+        Optional<Job> retrievedJob = jobService.getJob(jobID);
+
+        if (retrievedJob.isEmpty()) {
+            return "redirect:/jobs";
+        }
+
+        AppUser applicant = authService.getAuthenticatedUser();
+
+        try {
+            jobService.checkIfUserAlreadySubmittedApplication(applicant, jobID);
+        } catch(Exception e) {
+            return "redirect:/jobs";
+        }
+
+        Job job = retrievedJob.get();
+
+        model.addAttribute("email", applicant.getEmail());
+        model.addAttribute("jobid", job.getID());
+        model.addAttribute("company", job.getCompany());
+        model.addAttribute("position", job.getPosition());
+
+        return "pages/jobapplicationform";
+    }
+
+    @PostMapping("/jobapplication")
+    public String createJobApplication(JobApplication request, BindingResult bindingResult, Model model, @RequestParam("jobid") Long jobID) {
+        try {
+            if (!authService.isUserAuthenticated()) {
+                return "redirect:/";
+            }
+
+            if (bindingResult.hasErrors()) {
+                throw new Exception("There was a problem processing your application. Try again later.");
+            }
+
+            AppUser applicant = authService.getAuthenticatedUser();
+            request.setApplicant(applicant);
+
+            jobService.createJobApplication(request, applicant, jobID);
+
+            return "redirect:/applicationsuccess";
+
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return getJobApplication(jobID, model);
+        }
+    }
+
+    @GetMapping("/applicationsuccess")
+    public String returnJobApplicationSuccess() {
+        return "pages/applicationsuccess";
+    }
+
     @PostMapping("/deletejob")
     public String deleteJob(@RequestParam("jid") Long jid) {
         Optional<Job> optionalJob = jobService.getJob(jid);
@@ -110,6 +174,7 @@ public class JobController {
             return "redirect:/";
 
         return jobService.deleteJob(jid);
+
     }
 
     @GetMapping("/editjob")
