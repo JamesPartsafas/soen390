@@ -85,8 +85,11 @@ class JobServiceTest {
     void createJobApplicationCreatesJobApplicationSuccessfully() {
         AppUser candidate = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
 
+        when(jobRepository.getReferenceById(any(Long.class))).thenReturn(mock(Job.class));
+
         underTest.createJobApplication(mock(JobApplication.class), candidate, 1L);
 
+        verify(jobRepository).save(any(Job.class));
         verify(jobApplicationRepository).save(any(JobApplication.class));
     }
 
