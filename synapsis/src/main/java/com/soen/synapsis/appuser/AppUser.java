@@ -99,6 +99,24 @@ public class AppUser {
         this(name, password, email, role, AuthProvider.LOCAL);
     }
 
+    public AppUser(String name, String password, String email, Role role, AuthProvider authProvider, AppUser company) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.authProvider = authProvider;
+        this.company = company;
+    }
+
+    public AppUser(Long id, String name, String password, String email, Role role, AppUser company) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.company = company;
+    }
+
     public Long getId() {
         return id;
     }

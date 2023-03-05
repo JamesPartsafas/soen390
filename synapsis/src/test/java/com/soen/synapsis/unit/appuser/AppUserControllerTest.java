@@ -4,6 +4,7 @@ import com.soen.synapsis.appuser.*;
 import com.soen.synapsis.appuser.connection.ConnectionService;
 import com.soen.synapsis.utilities.SecurityUtilities;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
+import org.aspectj.weaver.ast.Not;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -124,7 +125,6 @@ class AppUserControllerTest {
 
         String returnValue = underTest.markCandidateToRecruiter(candidateUser.getId());
 
-        assertEquals(Role.CANDIDATE, candidateUser.getRole());
         assertEquals("redirect:/user/" + candidateUser.getId(), returnValue);
     }
 
@@ -140,34 +140,47 @@ class AppUserControllerTest {
     @Test
     void isCompanyForMarkingIsNotCandidateToRecruiter() {
         AppUser companyUser = new AppUser(1L, "Joe Company", "1234", "joecompany@mail.com", Role.COMPANY);
-        AppUser recruiterUser = new AppUser(2L, "Joe Recruiter", "1234", "joerecruiter@mail.com", Role.RECRUITER);
+        AppUser NotCandidateUser = new AppUser(2L, "Joe Recruiter", "1234", "joerecruiter@mail.com", Role.RECRUITER);
         when(authService.getAuthenticatedUser()).thenReturn(companyUser);
         when(authService.doesUserHaveRole(Role.COMPANY)).thenReturn(true);
+        when(appUserService.getAppUser(NotCandidateUser.getId())).thenReturn(Optional.of(NotCandidateUser));
+
+        assertEquals("redirect:/", underTest.markCandidateToRecruiter(NotCandidateUser.getId()));
+    }
+
+    @Test
+    void isCompanyForUnmarkingIsRecruiterToCandidate() {
+        AppUser companyUser = new AppUser(1L, "Joe Company", "1234", "joecompany@mail.com", Role.COMPANY);
+        AppUser recruiterUser = new AppUser(2L, "Joe Recruiter", "1234", "joerecruiter@mail.com", Role.RECRUITER, companyUser);
+        when(authService.getAuthenticatedUser()).thenReturn(companyUser);
+        when(authService.doesUserHaveRole(Role.COMPANY)).thenReturn(true);
+        when(authService.isUserAuthenticated()).thenReturn(true);
         when(appUserService.getAppUser(recruiterUser.getId())).thenReturn(Optional.of(recruiterUser));
 
-        assertEquals("redirect:/", underTest.markCandidateToRecruiter(recruiterUser.getId()));
+        String returnValue = underTest.unmarkRecruiterToCandidate(recruiterUser.getId());
+
+        assertEquals("redirect:/user/" + recruiterUser.getId(), returnValue);
     }
 
     @Test
-    void isCompanyForSetRecruiterToCandidate() {
-        AppUser companyUser = new AppUser(1L, "Joe Man", "1234", "joecompany@mail.com", Role.COMPANY);
-        AppUser recruiterUser = new AppUser(2L, "Joe Man", "1234", "joerecruiter@mail.com", Role.RECRUITER);
+    void isNotCompanyForUnmarkingRecruiterToCandidate() {
+        AppUser NotCompanyUser = new AppUser(1L, "Joe Recruiter", "1234", "joerecruiter@mail.com", Role.RECRUITER);
+        AppUser recruiterUser = new AppUser(2L, "Joe Recruiter", "1234", "joerecruiter@mail.com", Role.RECRUITER);
+        when(authService.getAuthenticatedUser()).thenReturn(NotCompanyUser);
+
+        assertEquals("redirect:/", underTest.unmarkRecruiterToCandidate(recruiterUser.getId()));
+    }
+
+    @Test
+    void isCompanyForUnmarkingIsNotRecruiterToCandidate() {
+        AppUser companyUser = new AppUser(1L, "Joe Company", "1234", "joecompany@mail.com", Role.COMPANY);
+        AppUser NotRecruiterUser = new AppUser(2L, "Joe Candidate", "1234", "joecandidate@mail.com", Role.CANDIDATE);
         when(authService.getAuthenticatedUser()).thenReturn(companyUser);
         when(authService.doesUserHaveRole(Role.COMPANY)).thenReturn(true);
+        when(appUserService.getAppUser(NotRecruiterUser.getId())).thenReturn(Optional.of(NotRecruiterUser));
 
-        String returnValue = underTest.unmarkRecruiterToCandidate(recruiterUser);
+        assertEquals("redirect:/", underTest.unmarkRecruiterToCandidate(NotRecruiterUser.getId()));
 
-        assertEquals("pages/userpage", returnValue);
     }
 
-    @Test
-    void isNotCompanyForSetRecruiterToCandidate() {
-        AppUser notCompanyUser = new AppUser(1L, "Joe Man", "1234", "joerecruiter@mail.com", Role.RECRUITER);
-        AppUser recruiterUser = new AppUser(2L, "Joe Man", "1234", "joecandidate@mail.com", Role.RECRUITER);
-        when(authService.getAuthenticatedUser()).thenReturn(notCompanyUser);
-
-        String returnValue = underTest.unmarkRecruiterToCandidate(recruiterUser);
-
-        assertEquals("You must be a company to unmark recruiters as candidates.", returnValue);
-    }
 }

@@ -71,6 +71,10 @@ public class AppUserController {
         model.addAttribute("isConnectedWith", isConnectedWith);
         model.addAttribute("role", appUser.getRole());
         model.addAttribute("myRole", authService.getAuthenticatedUser().getRole());
+        model.addAttribute("myId", authService.getAuthenticatedUser().getId());
+        if(appUser.getRole() ==  Role.RECRUITER) {
+            model.addAttribute("companyId", appUser.getCompany().getId());
+        }
 
         if (authService.getAuthenticatedUser().getId() == uid)
             model.addAttribute("showControls", true);
@@ -133,7 +137,7 @@ public class AppUserController {
     @PostMapping("/company/markCandidateToRecruiter")
     public String markCandidateToRecruiter(@RequestParam("appUserId") Long id) {
         try {
-            if(!authService.doesUserHaveRole(Role.COMPANY) || !authService.isUserAuthenticated()) {
+            if(!authService.doesUserHaveRole(Role.COMPANY)) {
                 throw new IllegalStateException("You must be a company to mark candidates as recruiters.");
             }
             Optional<AppUser> optionalAppUser = appUserService.getAppUser(id);
@@ -158,17 +162,36 @@ public class AppUserController {
         }
     }
 
-    @PutMapping("/company/unmarkRecruiterToCandidate")
-    public String unmarkRecruiterToCandidate(AppUser appUser) {
-        if (!authService.doesUserHaveRole(Role.COMPANY)) {
-            return "You must be a company to unmark recruiters as candidates.";
-        }
+    @PostMapping("/company/unmarkRecruiterToCandidate")
+    public String unmarkRecruiterToCandidate(@RequestParam("appUserId") Long id) {
         try {
+            if (!authService.doesUserHaveRole(Role.COMPANY)) {
+                throw new IllegalStateException("You must be a company to unmark recruiters as candidates.");
+            }
+            Optional<AppUser> optionalAppUser = appUserService.getAppUser(id);
+
+            if (optionalAppUser.isEmpty()) {
+                return "redirect:/";
+            }
+
+            AppUser appUser = optionalAppUser.get();
+
+            if (appUser.getRole() != Role.RECRUITER) {
+                throw new IllegalStateException("The user must be a recruiter to be unmarked as a candidate.");
+            }
+
+            if(appUser.getCompany().getId() != authService.getAuthenticatedUser().getId()) {
+                throw new IllegalStateException("The recruiter is not part of your company.");
+            }
+
             appUserService.unmarkRecruiterToCandidate(appUser, authService.getAuthenticatedUser());
-        } catch (IllegalStateException e) {
-            return e.getMessage();
+            String userProfileURL = "redirect:/user/" + id;
+
+            return userProfileURL;
         }
-        return "pages/userpage";
+        catch (IllegalStateException e) {
+            return "redirect:/";
+        }
     }
 
     @GetMapping("/updateuserpage")
