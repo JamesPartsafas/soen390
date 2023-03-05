@@ -35,6 +35,7 @@ class JobControllerTest {
     private AppUser candidate;
     private Job job1;
     private Job job2;
+    private Job job3;
     private JobRequest request;
 
     @BeforeEach
@@ -47,6 +48,8 @@ class JobControllerTest {
 
         job1 = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true, true);
         job2 = new Job(creator, "Mechanical Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true, true);
+        job3 = new Job(creator, "Mechanical Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, false, "", true, true, true);
+
         job1.setID(1L);
 
         allJobs = new ArrayList<>();
@@ -106,6 +109,28 @@ class JobControllerTest {
     }
 
     @Test
+    void getJobRedirectsJobPage() {
+        when(jobService.getJob(any(Long.class))).thenReturn(Optional.of(job3));
+        when(authService.getAuthenticatedUser()).thenReturn(creator);
+        when(authService.isUserAuthenticated()).thenReturn(true);
+
+        String returnValue = underTest.getJob(job1.getID(), mock(Model.class));
+
+        assertEquals("pages/job", returnValue);
+    }
+
+    @Test
+    void getJobRedirectsJobApplicationExternalPage() {
+        when(jobService.getJob(any(Long.class))).thenReturn(Optional.of(job1));
+        when(authService.getAuthenticatedUser()).thenReturn(creator);
+        when(authService.isUserAuthenticated()).thenReturn(true);
+
+        String returnValue = underTest.getJob(job1.getID(), mock(Model.class));
+
+        assertEquals("pages/jobapplicationexternal", returnValue);
+    }
+
+    @Test
     void viewJobCreationPage() {
         String returnedPage = underTest.createJob(Mockito.mock(Model.class));
         assertEquals("redirect:/", returnedPage);
@@ -159,12 +184,21 @@ class JobControllerTest {
     }
 
     @Test
-    void getJobApplicationByIdRedirectToApplicationForm() {
+    void getJobApplicationByIdRedirectToJobApplicationExternal() {
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(jobService.getJob(any(Long.class))).thenReturn(Optional.of(job3));
+        when(authService.getAuthenticatedUser()).thenReturn(candidate);
+
+        assertEquals("pages/jobapplicationform", underTest.getJobApplication(1L, Mockito.mock(Model.class)));
+    }
+
+    @Test
+    void getJobApplicationByIdRedirectToJobApplicationForm() {
         when(authService.isUserAuthenticated()).thenReturn(true);
         when(jobService.getJob(any(Long.class))).thenReturn(Optional.of(job1));
         when(authService.getAuthenticatedUser()).thenReturn(candidate);
 
-        assertEquals("pages/jobapplicationform", underTest.getJobApplication(1L, Mockito.mock(Model.class)));
+        assertEquals("pages/jobapplicationexternal", underTest.getJobApplication(1L, Mockito.mock(Model.class)));
     }
 
     @Test

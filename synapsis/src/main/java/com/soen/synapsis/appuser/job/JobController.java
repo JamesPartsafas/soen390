@@ -56,7 +56,6 @@ public class JobController {
 
         Job job = optionalJob.get();
 
-
         model.addAttribute("authorization", authService.getAuthenticatedUser().getId() == optionalJob.get().getCreator().getId());
         model.addAttribute("role", authService.getAuthenticatedUser().getRole());
         model.addAttribute("creator", job.getCreator().getName());
@@ -74,7 +73,11 @@ public class JobController {
         model.addAttribute("need_cover", job.getNeedCover());
         model.addAttribute("need_portfolio", job.getNeedPortfolio());
 
-        return "pages/job";
+        if (job.getIsExternal()) {
+            return "pages/jobapplicationexternal";
+        } else {
+            return "pages/job";
+        }
     }
 
     @GetMapping(value = "/createjob")
@@ -129,12 +132,31 @@ public class JobController {
 
         Job job = retrievedJob.get();
 
-        model.addAttribute("email", applicant.getEmail());
-        model.addAttribute("jobid", job.getID());
+        model.addAttribute("jid", job.getID());
         model.addAttribute("company", job.getCompany());
         model.addAttribute("position", job.getPosition());
 
-        return "pages/jobapplicationform";
+        if (job.getIsExternal()) {
+            model.addAttribute("authorization", authService.getAuthenticatedUser().getId() == retrievedJob.get().getCreator().getId());
+            model.addAttribute("role", authService.getAuthenticatedUser().getRole());
+            model.addAttribute("creator", job.getCreator().getName());
+            model.addAttribute("address", job.getAddress());
+            model.addAttribute("type", job.getType());
+            model.addAttribute("description", job.getDescription());
+            model.addAttribute("num_available", job.getNumAvailable());
+            model.addAttribute("num_applicants", job.getNumApplicants());
+            model.addAttribute("is_external", job.getIsExternal());
+            model.addAttribute("external_link", job.getExternalLink());
+            model.addAttribute("need_resume", job.getNeedResume());
+            model.addAttribute("need_cover", job.getNeedCover());
+            model.addAttribute("need_portfolio", job.getNeedPortfolio());
+
+            return "pages/jobapplicationexternal";
+        } else {
+            model.addAttribute("email", applicant.getEmail());
+
+            return "pages/jobapplicationform";
+        }
     }
 
     @PostMapping("/jobapplication")

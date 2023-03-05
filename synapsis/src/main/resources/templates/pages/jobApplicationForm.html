@@ -16,7 +16,7 @@
             <p class="font-bold text-3xl text-black-variant text-center">Application for [[${company}]] - [[${position}]]</p>
             <p class="font-thin text-grey text-center mb-4">Please complete the form below to apply for this position.</p>
 
-            <input type="hidden" name="jobid" th:value="${jobid}">
+            <input type="hidden" name="jobid" th:value="${jid}">
 
             <input th:value="${email}" name="email" type="email" placeholder="Email" class="font-thin font-serif border border-grey pl-3 justify-around rounded-md hover:bg-light h-14" required />
 
