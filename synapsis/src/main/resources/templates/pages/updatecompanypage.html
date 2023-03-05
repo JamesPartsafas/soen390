@@ -22,10 +22,15 @@
                 <label>Website</label><br>
                 <input type="text" id="website" name="website" th:value="${profile.website}"
                        class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+
                 <br>
                 <label>Industry</label><br>
                 <input type="text" id="industry" name="industry" th:value="${profile.industry}"
-                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+                       oninvalid="this.setCustomValidity('Enter a Valid Industry')"
+                       onchange="try{setCustomValidity('')}catch(e){}"
+                       oninput="setCustomValidity(' ')"
+                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white" required/>
+
                 <br>
                 <label>Company Size</label><br>
                 <input type="text" required  oninvalid="this.setCustomValidity(this.value.trim() == '' ? 'Please fill out this field' : 'Please enter a valid number')"
@@ -40,7 +45,10 @@
                 <br>
                 <label>Speciality</label><br>
                 <input type="text" id="speciality" name="speciality" th:value="${profile.speciality}"
-                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+                       oninvalid="this.setCustomValidity('Enter a Valid Speciality')"
+                       onchange="try{setCustomValidity('')}catch(e){}"
+                       oninput="setCustomValidity(' ')"
+                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white" required/>
                 <br>
                 <button class=" btn bg-red-500 text-white rounded-full " type="submit">Save</button>
             </div>

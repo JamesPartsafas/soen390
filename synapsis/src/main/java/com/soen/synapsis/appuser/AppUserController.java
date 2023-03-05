@@ -175,4 +175,5 @@ public class AppUserController {
     public String getUpdateUserProfile() {
         return "pages/updateuserpage";
     }
+
 }
