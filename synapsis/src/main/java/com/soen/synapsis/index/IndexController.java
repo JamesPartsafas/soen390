@@ -16,7 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Controller
 @RequestMapping(path = "/")
 public class IndexController {
-
+    private AppUser appUser;
     private final IndexService indexService;
 
     @Autowired
