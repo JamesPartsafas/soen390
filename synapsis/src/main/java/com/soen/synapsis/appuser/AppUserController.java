@@ -80,12 +80,7 @@ public class AppUserController {
             model.addAttribute("companyId", appUser.getCompany().getId());
         }
 
-        if (authService.getAuthenticatedUser().getId() == uid) {
-            model.addAttribute("showControls", true);
-        }
-        else {
-            model.addAttribute("showControls", false);
-        }
+        model.addAttribute("showControls", authService.getAuthenticatedUser().getId() == uid);
 
         if (appUser.getRole() == Role.COMPANY) {
             CompanyProfile companyProfile = appUser.getCompanyProfile();
