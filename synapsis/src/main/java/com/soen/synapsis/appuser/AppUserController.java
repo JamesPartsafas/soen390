@@ -73,7 +73,6 @@ public class AppUserController {
         model.addAttribute("isConnectedWith", isConnectedWith);
         model.addAttribute("isPendingConnectionWhenSentConnection", isPendingConnectionWhenSentConnection);
         model.addAttribute("isPendingConnectionWhenReceivingConnection", isPendingConnectionWhenReceivingConnection);
-        model.addAttribute("isLookingAtYourOwnProfilePage", authService.getAuthenticatedUser().getId() == uid);
         model.addAttribute("role", appUser.getRole());
         model.addAttribute("myRole", authService.getAuthenticatedUser().getRole());
         model.addAttribute("myId", authService.getAuthenticatedUser().getId());
@@ -81,8 +80,12 @@ public class AppUserController {
             model.addAttribute("companyId", appUser.getCompany().getId());
         }
 
-        if (authService.getAuthenticatedUser().getId() == uid)
+        if (authService.getAuthenticatedUser().getId() == uid) {
             model.addAttribute("showControls", true);
+        }
+        else {
+            model.addAttribute("showControls", false);
+        }
 
         if (appUser.getRole() == Role.COMPANY) {
             CompanyProfile companyProfile = appUser.getCompanyProfile();
