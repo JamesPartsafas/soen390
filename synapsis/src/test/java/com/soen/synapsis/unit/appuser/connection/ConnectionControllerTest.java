@@ -74,14 +74,21 @@ public class ConnectionControllerTest {
     }
 
     @Test
-    void makeConnectionTest() {
-        AppUser appUser1 = new AppUser("Joe Man", "1234", "joeman@email.com", Role.CANDIDATE);
-        AppUser appUser2 = new AppUser("Joe Woman", "1234", "joewoman@email.com", Role.CANDIDATE);
-        Model model = mock(Model.class);
+    void connectWithUser() {
+        AppUser appUser = new AppUser("Joe Man", "1234", "joeman@email.com", Role.CANDIDATE);
 
-        String returnedPage = underTest.makeConnection(appUser1, appUser2, model);
+        String returnedPage = underTest.connectWithUser(appUser.getId(), mock(Model.class));
 
-        assertEquals(null, returnedPage);
+        assertEquals("redirect:/user/" + appUser.getId(), returnedPage);
+    }
+
+    @Test
+    void connectWithUserThrowsExceptionWhenRoleIsAdmin() {
+        AppUser appUser = new AppUser("Joe Admin", "1234", "joeman@email.com", Role.ADMIN);
+
+        String returnedPage = underTest.connectWithUser(appUser.getId(), mock(Model.class));
+
+        assertEquals("redirect:/user/" + appUser.getId(), returnedPage);
     }
 
     @Test

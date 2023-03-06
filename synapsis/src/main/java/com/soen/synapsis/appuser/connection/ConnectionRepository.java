@@ -19,4 +19,7 @@ public interface ConnectionRepository extends JpaRepository<Connection, Connecti
 
     @Query(value = "SELECT a FROM AppUser a JOIN Connection c ON c.id.requesterID = a.id WHERE c.id.receiverID = :receiverID AND c.pending = true ")
     List<AppUser> findPendingConnectionsByReceiverID(@Param("receiverID") Long receiverID);
+
+    @Query(value = "SELECT * FROM Connection c WHERE c.requester_id = :requesterID AND c.receiver_id = :receiverID AND c.pending = true", nativeQuery = true)
+    List<Connection> findPendingConnectionsByRequesterIDAndReceiverID(@Param("requesterID") Long requesterID, @Param("receiverID") Long receiverID);
 }

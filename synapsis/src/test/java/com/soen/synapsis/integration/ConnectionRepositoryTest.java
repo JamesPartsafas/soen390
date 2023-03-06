@@ -90,4 +90,21 @@ public class ConnectionRepositoryTest {
         underTest.save(connection);
         assertTrue(underTest.findPendingConnectionsByReceiverID(appUser2.getId()).size() == 0);
     }
+
+    @Test
+    void PendingConnectionsByReceiverIDAndRequesterID_SomePendingCConnections() {
+        ConnectionKey connectionKey = new ConnectionKey(appUser1.getId(), appUser2.getId());
+        Connection connection = new Connection(connectionKey, appUser1, appUser2, true);
+        underTest.save(connection);
+        assertTrue(underTest.findPendingConnectionsByRequesterIDAndReceiverID(appUser1.getId(), appUser2.getId()).size() == 1);
+    }
+
+    @Test
+    void PendingConnectionsByReceiverIDAndRequesterID_NoPendingCConnections() {
+        ConnectionKey connectionKey = new ConnectionKey(appUser1.getId(), appUser2.getId());
+        Connection connection = new Connection(connectionKey, appUser1, appUser2, false);
+        underTest.save(connection);
+        assertTrue(underTest.findPendingConnectionsByRequesterIDAndReceiverID(appUser1.getId(),appUser2.getId()).size() == 0);
+    }
+
 }

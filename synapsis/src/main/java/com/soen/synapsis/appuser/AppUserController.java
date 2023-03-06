@@ -63,12 +63,16 @@ public class AppUserController {
 
         model.addAttribute("role", appUser.getRole());
         boolean isConnectedWith = connectionService.isConnectedWith(authService.getAuthenticatedUser().getId(), uid);
+        boolean isPendingConnectionWithSent = connectionService.isPendingConnectionWith(authService.getAuthenticatedUser().getId(), uid); // You sent a connection request and are waiting on the person
+        boolean isPendingConnectionWithReceived = connectionService.isPendingConnectionWith(uid, authService.getAuthenticatedUser().getId()); // Another person sent a connection request to you, and is waiting for you
 
         model.addAttribute("id", appUser.getId());
         model.addAttribute("name", appUser.getName());
         model.addAttribute("email", appUser.getEmail());
         model.addAttribute("profilePicture", appUser.getProfilePicture() != null ? appUser.getProfilePicture().getImage() : "");
         model.addAttribute("isConnectedWith", isConnectedWith);
+        model.addAttribute("isPendingConnectedWithSent", isPendingConnectionWithSent);
+        model.addAttribute("isPendingConnectedWithReceived", isPendingConnectionWithReceived);
         model.addAttribute("role", appUser.getRole());
         model.addAttribute("myRole", authService.getAuthenticatedUser().getRole());
         model.addAttribute("myId", authService.getAuthenticatedUser().getId());
