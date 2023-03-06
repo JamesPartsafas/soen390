@@ -73,6 +73,7 @@ public class AppUserController {
         model.addAttribute("isConnectedWith", isConnectedWith);
         model.addAttribute("isPendingConnectedWithSent", isPendingConnectionWithSent);
         model.addAttribute("isPendingConnectedWithReceived", isPendingConnectionWithReceived);
+        model.addAttribute("isLookingAtYourOwnProfilePage", authService.getAuthenticatedUser().getId() == uid);
         model.addAttribute("role", appUser.getRole());
         model.addAttribute("myRole", authService.getAuthenticatedUser().getRole());
         model.addAttribute("myId", authService.getAuthenticatedUser().getId());
