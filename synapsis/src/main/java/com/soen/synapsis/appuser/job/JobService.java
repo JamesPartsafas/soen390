@@ -71,6 +71,9 @@ public class JobService {
 
         Job job = jobRepository.getReferenceById(jobID);
 
+        job.setNumApplicants(job.getNumApplicants() + 1);
+        jobRepository.save(job);
+
         JobApplication jobApplication = new JobApplication(
                 job,
                 applicant,

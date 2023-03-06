@@ -81,6 +81,7 @@ public class ConnectionController {
         }
     }
 
+
     @PostMapping("/disconnect")
     public String disconnectFromUser(@RequestParam("id") Long id) {
         connectionService.disconnect(authService.getAuthenticatedUser().getId(), id);
