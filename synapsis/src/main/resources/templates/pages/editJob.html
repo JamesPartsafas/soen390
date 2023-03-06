@@ -35,13 +35,13 @@
       <label for="type" class="font-thin text-grey font-serif">Job Type</label>
       <select id="type" name="type" class="mt-2 bg-white border text-sm h-14 border-grey
       text-grey rounded-md focus:border-blue-500 p-3 hover:bg-light" required>
-        <option value="FULLTIME">Full-time</option>
-        <option value="PARTTIME">Part-time</option>
-        <option value="CONTRACT">Contract</option>
-        <option value="TEMPORARY">Temporary</option>
-        <option value="VOLUNTEER">Volunteer</option>
-        <option value="INTERNSHIP">Internship</option>
-        <option value="OTHER">Other</option>
+        <option th:selected="${type.toString() == 'FULLTIME'}" value="FULLTIME">Full-time</option>
+        <option th:selected="${type.toString() == 'PARTTIME'}" value="PARTTIME">Part-time</option>
+        <option th:selected="${type.toString() == 'CONTRACT'}" value="CONTRACT">Contract</option>
+        <option th:selected="${type.toString() == 'TEMPORARY'}" value="TEMPORARY">Temporary</option>
+        <option th:selected="${type.toString() == 'VOLUNTEER'}" value="VOLUNTEER">Volunteer</option>
+        <option th:selected="${type.toString() == 'INTERNSHIP'}" value="INTERNSHIP">Internship</option>
+        <option th:selected="${type.toString() == 'OTHER'}" value="OTHER">Other</option>
       </select>
 
       <input id="numAvailable" name="numAvailable" type="number" th:value="${num_available}" min="1" placeholder="Available Positions"
