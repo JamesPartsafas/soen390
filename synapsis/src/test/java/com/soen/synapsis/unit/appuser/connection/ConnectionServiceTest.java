@@ -58,63 +58,68 @@ public class ConnectionServiceTest {
     }
 
     @Test
-    void makeConnectionSuccessfulWithCandidateRoles() {
-        String returnValue = underTest.makeConnection(candidateUser1, candidateUser2);
+    void connectSuccessfulWithCandidateRoles() {
+        when(appUserRepository.getReferenceById(any(Long.class))).thenReturn(candidateUser1);
+
+        underTest.connect(candidateUser1.getId(), candidateUser2.getId());
 
         ArgumentCaptor<Connection> connectionArgumentCaptor = ArgumentCaptor.forClass(Connection.class);
         verify(connectionRepository).save(connectionArgumentCaptor.capture());
-
-        assertEquals("pages/network", returnValue);
     }
 
     @Test
-    void makeConnectionSuccessfulWithCompanyRoles() {
-        String returnValue = underTest.makeConnection(companyUser, candidateUser1);
+    void connectSuccessfulWithCompanyRoles() {
+        when(appUserRepository.getReferenceById(any(Long.class))).thenReturn(companyUser);
+
+        underTest.connect(companyUser.getId(), candidateUser1.getId());
 
         ArgumentCaptor<Connection> connectionArgumentCaptor = ArgumentCaptor.forClass(Connection.class);
         verify(connectionRepository).save(connectionArgumentCaptor.capture());
-
-        assertEquals("pages/network", returnValue);
     }
 
     @Test
-    void makeConnectionSuccessfulWithRecruiterRoles() {
-        String returnValue = underTest.makeConnection(recruiterUser, candidateUser1);
+    void connectSuccessfulWithRecruiterRoles() {
+        when(appUserRepository.getReferenceById(any(Long.class))).thenReturn(recruiterUser);
+
+        underTest.connect(recruiterUser.getId(), candidateUser1.getId());
 
         ArgumentCaptor<Connection> connectionArgumentCaptor = ArgumentCaptor.forClass(Connection.class);
         verify(connectionRepository).save(connectionArgumentCaptor.capture());
-
-        assertEquals("pages/network", returnValue);
     }
 
     @Test
-    void makeConnectionFailWithAdminRequesterRole() {
+    void connectWillFailWithAdminRequesterRole() {
+        when(appUserRepository.getReferenceById(any(Long.class))).thenReturn(adminUser);
+
         ArgumentCaptor<Connection> connectionArgumentCaptor = ArgumentCaptor.forClass(Connection.class);
         verify(connectionRepository, never()).save(connectionArgumentCaptor.capture());
 
         assertThrows(IllegalStateException.class,
-                () -> underTest.makeConnection(adminUser, candidateUser1),
+                () -> underTest.connect(adminUser.getId(), candidateUser1.getId()),
                 "Admins cannot make connections.");
     }
 
     @Test
-    void makeConnectionFailWithAdminReceiverRole() {
+    void connectWillFailWithAdminReceiverRole() {
+        when(appUserRepository.getReferenceById(any(Long.class))).thenReturn(adminUser);
+
         ArgumentCaptor<Connection> connectionArgumentCaptor = ArgumentCaptor.forClass(Connection.class);
         verify(connectionRepository, never()).save(connectionArgumentCaptor.capture());
 
         assertThrows(IllegalStateException.class,
-                () -> underTest.makeConnection(candidateUser1, adminUser),
+                () -> underTest.connect(candidateUser1.getId(), adminUser.getId()),
                 "Admins cannot receive connections.");
     }
 
     @Test
     void willThrowWhenConnectionExists() {
-        given(connectionRepository.existsById(Mockito.any(ConnectionKey.class))).willReturn(true);
+        when(appUserRepository.getReferenceById(any(Long.class))).thenReturn(candidateUser1);
+        when(connectionRepository.existsById(any(ConnectionKey.class))).thenReturn(true);
 
         verify(connectionRepository, never()).save(any());
 
         assertThrows(IllegalStateException.class,
-                () -> underTest.makeConnection(candidateUser1, candidateUser2),
+                () -> underTest.connect(candidateUser1.getId(), candidateUser2.getId()),
                 "Connection has already been made.");
     }
 
@@ -213,7 +218,7 @@ public class ConnectionServiceTest {
 
     @Test
     void isConnectedWithReturnsFalseIfConnectionDoesNotExist() {
-        when(connectionRepository.findById(any(ConnectionKey.class))).thenReturn(Optional.empty());
+        when(connectionRepository.findAcceptedConnectionsByRequesterIDAndReceiverID(any(Long.class), any(Long.class))).thenReturn(Optional.empty());
 
         assertFalse(underTest.isConnectedWith(candidateUser2.getId(), candidateUser1.getId()));
     }
@@ -223,7 +228,7 @@ public class ConnectionServiceTest {
         ConnectionKey connectionKey = new ConnectionKey(candidateUser2.getId(), candidateUser1.getId());
         Connection connection = new Connection(connectionKey, candidateUser2, candidateUser1, true);
 
-        when(connectionRepository.findById(any(ConnectionKey.class))).thenReturn(Optional.of(connection));
+        when(connectionRepository.findAcceptedConnectionsByRequesterIDAndReceiverID(any(Long.class), any(Long.class))).thenReturn(Optional.empty());
 
         assertFalse(underTest.isConnectedWith(candidateUser2.getId(), candidateUser1.getId()));
     }
@@ -233,8 +238,24 @@ public class ConnectionServiceTest {
         ConnectionKey connectionKey = new ConnectionKey(candidateUser2.getId(), candidateUser1.getId());
         Connection connection = new Connection(connectionKey, candidateUser2, candidateUser1, false);
 
-        when(connectionRepository.findById(any(ConnectionKey.class))).thenReturn(Optional.of(connection));
+        when(connectionRepository.findAcceptedConnectionsByRequesterIDAndReceiverID(any(Long.class), any(Long.class))).thenReturn(Optional.of(connection));
 
         assertTrue(underTest.isConnectedWith(candidateUser2.getId(), candidateUser1.getId()));
+    }
+
+    @Test
+    void isPendingConnectionWithReturnsFalse() {
+        Optional<Connection> connection = Optional.empty();
+        when(connectionRepository.findPendingConnectionsByRequesterIDAndReceiverID(any(Long.class), any(Long.class))).thenReturn(connection);
+        boolean returnValue = underTest.isPendingConnectionWith(any(Long.class), any(Long.class));
+        assertFalse(returnValue);
+    }
+
+    @Test
+    void isPendingConnectionWithReturnsTrue() {
+        Optional<Connection> connection = Optional.of(mock(Connection.class));
+        when(connectionRepository.findPendingConnectionsByRequesterIDAndReceiverID(any(Long.class), any(Long.class))).thenReturn(connection);
+        boolean returnValue = underTest.isPendingConnectionWith(any(Long.class), any(Long.class));
+        assertTrue(returnValue);
     }
 }

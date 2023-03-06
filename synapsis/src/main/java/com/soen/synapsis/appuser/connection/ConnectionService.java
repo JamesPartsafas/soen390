@@ -92,7 +92,10 @@ public class ConnectionService {
         return "redirect:/network";
     }
 
-    public String makeConnection(AppUser requester, AppUser receiver) {
+    public void connect(Long requesterId, Long receiverId) {
+        AppUser requester = appUserRepository.getReferenceById(requesterId);
+        AppUser receiver = appUserRepository.getReferenceById(receiverId);
+
         if (requester.getRole() == Role.ADMIN) {
             throw new IllegalStateException("Admins cannot make connections.");
         }
@@ -112,8 +115,6 @@ public class ConnectionService {
 
         Connection connection = new Connection(cKey1, requester, receiver, true);
         connectionRepository.save(connection);
-
-        return "pages/network";
     }
 
     public void disconnect(Long requesterId, Long receiverId) {
@@ -122,15 +123,23 @@ public class ConnectionService {
     }
 
     public boolean isConnectedWith(Long requesterId, Long receiverId) {
-        ConnectionKey connectionKey = new ConnectionKey(requesterId, receiverId);
-        Optional<Connection> retrievedConnection = connectionRepository.findById(connectionKey);
+        Optional<Connection> connectionWhenSentConnection = connectionRepository.findAcceptedConnectionsByRequesterIDAndReceiverID(requesterId, receiverId);
+        Optional<Connection> connectionWhenReceivedConnection = connectionRepository.findAcceptedConnectionsByRequesterIDAndReceiverID(receiverId, requesterId);
 
-        if (!retrievedConnection.isPresent()) {
+        if (connectionWhenSentConnection.isEmpty() && connectionWhenReceivedConnection.isEmpty()) {
             return false;
         }
 
-        Connection connection = retrievedConnection.get();
-
-        return !connection.isPending();
+        return true;
     }
+
+    public boolean isPendingConnectionWith(Long requesterId, Long receiverId) {
+        Optional<Connection> retrievedConnection = connectionRepository.findPendingConnectionsByRequesterIDAndReceiverID(requesterId, receiverId);
+        if (retrievedConnection.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
 }
+

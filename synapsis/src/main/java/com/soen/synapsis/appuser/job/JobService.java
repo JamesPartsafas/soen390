@@ -4,6 +4,7 @@ import com.soen.synapsis.appuser.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,20 +13,27 @@ public class JobService {
 
     private final JobRepository jobRepository;
 
+    private final JobApplicationRepository jobApplicationRepository;
+
     @Autowired
-    public JobService(JobRepository jobRepository) {
+    public JobService(JobRepository jobRepository, JobApplicationRepository jobApplicationRepository) {
         this.jobRepository = jobRepository;
+        this.jobApplicationRepository = jobApplicationRepository;
     }
 
     public List<Job> getAllJobs() {
         return jobRepository.findAll();
     }
 
+    public List<Job> getAllJobsAlreadySubmittedByUser(AppUser user) {
+        return jobRepository.findAllJobApplicationsSubmittedByUserID(user.getId());
+    }
+
     public Optional<Job> getJob(Long id) {
         return jobRepository.findById(id);
     }
 
-    public String createJob (JobRequest request) {
+    public String createJob(JobRequest request) {
 
         if (request.getCreator().getRole() != Role.RECRUITER) {
             throw new IllegalStateException("This user is not a recruiter.");
@@ -49,6 +57,51 @@ public class JobService {
         jobRepository.save(job);
 
         return "redirect:/job/" + job.getID();
+    }
+
+
+
+    public void createJobApplication(JobApplication request, AppUser applicant, Long jobId) {
+
+        checkIfUserAlreadySubmittedApplication(applicant, jobId);
+
+        if (applicant.getRole() != Role.CANDIDATE) {
+            throw new IllegalStateException("You are not a candidate. Only candidates can submit application forms.");
+        }
+
+        Job job = jobRepository.getReferenceById(jobId);
+
+        job.setNumApplicants(job.getNumApplicants() + 1);
+        jobRepository.save(job);
+
+        JobApplication jobApplication = new JobApplication(
+                job,
+                applicant,
+                new Timestamp(System.currentTimeMillis()),
+                JobApplicationStatus.SUBMITTED,
+                request.getEmail(),
+                request.getFirstName(),
+                request.getLastName(),
+                request.getPhone(),
+                request.getAddress(),
+                request.getCity(),
+                request.getCountry(),
+                request.getResume(),
+                request.getCoverLetter(),
+                request.isLegallyAllowedToWork(),
+                request.getLinks()
+        );
+
+        jobApplicationRepository.save(jobApplication);
+    }
+
+    public void checkIfUserAlreadySubmittedApplication(AppUser applicant, Long jobId) {
+        List<Job> jobsSubmitted = getAllJobsAlreadySubmittedByUser(applicant);
+        for (Job job : jobsSubmitted) {
+            if (job.getID() == jobId) {
+                throw new IllegalStateException("You already submitted an application form for this job.");
+            }
+        }
     }
 
     public String deleteJob(Long id) {
@@ -79,4 +132,5 @@ public class JobService {
 
         return "redirect:/job/" + job.getID();
     }
+
 }

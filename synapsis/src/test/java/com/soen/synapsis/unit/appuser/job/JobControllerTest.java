@@ -2,6 +2,7 @@ package com.soen.synapsis.unit.appuser.job;
 
 import com.soen.synapsis.appuser.*;
 import com.soen.synapsis.appuser.job.*;
+import com.soen.synapsis.appuser.profile.appuserprofile.updateprofile.UpdateAppUserProfileRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,8 +32,10 @@ class JobControllerTest {
     private JobController underTest;
     private List<Job> allJobs;
     private AppUser creator;
+    private AppUser candidate;
     private Job job1;
     private Job job2;
+    private Job job3;
     private JobRequest request;
 
     @BeforeEach
@@ -40,10 +43,13 @@ class JobControllerTest {
         autoCloseable = MockitoAnnotations.openMocks(this);
         underTest = new JobController(jobService, authService);
 
-        creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
+        creator = new AppUser(1L, "joecreator", "1234", "joecreatorunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
+        candidate = new AppUser(2L, "joecandidate", "1234", "joecandidateunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
 
         job1 = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true, true);
         job2 = new Job(creator, "Mechanical Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true, true);
+        job3 = new Job(creator, "Mechanical Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, false, "", true, true, true);
+
         job1.setID(1L);
 
         allJobs = new ArrayList<>();
@@ -88,7 +94,7 @@ class JobControllerTest {
 
         String returnValue = underTest.getJob(job1.getID(),mock(Model.class));
 
-        assertEquals("pages/job", returnValue);
+        assertEquals("redirect:/", returnValue);
     }
 
     @Test
@@ -100,6 +106,28 @@ class JobControllerTest {
         String returnValue = underTest.getJob(5L,mock(Model.class));
 
         assertEquals("redirect:/", returnValue);
+    }
+
+    @Test
+    void getJobRedirectsJobPage() {
+        when(jobService.getJob(any(Long.class))).thenReturn(Optional.of(job3));
+        when(authService.getAuthenticatedUser()).thenReturn(creator);
+        when(authService.isUserAuthenticated()).thenReturn(true);
+
+        String returnValue = underTest.getJob(job1.getID(), mock(Model.class));
+
+        assertEquals("pages/job", returnValue);
+    }
+
+    @Test
+    void getJobRedirectsJobApplicationExternalPage() {
+        when(jobService.getJob(any(Long.class))).thenReturn(Optional.of(job1));
+        when(authService.getAuthenticatedUser()).thenReturn(creator);
+        when(authService.isUserAuthenticated()).thenReturn(true);
+
+        String returnValue = underTest.getJob(job1.getID(), mock(Model.class));
+
+        assertEquals("pages/jobapplicationexternal", returnValue);
     }
 
     @Test
@@ -132,6 +160,72 @@ class JobControllerTest {
 
         verify(model).addAttribute(anyString(), anyString());
     }
+
+    @Test
+
+    void getJobApplicationByIdRedirectToHomePageWhenUserNotAuthenticated() {
+        when(authService.isUserAuthenticated()).thenReturn(false);
+
+        assertEquals("redirect:/", underTest.getJobApplication(1L, Mockito.mock(Model.class)));
+    }
+
+    @Test
+    void getJobApplicationByIdRedirectToJobsPageWhenJobIsEmpty() {
+        when(authService.isUserAuthenticated()).thenReturn(true);
+
+        assertEquals("redirect:/jobs", underTest.getJobApplication(1L, Mockito.mock(Model.class)));
+    }
+
+    @Test
+    void getJobApplicationByIdRedirectToJobsPageWhenUserAlreadySubmittedApplication() {
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(jobService.getJob(any(Long.class))).thenReturn(Optional.empty());
+        assertEquals("redirect:/jobs", underTest.getJobApplication(1L, Mockito.mock(Model.class)));
+    }
+
+    @Test
+    void getJobApplicationByIdRedirectToJobApplicationExternal() {
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(jobService.getJob(any(Long.class))).thenReturn(Optional.of(job3));
+        when(authService.getAuthenticatedUser()).thenReturn(candidate);
+
+        assertEquals("pages/jobapplicationform", underTest.getJobApplication(1L, Mockito.mock(Model.class)));
+    }
+
+    @Test
+    void getJobApplicationByIdRedirectToJobApplicationForm() {
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(jobService.getJob(any(Long.class))).thenReturn(Optional.of(job1));
+        when(authService.getAuthenticatedUser()).thenReturn(candidate);
+
+        assertEquals("pages/jobapplicationexternal", underTest.getJobApplication(1L, Mockito.mock(Model.class)));
+    }
+
+    @Test
+    void createJobApplicationSendsAnErrorMessage() {
+        BindingResult bindingResult = mock(BindingResult.class);
+
+        when(bindingResult.hasErrors()).thenReturn(true);
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(jobService.getJob(any(Long.class))).thenReturn(Optional.of(job1));
+
+        String expectedMessage = "There was a problem processing your application. Try again later.";
+
+        assertThrows(Exception.class, () -> underTest.createJobApplication(mock(JobApplication.class), bindingResult, mock(Model.class), 1L), expectedMessage);
+    }
+
+    @Test
+    void createJobApplicationCreatedJobApplicationSuccessfully() {
+        when(authService.isUserAuthenticated()).thenReturn(true);
+
+        assertEquals("redirect:/applicationsuccess", underTest.createJobApplication(mock(JobApplication.class), mock(BindingResult.class), mock(Model.class), 1L));
+    }
+
+    @Test
+    void returnJobApplicationSuccessReturnsApplicationSuccess() {
+        assertEquals("pages/applicationsuccess", underTest.returnJobApplicationSuccess());
+    }
+
 
     @Test
     void deleteJobRedirects() {
@@ -203,3 +297,4 @@ class JobControllerTest {
         assertEquals(authService, this.authService);
     }
 }
+

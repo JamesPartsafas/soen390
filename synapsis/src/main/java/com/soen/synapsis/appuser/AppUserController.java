@@ -63,17 +63,24 @@ public class AppUserController {
 
         model.addAttribute("role", appUser.getRole());
         boolean isConnectedWith = connectionService.isConnectedWith(authService.getAuthenticatedUser().getId(), uid);
+        boolean isPendingConnectionWhenSentConnection = connectionService.isPendingConnectionWith(authService.getAuthenticatedUser().getId(), uid); // You sent a connection request and are waiting on the person
+        boolean isPendingConnectionWhenReceivingConnection = connectionService.isPendingConnectionWith(uid, authService.getAuthenticatedUser().getId()); // Another person sent a connection request to you, and is waiting for you
 
         model.addAttribute("id", appUser.getId());
         model.addAttribute("name", appUser.getName());
         model.addAttribute("email", appUser.getEmail());
         model.addAttribute("profilePicture", appUser.getProfilePicture() != null ? appUser.getProfilePicture().getImage() : "");
         model.addAttribute("isConnectedWith", isConnectedWith);
+        model.addAttribute("isPendingConnectionWhenSentConnection", isPendingConnectionWhenSentConnection);
+        model.addAttribute("isPendingConnectionWhenReceivingConnection", isPendingConnectionWhenReceivingConnection);
         model.addAttribute("role", appUser.getRole());
         model.addAttribute("myRole", authService.getAuthenticatedUser().getRole());
+        model.addAttribute("myId", authService.getAuthenticatedUser().getId());
+        if(appUser.getRole() ==  Role.RECRUITER) {
+            model.addAttribute("companyId", appUser.getCompany().getId());
+        }
 
-        if (authService.getAuthenticatedUser().getId() == uid)
-            model.addAttribute("showControls", true);
+        model.addAttribute("showControls", authService.getAuthenticatedUser().getId() == uid);
 
         if (appUser.getRole() == Role.COMPANY) {
             CompanyProfile companyProfile = appUser.getCompanyProfile();
@@ -133,7 +140,7 @@ public class AppUserController {
     @PostMapping("/company/markCandidateToRecruiter")
     public String markCandidateToRecruiter(@RequestParam("appUserId") Long id) {
         try {
-            if(!authService.doesUserHaveRole(Role.COMPANY) || !authService.isUserAuthenticated()) {
+            if(!authService.doesUserHaveRole(Role.COMPANY)) {
                 throw new IllegalStateException("You must be a company to mark candidates as recruiters.");
             }
             Optional<AppUser> optionalAppUser = appUserService.getAppUser(id);
@@ -158,21 +165,41 @@ public class AppUserController {
         }
     }
 
-    @PutMapping("/company/unmarkRecruiterToCandidate")
-    public String unmarkRecruiterToCandidate(AppUser appUser) {
-        if (!authService.doesUserHaveRole(Role.COMPANY)) {
-            return "You must be a company to unmark recruiters as candidates.";
-        }
+    @PostMapping("/company/unmarkRecruiterToCandidate")
+    public String unmarkRecruiterToCandidate(@RequestParam("appUserId") Long id) {
         try {
+            if (!authService.doesUserHaveRole(Role.COMPANY)) {
+                throw new IllegalStateException("You must be a company to unmark recruiters as candidates.");
+            }
+            Optional<AppUser> optionalAppUser = appUserService.getAppUser(id);
+
+            if (optionalAppUser.isEmpty()) {
+                return "redirect:/";
+            }
+
+            AppUser appUser = optionalAppUser.get();
+
+            if (appUser.getRole() != Role.RECRUITER) {
+                throw new IllegalStateException("The user must be a recruiter to be unmarked as a candidate.");
+            }
+
+            if(appUser.getCompany().getId() != authService.getAuthenticatedUser().getId()) {
+                throw new IllegalStateException("The recruiter is not part of your company.");
+            }
+
             appUserService.unmarkRecruiterToCandidate(appUser, authService.getAuthenticatedUser());
-        } catch (IllegalStateException e) {
-            return e.getMessage();
+            String userProfileURL = "redirect:/user/" + id;
+
+            return userProfileURL;
         }
-        return "pages/userpage";
+        catch (IllegalStateException e) {
+            return "redirect:/";
+        }
     }
 
     @GetMapping("/updateuserpage")
     public String getUpdateUserProfile() {
         return "pages/updateuserpage";
     }
+
 }
