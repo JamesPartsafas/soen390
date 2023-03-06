@@ -25,6 +25,9 @@ class AppUserTest {
     private String email;
     private Role role;
     private AuthProvider authProvider;
+    private String securityAnswer1;
+    private String securityAnswer2;
+    private String securityAnswer3;
 
     @BeforeEach
     void setUp() {
@@ -34,7 +37,10 @@ class AppUserTest {
         email = "joeunittest@mail.com";
         role = Role.CANDIDATE;
         authProvider = AuthProvider.LOCAL;
-        underTest = new AppUser(id, name, password, email, role, authProvider);
+        securityAnswer1 = "a";
+        securityAnswer2 = "a";
+        securityAnswer3 = "a";
+        underTest = new AppUser(id, name, password, email, role, authProvider, securityAnswer1, securityAnswer2, securityAnswer3);
     }
 
     @AfterEach
@@ -125,6 +131,48 @@ class AppUserTest {
         underTest.setAuthProvider(newAuthProvider);
 
         assertEquals(newAuthProvider, underTest.getAuthProvider());
+    }
+
+    @Test
+    void getSecurityAnswer1() {
+        assertEquals(securityAnswer1, underTest.getSecurityAnswer1());
+    }
+
+    @Test
+    void setSecurityAnswer1() {
+        String newSecurityAnswer = "b";
+
+        underTest.setSecurityAnswer1(newSecurityAnswer);
+
+        assertEquals(newSecurityAnswer, underTest.getSecurityAnswer1());
+    }
+
+    @Test
+    void getSecurityAnswer2() {
+        assertEquals(securityAnswer2, underTest.getSecurityAnswer2());
+    }
+
+    @Test
+    void setSecurityAnswer2() {
+        String newSecurityAnswer = "b";
+
+        underTest.setSecurityAnswer2(newSecurityAnswer);
+
+        assertEquals(newSecurityAnswer, underTest.getSecurityAnswer2());
+    }
+
+    @Test
+    void getSecurityAnswer3() {
+        assertEquals(securityAnswer3, underTest.getSecurityAnswer3());
+    }
+
+    @Test
+    void setSecurityAnswer3() {
+        String newSecurityAnswer = "b";
+
+        underTest.setSecurityAnswer3(newSecurityAnswer);
+
+        assertEquals(newSecurityAnswer, underTest.getSecurityAnswer3());
     }
 
     @Test

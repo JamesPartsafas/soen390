@@ -47,6 +47,7 @@ public class JobController {
     public String getJob(@PathVariable Long jid, Model model) {
         Optional<Job> optionalJob = jobService.getJob(jid);
 
+
         if (optionalJob.isEmpty())
             return "redirect:/";
 
@@ -60,6 +61,8 @@ public class JobController {
         model.addAttribute("description", job.getDescription());
         model.addAttribute("num_available", job.getNumAvailable());
         model.addAttribute("num_applicants", job.getNumApplicants());
+        model.addAttribute("role",authService.getAuthenticatedUser().getRole());
+
 
         return "pages/job";
     }

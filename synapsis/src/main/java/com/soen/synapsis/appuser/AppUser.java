@@ -17,8 +17,18 @@ public class AppUser {
 
     @Column(nullable = true)
     private String name;
+
     @Column(nullable = false)
     private String password;
+
+    @Column()
+    private String securityAnswer1;
+
+    @Column()
+    private String securityAnswer2;
+
+    @Column()
+    private String securityAnswer3;
 
     @Column(unique = true, nullable = false)
     private String email;
@@ -38,7 +48,7 @@ public class AppUser {
     @JoinColumn(name = "company_id")
     private AppUser company;
 
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy="company", fetch = FetchType.EAGER)
     private Set<AppUser> recruiters;
 
     @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
@@ -53,25 +63,39 @@ public class AppUser {
     protected AppUser() {
     }
 
-    public AppUser(Long id, String name, String password, String email, Role role, AuthProvider authProvider) {
+    public AppUser(Long id, String name, String password, String email, Role role, AuthProvider authProvider, String securityAnswer1, String securityAnswer2, String securityAnswer3) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.email = email;
         this.role = role;
         this.authProvider = authProvider;
+        this.securityAnswer1 = securityAnswer1;
+        this.securityAnswer2 = securityAnswer2;
+        this.securityAnswer3 = securityAnswer3;
+    }
+
+    public AppUser(Long id, String name, String password, String email, Role role, AuthProvider authProvider) {
+        this(id, name, password, email, role, authProvider, null, null, null);
     }
 
     public AppUser(Long id, String name, String password, String email, Role role) {
         this(id, name, password, email, role, AuthProvider.LOCAL);
     }
 
-    public AppUser(String name, String password, String email, Role role, AuthProvider authProvider) {
+    public AppUser(String name, String password, String email, Role role, AuthProvider authProvider, String securityAnswer1, String securityAnswer2, String securityAnswer3) {
         this.name = name;
         this.password = password;
         this.email = email;
         this.role = role;
         this.authProvider = authProvider;
+        this.securityAnswer1 = securityAnswer1;
+        this.securityAnswer2 = securityAnswer2;
+        this.securityAnswer3 = securityAnswer3;
+    }
+
+    public AppUser(String name, String password, String email, Role role, AuthProvider authProvider) {
+        this(name, password, email, role, authProvider, null, null, null);
     }
 
     public AppUser(String name, String password, String email, Role role) {
@@ -183,6 +207,30 @@ public class AppUser {
         this.companyProfile = companyProfile;
     }
 
+    public String getSecurityAnswer1() {
+        return securityAnswer1;
+    }
+
+    public void setSecurityAnswer1(String securityAnswer1) {
+        this.securityAnswer1 = securityAnswer1;
+    }
+
+    public String getSecurityAnswer2() {
+        return securityAnswer2;
+    }
+
+    public void setSecurityAnswer2(String securityAnswer2) {
+        this.securityAnswer2 = securityAnswer2;
+    }
+
+    public String getSecurityAnswer3() {
+        return securityAnswer3;
+    }
+
+    public void setSecurityAnswer3(String securityAnswer3) {
+        this.securityAnswer3 = securityAnswer3;
+    }
+
     public ProfilePicture getProfilePicture() {
         return profilePicture;
     }
@@ -205,9 +253,17 @@ public class AppUser {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
+                ", securityAnswer1='" + securityAnswer1 + '\'' +
+                ", securityAnswer2='" + securityAnswer2 + '\'' +
+                ", securityAnswer3='" + securityAnswer3 + '\'' +
+                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", role=" + role +
                 ", authProvider=" + authProvider +
+                ", company=" + company +
+                ", recruiters=" + recruiters +
+                ", profile=" + profile +
+                ", companyProfile=" + companyProfile +
                 ", emailNotificationsOn=" + emailNotificationsOn +
                 '}';
     }
