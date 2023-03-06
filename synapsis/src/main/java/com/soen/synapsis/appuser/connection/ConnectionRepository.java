@@ -23,4 +23,7 @@ public interface ConnectionRepository extends JpaRepository<Connection, Connecti
 
     @Query(value = "SELECT * FROM Connection c WHERE c.requester_id = :requesterID AND c.receiver_id = :receiverID AND c.pending = true", nativeQuery = true)
     Optional<Connection> findPendingConnectionsByRequesterIDAndReceiverID(@Param("requesterID") Long requesterID, @Param("receiverID") Long receiverID);
+
+    @Query(value = "SELECT * FROM Connection c WHERE c.requester_id = :requesterID AND c.receiver_id = :receiverID AND c.pending = false", nativeQuery = true)
+    Optional<Connection> findAcceptedConnectionsByRequesterIDAndReceiverID(@Param("requesterID") Long requesterID, @Param("receiverID") Long receiverID);
 }

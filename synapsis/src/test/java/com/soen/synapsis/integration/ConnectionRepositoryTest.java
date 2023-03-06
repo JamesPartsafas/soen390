@@ -92,7 +92,7 @@ public class ConnectionRepositoryTest {
     }
 
     @Test
-    void PendingConnectionsByReceiverIDAndRequesterID_SomePendingCConnections() {
+    void PendingConnectionsByReceiverIDAndRequesterID_SomePendingConnections() {
         ConnectionKey connectionKey = new ConnectionKey(appUser1.getId(), appUser2.getId());
         Connection connection = new Connection(connectionKey, appUser1, appUser2, true);
         underTest.save(connection);
@@ -100,11 +100,27 @@ public class ConnectionRepositoryTest {
     }
 
     @Test
-    void PendingConnectionsByReceiverIDAndRequesterID_NoPendingCConnections() {
+    void PendingConnectionsByReceiverIDAndRequesterID_NoPendingConnections() {
         ConnectionKey connectionKey = new ConnectionKey(appUser1.getId(), appUser2.getId());
         Connection connection = new Connection(connectionKey, appUser1, appUser2, false);
         underTest.save(connection);
         assertTrue(underTest.findPendingConnectionsByRequesterIDAndReceiverID(appUser1.getId(),appUser2.getId()).isEmpty());
+    }
+
+    @Test
+    void AcceptedConnectionsByReceiverIDAndRequesterID_SomeConnections() {
+        ConnectionKey connectionKey = new ConnectionKey(appUser1.getId(), appUser2.getId());
+        Connection connection = new Connection(connectionKey, appUser1, appUser2, false);
+        underTest.save(connection);
+        assertTrue(underTest.findAcceptedConnectionsByRequesterIDAndReceiverID(appUser1.getId(),appUser2.getId()).isPresent());
+    }
+
+    @Test
+    void AcceptedConnectionsByReceiverIDAndRequesterID_NoPendingConnections() {
+        ConnectionKey connectionKey = new ConnectionKey(appUser1.getId(), appUser2.getId());
+        Connection connection = new Connection(connectionKey, appUser1, appUser2, true);
+        underTest.save(connection);
+        assertTrue(underTest.findAcceptedConnectionsByRequesterIDAndReceiverID(appUser1.getId(),appUser2.getId()).isEmpty());
     }
 
 }

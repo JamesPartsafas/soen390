@@ -218,7 +218,7 @@ public class ConnectionServiceTest {
 
     @Test
     void isConnectedWithReturnsFalseIfConnectionDoesNotExist() {
-        when(connectionRepository.findById(any(ConnectionKey.class))).thenReturn(Optional.empty());
+        when(connectionRepository.findAcceptedConnectionsByRequesterIDAndReceiverID(any(Long.class), any(Long.class))).thenReturn(Optional.empty());
 
         assertFalse(underTest.isConnectedWith(candidateUser2.getId(), candidateUser1.getId()));
     }
@@ -228,7 +228,7 @@ public class ConnectionServiceTest {
         ConnectionKey connectionKey = new ConnectionKey(candidateUser2.getId(), candidateUser1.getId());
         Connection connection = new Connection(connectionKey, candidateUser2, candidateUser1, true);
 
-        when(connectionRepository.findById(any(ConnectionKey.class))).thenReturn(Optional.of(connection));
+        when(connectionRepository.findAcceptedConnectionsByRequesterIDAndReceiverID(any(Long.class), any(Long.class))).thenReturn(Optional.empty());
 
         assertFalse(underTest.isConnectedWith(candidateUser2.getId(), candidateUser1.getId()));
     }
@@ -238,7 +238,7 @@ public class ConnectionServiceTest {
         ConnectionKey connectionKey = new ConnectionKey(candidateUser2.getId(), candidateUser1.getId());
         Connection connection = new Connection(connectionKey, candidateUser2, candidateUser1, false);
 
-        when(connectionRepository.findById(any(ConnectionKey.class))).thenReturn(Optional.of(connection));
+        when(connectionRepository.findAcceptedConnectionsByRequesterIDAndReceiverID(any(Long.class), any(Long.class))).thenReturn(Optional.of(connection));
 
         assertTrue(underTest.isConnectedWith(candidateUser2.getId(), candidateUser1.getId()));
     }

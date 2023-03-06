@@ -123,35 +123,14 @@ public class ConnectionService {
     }
 
     public boolean isConnectedWith(Long requesterId, Long receiverId) {
-        ConnectionKey connectionKeySent = new ConnectionKey(requesterId, receiverId);
-        ConnectionKey connectionKeyReceived = new ConnectionKey(receiverId, requesterId);
+        Optional<Connection> connectionWhenSentConnection = connectionRepository.findAcceptedConnectionsByRequesterIDAndReceiverID(requesterId, receiverId);
+        Optional<Connection> connectionWhenReceivedConnection = connectionRepository.findAcceptedConnectionsByRequesterIDAndReceiverID(receiverId, requesterId);
 
-        Optional<Connection> retrievedConnectionSent = connectionRepository.findById(connectionKeySent);
-        Optional<Connection> retrievedConnectionReceived = connectionRepository.findById(connectionKeyReceived);
-
-        if (retrievedConnectionSent.isEmpty() && retrievedConnectionReceived.isEmpty()) {
+        if (connectionWhenSentConnection.isEmpty() && connectionWhenReceivedConnection.isEmpty()) {
             return false;
         }
 
-        Connection connectionSent;
-        Connection connectionRetrieved;
-
-        if (!retrievedConnectionSent.isEmpty()) {
-            connectionSent = retrievedConnectionSent.get();
-
-            if (!connectionSent.isPending()) {
-                return true;
-            }
-
-        } else {
-            connectionRetrieved = retrievedConnectionReceived.get();
-
-            if (!connectionRetrieved.isPending()) {
-                return true;
-            }
-        }
-
-        return false;
+        return true;
     }
 
     public boolean isPendingConnectionWith(Long requesterId, Long receiverId) {
