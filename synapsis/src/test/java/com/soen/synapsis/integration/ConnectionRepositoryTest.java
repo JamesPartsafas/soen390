@@ -96,7 +96,7 @@ public class ConnectionRepositoryTest {
         ConnectionKey connectionKey = new ConnectionKey(appUser1.getId(), appUser2.getId());
         Connection connection = new Connection(connectionKey, appUser1, appUser2, true);
         underTest.save(connection);
-        assertTrue(underTest.findPendingConnectionsByRequesterIDAndReceiverID(appUser1.getId(), appUser2.getId()).size() == 1);
+        assertTrue(underTest.findPendingConnectionsByRequesterIDAndReceiverID(appUser1.getId(), appUser2.getId()).isPresent());
     }
 
     @Test
@@ -104,7 +104,7 @@ public class ConnectionRepositoryTest {
         ConnectionKey connectionKey = new ConnectionKey(appUser1.getId(), appUser2.getId());
         Connection connection = new Connection(connectionKey, appUser1, appUser2, false);
         underTest.save(connection);
-        assertTrue(underTest.findPendingConnectionsByRequesterIDAndReceiverID(appUser1.getId(),appUser2.getId()).size() == 0);
+        assertTrue(underTest.findPendingConnectionsByRequesterIDAndReceiverID(appUser1.getId(),appUser2.getId()).isEmpty());
     }
 
 }

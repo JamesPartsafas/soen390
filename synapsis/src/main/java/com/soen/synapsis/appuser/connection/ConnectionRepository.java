@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ConnectionRepository extends JpaRepository<Connection, ConnectionKey> {
@@ -21,5 +22,5 @@ public interface ConnectionRepository extends JpaRepository<Connection, Connecti
     List<AppUser> findPendingConnectionsByReceiverID(@Param("receiverID") Long receiverID);
 
     @Query(value = "SELECT * FROM Connection c WHERE c.requester_id = :requesterID AND c.receiver_id = :receiverID AND c.pending = true", nativeQuery = true)
-    List<Connection> findPendingConnectionsByRequesterIDAndReceiverID(@Param("requesterID") Long requesterID, @Param("receiverID") Long receiverID);
+    Optional<Connection> findPendingConnectionsByRequesterIDAndReceiverID(@Param("requesterID") Long requesterID, @Param("receiverID") Long receiverID);
 }

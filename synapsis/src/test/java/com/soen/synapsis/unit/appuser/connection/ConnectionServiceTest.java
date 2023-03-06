@@ -245,7 +245,7 @@ public class ConnectionServiceTest {
 
     @Test
     void isPendingConnectionWithReturnsFalse() {
-        List<Connection> connection = new ArrayList<>();
+        Optional<Connection> connection = Optional.empty();
         when(connectionRepository.findPendingConnectionsByRequesterIDAndReceiverID(any(Long.class), any(Long.class))).thenReturn(connection);
         boolean returnValue = underTest.isPendingConnectionWith(any(Long.class), any(Long.class));
         assertFalse(returnValue);
@@ -253,8 +253,7 @@ public class ConnectionServiceTest {
 
     @Test
     void isPendingConnectionWithReturnsTrue() {
-        List<Connection> connection = new ArrayList<>();
-        connection.add(mock(Connection.class));
+        Optional<Connection> connection = Optional.of(mock(Connection.class));
         when(connectionRepository.findPendingConnectionsByRequesterIDAndReceiverID(any(Long.class), any(Long.class))).thenReturn(connection);
         boolean returnValue = underTest.isPendingConnectionWith(any(Long.class), any(Long.class));
         assertTrue(returnValue);

@@ -155,7 +155,7 @@ public class ConnectionService {
     }
 
     public boolean isPendingConnectionWith(Long requesterId, Long receiverId) {
-        List<Connection> retrievedConnection = connectionRepository.findPendingConnectionsByRequesterIDAndReceiverID(requesterId, receiverId);
+        Optional<Connection> retrievedConnection = connectionRepository.findPendingConnectionsByRequesterIDAndReceiverID(requesterId, receiverId);
         if (retrievedConnection.isEmpty()) {
             return false;
         }
