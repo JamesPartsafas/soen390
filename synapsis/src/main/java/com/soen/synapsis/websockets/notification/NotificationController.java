@@ -26,24 +26,26 @@ public class NotificationController {
 
     @MessageMapping("/notification/{recipientId}")
     public void sendNotification(Authentication authentication, @DestinationVariable Long recipientId, NotificationDTO notification) {
+        AppUserAuth appUserAuth = (AppUserAuth) authentication.getPrincipal();
+        AppUser appUser = appUserAuth.getAppUser();
+
+        if (appUser == null) {
+            throw new IllegalStateException("Sender ID not valid");
+        }
         notificationService.saveNotification(notification);
     }
 
     @MessageMapping("/notification/{recipientId}/seen")
     public void sendSeen(Authentication authentication, @DestinationVariable Long recipientId, NotificationDTO notification) {
-        try {
-            AppUserAuth appUserAuth = (AppUserAuth) authentication.getPrincipal();
-            AppUser appUser = appUserAuth.getAppUser();
+        
+        AppUserAuth appUserAuth = (AppUserAuth) authentication.getPrincipal();
+        AppUser appUser = appUserAuth.getAppUser();
 
-            if (appUser == null || !Objects.equals(notification.getRecipient_id(), appUser.getId())) {
-                throw new IllegalStateException("Sender ID not valid");
-            }
-
-            notificationService.updateSeen(notification, true);
-
-        } catch (Exception e) {
-            notificationService.updateSeen(notification, false);
+        if (appUser == null || !Objects.equals(recipientId, appUser.getId())) {
+            throw new IllegalStateException("Recipient ID not valid");
         }
+
+        notificationService.updateSeen(notification, true);
     }
 
     @GetMapping("/updateNotifications/{userId}")
