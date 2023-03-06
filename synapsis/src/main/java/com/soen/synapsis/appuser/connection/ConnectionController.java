@@ -69,14 +69,15 @@ public class ConnectionController {
         }
     }
 
-    @PostMapping("/makeConnection")
-    public String makeConnection(@RequestBody AppUser appUser1, @RequestBody AppUser appUser2, Model model) {
+    @PostMapping("/connect")
+    public String connectWithUser(@RequestParam("id") Long id, Model model) {
         try {
-            String returnString = connectionService.makeConnection(appUser1, appUser2);
-            return returnString;
+            connectionService.connect(authService.getAuthenticatedUser().getId(), id);
+            return "redirect:/user/" + id;
+
         } catch (Exception e) {
             model.addAttribute("error", "There was an error connecting with the user: " + e.getMessage());
-            return "pages/network";
+            return "redirect:/user/" + id;
         }
     }
 
