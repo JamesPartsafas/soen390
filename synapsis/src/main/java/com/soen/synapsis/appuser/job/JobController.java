@@ -46,9 +46,9 @@ public class JobController {
         return "pages/jobs";
     }
 
-    @GetMapping("/job/{jid}")
-    public String getJob(@PathVariable Long jid, Model model) {
-        Optional<Job> optionalJob = jobService.getJob(jid);
+    @GetMapping("/job/{jobId}")
+    public String getJob(@PathVariable Long jobId, Model model) {
+        Optional<Job> optionalJob = jobService.getJob(jobId);
 
 
         if (optionalJob.isEmpty() || !authService.isUserAuthenticated())
@@ -66,7 +66,7 @@ public class JobController {
         model.addAttribute("description", job.getDescription());
         model.addAttribute("num_available", job.getNumAvailable());
         model.addAttribute("num_applicants", job.getNumApplicants());
-        model.addAttribute("jid", job.getID());
+        model.addAttribute("jobId", job.getID());
         model.addAttribute("is_external", job.getIsExternal());
         model.addAttribute("external_link", job.getExternalLink());
         model.addAttribute("need_resume", job.getNeedResume());
@@ -110,13 +110,13 @@ public class JobController {
     }
 
 
-    @GetMapping("/jobapplication/{jobID}")
-    public String getJobApplication(@PathVariable Long jobID, Model model) {
+    @GetMapping("/jobapplication/{jobId}")
+    public String getJobApplication(@PathVariable Long jobId, Model model) {
         if (!authService.isUserAuthenticated()) {
             return "redirect:/";
         }
 
-        Optional<Job> retrievedJob = jobService.getJob(jobID);
+        Optional<Job> retrievedJob = jobService.getJob(jobId);
 
         if (retrievedJob.isEmpty()) {
             return "redirect:/jobs";
@@ -125,14 +125,14 @@ public class JobController {
         AppUser applicant = authService.getAuthenticatedUser();
 
         try {
-            jobService.checkIfUserAlreadySubmittedApplication(applicant, jobID);
+            jobService.checkIfUserAlreadySubmittedApplication(applicant, jobId);
         } catch(Exception e) {
             return "redirect:/jobs";
         }
 
         Job job = retrievedJob.get();
 
-        model.addAttribute("jid", job.getID());
+        model.addAttribute("jobId", job.getID());
         model.addAttribute("company", job.getCompany());
         model.addAttribute("position", job.getPosition());
 
@@ -160,7 +160,7 @@ public class JobController {
     }
 
     @PostMapping("/jobapplication")
-    public String createJobApplication(JobApplication request, BindingResult bindingResult, Model model, @RequestParam("jobid") Long jobID) {
+    public String createJobApplication(JobApplication request, BindingResult bindingResult, Model model, @RequestParam("jobId") Long jobId) {
         try {
             if (!authService.isUserAuthenticated()) {
                 return "redirect:/";
@@ -173,13 +173,13 @@ public class JobController {
             AppUser applicant = authService.getAuthenticatedUser();
             request.setApplicant(applicant);
 
-            jobService.createJobApplication(request, applicant, jobID);
+            jobService.createJobApplication(request, applicant, jobId);
 
             return "redirect:/applicationsuccess";
 
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
-            return getJobApplication(jobID, model);
+            return getJobApplication(jobId, model);
         }
     }
 
@@ -189,29 +189,29 @@ public class JobController {
     }
 
     @PostMapping("/deletejob")
-    public String deleteJob(@RequestParam("jid") Long jid) {
-        Optional<Job> optionalJob = jobService.getJob(jid);
+    public String deleteJob(@RequestParam("jobId") Long jobId) {
+        Optional<Job> optionalJob = jobService.getJob(jobId);
 
         if (optionalJob.isEmpty() || authService.getAuthenticatedUser().getId() != optionalJob.get().getCreator().getId())
             return "redirect:/";
 
-        return jobService.deleteJob(jid);
+        return jobService.deleteJob(jobId);
 
     }
 
     @GetMapping("/editjob")
-    public String editJob(@RequestParam("jid") Long jid, Model model) {
-        if (jid == null)
+    public String editJob(@RequestParam("jobId") Long jobId, Model model) {
+        if (jobId == null)
             return "redirect:/";
-        Optional<Job> optionalJob = jobService.getJob(jid);
+        Optional<Job> optionalJob = jobService.getJob(jobId);
         if (optionalJob.isEmpty())
             return "redirect:/";
         if (authService.getAuthenticatedUser().getId() != optionalJob.get().getCreator().getId())
-            return "redirect:/job/" + jid;
+            return "redirect:/job/" + jobId;
 
         Job job = optionalJob.get();
         model.addAttribute("jobRequest", new JobRequest());
-        model.addAttribute("jid", jid);
+        model.addAttribute("jobId", jobId);
         model.addAttribute("creator", job.getCreator().getName());
         model.addAttribute("company", job.getCompany());
         model.addAttribute("address", job.getAddress());
@@ -220,7 +220,7 @@ public class JobController {
         model.addAttribute("description", job.getDescription());
         model.addAttribute("num_available", job.getNumAvailable());
         model.addAttribute("num_applicants", job.getNumApplicants());
-        model.addAttribute("jid", job.getID());
+        model.addAttribute("jobId", job.getID());
         model.addAttribute("is_external", job.getIsExternal());
         model.addAttribute("external_link", job.getExternalLink());
         model.addAttribute("need_resume", job.getNeedResume());
@@ -231,17 +231,17 @@ public class JobController {
     }
 
     @PostMapping("/editjob")
-    public String editJob(@RequestParam("jid") Long jid, JobRequest request, BindingResult bindingResult, Model model) {
+    public String editJob(@RequestParam("jobId") Long jobId, JobRequest request, BindingResult bindingResult, Model model) {
         try {
             if (bindingResult.hasErrors()) {
                 throw new Exception();
             }
 
-            Optional<Job> optionalJob = jobService.getJob(jid);
+            Optional<Job> optionalJob = jobService.getJob(jobId);
             if (optionalJob.isEmpty())
                 return "redirect:/";
             if (authService.getAuthenticatedUser().getId() != optionalJob.get().getCreator().getId())
-                return "redirect:/job/" + jid;
+                return "redirect:/job/" + jobId;
 
             AppUser creator = authService.getAuthenticatedUser();
             request.setCreator(creator);
@@ -252,7 +252,7 @@ public class JobController {
         }
         catch (Exception e) {
             model.addAttribute("error", "There was an error editing the job. " + e.getMessage());
-            return editJob(jid, model);
+            return editJob(jobId, model);
         }
     }
 
