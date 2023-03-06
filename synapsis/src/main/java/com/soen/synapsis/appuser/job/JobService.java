@@ -61,15 +61,15 @@ public class JobService {
 
 
 
-    public void createJobApplication(JobApplication request, AppUser applicant, Long jobID) {
+    public void createJobApplication(JobApplication request, AppUser applicant, Long jobId) {
 
-        checkIfUserAlreadySubmittedApplication(applicant, jobID);
+        checkIfUserAlreadySubmittedApplication(applicant, jobId);
 
         if (applicant.getRole() != Role.CANDIDATE) {
             throw new IllegalStateException("You are not a candidate. Only candidates can submit application forms.");
         }
 
-        Job job = jobRepository.getReferenceById(jobID);
+        Job job = jobRepository.getReferenceById(jobId);
 
         job.setNumApplicants(job.getNumApplicants() + 1);
         jobRepository.save(job);
@@ -95,10 +95,10 @@ public class JobService {
         jobApplicationRepository.save(jobApplication);
     }
 
-    public void checkIfUserAlreadySubmittedApplication(AppUser applicant, Long jobID) {
+    public void checkIfUserAlreadySubmittedApplication(AppUser applicant, Long jobId) {
         List<Job> jobsSubmitted = getAllJobsAlreadySubmittedByUser(applicant);
         for (Job job : jobsSubmitted) {
-            if (job.getID() == jobID) {
+            if (job.getID() == jobId) {
                 throw new IllegalStateException("You already submitted an application form for this job.");
             }
         }
