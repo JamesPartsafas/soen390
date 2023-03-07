@@ -10,30 +10,33 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class JobServiceTest {
 
     @Mock
     private JobRepository jobRepository;
     @Mock
+    private JobApplicationRepository jobApplicationRepository;
+    @Mock
     AppUserRepository appUserRepository;
     @Mock
     NotificationService notificationService;
     private AutoCloseable autoCloseable;
-    private JobService undertest;
+    private JobService underTest;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        undertest = new JobService(jobRepository, appUserRepository, notificationService);
+        underTest = new JobService(jobRepository, jobApplicationRepository, appUserRepository, notificationService);
     }
 
     @AfterEach
@@ -43,7 +46,7 @@ class JobServiceTest {
 
     @Test
     void getAllJobsReturnsAllJobs() {
-        undertest.getAllJobs();
+        underTest.getAllJobs();
         verify(jobRepository, times(1)).findAll();
     }
 
@@ -51,28 +54,68 @@ class JobServiceTest {
     void getJobReturnsJob() {
         Long id = 1L;
 
-        Optional<Job> optionalJob = undertest.getJob(id);
+        Optional<Job> optionalJob = underTest.getJob(id);
 
         verify(jobRepository, times(1)).findById(id);
     }
 
     @Test
     void createValidJob() {
-        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1);
+        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
         AppUser creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
         request.setCreator(creator);
 
-        String returnValue = undertest.createJob(request);
+        String returnValue = underTest.createJob(request);
 
         assertEquals("redirect:/job/null", returnValue);
     }
 
     @Test
     void nonRecruiterCreateJobThrows() {
-        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1);
+        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
         AppUser creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
         request.setCreator(creator);
 
-        Exception exception = assertThrows(IllegalStateException.class, () -> undertest.createJob(request), "This user is not a recruiter.");
+        Exception exception = assertThrows(IllegalStateException.class, () -> underTest.createJob(request), "This user is not a recruiter.");
+    }
+
+    @Test
+    void createJobApplicationThrowsWhenRoleIsNotCandidate() {
+        AppUser notCandidate = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.COMPANY, AuthProvider.LOCAL);
+
+        assertThrows(IllegalStateException.class,
+                () -> underTest.createJobApplication(mock(JobApplication.class), notCandidate, 1L));
+    }
+
+    @Test
+    void createJobApplicationCreatesJobApplicationSuccessfully() {
+        AppUser candidate = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
+
+        when(jobRepository.getReferenceById(any(Long.class))).thenReturn(mock(Job.class));
+
+        underTest.createJobApplication(mock(JobApplication.class), candidate, 1L);
+
+        verify(jobRepository).save(any(Job.class));
+        verify(jobApplicationRepository).save(any(JobApplication.class));
+    }
+
+    @Test
+    void deleteJob() {
+        String returnedPage = underTest.deleteJob(1L);
+        assertEquals("redirect:/jobs", returnedPage);
+        verify(jobRepository, never()).findById(1L);
+    }
+
+    @Test
+    void editJob() {
+        Long id = 1L;
+
+        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
+        AppUser creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
+        request.setCreator(creator);
+
+        String returnValue = underTest.editJob(Mockito.mock(Optional.class), request);
+
+        assertEquals("redirect:/", returnValue);
     }
 }

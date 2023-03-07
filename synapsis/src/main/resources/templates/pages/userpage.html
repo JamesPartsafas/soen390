@@ -37,23 +37,38 @@
                         </tr>
                     </table>
                 </div>
+
+                <form th:if="${!isConnectedWith and !isPendingConnectionWhenSentConnection and !isPendingConnectionWhenReceivingConnection and !showControls}" th:action="@{/connect}" method="post">
+                    <input type="hidden" name="id" th:value="${id}"/>
+                    <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Connect</button>
+                </form>
+
+                <button th:if="${isPendingConnectionWhenSentConnection}" class="btn bg-black btn-black font-sans text-sm w-25 h-9 p-0" disabled>Pending</button>
+
+                <form th:action="@{/connection/accept}" method="post">
+                    <input type="hidden" name="id" th:value="${id}" />
+                    <button th:if="${isPendingConnectionWhenReceivingConnection}" class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Accept</button>
+                </form>
+
                 <form th:if="${isConnectedWith}" th:action="@{/disconnect}" method="post">
                     <input type="hidden" name="id" th:value="${id}"/>
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Disconnect
                     </button>
                 </form>
+
                 <form th:action="@{/chat/create}" method="post">
                     <input type="hidden" name="id" th:value="${id}"/>
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Chat</button>
                     <input type="hidden" name="id" th:value="${id}"/>
-                    <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Disconnect
-                    </button>
                 </form>
-                </form>
-                <p th:text="${role}"></p>
+
                 <form th:if="${role.toString() == 'CANDIDATE' and myRole.toString() == 'COMPANY'}" th:action="@{/company/markCandidateToRecruiter}" method="post">
                     <input type="hidden" name="appUserId" th:value="${id}" />
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Mark</button>
+                </form>
+                <form th:if="${role.toString() == 'RECRUITER' and myRole.toString() == 'COMPANY' and companyId == myId}" th:action="@{/company/unmarkRecruiterToCandidate}" method="post">
+                    <input type="hidden" name="appUserId" th:value="${id}" />
+                    <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Unmark</button>
                 </form>
             </div>
         </div>
@@ -182,6 +197,7 @@
             </div>
         </div>
 
+        <div th:if="${showControls}">
         <div th:if="${role.toString() =='RECRUITER'}" class="w-1/2 mt-8 ml-80 ">
             <div class="flex max-w-md  bg-neutral-100 h-[11rem]  border-gray-200 rounded-lg shadow">
                 <a th:href="@{/createjob}">
@@ -194,6 +210,8 @@
                 </p>
             </div>
         </div>
+    </div>
+
     </div>
 </div>
 </html>

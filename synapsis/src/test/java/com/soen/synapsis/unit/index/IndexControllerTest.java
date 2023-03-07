@@ -1,5 +1,6 @@
 package com.soen.synapsis.unit.index;
 
+
 import com.soen.synapsis.appuser.AppUserController;
 import com.soen.synapsis.appuser.AppUserService;
 import com.soen.synapsis.index.IndexController;
@@ -20,6 +21,9 @@ class IndexControllerTest {
     private IndexService indexService;
     @Mock
     private Model model;
+
+
+
     private AutoCloseable autoCloseable;
     private IndexController underTest;
 

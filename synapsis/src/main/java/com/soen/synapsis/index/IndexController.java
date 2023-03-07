@@ -17,7 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @RequestMapping(path = "/")
 public class IndexController {
     private AppUser appUser;
-
     private final IndexService indexService;
 
     @Autowired
@@ -30,6 +29,7 @@ public class IndexController {
         model.addAttribute("attr", "This is an attribute for thymeleaf");
         return indexService.getHomePage();
     }
+
 
     @GetMapping(value= "/admincreationpage")
     public String getAdminPage(Model model) {
@@ -47,4 +47,5 @@ public class IndexController {
     public String getAccessDeniedPage(Model model) {
         return indexService.getAccessDeniedPage();
     }
+
 }
