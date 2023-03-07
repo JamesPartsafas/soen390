@@ -7,19 +7,17 @@ public class NotificationDTO {
     private String text;
     private String url;
     private boolean seen;
-    private String creation_time;
 
     public NotificationDTO() {
     }
 
-    public NotificationDTO(Long id, Long recipient_id, NotificationType type, String text, String url, boolean seen, String timestamp) {
+    public NotificationDTO(Long id, Long recipient_id, NotificationType type, String text, String url, boolean seen) {
         this.id = id;
         this.recipient_id = recipient_id;
         this.type = type;
         this.text = text;
         this.url = url;
         this.seen = seen;
-        this.creation_time = timestamp;
     }
 
     public Long getId() {
@@ -70,14 +68,6 @@ public class NotificationDTO {
         this.seen = seen;
     }
 
-    public String getCreation_time() {
-        return creation_time;
-    }
-
-    public void setCreation_time(String creation_time) {
-        this.creation_time = creation_time;
-    }
-
     public static NotificationDTO notificationToDTO(Notification notification) {
         return new NotificationDTO(
                 notification.getId(),
@@ -85,8 +75,7 @@ public class NotificationDTO {
                 notification.getType(),
                 notification.getText(),
                 notification.getUrl(),
-                notification.isSeen(),
-                notification.getCreationTime().toString()
+                notification.isSeen()
         );
     }
 
@@ -99,7 +88,6 @@ public class NotificationDTO {
                 ", text='" + text + '\'' +
                 ", url='" + url + '\'' +
                 ", seen=" + seen +
-                ", creation_time='" + creation_time + '\'' +
                 '}';
     }
 }

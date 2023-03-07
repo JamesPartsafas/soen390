@@ -98,10 +98,10 @@ public class ConnectionService {
         AppUser requester = connection.getRequester();
         AppUser accepter = connection.getReceiver();
 
-        NotificationDTO requesterNotificationDTO = new NotificationDTO(0L, requester.getId(), NotificationType.CONNECTION, "Your connection request was accepted!", "/network", false, "");
+        NotificationDTO requesterNotificationDTO = new NotificationDTO(0L, requester.getId(), NotificationType.CONNECTION, "Your connection request was accepted!", "/network", false);
         notificationService.saveNotification(requesterNotificationDTO, requester);
 
-        NotificationDTO accepterNotificationDTO = new NotificationDTO(0L, accepter.getId(), NotificationType.CONNECTION, "You accepted a new connection!", "/network", false, "");
+        NotificationDTO accepterNotificationDTO = new NotificationDTO(0L, accepter.getId(), NotificationType.CONNECTION, "You accepted a new connection!", "/network", false);
         notificationService.saveNotification(accepterNotificationDTO, accepter);
 
         return "redirect:/network";
@@ -131,7 +131,7 @@ public class ConnectionService {
         Connection connection = new Connection(cKey1, requester, receiver, true);
         connectionRepository.save(connection);
 
-        NotificationDTO notificationDTO = new NotificationDTO(0L, receiver.getId(), NotificationType.CONNECTION, "You have a new connection request!", "/network", false, "");
+        NotificationDTO notificationDTO = new NotificationDTO(0L, receiver.getId(), NotificationType.CONNECTION, "You have a new connection request!", "/network", false);
         notificationService.saveNotification(notificationDTO, receiver);
     }
 

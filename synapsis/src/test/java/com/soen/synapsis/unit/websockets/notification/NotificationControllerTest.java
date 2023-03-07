@@ -35,7 +35,7 @@ public class NotificationControllerTest {
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
         underTest = new NotificationController(notificationService);
-        notification = new NotificationDTO(0L, 1L, NotificationType.JOB, "text", "url", false, "");
+        notification = new NotificationDTO(0L, 1L, NotificationType.JOB, "text", "url", false);
         appUser = new AppUser(1l, "name", "12345678", "name@mail.com", Role.CANDIDATE);
     }
 

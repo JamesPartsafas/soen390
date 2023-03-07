@@ -152,8 +152,7 @@ public class JobService {
                     NotificationType.JOB,
                     "You have a new job suggestion!",
                     "/job/" + jobId,
-                    false,
-                    ""
+                    false
             );
             notificationService.saveNotification(notificationDTO, appUser);
         }
