@@ -73,6 +73,10 @@ public class JobController {
         model.addAttribute("need_cover", job.getNeedCover());
         model.addAttribute("need_portfolio", job.getNeedPortfolio());
 
+        AppUser candidate = authService.getAuthenticatedUser();
+        List<Job> jobsSubmitted = jobService.getAllJobsAlreadySubmittedByUser(candidate);
+        model.addAttribute("isJobSubmitted", jobsSubmitted.contains(job));
+
         if (job.getIsExternal()) {
             return "pages/jobapplicationexternal";
         } else {
