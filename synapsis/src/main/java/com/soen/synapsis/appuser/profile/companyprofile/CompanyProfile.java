@@ -5,6 +5,9 @@ import com.soen.synapsis.appuser.AppUser;
 
 import javax.persistence.*;
 
+/**
+ * This Company class serves as the entity to store the profile of a company user.
+ */
 @Entity
 public class CompanyProfile {
     @OneToOne
@@ -32,9 +35,23 @@ public class CompanyProfile {
     @Column(nullable = true)
     private String speciality;
 
+    /**
+     * Empty constructor.
+     */
     public CompanyProfile() {
     }
 
+    /**
+     * Create a new company profile given an app user object, id, description, website, industry, size of the company, location and specialty.
+     * @param appUser the object representing the company user.
+     * @param id the id of the company.
+     * @param description the company's description on their profile.
+     * @param website the company's website on their profile.
+     * @param industry the company's industry on their profile.
+     * @param companySize the size of the company on their profile.
+     * @param location the location of the company on their profile.
+     * @param speciality the specialty of the company on their profile.
+     */
     public CompanyProfile(AppUser appUser, Long id, String description, String website, String industry, String companySize, String location,
                           String speciality) {
         this.appUser = appUser;
@@ -47,6 +64,16 @@ public class CompanyProfile {
         this.speciality = speciality;
     }
 
+    /**
+     * Create a new company profile given an app user object, description, website, industry, size of the company, location and specialty.
+     * @param appUser the object representing the company user.
+     * @param description the company's description on their profile.
+     * @param website the company's website on their profile.
+     * @param industry the company's industry on their profile.
+     * @param companySize the size of the company on their profile.
+     * @param location the location of the company on their profile.
+     * @param speciality the specialty of the company on their profile.
+     */
     public CompanyProfile(AppUser appUser, String description, String website, String industry, String companySize, String location,
                           String speciality) {
         this.appUser = appUser;

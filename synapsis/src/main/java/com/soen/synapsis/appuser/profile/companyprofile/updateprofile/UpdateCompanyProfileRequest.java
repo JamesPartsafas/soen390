@@ -1,5 +1,8 @@
 package com.soen.synapsis.appuser.profile.companyprofile.updateprofile;
 
+/**
+ * This UpdateCompanyProfileRequest class serves as the request to update the company user profile.
+ */
 public class UpdateCompanyProfileRequest {
     private String description;
     private String website;
@@ -8,9 +11,21 @@ public class UpdateCompanyProfileRequest {
     private String location;
     private String speciality;
 
+    /**
+     * Empty constructor.
+     */
     public UpdateCompanyProfileRequest() {
     }
 
+    /**
+     * Create a new update company user profile request given the inputs data.
+     * @param description the description of the company user profile update request.
+     * @param website the website of the company user profile update request.
+     * @param industry the industry of the company user profile update request.
+     * @param companySize the company size of the company user profile update request.
+     * @param location the location of the company user profile update request.
+     * @param speciality the specialty of the company user profile update request.
+     */
     public UpdateCompanyProfileRequest(String description, String website, String industry, String companySize, String location, String speciality) {
         this.description = description;
         this.website = website;
