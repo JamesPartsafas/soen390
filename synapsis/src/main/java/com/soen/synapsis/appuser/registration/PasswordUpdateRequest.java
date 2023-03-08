@@ -1,5 +1,8 @@
 package com.soen.synapsis.appuser.registration;
 
+/**
+ * Contains data for user requests for when they wish to change their password
+ */
 public class PasswordUpdateRequest {
     private String oldPassword;
     private String newPassword;

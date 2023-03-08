@@ -8,6 +8,9 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.*;
 
+/**
+ * Wrapper for AppUser to interface with OAuth authentication framework
+ */
 public class CustomOAuth2User implements OAuth2User, AppUserAuth {
     private AppUser appUser;
 
@@ -15,6 +18,10 @@ public class CustomOAuth2User implements OAuth2User, AppUserAuth {
         this.appUser = appUser;
     }
 
+    /**
+     * Retrieves attributes of OAuth2 user
+     * @return Map containing name, email, and role
+     */
     @Override
     public Map<String, Object> getAttributes() {
         Map<String, Object> attributes = new HashMap<String, Object>();
@@ -25,6 +32,10 @@ public class CustomOAuth2User implements OAuth2User, AppUserAuth {
         return attributes;
     }
 
+    /**
+     * Retrieves authorities based on role of AppUser
+     * @return Collection of authorities containing 1 authority only
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();

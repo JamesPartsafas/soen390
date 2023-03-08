@@ -8,6 +8,11 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Contains data on all users of any role.
+ * All registered users are instances of AppUser, which maps
+ * to a database table.
+ */
 @Entity
 public class AppUser {
 
@@ -168,6 +173,11 @@ public class AppUser {
         this.authProvider = authProvider;
     }
 
+    /**
+     * Retrieves the recruiters associated to this AppUser. Only AppUsers
+     * with the role COMPANY may have recruiters.
+     * @return Set of AppUsers with the role RECRUITER.
+     */
     public Set<AppUser> getRecruiter() {
         if (this.getRole() != Role.COMPANY) {
             throw new IllegalStateException("You must be company to have recruiters.");
@@ -175,6 +185,10 @@ public class AppUser {
         return recruiters;
     }
 
+    /**
+     * Add recruiter to AppUser of role COMPANY.
+     * @param recruiter AppUser to be added to recruiters list.
+     */
     public void addRecruiter(AppUser recruiter) {
         if (this.getRole() != Role.COMPANY) {
             throw new IllegalStateException("You must be a company to add a recruiter.");
@@ -185,6 +199,12 @@ public class AppUser {
         recruiters.add(recruiter);
     }
 
+    /**
+     * Remove recruiter from AppUser's recruiter list.
+     * Only AppUsers of role COMPANY may have recruiters.
+     * @param recruiter The recruiter to remove from the company's
+     *                  recruiter list.
+     */
     public void removeRecruiter(AppUser recruiter) {
         if (this.getRole() != Role.COMPANY) {
             throw new IllegalStateException("You must be a company to remove a recruiter.");
@@ -195,6 +215,10 @@ public class AppUser {
         recruiters.remove(recruiter);
     }
 
+    /**
+     * Gets the company a user of role RECRUITER works for.
+     * @return An AppUser of role COMPANY.
+     */
     public AppUser getCompany() {
         if (this.getRole() != Role.RECRUITER) {
             throw new IllegalStateException("You must be a recruiter to belong to a company.");
@@ -202,6 +226,10 @@ public class AppUser {
         return company;
     }
 
+    /**
+     * Sets the company a user of role RECRUITER works for.
+     * @param company The AppUser of role COMPANY to work for.
+     */
     public void setCompany(AppUser company) {
         if (this.getRole() != Role.RECRUITER) {
             throw new IllegalStateException("You must be a recruiter to be part of a company.");

@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Entry point for user requests to interface with AppUser-related functionality.
+ */
 @Controller
 public class AppUserController {
 
@@ -34,6 +37,10 @@ public class AppUserController {
         this.authService = authService;
     }
 
+    /**
+     * Allows user to access their profile page without specifying their id.
+     * @return The authenticated user's profile page. If they are not authenticated, redirects to home page.
+     */
     @GetMapping("/user")
     public String redirectToAuthenticatedUserProfile() {
         if (!authService.isUserAuthenticated()) {
@@ -45,6 +52,12 @@ public class AppUserController {
         return userProfileURL;
     }
 
+    /**
+     * Retrieves a user's profile page, both for standard and company users.
+     * @param uid the user's page to retrieve.
+     * @param model Allows for data to be passed to view.
+     * @return View to profile page if the requester is authenticated, else redirects to home page.
+     */
     @GetMapping("/user/{uid}")
     public String getAppUser(@PathVariable Long uid, Model model) {
         if (!authService.isUserAuthenticated()) {
@@ -114,6 +127,12 @@ public class AppUserController {
         return "pages/userpage";
     }
 
+    /**
+     * Allows user to view search results for other users.
+     * @param name Name to search for
+     * @param model Allows data to be passed to view
+     * @return Returns search results if the user is authenticated, else redirects to home page.
+     */
     @GetMapping("/search")
     public String getUsersLikeName(@RequestParam String name, Model model) {
         if (!authService.isUserAuthenticated()) {
@@ -125,18 +144,31 @@ public class AppUserController {
         return "pages/usersearchpage";
     }
 
+    /**
+     * Sample page for verifying if user is authenticated.
+     * @return View containing private user page.
+     */
     @GetMapping("/privateuser")
     @ResponseBody
     public String getUserData() {
         return "This is the user page";
     }
 
+    /**
+     * Sample page for verifying if user is authenticated as admin.
+     * @return View containing admin page
+     */
     @GetMapping("/admin")
     @ResponseBody
     public String getAdminData() {
         return "This is the admin page";
     }
 
+    /**
+     * Allows company to mark a CANDIDATE user to a RECRUITER for their company.
+     * @param id The id of the user to mark as a recruiter
+     * @return View containing user profile. If the requester is not authenticated, redirects to home page.
+     */
     @PostMapping("/company/markCandidateToRecruiter")
     public String markCandidateToRecruiter(@RequestParam("appUserId") Long id) {
         try {
@@ -165,6 +197,12 @@ public class AppUserController {
         }
     }
 
+    /**
+     * Allows companies to unmark a recruiter belonging to them back to CANDIDATE role.
+     * @param id The id of the recruiter to unmark
+     * @return View containing profile page of unmarked user.
+     * If the requester is not authenticated, redirect to home page.
+     */
     @PostMapping("/company/unmarkRecruiterToCandidate")
     public String unmarkRecruiterToCandidate(@RequestParam("appUserId") Long id) {
         try {
@@ -197,6 +235,10 @@ public class AppUserController {
         }
     }
 
+    /**
+     * Allows user to access the update user page.
+     * @return View containing the update user page.
+     */
     @GetMapping("/updateuserpage")
     public String getUpdateUserProfile() {
         return "pages/updateuserpage";
