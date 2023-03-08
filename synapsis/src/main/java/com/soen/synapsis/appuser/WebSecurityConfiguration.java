@@ -13,6 +13,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+/**
+ * Configures the Spring Security framework. Used for configuration
+ * related to authentication and access control.
+ */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -26,6 +30,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.oAuth2UserService = oAuth2UserService;
     }
 
+    /**
+     * Used to retrieve currently used authentication provider, set up with the correct
+     * password encoder.
+     * @return The app's authentication provider, used by Spring Security.
+     */
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -35,6 +44,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return provider;
     }
 
+    /**
+     * Specifies access control along certain routes, as well as redirect info
+     * if the user is not authenticated or does not have the correct role.
+     * @param httpSecurity Passed in by Spring Security to be modified by the method.
+     * @throws Exception Thrown if configuration is improperly formatted.
+     */
     @Override
     @ExcludeFromGeneratedTestReport
     protected void configure(HttpSecurity httpSecurity) throws Exception {

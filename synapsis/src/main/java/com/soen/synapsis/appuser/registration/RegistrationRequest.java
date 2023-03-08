@@ -2,6 +2,9 @@ package com.soen.synapsis.appuser.registration;
 
 import com.soen.synapsis.appuser.Role;
 
+/**
+ * DTO containing registration request data from users. Used to communicate between views and controllers.
+ */
 public class RegistrationRequest {
     private String name;
     private String email;
