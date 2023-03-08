@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+/**
+ * A controller class to work with connections.
+ */
 @Controller
 public class ConnectionController {
 
@@ -31,6 +34,12 @@ public class ConnectionController {
         this.authService = authService;
     }
 
+    /**
+     * Retrieve all the connections of a given user.
+     *
+     * @param model an object carrying data attributes passed to the view.
+     * @return the network page.
+     */
     @GetMapping("/network")
     public String viewNetwork(Model model) {
         if (!authService.isUserAuthenticated()) {
@@ -48,6 +57,13 @@ public class ConnectionController {
         return "pages/network";
     }
 
+    /**
+     * Decline a connection request.
+     *
+     * @param id the id of the appuser that you are rejecting.
+     * @param model an object carrying data attributes passed to the view.
+     * @return the network page.
+     */
     @PostMapping("/connection/reject")
     public String rejectConnection(@RequestParam("id") Long id, Model model) {
         try {
@@ -59,6 +75,13 @@ public class ConnectionController {
         }
     }
 
+    /**
+     * Accept a connection request.
+     *
+     * @param id the id of the appuser that you are accepting.
+     * @param model an object carrying data attributes passed to the view.
+     * @return the network page.
+     */
     @PostMapping("/connection/accept")
     public String acceptConnection(@RequestParam("id") Long id, Model model) {
         try {
@@ -69,6 +92,13 @@ public class ConnectionController {
         }
     }
 
+    /**
+     * Send a connection request to another user.
+     *
+     * @param id the id of the appuser that you are sending a connection request to.
+     * @param model an object carrying data attributes passed to the view.
+     * @return the userpage of the user that you are sending a connection request to.
+     */
     @PostMapping("/connect")
     public String connectWithUser(@RequestParam("id") Long id, Model model) {
         try {
@@ -82,6 +112,12 @@ public class ConnectionController {
     }
 
 
+    /**
+     * Disconnect with another user.
+     *
+     * @param id the id of the appuser that you are disconneting with.
+     * @return the userpage of the user that you are disconneting with.
+     */
     @PostMapping("/disconnect")
     public String disconnectFromUser(@RequestParam("id") Long id) {
         connectionService.disconnect(authService.getAuthenticatedUser().getId(), id);

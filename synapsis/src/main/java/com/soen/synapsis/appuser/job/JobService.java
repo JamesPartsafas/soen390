@@ -13,6 +13,9 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * A service class to work with jobs.
+ */
 @Service
 public class JobService {
 
@@ -30,18 +33,41 @@ public class JobService {
         this.notificationService = notificationService;
     }
 
+    /**
+     * Retrieve all the jobs.
+     *
+     * @return a list of jobs.
+     */
     public List<Job> getAllJobs() {
         return jobRepository.findAll();
     }
 
+    /**
+     * Retrieve all the jobs submitted by a user.
+     *
+     * @param user the appuser.
+     * @return a list of jobs.
+     */
     public List<Job> getAllJobsAlreadySubmittedByUser(AppUser user) {
         return jobRepository.findAllJobApplicationsSubmittedByUserID(user.getId());
     }
 
+    /**
+     * Retrieve a job given an id.
+     *
+     * @param id the job id.
+     * @return the job.
+     */
     public Optional<Job> getJob(Long id) {
         return jobRepository.findById(id);
     }
 
+    /**
+     * Create a new job posting.
+     *
+     * @param request the job application request.
+     * @return the job page.
+     */
     public String createJob(JobRequest request) {
 
         if (request.getCreator().getRole() != Role.RECRUITER) {
@@ -69,6 +95,14 @@ public class JobService {
     }
 
 
+
+    /**
+     * Create a new job application.
+     *
+     * @param request the job application request.
+     * @param applicant the user submitting the application.
+     * @param jobId the job id.
+     */
     public void createJobApplication(JobApplication request, AppUser applicant, Long jobId) {
 
         checkIfUserAlreadySubmittedApplication(applicant, jobId);
@@ -103,6 +137,12 @@ public class JobService {
         jobApplicationRepository.save(jobApplication);
     }
 
+    /**
+     * Check if user already submitted the job application form.
+     *
+     * @param applicant the user submitting the application.
+     * @param jobId the job id.
+     */
     public void checkIfUserAlreadySubmittedApplication(AppUser applicant, Long jobId) {
         List<Job> jobsSubmitted = getAllJobsAlreadySubmittedByUser(applicant);
         for (Job job : jobsSubmitted) {
@@ -112,11 +152,24 @@ public class JobService {
         }
     }
 
+    /**
+     * Delete a job.
+     *
+     * @param id the job id.
+     * @return the jobs page.
+     */
     public String deleteJob(Long id) {
         jobRepository.deleteById(id);
         return "redirect:/jobs";
     }
 
+    /**
+     * Edit a job posting.
+     *
+     * @param optionalJob the job to be edited.
+     * @param request the job request.
+     * @return the job page.
+     */
     public String editJob(Optional<Job> optionalJob, JobRequest request) {
 
         Job job = optionalJob.get();

@@ -4,6 +4,9 @@ import com.soen.synapsis.appuser.AppUser;
 
 import javax.persistence.*;
 
+/**
+ * This Job class serves as the entity to store job postings.
+ */
 @Entity
 public class Job {
 
@@ -51,8 +54,27 @@ public class Job {
     @Column(name = "need_portfolio", nullable = false)
     private boolean needPortfolio;
 
+    /**
+     * Empty constructor.
+     */
     protected Job() {}
 
+    /**
+     * Create a new job posting given the inputs data.
+     *
+     * @param creator the recruiter who creates the job.
+     * @param position the name of the position.
+     * @param company the name of the company.
+     * @param address the address of the workplace.
+     * @param description the description of the job.
+     * @param type fulltime, partime, contract, temporary, volunteer, internship, or other.
+     * @param numAvailable the number of positions open.
+     * @param isExternal true if the job application is posted externally; otherwise false.
+     * @param externalLink the link of the external website.
+     * @param needResume true if the job application requires a resume; otherwise false.
+     * @param needCover true if the job application requires a cover letter; otherwise false.
+     * @param needPortfolio true if the job application requires a portfolio; otherwise false.
+     */
     public Job(AppUser creator, String position, String company, String address, String description, JobType type, int numAvailable, boolean isExternal, String externalLink, boolean needResume, boolean needCover, boolean needPortfolio) {
         this.creator = creator;
         this.position = position;
