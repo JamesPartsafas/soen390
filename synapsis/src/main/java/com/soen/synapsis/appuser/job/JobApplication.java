@@ -49,13 +49,11 @@ public class JobApplication {
     @Column(nullable = false)
     private String country;
 
-    @Lob
-    @Column()
-    private byte[] resume;
+    @Column(columnDefinition = "TEXT")
+    private String resume;
 
-    @Lob
-    @Column()
-    private byte[] coverLetter;
+    @Column(columnDefinition = "TEXT")
+    private String coverLetter;
 
     @Column(nullable = false)
     private boolean legallyAllowedToWork;
@@ -67,7 +65,7 @@ public class JobApplication {
 
     }
 
-    public JobApplication(Long id, Job job, AppUser applicant, Timestamp dateApplied, JobApplicationStatus status, String email, String firstName, String lastName, String phone, String address, String city, String country, byte[] resume, byte[] coverLetter, boolean legallyAllowedToWork, String links) {
+    public JobApplication(Long id, Job job, AppUser applicant, Timestamp dateApplied, JobApplicationStatus status, String email, String firstName, String lastName, String phone, String address, String city, String country, String resume, String coverLetter, boolean legallyAllowedToWork, String links) {
         this.id = id;
         this.job = job;
         this.applicant = applicant;
@@ -86,7 +84,7 @@ public class JobApplication {
         this.links = links;
     }
 
-    public JobApplication(Job job, AppUser applicant, Timestamp dateApplied, JobApplicationStatus status, String email, String firstName, String lastName, String phone, String address, String city, String country, byte[] resume, byte[] coverLetter, boolean legallyAllowedToWork, String links) {
+    public JobApplication(Job job, AppUser applicant, Timestamp dateApplied, JobApplicationStatus status, String email, String firstName, String lastName, String phone, String address, String city, String country, String resume, String coverLetter, boolean legallyAllowedToWork, String links) {
         this.job = job;
         this.applicant = applicant;
         this.dateApplied = dateApplied;
@@ -100,6 +98,22 @@ public class JobApplication {
         this.country = country;
         this.resume = resume;
         this.coverLetter = coverLetter;
+        this.legallyAllowedToWork = legallyAllowedToWork;
+        this.links = links;
+    }
+
+    public JobApplication(Job job, AppUser applicant, Timestamp dateApplied, JobApplicationStatus status, String email, String firstName, String lastName, String phone, String address, String city, String country, boolean legallyAllowedToWork, String links) {
+        this.job = job;
+        this.applicant = applicant;
+        this.dateApplied = dateApplied;
+        this.status = status;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.address = address;
+        this.city = city;
+        this.country = country;
         this.legallyAllowedToWork = legallyAllowedToWork;
         this.links = links;
     }
@@ -215,19 +229,19 @@ public class JobApplication {
         this.country = country;
     }
 
-    public byte[] getResume() {
+    public String getResume() {
         return resume;
     }
 
-    public void setResume(byte[] resume) {
+    public void setResume(String resume) {
         this.resume = resume;
     }
 
-    public byte[] getCoverLetter() {
+    public String getCoverLetter() {
         return coverLetter;
     }
 
-    public void setCoverLetter(byte[] coverLetter) {
+    public void setCoverLetter(String coverLetter) {
         this.coverLetter = coverLetter;
     }
 
@@ -262,8 +276,8 @@ public class JobApplication {
                 ", address='" + address + '\'' +
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +
-                ", resume=" + Arrays.toString(resume) +
-                ", coverLetter=" + Arrays.toString(coverLetter) +
+                ", resume=" + resume +
+                ", coverLetter=" + coverLetter +
                 ", legallyAllowedToWork=" + legallyAllowedToWork +
                 ", links='" + links + '\'' +
                 '}';

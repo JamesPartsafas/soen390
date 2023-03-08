@@ -7,11 +7,9 @@ import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfileRepository
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 
 import java.io.IOException;

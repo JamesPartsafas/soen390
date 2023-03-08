@@ -30,8 +30,8 @@ public class JobApplicationTest {
     private String address;
     private String city;
     private String country;
-    private byte[] resume;
-    private byte[] coverLetter;
+    private String resume;
+    private String coverLetter;
     private boolean isLegallyAllowedToWork;
     private String links;
 

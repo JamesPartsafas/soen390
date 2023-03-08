@@ -1,14 +1,19 @@
 package com.soen.synapsis.appuser.job;
 
 import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AppUserService;
 import com.soen.synapsis.appuser.AuthService;
 import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.appuser.profile.appuserprofile.updateprofile.UpdateAppUserProfileRequest;
+import com.soen.synapsis.appuser.profile.companyprofile.updateprofile.UpdateCompanyProfileRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -135,6 +140,8 @@ public class JobController {
         model.addAttribute("jobId", job.getID());
         model.addAttribute("company", job.getCompany());
         model.addAttribute("position", job.getPosition());
+        model.addAttribute("need_resume", job.getNeedResume());
+        model.addAttribute("need_cover", job.getNeedCover());
 
         if (job.getIsExternal()) {
             model.addAttribute("authorization", authService.getAuthenticatedUser().getId() == retrievedJob.get().getCreator().getId());
@@ -147,8 +154,6 @@ public class JobController {
             model.addAttribute("num_applicants", job.getNumApplicants());
             model.addAttribute("is_external", job.getIsExternal());
             model.addAttribute("external_link", job.getExternalLink());
-            model.addAttribute("need_resume", job.getNeedResume());
-            model.addAttribute("need_cover", job.getNeedCover());
             model.addAttribute("need_portfolio", job.getNeedPortfolio());
 
             return "pages/jobapplicationexternal";
@@ -160,7 +165,7 @@ public class JobController {
     }
 
     @PostMapping("/jobapplication")
-    public String createJobApplication(JobApplication request, BindingResult bindingResult, Model model, @RequestParam("jobId") Long jobId) {
+    public String createJobApplication(JobApplicationRequest request, @RequestParam("jobId") Long jobId, @RequestParam("resume") MultipartFile resume, @RequestParam("coverLetter") MultipartFile coverLetter, BindingResult bindingResult, Model model) {
         try {
             if (!authService.isUserAuthenticated()) {
                 return "redirect:/";
@@ -173,7 +178,7 @@ public class JobController {
             AppUser applicant = authService.getAuthenticatedUser();
             request.setApplicant(applicant);
 
-            jobService.createJobApplication(request, applicant, jobId);
+            jobService.createJobApplication(request, applicant, jobId, resume, coverLetter);
 
             return "redirect:/applicationsuccess";
 
@@ -255,5 +260,4 @@ public class JobController {
             return editJob(jobId, model);
         }
     }
-
 }
