@@ -8,6 +8,7 @@
             <div class="connecting">
                 Connecting...
             </div>
+            <!-- page that will be displayed once the user clicks on a specific chat with a specific user -->
 
             <ul id="messageArea">
                 <li th:each="message: ${messages}" th:text="${message.getContent()}"></li>
