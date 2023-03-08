@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+/**
+ * A controller class to work the index.
+ */
 @Controller
 @RequestMapping(path = "/")
 public class IndexController {
@@ -24,6 +28,12 @@ public class IndexController {
         this.indexService = indexService;
     }
 
+    /**
+     * Display the home page.
+     *
+     * @param model an object carrying data attributes passed to the view.
+     * @return the home page.
+     */
     @GetMapping
     public String getHomePage(Model model) {
         model.addAttribute("attr", "This is an attribute for thymeleaf");
@@ -31,18 +41,36 @@ public class IndexController {
     }
 
 
+    /**
+     * Display the admin page.
+     *
+     * @param model an object carrying data attributes passed to the view.
+     * @return the admin page.
+     */
     @GetMapping(value= "/admincreationpage")
     public String getAdminPage(Model model) {
         model.addAttribute("registrationRequest", new RegistrationRequest());
         return indexService.getAdminPage();
     }
 
+    /**
+     * Display the password reset page.
+     *
+     * @param model an object carrying data attributes passed to the view.
+     * @return the password reset page.
+     */
     @GetMapping(value= "/passwordresetpage")
     public String getPasswordResetPage(Model model) {
         model.addAttribute("registrationRequest", new RegistrationRequest());
         return indexService.getPasswordResetPage();
     }
 
+    /**
+     * Display the access denied page.
+     *
+     * @param model an object carrying data attributes passed to the view.
+     * @return the denied page.
+     */
     @GetMapping(value= "/accessDenied")
     public String getAccessDeniedPage(Model model) {
         return indexService.getAccessDeniedPage();
