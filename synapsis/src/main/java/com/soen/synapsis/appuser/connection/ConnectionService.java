@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * A service class to work with connections.
+ */
 @Service
 public class ConnectionService {
     private final ConnectionRepository connectionRepository;
@@ -26,6 +29,12 @@ public class ConnectionService {
         this.notificationService = notificationService;
     }
 
+    /**
+     * Retrieve all the connections of a user.
+     *
+     * @param appUser the user that we want to retrieve the connections.
+     * @return a list of appuser that you are connected with.
+     */
     public List<AppUser> getConnections(AppUser appUser) {
         List<Connection> connectionsRequesters = connectionRepository.findAcceptedConnectionsByRequesterID(appUser.getId());
         List<Connection> connectionsReceivers = connectionRepository.findAcceptedConnectionsByReceiverID(appUser.getId());
@@ -55,10 +64,23 @@ public class ConnectionService {
         return allConnections;
     }
 
+    /**
+     * Retrieve the users that send you a connection request.
+     *
+     * @param user the user that we want to get the pending connection requests from.
+     * @return a list of appuser where there is a pending connection.
+     */
     public List<AppUser> getPendingConnectionRequest(AppUser user) {
         return connectionRepository.findPendingConnectionsByReceiverID(user.getId());
     }
 
+    /**
+     * Reject a connection request from another user.
+     *
+     * @param user the logged-in user.
+     * @param id the user that you are rejecting the request.
+     * @return the network page.
+     */
     public String rejectConnection(AppUser user, Long id) {
         ConnectionKey connectionKey = new ConnectionKey(id, user.getId());
         Optional<Connection> retrievedConnection = connectionRepository.findById(connectionKey);
@@ -78,6 +100,13 @@ public class ConnectionService {
         return "redirect:/network";
     }
 
+    /**
+     * Accept a connection request from another user.
+     *
+     * @param user the logged-in user.
+     * @param id the user that you are accepting the request.
+     * @return the network page.
+     */
     public String acceptConnection(AppUser user, Long id) {
         ConnectionKey connectionKey = new ConnectionKey(id, user.getId());
         Optional<Connection> retrievedConnection = connectionRepository.findById(connectionKey);
@@ -107,6 +136,12 @@ public class ConnectionService {
         return "redirect:/network";
     }
 
+    /**
+     * Create a connection request with another user.
+     *
+     * @param requesterId the logged-in user.
+     * @param receiverId the user that you are sending a request to.
+     */
     public void connect(Long requesterId, Long receiverId) {
         AppUser requester = appUserRepository.getReferenceById(requesterId);
         AppUser receiver = appUserRepository.getReferenceById(receiverId);
@@ -135,11 +170,24 @@ public class ConnectionService {
         notificationService.saveNotification(notificationDTO, receiver);
     }
 
+    /**
+     * Disconnect with another user.
+     *
+     * @param requesterId the logged-in user.
+     * @param receiverId the user that you are disconnecting with.
+     */
     public void disconnect(Long requesterId, Long receiverId) {
         ConnectionKey connectionKey = new ConnectionKey(requesterId, receiverId);
         connectionRepository.deleteById(connectionKey);
     }
 
+    /**
+     * Check if two users are connected.
+     *
+     * @param requesterId the first appuser
+     * @param receiverId the second appuser
+     * @return true if the two users are connected; otherwise false
+     */
     public boolean isConnectedWith(Long requesterId, Long receiverId) {
         Optional<Connection> connectionWhenSentConnection = connectionRepository.findAcceptedConnectionsByRequesterIDAndReceiverID(requesterId, receiverId);
         Optional<Connection> connectionWhenReceivedConnection = connectionRepository.findAcceptedConnectionsByRequesterIDAndReceiverID(receiverId, requesterId);
@@ -151,6 +199,13 @@ public class ConnectionService {
         return true;
     }
 
+    /**
+     * Check if there's a pending connection request between two users.
+     *
+     * @param requesterId the first appuser.
+     * @param receiverId the second appuser.
+     * @return true if there is a pending connection between the two users; otherwise false
+     */
     public boolean isPendingConnectionWith(Long requesterId, Long receiverId) {
         Optional<Connection> retrievedConnection = connectionRepository.findPendingConnectionsByRequesterIDAndReceiverID(requesterId, receiverId);
         if (retrievedConnection.isEmpty()) {

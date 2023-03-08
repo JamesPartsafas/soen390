@@ -4,6 +4,9 @@ import com.soen.synapsis.appuser.AppUser;
 
 import javax.persistence.*;
 
+/**
+ * This Connection class serves as the entity to store the connection between users.
+ */
 @Entity
 public class Connection {
 
@@ -23,9 +26,20 @@ public class Connection {
     @Column(nullable = false)
     private boolean pending;
 
+    /**
+     * Empty constructor.
+     */
     protected Connection() {
     }
 
+    /**
+     *  Create a new connection given the connection key id, the requester appuser, the receiver appuser, and the pending status.
+     *
+     * @param id the id embedding the requester id and the receiver id
+     * @param requester the appuser that sends the connection request
+     * @param receiver the appuser that received the connection request
+     * @param pending if the connection has been accepted: pending = true if the connection is awaiting acceptance, and pending = false if the connection is accepted
+     */
     public Connection(ConnectionKey id, AppUser requester, AppUser receiver, boolean pending) {
         this.id = id;
         this.requester = requester;

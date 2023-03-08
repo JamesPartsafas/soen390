@@ -6,6 +6,9 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
+/**
+ * This Job Application class serves as the entity to store job applications.
+ */
 @Entity
 public class JobApplication {
 
@@ -61,10 +64,33 @@ public class JobApplication {
     @Column(nullable = true, columnDefinition="TEXT")
     private String links;
 
+    /**
+     * Empty constructor.
+     */
     public JobApplication() {
 
     }
 
+    /**
+     * Create a job application given the inputs data.
+     *
+     * @param id unique id of the job application
+     * @param job the job that the job application is referring to
+     * @param applicant the user creating the job application
+     * @param dateApplied the date at which the job application was created
+     * @param status submitted, in review, selected, interviewed, offered, hired, rejected
+     * @param email the email of the user submitting the job application
+     * @param firstName the first name of the user submitting the job application
+     * @param lastName the last name of the user submitting the job application
+     * @param phone the phone number of the user submitting the job application
+     * @param address the address of the user submitting the job application
+     * @param city the city of the user submitting the job application
+     * @param country the country of the user submitting the job application
+     * @param resume the resume of the user submitting the job application
+     * @param coverLetter the cover letter of the user submitting the job application
+     * @param legallyAllowedToWork true if the user is allowed to work in Canada; otherwise false
+     * @param links any additional links from the user submitting the job application
+     */
     public JobApplication(Long id, Job job, AppUser applicant, Timestamp dateApplied, JobApplicationStatus status, String email, String firstName, String lastName, String phone, String address, String city, String country, String resume, String coverLetter, boolean legallyAllowedToWork, String links) {
         this.id = id;
         this.job = job;
@@ -84,6 +110,25 @@ public class JobApplication {
         this.links = links;
     }
 
+    /**
+     * Create a job application given the inputs data.
+     *
+     * @param job the job that the job application is referring to
+     * @param applicant the user creating the job application
+     * @param dateApplied the date at which the job application was created
+     * @param status submitted, in review, selected, interviewed, offered, hired, rejected
+     * @param email the email of the user submitting the job application
+     * @param firstName the first name of the user submitting the job application
+     * @param lastName the last name of the user submitting the job application
+     * @param phone the phone number of the user submitting the job application
+     * @param address the address of the user submitting the job application
+     * @param city the city of the user submitting the job application
+     * @param country the country of the user submitting the job application
+     * @param resume the resume of the user submitting the job application
+     * @param coverLetter the cover letter of the user submitting the job application
+     * @param legallyAllowedToWork true if the user is allowed to work in Canada; otherwise false
+     * @param links any additional links from the user submitting the job application
+     */
     public JobApplication(Job job, AppUser applicant, Timestamp dateApplied, JobApplicationStatus status, String email, String firstName, String lastName, String phone, String address, String city, String country, String resume, String coverLetter, boolean legallyAllowedToWork, String links) {
         this.job = job;
         this.applicant = applicant;
@@ -118,6 +163,22 @@ public class JobApplication {
         this.links = links;
     }
 
+    /**
+     * Create a job application given the inputs data.
+     *
+     * @param job the job that the job application is referring to
+     * @param applicant the user creating the job application
+     * @param dateApplied the date at which the job application was created
+     * @param status submitted, in review, selected, interviewed, offered, hired, rejected
+     * @param email the email of the user submitting the job application
+     * @param firstName the first name of the user submitting the job application
+     * @param lastName the last name of the user submitting the job application
+     * @param phone the phone number of the user submitting the job application
+     * @param address the address of the user submitting the job application
+     * @param city the city of the user submitting the job application
+     * @param country the country of the user submitting the job application
+     * @param legallyAllowedToWork true if the user is allowed to work in Canada; otherwise false
+     */
     public JobApplication(Job job, AppUser applicant, Timestamp dateApplied, JobApplicationStatus status, String email, String firstName, String lastName, String phone, String address, String city, String country, boolean legallyAllowedToWork) {
         this.job = job;
         this.applicant = applicant;
