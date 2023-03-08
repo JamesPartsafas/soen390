@@ -2,6 +2,9 @@ package com.soen.synapsis.appuser.job;
 
 import com.soen.synapsis.appuser.AppUser;
 
+/**
+ * This JobRequest class serves as the job application request.
+ */
 public class JobRequest {
 
     private AppUser creator;
@@ -17,8 +20,26 @@ public class JobRequest {
     private boolean needCover;
     private boolean needPortfolio;
 
+    /**
+     * Empty constructor.
+     */
     public JobRequest() {}
 
+    /**
+     * Create a new job request given the inputs data.
+     *
+     * @param position the name of the position.
+     * @param company the name of the company.
+     * @param address the address of the workplace.
+     * @param description the description of the job.
+     * @param type fulltime, partime, contract, temporary, volunteer, internship, or other.
+     * @param numAvailable the number of positions open.
+     * @param isExternal true if the job application is posted externally; otherwise false.
+     * @param externalLink the link of the external website.
+     * @param needResume true if the job application requires a resume; otherwise false.
+     * @param needCover true if the job application requires a cover letter; otherwise false.
+     * @param needPortfolio true if the job application requires a portfolio; otherwise false.
+     */
     public JobRequest(String position, String company, String address, String description, JobType type, int numAvailable, boolean isExternal, String externalLink, boolean needResume, boolean needCover, boolean needPortfolio) {
         this.position = position;
         this.company = company;

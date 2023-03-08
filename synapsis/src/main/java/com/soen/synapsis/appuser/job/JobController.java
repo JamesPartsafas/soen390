@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * A controller class to work with jobs.
+ */
 @Controller
 public class JobController {
 
@@ -29,6 +32,12 @@ public class JobController {
         this.authService = authService;
     }
 
+    /**
+     * Retrieve all job postings.
+     *
+     * @param model an object carrying data attributes passed to the view.
+     * @return the jobs page.
+     */
     @GetMapping("/jobs")
     public String viewJobPosting(Model model) {
         if (!authService.isUserAuthenticated()) {
@@ -46,6 +55,13 @@ public class JobController {
         return "pages/jobs";
     }
 
+    /**
+     * Retrieve all the information for a specific job.
+     *
+     * @param jobId the id of the specific job.
+     * @param model an object carrying data attributes passed to the view.
+     * @return the jobs page.
+     */
     @GetMapping("/job/{jobId}")
     public String getJob(@PathVariable Long jobId, Model model) {
         Optional<Job> optionalJob = jobService.getJob(jobId);
@@ -80,6 +96,12 @@ public class JobController {
         }
     }
 
+    /**
+     * Get a job posting.
+     *
+     * @param model an object carrying data attributes passed to the view.
+     * @return a page of the created job.
+     */
     @GetMapping(value = "/createjob")
     public String createJob(Model model) {
         if (!authService.isUserAuthenticated() || authService.getAuthenticatedUser().getRole() != Role.RECRUITER)
@@ -89,6 +111,14 @@ public class JobController {
         return "pages/createjob";
     }
 
+    /**
+     * Create a job posting.
+     *
+     * @param request the job application request.
+     * @param bindingResult an object that contains errors that may have occurred.
+     * @param model an object carrying data attributes passed to the view.
+     * @return the created job page.
+     */
     @PostMapping("/createjob")
     public String createJob(JobRequest request, BindingResult bindingResult, Model model) {
         try {
@@ -109,7 +139,13 @@ public class JobController {
         }
     }
 
-
+    /**
+     * Retrieve the job application form for a job posting.
+     *
+     * @param jobId the id of the job posting.
+     * @param model an object carrying data attributes passed to the view.
+     * @return the job application page.
+     */
     @GetMapping("/jobapplication/{jobId}")
     public String getJobApplication(@PathVariable Long jobId, Model model) {
         if (!authService.isUserAuthenticated()) {
@@ -159,6 +195,15 @@ public class JobController {
         }
     }
 
+    /**
+     * Submit a job application form.
+     *
+     * @param request the applicant's request data.
+     * @param bindingResult an object that contains errors that may have occurred.
+     * @param model an object carrying data attributes passed to the view.
+     * @param jobId the job id.
+     * @return the application success page.
+     */
     @PostMapping("/jobapplication")
     public String createJobApplication(JobApplication request, BindingResult bindingResult, Model model, @RequestParam("jobId") Long jobId) {
         try {
@@ -183,11 +228,22 @@ public class JobController {
         }
     }
 
+    /**
+     * Display the job application success page.
+     *
+     * @return the application success page.
+     */
     @GetMapping("/applicationsuccess")
     public String returnJobApplicationSuccess() {
         return "pages/applicationsuccess";
     }
 
+    /**
+     * Delete a specific job.
+     *
+     * @param jobId the job id.
+     * @return the jobs page.
+     */
     @PostMapping("/deletejob")
     public String deleteJob(@RequestParam("jobId") Long jobId) {
         Optional<Job> optionalJob = jobService.getJob(jobId);
@@ -199,6 +255,13 @@ public class JobController {
 
     }
 
+    /**
+     * Display the edit job page.
+     *
+     * @param jobId the job id.
+     * @param model an object carrying data attributes passed to the view.
+     * @return the edit job page.
+     */
     @GetMapping("/editjob")
     public String editJob(@RequestParam("jobId") Long jobId, Model model) {
         if (jobId == null)
@@ -230,6 +293,15 @@ public class JobController {
         return "pages/editjob";
     }
 
+    /**
+     * Edit a specific job.
+     *
+     * @param jobId the job id.
+     * @param request the job request.
+     * @param bindingResult an object that contains errors that may have occurred.
+     * @param model an object carrying data attributes passed to the view.
+     * @return the edit job page.
+     */
     @PostMapping("/editjob")
     public String editJob(@RequestParam("jobId") Long jobId, JobRequest request, BindingResult bindingResult, Model model) {
         try {
