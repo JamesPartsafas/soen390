@@ -4,6 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
+/**
+ * A class embedded in the 'Connection' table used to hold the requester's ID and te receiver's ID.
+ */
 @Embeddable
 public class ConnectionKey implements Serializable {
     @Column(name = "requester_id")
