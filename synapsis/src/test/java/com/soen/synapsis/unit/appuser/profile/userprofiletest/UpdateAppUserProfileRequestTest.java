@@ -3,13 +3,11 @@ package com.soen.synapsis.unit.appuser.profile.userprofiletest;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
-import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
-import com.soen.synapsis.appuser.registration.RegistrationRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UpdateAppUserProfileRequestTest {
 

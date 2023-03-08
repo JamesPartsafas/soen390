@@ -86,7 +86,7 @@ public class JobController {
             return "redirect:/";
 
         model.addAttribute("jobRequest", new JobRequest());
-        return "pages/createjob";
+        return "pages/createJob";
     }
 
     @PostMapping("/createjob")
@@ -102,8 +102,7 @@ public class JobController {
 
             return response;
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             model.addAttribute("error", "There was an error creating a new job. " + e.getMessage());
             return createJob(model);
         }

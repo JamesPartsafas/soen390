@@ -1,9 +1,12 @@
 package com.soen.synapsis.appuser.connection;
 
 import com.soen.synapsis.appuser.AppUser;
-import com.soen.synapsis.appuser.AppUserDetails;
 import com.soen.synapsis.appuser.AppUserRepository;
 import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.websockets.notification.NotificationDTO;
+import com.soen.synapsis.websockets.notification.NotificationService;
+import com.soen.synapsis.websockets.notification.NotificationType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,10 +17,13 @@ import java.util.Optional;
 public class ConnectionService {
     private final ConnectionRepository connectionRepository;
     private final AppUserRepository appUserRepository;
+    private final NotificationService notificationService;
 
-    public ConnectionService(ConnectionRepository connectionRepository, AppUserRepository appUserRepository) {
+    @Autowired
+    public ConnectionService(ConnectionRepository connectionRepository, AppUserRepository appUserRepository, NotificationService notificationService) {
         this.connectionRepository = connectionRepository;
         this.appUserRepository = appUserRepository;
+        this.notificationService = notificationService;
     }
 
     public List<AppUser> getConnections(AppUser appUser) {
@@ -89,6 +95,15 @@ public class ConnectionService {
         connection.setPending(false);
         connectionRepository.save(connection);
 
+        AppUser requester = connection.getRequester();
+        AppUser accepter = connection.getReceiver();
+
+        NotificationDTO requesterNotificationDTO = new NotificationDTO(0L, requester.getId(), NotificationType.CONNECTION, "Your connection request was accepted!", "/network", false);
+        notificationService.saveNotification(requesterNotificationDTO, requester);
+
+        NotificationDTO accepterNotificationDTO = new NotificationDTO(0L, accepter.getId(), NotificationType.CONNECTION, "You accepted a new connection!", "/network", false);
+        notificationService.saveNotification(accepterNotificationDTO, accepter);
+
         return "redirect:/network";
     }
 
@@ -115,6 +130,9 @@ public class ConnectionService {
 
         Connection connection = new Connection(cKey1, requester, receiver, true);
         connectionRepository.save(connection);
+
+        NotificationDTO notificationDTO = new NotificationDTO(0L, receiver.getId(), NotificationType.CONNECTION, "You have a new connection request!", "/network", false);
+        notificationService.saveNotification(notificationDTO, receiver);
     }
 
     public void disconnect(Long requesterId, Long receiverId) {

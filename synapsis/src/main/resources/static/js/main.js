@@ -12,7 +12,8 @@ let stompClient = null;
 function connect() {
     const socket = new SockJS('/ws');
     stompClient = Stomp.over(socket);
-    stompClient.debug = () => {};
+    stompClient.debug = () => {
+    };
     stompClient.connect({}, onConnected, onError);
 }
 
@@ -42,7 +43,8 @@ function sendMessage(event) {
         };
 
         try {
-            stompClient.send(`/app/chat/${chatId}`, {}, JSON.stringify(chatMessage))
+            stompClient.send(`/app/chat/${chatId}`, {}, JSON.stringify(chatMessage));
+            sendNotification("You have a message.", `/chat/${chatId}`, receiverId, 'MESSAGE');
             showMessage(chatMessage);
         } catch (e) {
             onError(e);
