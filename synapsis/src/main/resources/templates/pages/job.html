@@ -63,17 +63,17 @@
             hover:bg-opacity-60">Apply Now at Synapsis</a>
     </div>
 
-    <div th:if="${role.toString()=='RECRUITER'}" class="mx-auto my-4 transition hover:-translate-y-0.5 duration-150 ">
+    <div th:if="${role.toString()=='RECRUITER'}" class="flex mx-auto my-4 space-x-4">
     <!--Add link below. Only RECRUITERS can edit jobs.-->
       <form th:action="@{/editjob}" th:if="${authorization}" method="get">
         <input type="hidden" name="jobId" th:value="${jobId}" />
         <button class="mb-4 text-white font-thin bg-primary mx-auto p-4 rounded-2xl
-              hover:bg-opacity-60" type="submit">Edit</button>
+              hover:bg-opacity-60 transition hover:-translate-y-0.5 duration-150" type="submit">Edit</button>
       </form>
       <form th:action="@{/deletejob}" th:if="${authorization}" method="post">
         <input type="hidden" name="jobId" th:value="${jobId}" />
         <button class="mb-4 text-white font-thin bg-primary mx-auto p-4 rounded-2xl
-              hover:bg-opacity-60" type="submit">Delete</button>
+              hover:bg-opacity-60 transition hover:-translate-y-0.5 duration-150" type="submit">Delete</button>
       </form>
     </div>
 
