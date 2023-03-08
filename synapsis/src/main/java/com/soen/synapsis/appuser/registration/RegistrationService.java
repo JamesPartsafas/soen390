@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import static com.soen.synapsis.utility.Constants.MIN_PASSWORD_LENGTH;
 
+/**
+ * Service layer for processing user registration requests and interacting with repository layer
+ */
 @Service
 public class RegistrationService {
 
@@ -23,6 +26,11 @@ public class RegistrationService {
         this.emailValidator = emailValidator;
     }
 
+    /**
+     * Verifies registration data to ensure email, password, and role validity, then adds user to database
+     * @param request Contains registration data
+     * @return View to home page
+     */
     public String register(RegistrationRequest request) {
         boolean isValidEmail = emailValidator.validateEmail(request.getEmail());
 
@@ -52,6 +60,13 @@ public class RegistrationService {
         );
     }
 
+    /**
+     * Obtains information on SSO user if they are found. If not, a new entry is added to the database with
+     * the user's information.
+     * @param name User's name
+     * @param email user's email address
+     * @return Retrieved or created user
+     */
     public AppUser retrieveSSOUserOrRegisterIfNotExists(String name, String email) {
         AppUser retrievedUser = appUserService.getAppUser(email);
         if (retrievedUser != null) {
@@ -65,6 +80,11 @@ public class RegistrationService {
         return createdUser;
     }
 
+    /**
+     * Processes request to register a new admin.
+     * @param request Contains registration data
+     * @return View containing confirmation page
+     */
     public String registerAdmin(RegistrationRequest request) {
         boolean isValidEmail = emailValidator.validateEmail(request.getEmail());
 
@@ -88,6 +108,13 @@ public class RegistrationService {
         );
     }
 
+    /**
+     * Updates the user password from requested user
+     * @param appUser The user whose password should be updated
+     * @param oldPassword The user's previous password
+     * @param newPassword The user's new password
+     * @return View containing login page
+     */
     public String updateUserPassword(AppUser appUser, String oldPassword, String newPassword) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         if (!encoder.matches(oldPassword, appUser.getPassword())) {
@@ -100,6 +127,11 @@ public class RegistrationService {
         return appUserService.updatePassword(appUser, newPassword);
     }
 
+    /**
+     * Processes request to update a user password
+     * @param request Contains request data
+     * @return View containing login page
+     */
     public String resetUserPassword(RegistrationRequest request) {
         boolean isValidEmail = emailValidator.validateEmail(request.getEmail());
         AppUser appUser = appUserService.getAppUser(request.getEmail());
