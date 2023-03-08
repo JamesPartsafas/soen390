@@ -38,7 +38,8 @@
     </nav>
 
     <!--Logged in navbar-->
-    <nav sec:authorize="isAuthenticated()" class="bg-white px-4 lg:px-2 py-2 fixed w-full z-20 top-0 left-0">
+    <nav sec:authorize="isAuthenticated()"
+         class="bg-white px-4 lg:px-2 py-2 fixed w-full z-20 top-0 left-0">
         <div class="container flex flex-wrap items-center justify-between mx-auto">
             <a href="/" class="flex items-center">
                 <img src="/assets/synapsis_black.svg" class="h-12 lg:h-16 mt-3 mr-3 " alt="Synapsis Logo">
@@ -69,11 +70,17 @@
                             Messages
                         </li>
                     </a>
-                    <a href="#">
+                    <button data-dropdown-toggle="notificationsDropdown" data-dropdown-trigger="click">
                         <li class="flex flex-col items-center">
-                            <i class="fa-solid fa-bell fa-2x h-10"></i>
+                            <i id="notificationIcon" class="fa-solid fa-bell fa-2x h-10"></i>
                             Notifications
                         </li>
+                        <div id="notificationsDropdown"
+                             class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-52">
+                            <div id="notification_output">Nothing to show!</div>
+                        </div>
+                    </button>
+                    <a href="/user">
                     </a>
                     <a href="/settings">
                         <li>
@@ -97,5 +104,7 @@
                 </ul>
             </div>
         </div>
+        <div class="invisible w-0 h-0" th:text="${#authentication.getPrincipal().getId()}" id="userId"></div>
+        <script src="/js/notification.js"></script>
     </nav>
 </div>

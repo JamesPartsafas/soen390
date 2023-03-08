@@ -1,12 +1,11 @@
 package com.soen.synapsis.unit.appuser.profile.userprofiletest;
 
-import com.soen.synapsis.appuser.*;
+import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AppUserService;
+import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.profile.appuserprofile.updateprofile.UpdateAppUserProfileController;
 import com.soen.synapsis.appuser.profile.appuserprofile.updateprofile.UpdateAppUserProfileRequest;
 import com.soen.synapsis.appuser.profile.appuserprofile.updateprofile.UpdateAppUserProfileService;
-import com.soen.synapsis.appuser.profile.companyprofile.updateprofile.UpdateCompanyProfileController;
-import com.soen.synapsis.appuser.profile.companyprofile.updateprofile.UpdateCompanyProfileRequest;
-import com.soen.synapsis.appuser.profile.companyprofile.updateprofile.UpdateCompanyProfileService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,14 +17,16 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class UpdateAppUserProfileControllerTest {
 
     @Mock
     private UpdateAppUserProfileService updateAppUserProfileService;
-    @Mock AppUserService appUserService;
+    @Mock
+    AppUserService appUserService;
 
     private AutoCloseable autoCloseable;
     private UpdateAppUserProfileController underTest;

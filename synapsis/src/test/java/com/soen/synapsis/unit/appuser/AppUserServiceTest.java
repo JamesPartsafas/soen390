@@ -111,6 +111,17 @@ public class AppUserServiceTest {
     }
 
     @Test
+    void markCandidateToRecruiterFails() {
+        AppUser notCandidateUser = new AppUser(1L, "Joe Man", "1234", "joecompany@mail.com", Role.COMPANY);
+        AppUser companyUser = new AppUser(2L, "Joe Man", "1234", "joecompany@mail.com", Role.COMPANY);
+
+        assertThrows(IllegalStateException.class,
+                () -> underTest.markCandidateToRecruiter(notCandidateUser, companyUser),
+                "The user must be a candidate to be marked as a recruiter.");
+
+    }
+
+    @Test
     void signUpAdminWithUniqueEmail() {
         String email = "joeadmin@mail.com";
         AppUser appUser = new AppUser("Joe Admin", "1234", email, Role.ADMIN);
@@ -151,6 +162,7 @@ public class AppUserServiceTest {
                 () -> underTest.updatePassword(null, ""),
                 "This email does not belong to any user.");
     }
+
 
     @Test
     void checkSecurityQuestionsSuccessful() {

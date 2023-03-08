@@ -1,0 +1,18 @@
+<html xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="_layout">
+<ul th:fragment="notification_list" id="notification_output">
+    <li th:if="${notificationList.empty}">
+        <td>Nothing to show!</td>
+    </li>
+    <li th:each="notification : ${notificationList}">
+        <a th:onclick="'sendSeen(' + ${notification.id} + ')'" th:href="${notification.url}"
+           class="flex justify-between items-center">
+            <div th:text="${notification.text}" class="flex-none w-44 mr-2 pr-2"></div>
+            <div id="unseen" th:if="${!notification.seen}"
+                 class="flex-none w-2 h-2 bg-red-400 rounded-full mr-2 pr-2"></div>
+        </a>
+        <hr class="mt-2 mb-2">
+    </li>
+</ul>
+</html>
+

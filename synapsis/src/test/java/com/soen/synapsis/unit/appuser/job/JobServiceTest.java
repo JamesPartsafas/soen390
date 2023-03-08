@@ -2,9 +2,11 @@ package com.soen.synapsis.unit.appuser.job;
 
 import com.fasterxml.jackson.databind.ser.Serializers;
 import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AppUserRepository;
 import com.soen.synapsis.appuser.AuthProvider;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.job.*;
+import com.soen.synapsis.websockets.notification.NotificationService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -12,12 +14,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -27,13 +32,17 @@ class JobServiceTest {
     private JobRepository jobRepository;
     @Mock
     private JobApplicationRepository jobApplicationRepository;
+    @Mock
+    AppUserRepository appUserRepository;
+    @Mock
+    NotificationService notificationService;
     private AutoCloseable autoCloseable;
     private JobService underTest;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new JobService(jobRepository, jobApplicationRepository);
+        underTest = new JobService(jobRepository, jobApplicationRepository, appUserRepository, notificationService);
     }
 
     @AfterEach
@@ -121,4 +130,3 @@ class JobServiceTest {
         assertEquals("redirect:/", returnValue);
     }
 }
-

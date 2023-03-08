@@ -41,6 +41,9 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 
+    @Column(columnDefinition = "boolean default true")
+    private boolean emailNotificationsOn;
+
     @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "company_id")
     private AppUser company;
@@ -254,6 +257,14 @@ public class AppUser {
         this.profilePicture = profilePicture;
     }
 
+    public boolean isEmailNotificationsOn() {
+        return emailNotificationsOn;
+    }
+
+    public void setEmailNotificationsOn(boolean emailNotificationsOn) {
+        this.emailNotificationsOn = emailNotificationsOn;
+    }
+
     @Override
     public String toString() {
         return "AppUser{" +
@@ -263,6 +274,7 @@ public class AppUser {
                 ", securityAnswer1='" + securityAnswer1 + '\'' +
                 ", securityAnswer2='" + securityAnswer2 + '\'' +
                 ", securityAnswer3='" + securityAnswer3 + '\'' +
+                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", role=" + role +
                 ", authProvider=" + authProvider +
@@ -270,6 +282,7 @@ public class AppUser {
                 ", recruiters=" + recruiters +
                 ", profile=" + profile +
                 ", companyProfile=" + companyProfile +
+                ", emailNotificationsOn=" + emailNotificationsOn +
                 '}';
     }
 }
