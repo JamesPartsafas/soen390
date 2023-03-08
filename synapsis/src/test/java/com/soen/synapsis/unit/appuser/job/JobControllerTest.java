@@ -1,17 +1,16 @@
 package com.soen.synapsis.unit.appuser.job;
 
-import com.soen.synapsis.appuser.*;
+import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AuthProvider;
+import com.soen.synapsis.appuser.AuthService;
+import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.job.*;
-import com.soen.synapsis.appuser.profile.appuserprofile.updateprofile.UpdateAppUserProfileRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
@@ -19,7 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class JobControllerTest {
@@ -92,7 +92,7 @@ class JobControllerTest {
 
         when(jobService.getJob(job1.getID())).thenReturn(Optional.of(job1));
 
-        String returnValue = underTest.getJob(job1.getID(),mock(Model.class));
+        String returnValue = underTest.getJob(job1.getID(), mock(Model.class));
 
         assertEquals("redirect:/", returnValue);
     }
@@ -103,7 +103,7 @@ class JobControllerTest {
 
         when(jobService.getJob(job1.getID())).thenReturn(Optional.of(job1));
 
-        String returnValue = underTest.getJob(5L,mock(Model.class));
+        String returnValue = underTest.getJob(5L, mock(Model.class));
 
         assertEquals("redirect:/", returnValue);
     }
@@ -162,7 +162,6 @@ class JobControllerTest {
     }
 
     @Test
-
     void getJobApplicationByIdRedirectToHomePageWhenUserNotAuthenticated() {
         when(authService.isUserAuthenticated()).thenReturn(false);
 

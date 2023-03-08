@@ -1,6 +1,11 @@
 package com.soen.synapsis.appuser.job;
 
-import com.soen.synapsis.appuser.*;
+import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AppUserRepository;
+import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.websockets.notification.NotificationDTO;
+import com.soen.synapsis.websockets.notification.NotificationService;
+import com.soen.synapsis.websockets.notification.NotificationType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +20,17 @@ import java.util.Optional;
 public class JobService {
 
     private final JobRepository jobRepository;
+    private final AppUserRepository appUserRepository;
+    private final NotificationService notificationService;
 
     private final JobApplicationRepository jobApplicationRepository;
 
     @Autowired
-    public JobService(JobRepository jobRepository, JobApplicationRepository jobApplicationRepository) {
+    public JobService(JobRepository jobRepository, JobApplicationRepository jobApplicationRepository, AppUserRepository appUserRepository, NotificationService notificationService) {
         this.jobRepository = jobRepository;
         this.jobApplicationRepository = jobApplicationRepository;
+        this.appUserRepository = appUserRepository;
+        this.notificationService = notificationService;
     }
 
     /**
@@ -84,6 +93,7 @@ public class JobService {
 
         return "redirect:/job/" + job.getID();
     }
+
 
 
     /**
@@ -181,7 +191,24 @@ public class JobService {
 
         jobRepository.save(job);
 
+        sendJobNotifications(job.getID());
+
         return "redirect:/job/" + job.getID();
+    }
+
+    //This should be changed to however we are implementing suggested jobs
+    private void sendJobNotifications(Long jobId) {
+        for (AppUser appUser : appUserRepository.findAll()) {
+            NotificationDTO notificationDTO = new NotificationDTO(
+                    0L,
+                    appUser.getId(),
+                    NotificationType.JOB,
+                    "You have a new job suggestion!",
+                    "/job/" + jobId,
+                    false
+            );
+            notificationService.saveNotification(notificationDTO, appUser);
+        }
     }
 
 }

@@ -97,7 +97,7 @@ public class CompanyProfileTest {
 
     @Test
     void setIndustry() {
-        String newIndustry= "Medical";
+        String newIndustry = "Medical";
 
         underTest.setIndustry(newIndustry);
 
@@ -147,6 +147,7 @@ public class CompanyProfileTest {
 
         assertEquals(newSpeciality, underTest.getSpeciality());
     }
+
     @Test
     void testToString() {
         assertThat(underTest.toString()).isNotNull();

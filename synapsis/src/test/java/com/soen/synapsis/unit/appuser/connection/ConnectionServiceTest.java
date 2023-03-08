@@ -1,14 +1,13 @@
 package com.soen.synapsis.unit.appuser.connection;
 
 import com.soen.synapsis.appuser.AppUser;
-import com.soen.synapsis.appuser.AppUserDetails;
 import com.soen.synapsis.appuser.AppUserRepository;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.connection.Connection;
 import com.soen.synapsis.appuser.connection.ConnectionKey;
 import com.soen.synapsis.appuser.connection.ConnectionRepository;
 import com.soen.synapsis.appuser.connection.ConnectionService;
-import org.checkerframework.checker.nullness.Opt;
+import com.soen.synapsis.websockets.notification.NotificationService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +32,8 @@ public class ConnectionServiceTest {
     private ConnectionRepository connectionRepository;
     @Mock
     private AppUserRepository appUserRepository;
+    @Mock
+    NotificationService notificationService;
     private AutoCloseable autoCloseable;
     private AppUser candidateUser1;
     private AppUser candidateUser2;
@@ -43,13 +44,13 @@ public class ConnectionServiceTest {
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new ConnectionService(connectionRepository, appUserRepository);
+        underTest = new ConnectionService(connectionRepository, appUserRepository, notificationService);
 
         candidateUser1 = new AppUser(1L, "Joe Man", "1234", "joeman@email.com", Role.CANDIDATE);
-        candidateUser2 = new AppUser(2L,"Joe Woman", "1234", "joewoman@email.com", Role.CANDIDATE);
-        companyUser = new AppUser(3L,"Company", "1234", "company@email.com", Role.COMPANY);
-        recruiterUser = new AppUser(4L,"Recruiter", "1234", "recruiter@email.com", Role.RECRUITER);
-        adminUser = new AppUser(5L,"Admin", "1234", "admin@email.com", Role.ADMIN);
+        candidateUser2 = new AppUser(2L, "Joe Woman", "1234", "joewoman@email.com", Role.CANDIDATE);
+        companyUser = new AppUser(3L, "Company", "1234", "company@email.com", Role.COMPANY);
+        recruiterUser = new AppUser(4L, "Recruiter", "1234", "recruiter@email.com", Role.RECRUITER);
+        adminUser = new AppUser(5L, "Admin", "1234", "admin@email.com", Role.ADMIN);
     }
 
     @AfterEach
