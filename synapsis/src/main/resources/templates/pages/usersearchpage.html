@@ -4,6 +4,7 @@
 <div layout:fragment="content">
     <div th:if="${users.size() == 0}">
         <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+            <!-- If there are no users that satisfy the search criteria then nothing will be returned-->
             <span class="font-medium"></span> No users exists with that name !
         </div>
     </div>

@@ -2,7 +2,7 @@
 <html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
     <div layout:fragment="content">
-        <!-- It will displayed if the user has no chat messages -->
+        <!-- It will be displayed if the user has no chat messages -->
         <div th:if="${chats.size() == 0}">
             <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
                 <span class="font-medium"></span> You don't have any chat messages
