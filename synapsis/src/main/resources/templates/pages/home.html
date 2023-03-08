@@ -2,6 +2,7 @@
 <html xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml"
       layout:decorate="_layout">
 <div layout:fragment="content">
+    <!-- The home page that will be displayed if no user was logged in -->
     <div sec:authorize="!isAuthenticated()">
     <div  class="container flex flex-wrap w-10/12 justify-between items-center">
         <div class="flex-none mt-24 w-1/3">
@@ -64,6 +65,7 @@
     </div>
     </div>
 
+    <!-- The home page that will be displayed if user is already logged in -->
 
     <div sec:authorize="isAuthenticated()" >
 <div class="container flex flex-wrap w-10/12 justify-between items-center">
