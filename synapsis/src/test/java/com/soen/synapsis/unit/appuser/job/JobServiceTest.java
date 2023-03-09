@@ -153,16 +153,18 @@ class JobServiceTest {
 
     @Test
     void createJobApplicationWithEmptyResumeThatIsMandatory() {
+        AppUser candidate = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
         AppUser creator = new AppUser(9L, "joe", "1234", "joerecruiter@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
         Job job = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true, true);
-        assertThrows(IllegalStateException.class, () -> underTest.createJobApplication(mock(JobApplicationRequest.class),mock(AppUser.class),job.getID(), null, null));
+        assertThrows(NullPointerException.class, () -> underTest.createJobApplication(mock(JobApplicationRequest.class), candidate,job.getID(), null, null));
     }
 
     @Test
     void createJobApplicationWithEmptyCoverLetterThatIsMandatory() {
+        AppUser candidate = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
         AppUser creator = new AppUser(9L, "joe", "1234", "joerecruiter@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
         Job job = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true, true);
-        assertThrows(IllegalStateException.class, () -> underTest.createJobApplication(mock(JobApplicationRequest.class),mock(AppUser.class),job.getID(), mock(MultipartFile.class), null));
+        assertThrows(NullPointerException.class, () -> underTest.createJobApplication(mock(JobApplicationRequest.class), candidate, job.getID(), mock(MultipartFile.class), null));
     }
 
 }
