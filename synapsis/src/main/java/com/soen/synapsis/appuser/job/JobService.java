@@ -8,8 +8,11 @@ import com.soen.synapsis.websockets.notification.NotificationService;
 import com.soen.synapsis.websockets.notification.NotificationType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,8 +97,6 @@ public class JobService {
         return "redirect:/job/" + job.getID();
     }
 
-
-
     /**
      * Create a new job application.
      *
@@ -103,7 +104,7 @@ public class JobService {
      * @param applicant the user submitting the application.
      * @param jobId the job id.
      */
-    public void createJobApplication(JobApplication request, AppUser applicant, Long jobId) {
+    public void createJobApplication(JobApplicationRequest request, AppUser applicant, Long jobId, MultipartFile resume, MultipartFile coverLetter) throws IOException {
 
         checkIfUserAlreadySubmittedApplication(applicant, jobId);
 
@@ -112,9 +113,6 @@ public class JobService {
         }
 
         Job job = jobRepository.getReferenceById(jobId);
-
-        job.setNumApplicants(job.getNumApplicants() + 1);
-        jobRepository.save(job);
 
         JobApplication jobApplication = new JobApplication(
                 job,
@@ -128,11 +126,20 @@ public class JobService {
                 request.getAddress(),
                 request.getCity(),
                 request.getCountry(),
-                request.getResume(),
-                request.getCoverLetter(),
                 request.isLegallyAllowedToWork(),
                 request.getLinks()
         );
+
+        String encodedResume = Base64.getEncoder().encodeToString(resume.getBytes());
+        String encodedCoverLetter = Base64.getEncoder().encodeToString(coverLetter.getBytes());
+        if(encodedResume.isEmpty() || encodedCoverLetter.isEmpty()) {
+            return;
+        }
+        jobApplication.setResume(encodedResume);
+        jobApplication.setCoverLetter(encodedCoverLetter);
+
+        job.setNumApplicants(job.getNumApplicants() + 1);
+        jobRepository.save(job);
 
         jobApplicationRepository.save(jobApplication);
     }

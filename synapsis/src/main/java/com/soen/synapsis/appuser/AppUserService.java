@@ -7,11 +7,9 @@ import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfileRepository
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
@@ -133,21 +131,15 @@ public class AppUserService {
      * @param appUser The user to be made a recruiter.
      * @param companyUser The company the recruiter is to be associated to.
      */
-    public void markCandidateToRecruiter(AppUser appUser, @AuthenticationPrincipal AppUser companyUser) {
+    public void markCandidateToRecruiter(AppUser appUser, AppUser companyUser) {
 
-        if (appUser.getRole() != Role.CANDIDATE) {
-            throw new IllegalStateException("The user must be a candidate to be marked as a recruiter.");
-        }
         appUser.setRole(Role.RECRUITER);
         appUser.setCompany(companyUser);
-        try {
-            companyUser.addRecruiter(appUser);
-        } catch (IllegalStateException e) {
-            e.getMessage();
-        }
+
+        companyUser.addRecruiter(appUser);
+
         appUserRepository.save(appUser);
         appUserRepository.save(companyUser);
-
     }
 
     /**

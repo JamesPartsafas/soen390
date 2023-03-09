@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -210,14 +211,14 @@ class JobControllerTest {
 
         String expectedMessage = "There was a problem processing your application. Try again later.";
 
-        assertThrows(Exception.class, () -> underTest.createJobApplication(mock(JobApplication.class), bindingResult, mock(Model.class), 1L), expectedMessage);
+        assertThrows(Exception.class, () -> underTest.createJobApplication(mock(JobApplicationRequest.class), 1L, mock(MultipartFile.class), mock(MultipartFile.class), bindingResult, mock(Model.class)), expectedMessage);
     }
 
     @Test
     void createJobApplicationCreatedJobApplicationSuccessfully() {
         when(authService.isUserAuthenticated()).thenReturn(true);
 
-        assertEquals("redirect:/applicationsuccess", underTest.createJobApplication(mock(JobApplication.class), mock(BindingResult.class), mock(Model.class), 1L));
+        assertEquals("redirect:/applicationsuccess", underTest.createJobApplication(mock(JobApplicationRequest.class), 1L, mock(MultipartFile.class), mock(MultipartFile.class),mock(BindingResult.class), mock(Model.class)));
     }
 
     @Test
