@@ -5,6 +5,9 @@ import com.soen.synapsis.appuser.AppUser;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
+/**
+ * Contains data on all the notification
+ */
 @Entity
 public class Notification {
 
@@ -31,9 +34,23 @@ public class Notification {
     @Column(nullable = false)
     private Timestamp creationTime;
 
+    /**
+     * Default Constructor.
+     * Assigns the default values to all the instance variables
+     */
     public Notification() {
     }
 
+    /**
+     * Creates a new notification instance from the given data.
+     * The ID of the chat is set automatically.
+     * @param recipient Represent the AppUser that the notification will be sent to
+     * @param type Represents the type of notification
+     * @param text Represents the content of the notification
+     * @param url Represents the URL where the notification will redirect to in case if it is clicked
+     * @param seen Flag represents if the notification have been viewed
+     * @param creationTime Timestamp representing the time the message is created
+     */
     public Notification(AppUser recipient, NotificationType type, String text, String url, boolean seen, Timestamp creationTime) {
         this.recipient = recipient;
         this.type = type;
@@ -44,11 +61,32 @@ public class Notification {
 
     }
 
+    /**
+     * Creates a new notification instance from the given data.
+     * The constructor should only be used in testing. ID should be set automatically.
+     * @param id the ID of the Message. This should be unique
+     * @param recipient Represent the AppUser that the notification will be sent to
+     * @param type Represents the type of notification
+     * @param text Represents the content of the notification
+     * @param url Represents the URL where the notification will redirect to in case if it is clicked
+     * @param seen Flag represents if the notification have been viewed
+     * @param creationTime Timestamp representing the time the message is created
+     */
     public Notification(Long id, AppUser recipient, NotificationType type, String text, String url, boolean seen, Timestamp creationTime) {
         this(recipient, type, text, url, seen, creationTime);
         this.id = id;
     }
 
+    /**
+     * Creates a new notification instance from the given data.
+     * The ID of the chat is set automatically.
+     * The createdAt timestamp is set to the current timestamp in milliseconds.
+     * @param recipient Represent the AppUser that the notification will be sent to
+     * @param type Represents the type of notification
+     * @param text Represents the content of the notification
+     * @param url Represents the URL where the notification will redirect to in case if it is clicked
+     * @param seen Flag represents if the notification have been viewed
+     */
     public Notification(AppUser recipient, NotificationType type, String text, String url, boolean seen) {
         this(recipient, type, text, url, seen, new Timestamp(System.currentTimeMillis()));
     }

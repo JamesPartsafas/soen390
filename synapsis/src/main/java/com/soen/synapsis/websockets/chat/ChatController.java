@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Entry point for user requests to interface with Chat-related functionality.
+ */
 @Controller
 public class ChatController {
 
@@ -28,6 +31,13 @@ public class ChatController {
     private AuthService authService;
     private SimpMessageSendingOperations simpMessagingTemplate;
 
+    /**
+     * Constructor to create an instance of the ChatController.
+     * This is annotated by autowired for automatic dependency injection
+     * @param chatService Used to interact with the Chat service layer
+     * @param authService  Used to fetch with the authenticated user
+     * @param simpMessagingTemplate  Used to send messages to a user via the WebSocket connection.
+     */
     @Autowired
     public ChatController(ChatService chatService, AuthService authService, SimpMessageSendingOperations simpMessagingTemplate) {
         this.chatService = chatService;
@@ -35,6 +45,11 @@ public class ChatController {
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
+    /**
+     * Allows users to create a new chat
+     * @param id The ID of the participant AppUser
+     * @return The view of the chat if the user is authenticated else redirects to the home page.
+     */
     @PostMapping("/chat/create")
     public String createChat(@RequestParam("id") Long id) {
         if (!authService.isUserAuthenticated()) {
@@ -44,6 +59,11 @@ public class ChatController {
         return chatService.createChat(authService.getAuthenticatedUser(), id);
     }
 
+    /**
+     * Retrieves all the chats that the authenticated user have
+     * @param model Allows for data to be passed to view.
+     * @return The view containing all the chats if the user is authenticated else redirects to the home page.
+     */
     @GetMapping("/chats")
     public String getChats(Model model) {
         if (!authService.isUserAuthenticated()) {
@@ -56,6 +76,12 @@ public class ChatController {
         return "pages/chatPage";
     }
 
+    /**
+     * Retrieves all the messages for a specific chat for the authenticated user have
+     * @param chatID The chat's page to retrieve
+     * @param model Allows for data to be passed to view.
+     * @return The view for a specific chat showing all its messages if the user is authenticated else redirects to the home page.
+     */
     @GetMapping("/chat/{chatID}")
     public String getChatById(@PathVariable Long chatID, Model model) {
         if (!authService.isUserAuthenticated()) {
@@ -106,6 +132,13 @@ public class ChatController {
         return "pages/messagingPage";
     }
 
+    /**
+     * This method handles sending a message in a chat to the receiving user.
+     * If the message type is not TYPE, the sending user will receive an ERROR message.
+     * @param authentication an instance of the Authentication interface representing the user's authentication information
+     * @param chatID a Long representing the ID of the chat
+     * @param message a MessageDTO object representing the content of the message to be sent and saved
+     */
     @MessageMapping("/chat/{chatID}")
     public void sendMessage(Authentication authentication, @DestinationVariable Long chatID, MessageDTO message) {
         try {
@@ -129,6 +162,13 @@ public class ChatController {
         }
     }
 
+    /**
+     * This method handles sending a READ message in a chat to the receiving user.
+     * If the message type is not READ, the sending user will receive an ERROR message.
+     * @param authentication an instance of the Authentication interface representing the user's authentication information
+     * @param chatID a Long representing the ID of the chat
+     * @param message a MessageDTO object representing the READ message to be sent
+     */
     @MessageMapping("/chat/{chatID}/read")
     public void sendRead(Authentication authentication, @DestinationVariable Long chatID, MessageDTO message) {
         try {
