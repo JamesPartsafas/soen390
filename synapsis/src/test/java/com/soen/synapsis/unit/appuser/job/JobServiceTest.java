@@ -18,7 +18,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -94,6 +97,20 @@ class JobServiceTest {
     }
 
     @Test
+    void UserAlreadySubmittedApplication() {
+        AppUser candidate = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
+        AppUser creator = new AppUser(9L, "joe", "1234", "joerecruiter@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
+        Job job = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true, true);
+
+        List<Job> jobsSubmitted = new ArrayList<>();
+        jobsSubmitted.add(job);
+
+        when(underTest.getAllJobsAlreadySubmittedByUser(candidate)).thenReturn(jobsSubmitted);
+
+        assertThrows(IllegalStateException.class, () -> underTest.checkIfUserAlreadySubmittedApplication(candidate, job.getID()));
+
+    }
+    @Test
     @Disabled
     void createJobApplicationCreatesJobApplicationSuccessfully() throws IOException {
         AppUser candidate = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
@@ -102,6 +119,10 @@ class JobServiceTest {
         MultipartFile file = mock(MultipartFile.class);
         when(file.getBytes()).thenReturn(new byte[]{});
 
+        String encodedResume = "test";
+
+        when(Base64.getEncoder()).thenReturn(Base64.getEncoder());
+        when(Base64.getEncoder().encodeToString(any(byte[].class))).thenReturn(encodedResume);
         when(anyString().isEmpty()).thenReturn(false);
 
         underTest.createJobApplication(mock(JobApplicationRequest.class), candidate, 1L, file, file);
@@ -129,4 +150,19 @@ class JobServiceTest {
 
         assertEquals("redirect:/", returnValue);
     }
+
+    @Test
+    void createJobApplicationWithEmptyResumeThatIsMandatory() {
+        AppUser creator = new AppUser(9L, "joe", "1234", "joerecruiter@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
+        Job job = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true, true);
+        assertThrows(IllegalStateException.class, () -> underTest.createJobApplication(mock(JobApplicationRequest.class),mock(AppUser.class),job.getID(), null, null));
+    }
+
+    @Test
+    void createJobApplicationWithEmptyCoverLetterThatIsMandatory() {
+        AppUser creator = new AppUser(9L, "joe", "1234", "joerecruiter@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
+        Job job = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true, true);
+        assertThrows(IllegalStateException.class, () -> underTest.createJobApplication(mock(JobApplicationRequest.class),mock(AppUser.class),job.getID(), mock(MultipartFile.class), null));
+    }
+
 }
