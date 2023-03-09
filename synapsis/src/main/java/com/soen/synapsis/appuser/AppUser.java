@@ -53,7 +53,7 @@ public class AppUser {
     @JoinColumn(name = "company_id")
     private AppUser company;
 
-    @OneToMany(mappedBy="company", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
     private Set<AppUser> recruiters;
 
     @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
@@ -176,6 +176,7 @@ public class AppUser {
     /**
      * Retrieves the recruiters associated to this AppUser. Only AppUsers
      * with the role COMPANY may have recruiters.
+     *
      * @return Set of AppUsers with the role RECRUITER.
      */
     public Set<AppUser> getRecruiter() {
@@ -187,6 +188,7 @@ public class AppUser {
 
     /**
      * Add recruiter to AppUser of role COMPANY.
+     *
      * @param recruiter AppUser to be added to recruiters list.
      */
     public void addRecruiter(AppUser recruiter) {
@@ -202,6 +204,7 @@ public class AppUser {
     /**
      * Remove recruiter from AppUser's recruiter list.
      * Only AppUsers of role COMPANY may have recruiters.
+     *
      * @param recruiter The recruiter to remove from the company's
      *                  recruiter list.
      */
@@ -217,6 +220,7 @@ public class AppUser {
 
     /**
      * Gets the company a user of role RECRUITER works for.
+     *
      * @return An AppUser of role COMPANY.
      */
     public AppUser getCompany() {
@@ -228,6 +232,7 @@ public class AppUser {
 
     /**
      * Sets the company a user of role RECRUITER works for.
+     *
      * @param company The AppUser of role COMPANY to work for.
      */
     public void setCompany(AppUser company) {
@@ -306,10 +311,6 @@ public class AppUser {
                 ", email='" + email + '\'' +
                 ", role=" + role +
                 ", authProvider=" + authProvider +
-                ", company=" + company +
-                ", recruiters=" + recruiters +
-                ", profile=" + profile +
-                ", companyProfile=" + companyProfile +
                 ", emailNotificationsOn=" + emailNotificationsOn +
                 '}';
     }
