@@ -18,12 +18,12 @@
 
                 <label>Description</label><br>
                 <textarea id="description" name="description"
-                          class="w-full py-3 px-4 mb-3 h-32 resize-y font-normal tracking-tight text-gray-900 dark:text-white resize-y"
+                          class="w-full py-3 px-4 mb-3 h-32 resize-y font-normal tracking-tight text-gray-900  resize-y"
                           th:text="${profile.description}"></textarea>
                 <br>
                 <label>Website</label><br>
                 <input type="text" id="website" name="website" th:value="${profile.website}"
-                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+                       class="mb-2 text-left font-normal tracking-tight text-gray-900 "/>
 
                 <br>
                 <label>Industry</label><br>
@@ -31,7 +31,7 @@
                        oninvalid="this.setCustomValidity('Enter a Valid Industry')"
                        onchange="try{setCustomValidity('')}catch(e){}"
                        oninput="setCustomValidity(' ')"
-                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white" required/>
+                       class="mb-2 text-left font-normal tracking-tight text-gray-900 " required/>
 
                 <br>
                 <label>Company Size</label><br>
@@ -39,18 +39,18 @@
                        onchange="try{if(!/^\d+$/.test(this.value.trim())) throw 'Please enter a valid number'; setCustomValidity('')}catch(e){setCustomValidity(e)}"
                        oninput="setCustomValidity('')"
                        id="companySize" name="companySize" th:value="${profile.companySize}"
-                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white "/>
+                       class="mb-2 text-left font-normal tracking-tight text-gray-900  "/>
                 <br>
                 <label>Location</label><br>
                 <input type="text" id="location" name="location" th:value="${profile.location}"
-                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white"/>
+                       class="mb-2 text-left font-normal tracking-tight text-gray-900 "/>
                 <br>
                 <label>Speciality</label><br>
                 <input type="text" id="speciality" name="speciality" th:value="${profile.speciality}"
                        oninvalid="this.setCustomValidity('Enter a Valid Speciality')"
                        onchange="try{setCustomValidity('')}catch(e){}"
                        oninput="setCustomValidity(' ')"
-                       class="mb-2 text-left font-normal tracking-tight text-gray-900 dark:text-white" required/>
+                       class="mb-2 text-left font-normal tracking-tight text-gray-900 " required/>
                 <br>
                 <button class=" btn bg-red-500 text-white rounded-full " type="submit">Save</button>
             </div>
