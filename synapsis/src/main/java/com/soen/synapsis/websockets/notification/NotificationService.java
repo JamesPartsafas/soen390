@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * Service layer for Notification-related functionality.
+ */
 @Service
 public class NotificationService {
     private NotificationRepository notificationRepository;
@@ -19,6 +22,14 @@ public class NotificationService {
     private SimpMessagingTemplate simpMessagingTemplate;
     private EmailService emailService;
 
+    /**
+     * Constructor to create an instance of the MessageService.
+     * This is annotated by autowired for automatic dependency injection
+     * @param notificationRepository Used to interact with the Notification table in the database
+     * @param appUserService Used to interact with the AppUser service layer
+     * @param simpMessagingTemplate Used to send notification to a user via the WebSocket connection.
+     * @param emailService Used to send emails to a user
+     */
     @Autowired
     public NotificationService(NotificationRepository notificationRepository,
                                AppUserService appUserService,
@@ -30,11 +41,22 @@ public class NotificationService {
         this.emailService = emailService;
     }
 
+    /**
+     * Saves the notification in the database for the given recipient.
+     * @param notificationDTO The DTO representation of the notification to be saved.
+     */
     public void saveNotification(NotificationDTO notificationDTO) {
         AppUser appUser = appUserService.getAppUser(notificationDTO.getRecipient_id()).get();
         saveNotification(notificationDTO, appUser);
     }
 
+    /**
+     * Saves a notification for a given AppUser using a NotificationDTO object.
+     * Also sends the notification to the user via web socket and,
+     * if the user has email notifications on, sends an email to the user's email address.
+     * @param notificationDTO the NotificationDTO object representing the notification to be saved
+     * @param appUser the AppUser who should receive the notification
+     */
     public void saveNotification(NotificationDTO notificationDTO, AppUser appUser) {
         Notification notification = new Notification(appUser, notificationDTO.getType(), notificationDTO.getText(), notificationDTO.getUrl(), false);
         notificationRepository.save(notification);
@@ -51,6 +73,11 @@ public class NotificationService {
         }
     }
 
+    /**
+     * Update the seen flag of a notification and send the updated notification object to the user's specific channel.
+     * @param notificationDTO the NotificationDTO object containing the id of the notification to be updated
+     * @param seenValue the new seen flag value to be set for the notification
+     */
     public void updateSeen(NotificationDTO notificationDTO, boolean seenValue) {
         Notification notification = notificationRepository.getNotificationById(notificationDTO.getId());
 
@@ -61,6 +88,11 @@ public class NotificationService {
         simpMessagingTemplate.convertAndSendToUser(recipientId.toString(), "/specific/notification/" + recipientId, notificationDTO);
     }
 
+    /**
+     * Get the list of 5 most recent notifications for a specific user from the past 7 days.
+     * @param userId the id of the user whose notifications are to be fetched
+     * @return a list of NotificationDTO objects representing the notifications
+     */
     public List<NotificationDTO> getNotificationsByUserId(Long userId) {
         Timestamp time = new Timestamp(System.currentTimeMillis());
         Calendar cal = Calendar.getInstance();

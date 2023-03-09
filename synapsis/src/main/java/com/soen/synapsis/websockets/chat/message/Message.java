@@ -1,13 +1,14 @@
 package com.soen.synapsis.websockets.chat.message;
 
-import antlr.debug.MessageListener;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.websockets.chat.Chat;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.sql.Timestamp;
 
+/**
+ * Contains data on all the messages including the related chat
+ */
 @Entity
 public class Message {
 
@@ -32,14 +33,37 @@ public class Message {
     @Column(nullable = false)
     private Timestamp createdAt;
 
+    /**
+     * Default Constructor.
+     * Assigns the default values to all the instance variables
+     */
     public Message() {
     }
 
+    /**
+     * Creates a new message instance from the given data.
+     * The constructor should only be used in testing. ID should be set automatically.
+     * @param id the ID of the Message. This should be unique
+     * @param chat the instance of the Chat that the message is related to
+     * @param content the content of the message in a string format
+     * @param sender the instance of the sender user
+     * @param read a flag to indicate whether the receiver viewed the message
+     * @param createdAt a timestamp representing the time the message is created
+     */
     public Message(Long id, Chat chat, String content, AppUser sender, boolean read, Timestamp createdAt) {
         this(chat, content, sender, read, createdAt);
         this.id = id;
     }
 
+    /**
+     * Creates a new message instance from the given data.
+     * The ID of the message is set automatically.
+     * @param chat the instance of the Chat that the message is related to
+     * @param content the content of the message in a string format
+     * @param sender the instance of the sender user
+     * @param read a flag to indicate whether the receiver viewed the message
+     * @param createdAt a timestamp representing the time the message is created
+     */
     public Message(Chat chat, String content, AppUser sender, boolean read, Timestamp createdAt) {
         this.chat = chat;
         this.content = content;
@@ -48,6 +72,15 @@ public class Message {
         this.createdAt = createdAt;
     }
 
+    /**
+     * Creates a new message instance from the given data.
+     * The ID of the message is set automatically.
+     * The read flag is set to false.
+     * The createdAt timestamp is set to the current timestamp in milliseconds.
+     * @param chat the instance of the Chat that the message is related to
+     * @param content the content of the message in a string format
+     * @param sender the instance of the sender user
+     */
     public Message(Chat chat, String content, AppUser sender) {
         this(chat, content, sender, false, new Timestamp(System.currentTimeMillis()));
     }
