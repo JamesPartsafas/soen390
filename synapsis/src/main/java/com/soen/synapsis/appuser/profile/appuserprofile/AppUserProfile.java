@@ -4,6 +4,9 @@ import com.soen.synapsis.appuser.AppUser;
 
 import javax.persistence.*;
 
+/**
+ * This AppUserProfile class serves as the entity to store the profile of an app user.
+ */
 @Entity
 public class AppUserProfile {
     @OneToOne
@@ -43,9 +46,27 @@ public class AppUserProfile {
     @Column(nullable = true)
     private String language;
 
+    /**
+     * Empty constructor.
+     */
     public AppUserProfile() {
     }
 
+    /**
+     * Create a new app user profile given an app user object, id, description, education, skill, work, course, phone, volunteering, project, award and language.
+     * @param appUser the object representing an app user.
+     * @param id the app user's id.
+     * @param description the app user's description on his profile.
+     * @param education the app user's education on his profile.
+     * @param skill the app user's skill on his profile.
+     * @param work the app user's work on his profile.
+     * @param course the app user's course on his profile.
+     * @param phone the app user's phone on his profile.
+     * @param volunteering the app user's volunteering on his profile.
+     * @param project the app user's project on his profile.
+     * @param award the app user's award on his profile.
+     * @param language the app user's language on his profile.
+     */
     public AppUserProfile(AppUser appUser, Long id, String description, String education, String skill, String work, String course,
                           String phone, String volunteering, String project, String award, String language) {
         this.appUser = appUser;
@@ -62,6 +83,20 @@ public class AppUserProfile {
         this.language = language;
     }
 
+    /**
+     * Create a new app user profile given an app user object, description, education, skill, work, course, phone, volunteering, project, award and language.
+     * @param appUser the object representing an app user.
+     * @param description the app user's description on his profile.
+     * @param education the app user's education on his profile.
+     * @param skill the app user's skill on his profile.
+     * @param work the app user's work on his profile.
+     * @param course the app user's course on his profile.
+     * @param phone the app user's phone on his profile.
+     * @param volunteering the app user's volunteering on his profile.
+     * @param project the app user's project on his profile.
+     * @param award the app user's award on his profile.
+     * @param language the app user's language on his profile.
+     */
     public AppUserProfile(AppUser appUser, String description, String education, String skill, String work, String course,
                           String phone, String volunteering, String project, String award, String language) {
 

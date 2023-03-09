@@ -6,5 +6,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProfilePictureRepository extends JpaRepository<ProfilePicture, Long> {
+    /**
+     * Retrieve the profile picture of an app user.
+     * @param appUser the object representing an app user.
+     * @return the ProfilePicture of an app user.
+     */
     ProfilePicture findByAppUser(AppUser appUser);
 }
