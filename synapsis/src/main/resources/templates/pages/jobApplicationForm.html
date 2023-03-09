@@ -36,15 +36,23 @@
             </div>
 
             <!-- Upload Resume -->
-            <div class="mt-4">
+            <div th:if="${need_resume}" class="mt-4">
                 <p class="font-thin font-serif text-grey">Upload Resume *</p>
-                <input name="resume" class="w-full text-lg file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" id="resume" type="file" accept=".pdf,.docx" required/>
+                <input name="resume" class="w-full text-lg file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx" required/>
+            </div>
+            <div th:unless="${need_resume}" class="mt-4">
+                <p class="font-thin font-serif text-grey">Upload Resume</p>
+                <input name="resume" class="w-full text-lg file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx"/>
             </div>
 
             <!-- Upload Cover Letter -->
-            <div class="mt-4">
+            <div th:if="${need_cover}" class="mt-4">
+                <p class="font-thin font-serif text-grey">Upload Cover Letter *</p>
+                <input name="coverLetter" class="w-full text-lg file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx" required>
+            </div>
+            <div th:unless="${need_cover}" class="mt-4">
                 <p class="font-thin font-serif text-grey">Upload Cover Letter</p>
-                <input name="coverLetter" class="w-full text-lg file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" id="cover_letter" type="file" accept=".pdf,.docx">
+                <input name="coverLetter" class="w-full text-lg file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx">
             </div>
 
             <div class="border border-grey p-3 mt-4 rounded-md hover:bg-light text-black-variant">
