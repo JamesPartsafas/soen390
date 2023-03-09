@@ -1,5 +1,8 @@
 package com.soen.synapsis.appuser.profile.appuserprofile.updateprofile;
 
+/**
+ * This UpdateAppUserProfileRequest class serves as the request to update the app user profile.
+ */
 public class UpdateAppUserProfileRequest {
     private String description;
     private String education;
@@ -12,9 +15,25 @@ public class UpdateAppUserProfileRequest {
     private String award;
     private String language;
 
+    /**
+     * Empty constructor.
+     */
     public UpdateAppUserProfileRequest() {
     }
 
+    /**
+     * Create a new update app user profile request given the inputs data.
+     * @param description the description of the app user profile update request.
+     * @param education the education of the app user profile update request.
+     * @param skill the skill of the app user profile update request.
+     * @param work the work of the app user profile update request.
+     * @param phone the phone of the app user profile update request.
+     * @param volunteering the volunteering of the app user profile update request.
+     * @param course the course of the app user profile update request.
+     * @param project the project of the app user profile update request.
+     * @param award the award of the app user profile update request.
+     * @param language the language of the app user profile update request.
+     */
     public UpdateAppUserProfileRequest(String description, String education, String skill,
                                        String work, String phone, String volunteering, String course,
                                        String project, String award, String language) {
