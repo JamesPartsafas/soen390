@@ -131,12 +131,18 @@ public class JobService {
         );
 
         String encodedResume = Base64.getEncoder().encodeToString(resume.getBytes());
-        String encodedCoverLetter = Base64.getEncoder().encodeToString(coverLetter.getBytes());
-        if(encodedResume.isEmpty() || encodedCoverLetter.isEmpty()) {
-            return;
+        if(encodedResume.isEmpty()) {
+            throw new IllegalStateException("It is mandatory to upload your resume.");
         }
         jobApplication.setResume(encodedResume);
-        jobApplication.setCoverLetter(encodedCoverLetter);
+
+        if(job.getNeedCover()) {
+                String encodedCoverLetter = Base64.getEncoder().encodeToString(coverLetter.getBytes());
+                if (encodedCoverLetter.isEmpty()) {
+                    throw new IllegalStateException("It is mandatory to upload your cover letter.");
+                }
+                jobApplication.setCoverLetter(encodedCoverLetter);
+            }
 
         job.setNumApplicants(job.getNumApplicants() + 1);
         jobRepository.save(job);
