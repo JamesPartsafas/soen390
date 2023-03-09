@@ -39,11 +39,11 @@ INSERT INTO connection (receiver_id, requester_id, pending)
 VALUES (1, 4, true);
 INSERT INTO app_user_profile(app_user_id, description, education, skill, work, course,
                              phone, volunteering, project, award, language)
-VALUES (1, 'A standard user on Synapsis', 'Engineeing', 'fast learner', 'developer', 'ML', '5144444444', 'sss', 'xyz',
+VALUES (1, 'A standard user on Synapsis', 'Engineeing', 'fast learner', 'developer', 'ML', '514-444-4444', 'sss', 'xyz',
         'CARE', 'ARABIC');
 
 INSERT INTO company_profile(app_user_id, description, website, industry, company_size, location, speciality)
-VALUES (3, 'A standard company on Synapsis', 'www.google.com', 'technology', '150k', 'Newyork', 'search');
+VALUES (3, 'A standard company on Synapsis', 'www.google.com', 'technology', '150', 'Newyork', 'search');
 
 INSERT INTO chat (creator_id, participant_id, last_updated)
 VALUES (1, 5, '2022-01-01'),
