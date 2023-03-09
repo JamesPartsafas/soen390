@@ -17,19 +17,19 @@
       <p class="font-thin text-3xl m-2 text-center text-black-variant">Edit a Job</p>
       <label for="position" class="font-thin text-grey font-serif">Job Position</label>
       <input id="position" name="position" th:value="${position}"
-             class="font-thin font-serif border border-grey mt-4 pl-3 h-14 content-center rounded-md hover:bg-light"
+             class="font-thin font-serif border border-grey pl-3 h-14 content-center rounded-md hover:bg-light"
              required/>
-      <label for="company" class="font-thin text-grey font-serif">Company Name</label>
+      <label for="company" class="font-thin text-grey font-serif mt-4">Company Name</label>
       <input id="company" name="company" th:value="${company}"
-             class="font-thin font-serif border border-grey mt-4 pl-3 h-14 content-center rounded-md hover:bg-light"
+             class="font-thin font-serif border border-grey pl-3 h-14 content-center rounded-md hover:bg-light"
              required/>
-      <label for="address" class="font-thin text-grey font-serif">Address</label>
+      <label for="address" class="font-thin text-grey font-serif mt-4">Address</label>
       <input id="address" name="address" th:value="${address}"
-             class="font-thin font-serif border border-grey mt-4 pl-3 h-14 content-center rounded-md hover:bg-light"
+             class="font-thin font-serif border border-grey pl-3 h-14 content-center rounded-md hover:bg-light"
              required/>
-      <label for="description" class="font-thin text-grey font-serif">Description</label>
+      <label for="description" class="font-thin text-grey font-serif mt-4">Description</label>
       <textarea rows="5" id="description" name="description" th:text="${description}"
-                class="font-thin font-serif border border-grey mt-4 p-3 mb-4 content-center rounded-md hover:bg-light"
+                class="font-thin font-serif border border-grey p-3 mb-4 content-center rounded-md hover:bg-light"
                 required></textarea>
 
       <label for="type" class="font-thin text-grey font-serif">Job Type</label>
@@ -77,12 +77,14 @@
         </fieldset>
       </div>
 
-      <button type="submit" class="btn btn-primary mt-3 bg-primary text-base mx-auto p-4 rounded-2xl font-thin
-        transition hover:-translate-y-0.5 duration-150 hover:bg-opacity-60">Save
-      </button>
+      <div class="flex mt-3 mx-auto space-x-4">
+        <button type="submit" class="btn btn-primary bg-primary text-base rounded-2xl font-thin
+        hover:bg-opacity-60 p-4 w-20">Save
+        </button>
 
-      <a th:href="'job/' + ${jobId}" class="mb-4 text-white font-thin bg-primary mx-auto p-4 rounded-2xl
-            hover:bg-opacity-60">Cancel</a>
+        <a th:href="'job/' + ${jobId}" class="text-white font-thin bg-primary rounded-2xl
+        hover:bg-opacity-60 h-16 px-4 py-[20px] w-20">Cancel</a>
+      </div>
 
     </div>
 
