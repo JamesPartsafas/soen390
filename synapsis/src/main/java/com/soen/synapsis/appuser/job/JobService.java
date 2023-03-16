@@ -25,7 +25,6 @@ public class JobService {
     private final JobRepository jobRepository;
     private final AppUserRepository appUserRepository;
     private final NotificationService notificationService;
-
     private final JobApplicationRepository jobApplicationRepository;
 
     @Autowired
@@ -52,7 +51,7 @@ public class JobService {
      * @return a list of jobs.
      */
     public List<Job> getAllJobsAlreadySubmittedByUser(AppUser user) {
-        return jobRepository.findAllJobApplicationsSubmittedByUserID(user.getId());
+        return jobRepository.findAllJobsAlreadySubmittedByUserID(user.getId());
     }
 
     /**
@@ -222,6 +221,16 @@ public class JobService {
             );
             notificationService.saveNotification(notificationDTO, appUser);
         }
+    }
+
+    /**
+     * Retrieve all jobs given the search term.
+     *
+     * @param searchTerm the job to search for.
+     * @return a list of jobs that meet the search criteria.
+     */
+    public List<Job> getAllJobsBySearch(String searchTerm) {
+        return jobRepository.findJobsBySearch(searchTerm);
     }
 
 }

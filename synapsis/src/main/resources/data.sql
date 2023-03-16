@@ -67,7 +67,10 @@ VALUES (5, 'VBA Developer', 'Macrosoft', '123 King Street',
         1, 1, 2, false, '', true, true, true),
        (5, 'Course Content Writer', 'Craigstutors', '203 Level Street',
         'Looking for talented and creative content writers to develop educational materials such as lesson plans, assessments, worksheets, and other learning resources fo students ranging from elementary to K-12. Preferably, you should have at least 3 years of experience.',
-        1, 1, 1, true, 'https://www.google.com/', true, true, true);
+        1, 1, 1, true, 'https://www.google.com/', true, true, true),
+       (5, 'Software Developer', 'Macrosoft', '123 King Street',
+        'We are looking for a Software Developer to build and implement functional programs. You will work with other Developers and Product Managers throughout the software development life cycle. In this role, you should be a team player with a keen eye for detail and problem-solving skills. If you also have experience in Agile frameworks and popular coding languages (e.g. JavaScript), we’d like to meet you.',
+        0, 2, 0, false, '', true, false, false);
 
 INSERT INTO notification (recipient_id, text, url, seen, creation_time)
 VALUES (1, 'This is a notification. It brings you to messages.', '/chats', false, '2023-03-01');

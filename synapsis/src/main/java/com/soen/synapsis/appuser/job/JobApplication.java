@@ -4,7 +4,6 @@ import com.soen.synapsis.appuser.AppUser;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Arrays;
 
 /**
  * This Job Application class serves as the entity to store job applications.
@@ -147,6 +146,23 @@ public class JobApplication {
         this.links = links;
     }
 
+    /**
+     * Create a new job application from the inputs data.
+     *
+     * @param job the job that the job application is referring to
+     * @param applicant the user creating the job application
+     * @param dateApplied the date at which the job application was created
+     * @param status submitted, in review, selected, interviewed, offered, hired, rejected
+     * @param email the email of the user submitting the job application
+     * @param firstName the first name of the user submitting the job application
+     * @param lastName the last name of the user submitting the job application
+     * @param phone the phone number of the user submitting the job application
+     * @param address the address of the user submitting the job application
+     * @param city the city of the user submitting the job application
+     * @param country the country of the user submitting the job application
+     * @param legallyAllowedToWork true if the user is allowed to work in Canada; otherwise false
+     * @param links any additional links from the user submitting the job application
+     */
     public JobApplication(Job job, AppUser applicant, Timestamp dateApplied, JobApplicationStatus status, String email, String firstName, String lastName, String phone, String address, String city, String country, boolean legallyAllowedToWork, String links) {
         this.job = job;
         this.applicant = applicant;

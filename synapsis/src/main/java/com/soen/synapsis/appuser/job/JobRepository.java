@@ -18,5 +18,14 @@ public interface JobRepository extends JpaRepository<Job, Long>{
      * @return a list of all job applications submitted.
      */
     @Query(value = "SELECT j FROM Job j JOIN JobApplication ja ON j.id = ja.job.id WHERE ja.applicant.id = :userID")
-    List<Job> findAllJobApplicationsSubmittedByUserID(@Param("userID") Long userID);
+    List<Job> findAllJobsAlreadySubmittedByUserID(@Param("userID") Long userID);
+
+    /**
+     * Retrieve all jobs given a search query.
+     *
+     * @param search the search query.
+     * @return a list of jobs that meet the search criteria.
+     */
+    @Query(value = "SELECT j FROM Job j WHERE LOWER(j.company) LIKE %:search% OR LOWER(j.position) LIKE %:search%")
+    List<Job> findJobsBySearch(@Param("search") String search);
 }

@@ -1,11 +1,8 @@
 package com.soen.synapsis.appuser.job;
 
 import com.soen.synapsis.appuser.AppUser;
-import com.soen.synapsis.appuser.AppUserService;
 import com.soen.synapsis.appuser.AuthService;
 import com.soen.synapsis.appuser.Role;
-import com.soen.synapsis.appuser.profile.appuserprofile.updateprofile.UpdateAppUserProfileRequest;
-import com.soen.synapsis.appuser.profile.companyprofile.updateprofile.UpdateCompanyProfileRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,24 +34,31 @@ public class JobController {
     }
 
     /**
-     * Retrieve all job postings.
+     * Retrieve and display all job postings.
      *
+     * @param searchTerm jobs to search for.
      * @param model an object carrying data attributes passed to the view.
-     * @return the jobs page.
+     * @return the view containing all jobs.
      */
     @GetMapping("/jobs")
-    public String viewJobPosting(Model model) {
+    public String viewJobPosting(@RequestParam(required = false) String searchTerm, Model model) {
         if (!authService.isUserAuthenticated()) {
             return "redirect:/";
         }
 
-        List<Job> jobs = jobService.getAllJobs();
+        List<Job> jobs;
 
-        AppUser candidate = authService.getAuthenticatedUser();
-        List<Job> jobsSubmitted = jobService.getAllJobsAlreadySubmittedByUser(candidate);
+        if (searchTerm != null) {
+            jobs = jobService.getAllJobsBySearch(searchTerm.toLowerCase());
+        } else {
+            jobs = jobService.getAllJobs();
+        }
+
+        List<Job> jobsSubmitted = jobService.getAllJobsAlreadySubmittedByUser(authService.getAuthenticatedUser());
 
         model.addAttribute("jobs", jobs);
         model.addAttribute("jobsSubmitted", jobsSubmitted);
+        model.addAttribute("searchTerm", searchTerm);
 
         return "pages/jobs";
     }
