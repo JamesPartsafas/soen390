@@ -50,7 +50,6 @@ public class NotificationService {
      */
     public void saveNotification(NotificationDTO notificationDTO) {
         AppUser appUser;
-        System.out.println(notificationDTO);
         try {
             appUser = appUserService.getAppUser(notificationDTO.getRecipientId()).get();
         } catch (NoSuchElementException e) {
