@@ -60,6 +60,13 @@ class JobServiceTest {
     }
 
     @Test
+    void getAllJobsBySearchTermReturnsJobs() {
+        String searchTerm = "developer";
+        underTest.getAllJobsBySearch(searchTerm);
+        verify(jobRepository, times(1)).findJobsBySearch(searchTerm);
+    }
+
+    @Test
     void getJobReturnsJob() {
         Long id = 1L;
 

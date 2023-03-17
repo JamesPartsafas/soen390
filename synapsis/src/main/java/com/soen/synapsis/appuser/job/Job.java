@@ -60,6 +60,40 @@ public class Job {
     protected Job() {}
 
     /**
+     * Create a new job posting from the inputs data.
+     *
+     * @param id the new id of the job which should be unique.
+     * @param creator the recruiter who creates the job.
+     * @param position the name of the position.
+     * @param company the name of the company.
+     * @param address the address of the workplace.
+     * @param description the description of the job.
+     * @param type fulltime, partime, contract, temporary, volunteer, internship, or other.
+     * @param numAvailable the number of positions open.
+     * @param isExternal true if the job application is posted externally; otherwise false.
+     * @param externalLink the link of the external website.
+     * @param needResume true if the job application requires a resume; otherwise false.
+     * @param needCover true if the job application requires a cover letter; otherwise false.
+     * @param needPortfolio true if the job application requires a portfolio; otherwise false.
+     */
+    public Job(Long id, AppUser creator, String position, String company, String address, String description, JobType type, int numAvailable, int numApplicants, boolean isExternal, String externalLink, boolean needResume, boolean needCover, boolean needPortfolio) {
+        this.id = id;
+        this.creator = creator;
+        this.position = position;
+        this.company = company;
+        this.address = address;
+        this.description = description;
+        this.type = type;
+        this.numAvailable = numAvailable;
+        this.numApplicants = numApplicants;
+        this.isExternal = isExternal;
+        this.externalLink = externalLink;
+        this.needResume = needResume;
+        this.needCover = needCover;
+        this.needPortfolio = needPortfolio;
+    }
+
+    /**
      * Create a new job posting given the inputs data.
      *
      * @param creator the recruiter who creates the job.

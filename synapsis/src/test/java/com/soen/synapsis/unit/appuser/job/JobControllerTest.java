@@ -38,11 +38,13 @@ class JobControllerTest {
     private Job job2;
     private Job job3;
     private JobRequest request;
+    private String searchTerm;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
         underTest = new JobController(jobService, authService);
+        searchTerm = null;
 
         creator = new AppUser(1L, "joecreator", "1234", "joecreatorunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
         candidate = new AppUser(2L, "joecandidate", "1234", "joecandidateunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
@@ -72,7 +74,19 @@ class JobControllerTest {
         when(authService.isUserAuthenticated()).thenReturn(true);
         when(jobService.getAllJobs()).thenReturn(allJobs);
 
-        String returnValue = underTest.viewJobPosting(mock(Model.class));
+        String returnValue = underTest.viewJobPosting(searchTerm, mock(Model.class));
+
+        assertEquals("pages/jobs", returnValue);
+    }
+
+    @Test
+    void viewJobPostingBySearchTermReturnsAllJobs() {
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(jobService.getAllJobs()).thenReturn(allJobs);
+
+        searchTerm = "software developer";
+
+        String returnValue = underTest.viewJobPosting(searchTerm, mock(Model.class));
 
         assertEquals("pages/jobs", returnValue);
     }
@@ -81,7 +95,7 @@ class JobControllerTest {
     void viewJobPostingWhenNotAuthenticatedRedirects() {
         when(jobService.getAllJobs()).thenReturn(allJobs);
 
-        String returnValue = underTest.viewJobPosting(mock(Model.class));
+        String returnValue = underTest.viewJobPosting(searchTerm, mock(Model.class));
 
         assertEquals("redirect:/", returnValue);
     }

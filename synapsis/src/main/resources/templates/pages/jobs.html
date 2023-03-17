@@ -7,13 +7,24 @@
     <div class="mx-auto">
 
       <div class="col-start-5 col-end-12 row-span-1 h-10 bg-white border rounded-md mb-6 w-1/2">
-        <form th:action="@{/search}" class="h-full ml-4" method="get">
-          <input class="w-full h-full font-sans text-xl font-light" placeholder="Find Jobs" name="name">
+        <form th:action="@{/jobs}" class="h-full ml-4" method="get">
+          <input class="w-full h-full font-sans text-xl font-light" placeholder="Search Jobs" name="searchTerm">
         </form>
       </div>
 
+      <div th:if="${jobs.size() == 0}">
+        <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+          No results for <span th:text="${searchTerm}"></span>
+        </div>
+      </div>
+
+      <div th:if="${jobs.size() > 0 and searchTerm != null}">
+        Searching for <span th:text="${searchTerm}"></span>
+      </div>
+
       <div class="grid grid-cols-3 gap-3">
-        <div th:each="job: ${jobs}" class="inline-block rounded-2xl shadow w-56 min-h-min bg-white mt-4 mr-4 pb-4">
+
+        <div th:if="${jobs.size() > 0}" th:each="job: ${jobs}" class="inline-block rounded-2xl shadow w-56 min-h-min bg-white mt-4 mr-4 pb-4">
 
           <img class="w-56 h-40">
           <div class="font-sans text-base font-light mt-2 ml-4" th:text="${job.position}"></div>
