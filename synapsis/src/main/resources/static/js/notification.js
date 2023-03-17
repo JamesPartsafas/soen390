@@ -20,7 +20,7 @@ function sendNotification(content, url, recipientId, type) {
     if (notificationStompClient) {
         const notification = {
             id: 0,
-            recipient_id: recipientId,
+            recipientId: recipientId,
             type: type,
             text: content,
             url: url,

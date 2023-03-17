@@ -6,7 +6,7 @@ package com.soen.synapsis.websockets.notification;
  */
 public class NotificationDTO {
     private Long id;
-    private Long recipient_id;
+    private Long recipientId;
     private NotificationType type;
     private String text;
     private String url;
@@ -22,15 +22,15 @@ public class NotificationDTO {
     /**
      * Creates a new notification instance from the given data.
      * @param id The ID of the viewed notification
-     * @param recipient_id The ID of the user that will be receiving the notification
+     * @param recipientId The ID of the user that will be receiving the notification
      * @param type The type of the notification
      * @param text The content of the notification
      * @param url Represents the URL where the notification will redirect to in case if it is clicked
      * @param seen Flag represents if the notification have been viewed
      */
-    public NotificationDTO(Long id, Long recipient_id, NotificationType type, String text, String url, boolean seen) {
+    public NotificationDTO(Long id, Long recipientId, NotificationType type, String text, String url, boolean seen) {
         this.id = id;
-        this.recipient_id = recipient_id;
+        this.recipientId = recipientId;
         this.type = type;
         this.text = text;
         this.url = url;
@@ -45,12 +45,12 @@ public class NotificationDTO {
         this.id = id;
     }
 
-    public Long getRecipient_id() {
-        return recipient_id;
+    public Long getRecipientId() {
+        return recipientId;
     }
 
-    public void setRecipient_id(Long recipient_id) {
-        this.recipient_id = recipient_id;
+    public void setRecipientId(Long recipientId) {
+        this.recipientId = recipientId;
     }
 
     public NotificationType getType() {
@@ -105,7 +105,7 @@ public class NotificationDTO {
     public String toString() {
         return "NotificationDTO{" +
                 "id=" + id +
-                ", recipient_id=" + recipient_id +
+                ", recipient_id=" + recipientId +
                 ", type=" + type +
                 ", text='" + text + '\'' +
                 ", url='" + url + '\'' +
