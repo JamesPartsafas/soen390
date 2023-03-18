@@ -220,4 +220,14 @@ public class AppUserServiceTest {
 
         verify(file).getBytes();
     }
+
+    @Test
+    void markCompanyAsVerifiedSucceeds() {
+        AppUser companyUser = new AppUser(2L, "Joe Man", "1234", "joecompany@mail.com", Role.COMPANY, false);
+
+        underTest.markCompanyAsVerified(companyUser);
+
+        assertEquals(true, companyUser.getVerificationStatus());
+        verify(appUserRepository).save(companyUser);
+    }
 }

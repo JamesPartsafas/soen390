@@ -89,6 +89,7 @@ public class AppUserController {
         model.addAttribute("role", appUser.getRole());
         model.addAttribute("myRole", authService.getAuthenticatedUser().getRole());
         model.addAttribute("myId", authService.getAuthenticatedUser().getId());
+        model.addAttribute("verificationStatus", appUser.getVerificationStatus());
         if(appUser.getRole() ==  Role.RECRUITER) {
             model.addAttribute("companyId", appUser.getCompany().getId());
         }
@@ -242,5 +243,38 @@ public class AppUserController {
     @GetMapping("/updateuserpage")
     public String getUpdateUserProfile() {
         return "pages/updateuserpage";
+    }
+
+    /**
+     * Allows administrator to mark a COMPANY user as verified.
+     * @param id The id of the company user to be marked as verified.
+     * @return View containing user profile. If the requester is not authenticated, redirects to home page.
+     */
+    @PostMapping("/admin/verifyCompany")
+    public String markCompanyAsVerified(@RequestParam("companyUserId") Long id) {
+        try {
+            if(!authService.doesUserHaveRole(Role.ADMIN)) {
+                throw new IllegalStateException("You must be an admin to mark a company as verified.");
+            }
+            Optional<AppUser> optionalAppUser = appUserService.getAppUser(id);
+
+            if(optionalAppUser.isEmpty()) {
+                return "redirect:/";
+            }
+
+            AppUser appUser = optionalAppUser.get();
+
+            if(appUser.getRole() != Role.COMPANY) {
+                throw new IllegalStateException("The user must be a company to be marked as a verified company.");
+            }
+
+            appUserService.markCompanyAsVerified(appUser);
+            String userProfileURL = "redirect:/user/" + id;
+
+            return userProfileURL;
+        }
+        catch (IllegalStateException e) {
+            return "redirect:/";
+        }
     }
 }

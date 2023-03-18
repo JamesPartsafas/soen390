@@ -37,6 +37,11 @@
                                 <p class="font-normal  text-gray-700 dark:text-gray-400" th:text="${location}"></p>
                             </td>
                         </tr>
+                        <tr>
+                            <td>
+                                <p th:if="${role.toString() == 'COMPANY' and verificationStatus == true}">&#10004;</p>
+                            </td>
+                        </tr>
                     </table>
                 </div>
 
@@ -60,6 +65,11 @@
                 <form th:action="@{/chat/create}" method="post">
                     <input type="hidden" name="id" th:value="${id}" />
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Chat</button>
+                </form>
+
+                <form th:if="${role.toString() == 'COMPANY' and myRole.toString() == 'ADMIN' and verificationStatus == false}" th:action="@{/admin/verifyCompany}" method="post">
+                    <input type="hidden" name="companyUserId" th:value="${id}" />
+                    <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Mark</button>
                 </form>
             </div>
         </div>

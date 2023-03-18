@@ -39,6 +39,9 @@ public class AppUser {
     private String email;
 
     @Column(nullable = false)
+    private boolean verificationStatus;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -125,6 +128,15 @@ public class AppUser {
         this.company = company;
     }
 
+    public AppUser(Long id, String name, String password, String email, Role role, boolean verificationStatus) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.verificationStatus = verificationStatus;
+    }
+
     public Long getId() {
         return id;
     }
@@ -163,6 +175,14 @@ public class AppUser {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public boolean getVerificationStatus() {
+        return verificationStatus;
+    }
+
+    public void setVerificationStatus(boolean verificationStatus) {
+        this.verificationStatus = verificationStatus;
     }
 
     public AuthProvider getAuthProvider() {
