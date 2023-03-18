@@ -3,6 +3,7 @@ package com.soen.synapsis.appuser;
 import com.soen.synapsis.appuser.profile.ProfilePicture;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
+import com.soen.synapsis.appuser.settings.Settings;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -46,10 +47,8 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 
-    @Column(columnDefinition = "boolean default true")
-    private boolean emailNotificationsOn;
 
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne
     @JoinColumn(name = "company_id")
     private AppUser company;
 
@@ -64,6 +63,9 @@ public class AppUser {
 
     @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
     private ProfilePicture profilePicture;
+
+    @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
+    private Settings settings;
 
     protected AppUser() {
     }
@@ -290,12 +292,12 @@ public class AppUser {
         this.profilePicture = profilePicture;
     }
 
-    public boolean isEmailNotificationsOn() {
-        return emailNotificationsOn;
+    public Settings getSettings() {
+        return settings;
     }
 
-    public void setEmailNotificationsOn(boolean emailNotificationsOn) {
-        this.emailNotificationsOn = emailNotificationsOn;
+    public void setSettings(Settings settings) {
+        this.settings = settings;
     }
 
     @Override
@@ -311,7 +313,6 @@ public class AppUser {
                 ", email='" + email + '\'' +
                 ", role=" + role +
                 ", authProvider=" + authProvider +
-                ", emailNotificationsOn=" + emailNotificationsOn +
                 '}';
     }
 }
