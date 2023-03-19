@@ -177,8 +177,12 @@ public class ConnectionService {
      * @param receiverId the user that you are disconnecting with.
      */
     public void disconnect(Long requesterId, Long receiverId) {
-        ConnectionKey connectionKey = new ConnectionKey(requesterId, receiverId);
-        connectionRepository.deleteById(connectionKey);
+        ConnectionKey connectionKey1 = new ConnectionKey(requesterId, receiverId);
+        ConnectionKey connectionKey2 = new ConnectionKey(receiverId, requesterId);
+
+        connectionRepository.findById(connectionKey1).ifPresentOrElse(
+                connectionRepository::delete,
+                () -> connectionRepository.findById(connectionKey2).ifPresent(connectionRepository::delete));
     }
 
     /**
