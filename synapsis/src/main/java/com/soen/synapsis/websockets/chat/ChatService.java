@@ -109,4 +109,21 @@ public class ChatService {
 
         return "redirect:/chat/" + newChat.getId();
     }
+
+    /**
+     * Delegate the setting the message reportStatus to reported to the MessageService
+     * @param authenticatedUser the authenticated user who is reporting the message
+     * @param messageID the ID of the message to report
+     */
+    public void setMessageReportStatus(AppUser authenticatedUser, Long messageID) {
+        messageService.setMessageReportStatus(authenticatedUser, messageID);
+    }
+
+    /**
+     * Delegate the process of fetching the messages to the MessageService
+     * @return A list of lists containing the reported messages and their previous messages.
+     */
+    public List<List<Message>> getReportedMessages() {
+        return messageService.getReportedMessages();
+    }
 }

@@ -31,6 +31,10 @@ public class Message {
     private boolean read;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ReportStatus reportStatus;
+
+    @Column(nullable = false)
     private Timestamp createdAt;
 
     /**
@@ -50,8 +54,24 @@ public class Message {
      * @param read a flag to indicate whether the receiver viewed the message
      * @param createdAt a timestamp representing the time the message is created
      */
+    public Message(Long id, Chat chat, String content, AppUser sender, boolean read, ReportStatus reportStatus, Timestamp createdAt) {
+        this(chat, content, sender, read, reportStatus, createdAt);
+        this.id = id;
+    }
+
+    /**
+     * Creates a new message instance from the given data.
+     * The constructor should only be used in testing. ID should be set automatically.
+     * The reportStatus is set to UNREPORTED
+     * @param id the ID of the Message. This should be unique
+     * @param chat the instance of the Chat that the message is related to
+     * @param content the content of the message in a string format
+     * @param sender the instance of the sender user
+     * @param read a flag to indicate whether the receiver viewed the message
+     * @param createdAt a timestamp representing the time the message is created
+     */
     public Message(Long id, Chat chat, String content, AppUser sender, boolean read, Timestamp createdAt) {
-        this(chat, content, sender, read, createdAt);
+        this(chat, content, sender, read, ReportStatus.UNREPORTED, createdAt);
         this.id = id;
     }
 
@@ -62,13 +82,15 @@ public class Message {
      * @param content the content of the message in a string format
      * @param sender the instance of the sender user
      * @param read a flag to indicate whether the receiver viewed the message
+     * @param reportStatus an indicator whether the message has been reported, unreported or reviewed
      * @param createdAt a timestamp representing the time the message is created
      */
-    public Message(Chat chat, String content, AppUser sender, boolean read, Timestamp createdAt) {
+    public Message(Chat chat, String content, AppUser sender, boolean read, ReportStatus reportStatus, Timestamp createdAt) {
         this.chat = chat;
         this.content = content;
         this.sender = sender;
         this.read = read;
+        this.reportStatus = reportStatus;
         this.createdAt = createdAt;
     }
 
@@ -76,13 +98,14 @@ public class Message {
      * Creates a new message instance from the given data.
      * The ID of the message is set automatically.
      * The read flag is set to false.
+     * The reportStatus is set to UNREPORTED
      * The createdAt timestamp is set to the current timestamp in milliseconds.
      * @param chat the instance of the Chat that the message is related to
      * @param content the content of the message in a string format
      * @param sender the instance of the sender user
      */
     public Message(Chat chat, String content, AppUser sender) {
-        this(chat, content, sender, false, new Timestamp(System.currentTimeMillis()));
+        this(chat, content, sender, false, ReportStatus.UNREPORTED, new Timestamp(System.currentTimeMillis()));
     }
 
     public Long getId() {
@@ -123,6 +146,14 @@ public class Message {
 
     public void setRead(boolean read) {
         this.read = read;
+    }
+
+    public ReportStatus getReportStatus() {
+        return reportStatus;
+    }
+
+    public void setReportStatus(ReportStatus reportStatus) {
+        this.reportStatus = reportStatus;
     }
 
     public Timestamp getCreatedAt() {

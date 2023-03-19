@@ -3,6 +3,7 @@ package com.soen.synapsis.websockets.chat;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AppUserAuth;
 import com.soen.synapsis.appuser.AuthService;
+import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.websockets.chat.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -60,7 +61,8 @@ public class ChatController {
     }
 
     /**
-     * Retrieves all the chats that the authenticated user have
+     * If the user is not an admin, the method retrieves all the chats that the authenticated user have
+     * else redirects to the admin review page.
      * @param model Allows for data to be passed to view.
      * @return The view containing all the chats if the user is authenticated else redirects to the home page.
      */
@@ -68,6 +70,10 @@ public class ChatController {
     public String getChats(Model model) {
         if (!authService.isUserAuthenticated()) {
             return "redirect:/";
+        }
+
+        if (authService.doesUserHaveRole(Role.ADMIN)) {
+            return "redirect:/chat/admin";
         }
 
         List<Chat> chats = chatService.findChatsByUserId(authService.getAuthenticatedUser().getId());
@@ -128,6 +134,7 @@ public class ChatController {
 
         model.addAttribute("chatId", chat.getId());
         model.addAttribute("messages", messages);
+        model.addAttribute("authenticatedUserID", authenticatedUserId);
 
         return "pages/messagingPage";
     }
@@ -191,4 +198,42 @@ public class ChatController {
         }
     }
 
+    /**
+     * This method is used to report a chat message.
+     * @param messageID The ID of the message to be reported.
+     * @param chatID The ID of the chat to which the message belongs.
+     * @param model The model object to add attributes to.
+     * @return Returns the chat page with an updated model attribute to show if the process succeeded or not.
+     */
+    @PostMapping("/chat/report")
+    public String reportMessage(@RequestParam("messageID") Long messageID, @RequestParam("chatID") Long chatID, Model model) {
+        if (!authService.isUserAuthenticated()) {
+            return "redirect:/";
+        }
+
+        try {
+            chatService.setMessageReportStatus(authService.getAuthenticatedUser(), messageID);
+            model.addAttribute("reportStatus", "Reported Message Successfully");
+        } catch (Exception e) {
+            model.addAttribute("reportStatus", e.getMessage());
+        }
+
+        return getChatById(chatID, model);
+    }
+
+    /**
+     * Retrieves reported messages and displays them on the admin messages page.
+     * @param model  Allows for data to be passed to view.
+     * @return The view of the admin reported messages' page if the user is an admin else redirects to the home page
+     */
+    @GetMapping ("/chat/admin")
+    public String getReportMessage(Model model) {
+        if (!authService.doesUserHaveRole(Role.ADMIN)) {
+            return "redirect:/";
+        }
+
+        List<List<Message>> reportedMessage = chatService.getReportedMessages();
+        model.addAttribute("listOfListOfMessages", reportedMessage);
+        return "pages/adminMessagesPage";
+    }
 }
