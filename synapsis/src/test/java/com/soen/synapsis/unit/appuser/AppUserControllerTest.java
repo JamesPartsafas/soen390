@@ -182,4 +182,37 @@ class AppUserControllerTest {
 
     }
 
+    @Test
+    void isAdminMarkingIsCompanyAsVerified() {
+        AppUser adminUser = new AppUser(2L, "Joe Admin", "1234", "joeadmin@mail.com", Role.ADMIN);
+        AppUser companyUser = new AppUser(1L, "Joe Company", "1234", "joecompany@mail.com", Role.COMPANY);
+        when(authService.getAuthenticatedUser()).thenReturn(adminUser);
+        when(authService.doesUserHaveRole(Role.ADMIN)).thenReturn(true);
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(appUserService.getAppUser(companyUser.getId())).thenReturn(Optional.of(companyUser));
+
+        String returnValue = underTest.markCompanyAsVerified(companyUser.getId());
+
+        assertEquals("redirect:/user/" + companyUser.getId(), returnValue);
+    }
+
+    @Test
+    void isNotAdminMarkingIsCompanyAsVerified() {
+        AppUser NotAdminUser = new AppUser(1L, "Joe Admin", "1234", "joerecruiter@mail.com", Role.RECRUITER);
+        AppUser companyUser = new AppUser(2L, "Joe Company", "1234", "joecompany@mail.com", Role.COMPANY);
+        when(authService.getAuthenticatedUser()).thenReturn(NotAdminUser);
+
+        assertEquals("redirect:/", underTest.markCompanyAsVerified(companyUser.getId()));
+    }
+
+    @Test
+    void isAdminMarkingIsNotCompanyAsVerified() {
+        AppUser adminUser = new AppUser(1L, "Joe Admin", "1234", "joeadmin@mail.com", Role.ADMIN);
+        AppUser NotCompanyUser = new AppUser(2L, "Joe Candidate", "1234", "joecandidate@mail.com", Role.CANDIDATE);
+        when(authService.getAuthenticatedUser()).thenReturn(adminUser);
+        when(authService.doesUserHaveRole(Role.COMPANY)).thenReturn(true);
+        when(appUserService.getAppUser(NotCompanyUser.getId())).thenReturn(Optional.of(NotCompanyUser));
+
+        assertEquals("redirect:/", underTest.markCompanyAsVerified(NotCompanyUser.getId()));
+    }
 }

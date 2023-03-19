@@ -216,4 +216,15 @@ public class AppUserService {
             throw new IllegalStateException("This email does not belong to any user.");
         }
     }
+
+    /**
+     * Marks company user as verified.
+     * @param appUser The user to be made a recruiter.
+     */
+    public void markCompanyAsVerified(AppUser appUser) {
+
+        appUser.setVerificationStatus(true);
+        appUserRepository.save(appUser);
+
+    }
 }
