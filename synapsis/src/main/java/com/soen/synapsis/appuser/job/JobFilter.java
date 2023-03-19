@@ -26,6 +26,14 @@ public class JobFilter {
 
     protected JobFilter() {}
 
+    public JobFilter(Long id, AppUser appUser, JobType jobType, boolean showInternalJobs, boolean showExternalJobs) {
+        this.id = id;
+        this.appUser = appUser;
+        this.jobType = jobType;
+        this.showInternalJobs = showInternalJobs;
+        this.showExternalJobs = showExternalJobs;
+    }
+
     public JobFilter(AppUser appUser, JobType jobType, boolean showInternalJobs, boolean showExternalJobs) {
         this.appUser = appUser;
         this.jobType = jobType;
@@ -39,6 +47,14 @@ public class JobFilter {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
     }
 
     public JobType getJobType() {
