@@ -64,10 +64,6 @@ public class JobController {
         }
         else if (searchTerm != null) {
             jobs = jobService.getAllJobsBySearch(searchTerm.toLowerCase());
-
-//            model.addAttribute("jobTypeFilter", null);
-//            model.addAttribute("showInternalJobsFilter", null);
-//            model.addAttribute("showExternalJobsFilter", null);
         } else {
             jobs = jobService.getAllJobs();
         }
