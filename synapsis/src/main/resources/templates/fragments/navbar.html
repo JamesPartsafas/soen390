@@ -1,5 +1,5 @@
 <!--    <nav class="flex-auto bg-white px-4 lg:px-2 py-6 fixed w-full z-20 items-center">-->
-<html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="http://thymeleaf.org"   xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
 
 <div th:fragment="navbar" class="h-32">
@@ -37,8 +37,76 @@
         </div>
     </nav>
 
-    <!--Logged in navbar-->
-    <nav sec:authorize="isAuthenticated()"
+
+
+    <!-- Logged in navbar for COMPANY-->
+    <nav sec:authorize="hasAuthority('COMPANY')"
+        class="bg-white px-4 lg:px-2 py-2 fixed w-full z-20 top-0 left-0">
+        <div class="container flex flex-wrap items-center justify-between mx-auto">
+            <a href="/" class="flex items-center">
+                <img src="/assets/synapsis_black.svg" class="h-12 lg:h-16 mt-3 mr-3 " alt="Synapsis Logo">
+            </a>
+            <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+                <ul class="flex flex-col justify-between p-4 mt-4 md:flex-row md:space-x-6 md:mt-0 text-lg font-light text-black w-[1000px]">
+                    <a href="/user" aria-current="page">
+                        <li class="flex flex-col items-center">
+                            <i class="fa-solid fa-user fa-2x h-10"></i>
+                            Profiles
+                        </li>
+                    </a>
+                    <a href="/network">
+                        <li class="flex flex-col items-center">
+                            <i class="fa-solid fa-users fa-2x h-10"></i>
+                            Network
+                        </li>
+                    </a>
+                    <a href="/chats">
+                        <li class="flex flex-col items-center">
+                            <i class="fa-regular fa-comment-dots fa-2x h-10"></i>
+                            Messages
+                        </li>
+                    </a>
+                    <button data-dropdown-toggle="notificationsDropdown" data-dropdown-trigger="click">
+                        <li class="flex flex-col items-center">
+                            <i id="notificationIcon" class="fa-solid fa-bell fa-2x h-10"></i>
+                            Notifications
+                        </li>
+                        <div id="notificationsDropdown"
+                             class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-52">
+                            <div id="notification_output">Nothing to show!</div>
+                        </div>
+                    </button>
+                    <a href="/user">
+                    </a>
+                    <a href="/settings">
+                        <li>
+                            <div class="text-center relative group">
+                                <i class="fa-solid fa-gear fa-2x h-10"></i>
+                                <div class="flex flex-col items-center cursor-pointer text-md  border-b-0
+                                group-hover:border-grey-light">
+                                    Settings
+                                </div>
+                                <div class="absolute border border-t-0 w-32 bg-neutral-100 rounded-lg invisible group-hover:visible">
+                                    <div class="text-center"><i class="fa-solid fa-gear mr-3"></i>Settings</div>
+                                    <div class="text-center"><i class="fa-solid fa-globe mr-3"></i>Language</div>
+                                    <hr class="border-t border-grey-light text-center">
+                                    <form th:action="@{/logout}" method="post" class="text-center">
+                                        <input type="submit" value="Log out"/>
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+                    </a>
+                </ul>
+            </div>
+        </div>
+        <div class="invisible w-0 h-0" th:text="${#authentication.getPrincipal().getId()}" id="userId"></div>
+        <script src="/js/notification.js"></script>
+    </nav>
+
+
+    <!-- Logged in navbar for Candidate,Recruiter or Admin-->
+    <nav  sec:authorize="hasAnyAuthority('RECRUITER', 'CANDIDATE', 'ADMIN')"
          class="bg-white px-4 lg:px-2 py-2 fixed w-full z-20 top-0 left-0">
         <div class="container flex flex-wrap items-center justify-between mx-auto">
             <a href="/" class="flex items-center">
