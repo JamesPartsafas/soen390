@@ -58,7 +58,7 @@ INSERT INTO job (creator_id, position, company, address, description, type, num_
                  external_link, need_resume, need_cover, need_portfolio)
 VALUES (5, 'VBA Developer', 'Macrosoft', '123 King Street',
         'We are seeking an experienced VBA developer to join our team. You will be responsible for developing, maintaining, and enhancing Excel-based applications and tools that are used across the company. You will work closely with other developers, business analysts, and end-users to deliver high-quality, user-friendly solutions that meet business needs.',
-        1, 5, 10, false, '', true, true, true),
+        0, 5, 10, false, '', true, true, true),
        (5, 'Graphic Artist', 'Adibas', '789 Main Street',
         'Our company is seeking a creative and skilled graphic artist to join our team. As a graphic artist, you will work closely with our marketing and design teams to create visually appealing and effective graphics for our footwear. Your designs will be a key factor in promoting our brand and driving sales.',
         1, 3, 6, false, '', true, true, true),
@@ -67,7 +67,7 @@ VALUES (5, 'VBA Developer', 'Macrosoft', '123 King Street',
         1, 1, 2, false, '', true, true, true),
        (5, 'Course Content Writer', 'Craigstutors', '203 Level Street',
         'Looking for talented and creative content writers to develop educational materials such as lesson plans, assessments, worksheets, and other learning resources fo students ranging from elementary to K-12. Preferably, you should have at least 3 years of experience.',
-        1, 1, 1, true, 'https://www.google.com/', true, true, true),
+        0, 1, 1, true, 'https://www.google.com/', true, true, true),
        (5, 'Software Developer', 'Macrosoft', '123 King Street',
         'We are looking for a Software Developer to build and implement functional programs. You will work with other Developers and Product Managers throughout the software development life cycle. In this role, you should be a team player with a keen eye for detail and problem-solving skills. If you also have experience in Agile frameworks and popular coding languages (e.g. JavaScript), we’d like to meet you.',
         0, 2, 0, false, '', true, false, false);

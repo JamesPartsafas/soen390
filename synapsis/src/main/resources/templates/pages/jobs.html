@@ -2,56 +2,84 @@
 <html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
 <div layout:fragment="content">
+    <div class="grid grid-cols-12 grid-rows-20 gap-y-4">
 
-  <div class="w-1/2 mx-auto">
-    <div class="mx-auto">
+        <div class="col-start-2 col-end-4 row-start-1 row-end-4 border border-zinc-400 rounded-xl">
+            <div class="mx-4 my-3">
+                <h1 class="text-3xl">Job Filters</h1>
+                <form th:action="@{/jobs}" method="get">
+                    <label class="font-thin text-grey font-serif">Job Type</label>
+                    <fieldset class="font-serif text-grey">
+                        <div th:each="jobType : ${jobTypes}">
+                            <input type="radio" name="jobType" th:id="${jobType}" th:value="${jobType}" th:checked="${jobType == jobTypeFilter}" required>
+                            <label th:for="${jobType}" th:text="${jobType}"></label><br>
+                        </div>
+                    </fieldset> <br>
 
-      <div class="col-start-5 col-end-12 row-span-1 h-10 bg-white border rounded-md mb-6 w-1/2">
-        <form th:action="@{/jobs}" class="h-full ml-4" method="get">
-          <input class="w-full h-full font-sans text-xl font-light" placeholder="Search Jobs" name="searchTerm">
-        </form>
-      </div>
+                    <label class="font-thin text-grey font-serif">Show internal jobs</label><br>
+                    <input type="radio" id="internal-yes" name="showInternalJobs" value="true" th:checked="${showInternalJobsFilter != null and showInternalJobsFilter}" required>
+                    <label for="internal-yes">Yes</label><br>
+                    <input type="radio" id="internal-no" name="showInternalJobs" value="false" th:checked="${showInternalJobsFilter != null and !showInternalJobsFilter}">
+                    <label for="internal-no">No</label><br><br>
 
-      <div th:if="${jobs.size() == 0}">
-        <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
-          No results for <span th:text="${searchTerm}"></span>
-        </div>
-      </div>
+                    <label class="font-thin text-grey font-serif">Show external jobs</label><br>
+                    <input type="radio" id="external-yes" name="showExternalJobs" value="true" th:checked="${showExternalJobsFilter != null and showExternalJobsFilter}" required>
+                    <label for="external-yes">Yes</label><br>
+                    <input type="radio" id="external-no" name="showExternalJobs" value="false" th:checked="${showExternalJobsFilter != null and !showExternalJobsFilter}">
+                    <label for="external-no">No</label><br><br>
 
-      <div th:if="${jobs.size() > 0 and searchTerm != null}">
-        Searching for <span th:text="${searchTerm}"></span>
-      </div>
+                    <input type="hidden" name="filterPassed" value="true">
 
-      <div class="grid grid-cols-3 gap-3">
-
-        <div th:if="${jobs.size() > 0}" th:each="job: ${jobs}" class="inline-block rounded-2xl shadow w-56 min-h-min bg-white mt-4 mr-4 pb-4">
-
-          <img class="w-56 h-40">
-          <div class="font-sans text-base font-light mt-2 ml-4" th:text="${job.position}"></div>
-          <div class="font-sans text-base font-light mt-2 ml-4" th:text="${job.company}"></div>
-
-          <div class="bg-light-blue mx-auto w-11/12 rounded-2xl text-xs mt-2">
-            <div class="font-sans font-light p-2" th:text="${job.description}"></div>
-            <p class="px-2">Salary: TBD</p>
-            <a th:href="@{/job/{id}(id=${job.getID()})}" class="inline-block px-2 py-2 underline">More details</a>
-            <p class="px-2" th:if="${job.isExternal}">***APPLY BY WEBSITE***</p>
-
-          </div>
-
-          <div class="ml-4 mr-4 mt-6 flex justify-center">
-            <div th:if="${jobsSubmitted.contains(job)}">
-              <button class="inline-block px-4 py-2 text-white bg-red-900 rounded-full" disabled>Submitted</button>
+                    <button type="submit" class="btn btn-primary bg-primary text-base mx-auto rounded-2xl font-thin transition hover:-translate-y-0.5 duration-150 hover:bg-opacity-60">Filter Jobs</button>
+                </form>
             </div>
-            <div th:unless="${jobsSubmitted.contains(job)}">
-              <a th:href="@{/jobapplication/{id}(id=${job.getID()})}" class="inline-block px-4 py-2 text-white bg-red-500 rounded-full">Apply</a>
-            </div>
-          </div>
-
         </div>
 
-      </div>
+        <div class="row-start-1 row-end-15 col-start-5 col-end-12 row-span-1 h-14 bg-white">
 
-    </div>
+            <form th:action="@{/jobs}" class="h-full" method="get">
+                <button type="submit" class="w-10 h-4/5 border rounded-md"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <input class="w-1/2 h-4/5 pl-4 font-sans text-xl font-light border rounded-md" placeholder="Search Jobs" name="searchTerm">
+            </form>
+
+          <div th:if="${jobs.size() == 0}">
+            <div class="p-4 mb-4 mt-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+              No results found.
+            </div>
+          </div>
+
+          <div th:if="${jobs.size() > 0 and searchTerm != null}">
+            Searching for <span th:text="${searchTerm}"></span>
+          </div>
+
+          <div class="grid grid-cols-3 gap-3">
+
+            <div th:if="${jobs.size() > 0}" th:each="job: ${jobs}" class="inline-block rounded-2xl shadow w-56 min-h-min bg-white mt-4 mr-4 pb-4">
+
+              <img class="w-56 h-40">
+              <div class="font-sans text-base font-light mt-2 ml-4" th:text="${job.position}"></div>
+              <div class="font-sans text-base font-light mt-2 ml-4" th:text="${job.company}"></div>
+
+              <div class="bg-light-blue mx-auto w-11/12 rounded-2xl text-xs mt-2">
+                <div class="font-sans font-light p-2" th:text="${job.description}"></div>
+                <p class="px-2">Salary: TBD</p>
+                <a th:href="@{/job/{id}(id=${job.getID()})}" class="inline-block px-2 py-2 underline">More details</a>
+                <p class="px-2" th:if="${job.isExternal}">***APPLY BY WEBSITE***</p>
+              </div>
+
+              <div class="ml-4 mr-4 mt-6 flex justify-center">
+                <div th:if="${jobsSubmitted.contains(job)}">
+                  <button class="inline-block px-4 py-2 text-white bg-red-900 rounded-full" disabled>Submitted</button>
+                </div>
+                <div th:unless="${jobsSubmitted.contains(job)}">
+                  <a th:href="@{/jobapplication/{id}(id=${job.getID()})}" class="inline-block px-4 py-2 text-white bg-red-500 rounded-full">Apply</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
   </div>
 
 </div>
