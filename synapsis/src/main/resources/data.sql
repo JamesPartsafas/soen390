@@ -47,12 +47,12 @@ VALUES (3, 'A standard company on Synapsis', 'www.google.com', 'technology', '15
 
 INSERT INTO chat (creator_id, participant_id, last_updated)
 VALUES (1, 5, '2022-01-01'),
-       (4, 1, '2023-01-01'),
-       (1, 1, '2023-01-01');
+       (4, 1, '2023-01-01');
 
-INSERT INTO message (chat_id, content, sender_id, read, created_at)
-VALUES (1, 'Hi from Joe User', 1, false, '2022-01-02'),
-       (1, 'Hi from Joe Recruiter', 5, false, '2022-01-03');
+INSERT INTO message (chat_id, content, sender_id, read, report_status, created_at)
+VALUES (1, 'Hi from Joe User', 1, false, 'UNREPORTED', '2022-01-02'),
+       (1, 'Hi from Joe Recruiter', 5, false, 'REPORTED', '2022-01-03'),
+       (2, 'Hi from Joe Google', 5, false, 'UNREPORTED', '2022-01-03');
 
 INSERT INTO job (creator_id, position, company, address, description, type, num_available, num_applicants, is_external,
                  external_link, need_resume, need_cover, need_portfolio)
