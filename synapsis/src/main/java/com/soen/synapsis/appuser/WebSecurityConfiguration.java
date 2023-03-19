@@ -55,10 +55,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
                 .antMatchers("/privateuser").hasAuthority(Role.CANDIDATE.toString())
-                .antMatchers("/").hasAuthority(Role.COMPANY.toString())
-                .antMatchers("/").hasAuthority(Role.RECRUITER.toString())
-                .antMatchers("/").hasAuthority(Role.ADMIN.toString())
-                .antMatchers("/").hasAuthority(Role.CANDIDATE.toString())
+                .antMatchers("/").permitAll()
                 .antMatchers("/admin").hasAuthority(Role.ADMIN.toString())
                 .antMatchers("/admincreationpage").hasAuthority(Role.ADMIN.toString())
                 .antMatchers("/deletejob").hasAuthority(Role.RECRUITER.toString())
