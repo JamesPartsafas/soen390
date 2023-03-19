@@ -211,7 +211,7 @@ public class ConnectionServiceTest {
     }
 
     @Test
-    void disconnectDeletesTheConnectionWhenOrderOfFirstAndSendCandidatesIsCorrect() {
+    void disconnectDeletesTheConnectionWhenOrderOfFirstAndSecondCandidatesIsCorrect() {
         ConnectionKey connectionKey = new ConnectionKey(candidateUser2.getId(), candidateUser1.getId());
         Connection connection = new Connection(connectionKey,candidateUser2, candidateUser1, false);
         when(connectionRepository.findById(connectionKey)).thenReturn(Optional.of(connection));
@@ -220,7 +220,7 @@ public class ConnectionServiceTest {
     }
 
     @Test
-    void disconnectDeletesTheConnectionWhenOrderOfFirstAndSendCandidatesIsReversed() {
+    void disconnectDeletesTheConnectionWhenOrderOfFirstAndSecondCandidatesIsReversed() {
         ConnectionKey connectionKey1 = new ConnectionKey(candidateUser2.getId(), candidateUser1.getId());
         ConnectionKey connectionKey2 = new ConnectionKey(candidateUser1.getId(), candidateUser2.getId());
         Connection connection = new Connection(connectionKey1,candidateUser2, candidateUser1, false);
