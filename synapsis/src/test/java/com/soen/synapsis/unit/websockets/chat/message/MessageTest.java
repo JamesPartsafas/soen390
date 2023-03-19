@@ -4,6 +4,7 @@ import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.websockets.chat.Chat;
 import com.soen.synapsis.websockets.chat.message.Message;
+import com.soen.synapsis.websockets.chat.message.ReportStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,6 +22,7 @@ class MessageTest {
     private String content;
     private AppUser sender;
     private boolean read;
+    private ReportStatus reportStatus;
     private Timestamp createdAt;
 
     @BeforeEach
@@ -30,8 +32,9 @@ class MessageTest {
         content = "content";
         sender = new AppUser("name", "password", "email@mail.com", Role.CANDIDATE);
         read = false;
+        reportStatus = ReportStatus.REVIEWED;
         createdAt = new Timestamp(System.currentTimeMillis());
-        underTest = new Message(id, chat, content, sender, read, createdAt);
+        underTest = new Message(id, chat, content, sender, read, reportStatus, createdAt);
     }
 
     @Test
@@ -89,6 +92,17 @@ class MessageTest {
     void setRead() {
         underTest.setRead(true);
         assertEquals(true, underTest.isRead());
+    }
+
+    @Test
+    void getReportStatus() {
+        assertEquals(reportStatus, underTest.getReportStatus());
+    }
+
+    @Test
+    void setReportStatus() {
+        underTest.setReportStatus(ReportStatus.REPORTED);
+        assertEquals(ReportStatus.REPORTED, underTest.getReportStatus());
     }
 
     @Test

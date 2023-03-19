@@ -105,4 +105,18 @@ class ChatServiceTest {
         underTest.createChat(appUser, 2L);
         verify(chatRepository).save(any(Chat.class));
     }
+
+    @Test
+    void setMessageReportStatusCallsTheMethodInMessageService() {
+        AppUser appUser = new AppUser(1L, "Joe Man", "1234", "joecandidate@mail.com", Role.CANDIDATE);
+        long messageID = 2L;
+        underTest.setMessageReportStatus(appUser, messageID);
+        verify(messageService).setMessageReportStatus(appUser, messageID);
+    }
+
+    @Test
+    void getReportedMessagesCallsTheMethodInMessageService() {
+        underTest.getReportedMessages();
+        verify(messageService).getReportedMessages();
+    }
 }

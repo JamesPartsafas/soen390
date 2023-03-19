@@ -292,4 +292,36 @@ class ChatControllerTest {
         verify(chatService).updateRead(1L, user2.getId(), 4L);
         assertEquals(messageDTO.getContent(), capturedMessageDTO.getContent());
     }
+
+    @Test
+    void reportMessageRedirectToHomePageWhenUserIsNotAuth() {
+        when(authService.isUserAuthenticated()).thenReturn(false);
+        assertEquals("redirect:/", underTest.reportMessage(1L, 2L, Mockito.mock(Model.class)));
+    }
+
+    @Test
+    void reportMessageCallsGetChatPageByIDWhenUserIsAuth() {
+        long chatID = 1L;
+        Model model = Mockito.mock(Model.class);
+        AppUser appUser = new AppUser(1L, "Joe Man", "1234", "joeman@mail.com", Role.CANDIDATE);
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(authService.getAuthenticatedUser()).thenReturn(appUser);
+
+        ChatController spyController = Mockito.spy(underTest);
+        doReturn("").when(spyController).getChatById(Mockito.anyLong(), Mockito.any(Model.class));
+        spyController.reportMessage(1L, chatID, model);
+        verify(spyController, atLeastOnce()).getChatById(Mockito.anyLong(), Mockito.any(Model.class));
+    }
+
+    @Test
+    void getReportMessageRedirectToHomePageWhenUserIsNotAuth() {
+        when(authService.doesUserHaveRole(Role.ADMIN)).thenReturn(false);
+        assertEquals("redirect:/", underTest.getReportMessage(Mockito.mock(Model.class)));
+    }
+
+    @Test
+    void getReportMessageReturnsAdminMessagePageWhenUserIsAuth() {
+        when(authService.doesUserHaveRole(Role.ADMIN)).thenReturn(true);
+        assertEquals("pages/adminMessagesPage", underTest.getReportMessage(Mockito.mock(Model.class)));
+    }
 }
