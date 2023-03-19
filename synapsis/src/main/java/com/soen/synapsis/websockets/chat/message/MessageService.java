@@ -3,11 +3,16 @@ package com.soen.synapsis.websockets.chat.message;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.websockets.chat.Chat;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Service layer for Message-related functionality.
@@ -55,5 +60,53 @@ public class MessageService {
         }
 
         messageRepository.saveAll(messagesToUpdate);
+    }
+
+    /**
+     * Sets the report status of a message to "REPORTED" and saves the updated message to the repository.
+     * @param authenticatedUser the authenticated user who is reporting the message
+     * @param messageID the ID of the message to report
+     * @throws IllegalStateException if the message with the given ID does not exist,
+     * or if the authenticated user is the sender of the message,
+     * or if the message has already been reported.
+     */
+    public void setMessageReportStatus(AppUser authenticatedUser, Long messageID) {
+        Optional<Message> messageToReport = messageRepository.findById(messageID);
+
+        if (messageToReport.isEmpty()) {
+            throw new IllegalStateException("Message does not exist");
+        }
+
+        Message message = messageToReport.get();
+
+        if (Objects.equals(message.getSender().getId(), authenticatedUser.getId())) {
+            throw new IllegalStateException("Can not report your own message");
+        }
+
+        if (message.getReportStatus() != ReportStatus.UNREPORTED) {
+            throw new IllegalStateException("Message already reported");
+        }
+
+        message.setReportStatus(ReportStatus.REPORTED);
+        messageRepository.save(message);
+    }
+
+
+    /**
+     * Retrieves a list of all reported messages and the five previous messages for each message in separate lists.
+     * @return A list of lists containing the reported messages and their previous messages.
+     */
+    public List<List<Message>> getReportedMessages() {
+        List<Message> reportedMessages = messageRepository.findByReportStatus(ReportStatus.REPORTED);
+        List<List<Message>> result = new ArrayList<>();
+
+        for (Message reportedMessage : reportedMessages) {
+            List<Message> previousMessages = messageRepository.findPreviousMessages(reportedMessage.getChat().getId(),
+                    reportedMessage.getId(),
+                    PageRequest.of(0, 6));
+            result.add(previousMessages);
+        }
+
+        return result;
     }
 }
