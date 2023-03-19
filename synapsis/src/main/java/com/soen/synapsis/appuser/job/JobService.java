@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -26,13 +27,15 @@ public class JobService {
     private final AppUserRepository appUserRepository;
     private final NotificationService notificationService;
     private final JobApplicationRepository jobApplicationRepository;
+    private final JobFilterRepository jobFilterRepository;
 
     @Autowired
-    public JobService(JobRepository jobRepository, JobApplicationRepository jobApplicationRepository, AppUserRepository appUserRepository, NotificationService notificationService) {
+    public JobService(JobRepository jobRepository, JobApplicationRepository jobApplicationRepository, AppUserRepository appUserRepository, NotificationService notificationService, JobFilterRepository jobFilterRepository) {
         this.jobRepository = jobRepository;
         this.jobApplicationRepository = jobApplicationRepository;
         this.appUserRepository = appUserRepository;
         this.notificationService = notificationService;
+        this.jobFilterRepository = jobFilterRepository;
     }
 
     /**
@@ -231,6 +234,59 @@ public class JobService {
      */
     public List<Job> getAllJobsBySearch(String searchTerm) {
         return jobRepository.findJobsBySearch(searchTerm);
+    }
+
+    /**
+     * Retrieve all jobs given the filter preferences.
+     *
+     * @param jobType the type of job (fulltime, parttime, contract, etc).
+     * @param showInternalJobs true if we want internal jobs to be retrieved; otherwise false.
+     * @param showExternalJobs true if we want external jobs to be retrieved; otherwise false.
+     * @return a list of jobs that meet the filtered preferences.
+     */
+    public List<Job> getAllJobsByFilter(JobType jobType, boolean showInternalJobs, boolean showExternalJobs) {
+        List<Job> jobs = new ArrayList<>();
+
+        if(showInternalJobs) {
+            jobs.addAll(jobRepository.findInternalJobsByJobType(jobType));
+        }
+
+        if(showExternalJobs) {
+            jobs.addAll(jobRepository.findExternalJobsByJobType(jobType));
+        }
+
+        return jobs;
+    }
+
+    /**
+     * Save a job filter preference for a user.
+     *
+     * @param appUser the user whose filter preferences is saved.
+     * @param jobType the type of job preference (fulltime, parttime, contract, etc).
+     * @param showInternalJobs true if we want internal jobs to be retrieved; otherwise false.
+     * @param showExternalJobs true if we want external jobs to be retrieved; otherwise false.
+     * @return the newly created job filter.
+     */
+    public JobFilter saveJobFilter(AppUser appUser, JobType jobType, boolean showInternalJobs, boolean showExternalJobs) {
+        if (appUser.getRole() != Role.CANDIDATE && appUser.getRole() != Role.RECRUITER) {
+            throw new IllegalStateException("Permission denied. Only Candidates and Recruiters can save job filters.");
+        }
+
+        Optional<JobFilter> optionalJobFilter = jobFilterRepository.findJobFilterByAppUser(appUser);
+        JobFilter jobFilter;
+
+        if (optionalJobFilter.isPresent()) {
+            jobFilter = optionalJobFilter.get();
+            jobFilter.setJobType(jobType);
+            jobFilter.setShowInternalJobs(showInternalJobs);
+            jobFilter.setShowExternalJobs(showExternalJobs);
+        } else {
+            jobFilter = new JobFilter(appUser, jobType, showInternalJobs, showExternalJobs);
+        }
+
+        jobFilterRepository.save(jobFilter);
+
+        return jobFilter;
     }
 
 }

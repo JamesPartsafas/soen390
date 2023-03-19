@@ -1,6 +1,5 @@
 package com.soen.synapsis.unit.appuser.job;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AppUserRepository;
 import com.soen.synapsis.appuser.AuthProvider;
@@ -11,14 +10,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
-import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -39,13 +35,21 @@ class JobServiceTest {
     AppUserRepository appUserRepository;
     @Mock
     NotificationService notificationService;
+    @Mock
+    private JobFilterRepository jobFilterRepository;
     private AutoCloseable autoCloseable;
     private JobService underTest;
+    private AppUser candidate;
+    private AppUser creator;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new JobService(jobRepository, jobApplicationRepository, appUserRepository, notificationService);
+
+        underTest = new JobService(jobRepository, jobApplicationRepository, appUserRepository, notificationService, jobFilterRepository);
+
+        candidate = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
+        creator = new AppUser(9L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
     }
 
     @AfterEach
@@ -67,6 +71,16 @@ class JobServiceTest {
     }
 
     @Test
+    void getAllJobsByFilterReturnsJobs() {
+        JobType jobType = JobType.FULLTIME;
+
+        underTest.getAllJobsByFilter(jobType, true, true);
+
+        verify(jobRepository, times(1)).findInternalJobsByJobType(jobType);
+        verify(jobRepository, times(1)).findExternalJobsByJobType(jobType);
+    }
+
+    @Test
     void getJobReturnsJob() {
         Long id = 1L;
 
@@ -78,7 +92,6 @@ class JobServiceTest {
     @Test
     void createValidJob() {
         JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
-        AppUser creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
         request.setCreator(creator);
 
         String returnValue = underTest.createJob(request);
@@ -89,8 +102,7 @@ class JobServiceTest {
     @Test
     void nonRecruiterCreateJobThrows() {
         JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
-        AppUser creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
-        request.setCreator(creator);
+        request.setCreator(candidate);
 
         Exception exception = assertThrows(IllegalStateException.class, () -> underTest.createJob(request), "This user is not a recruiter.");
     }
@@ -105,8 +117,6 @@ class JobServiceTest {
 
     @Test
     void UserAlreadySubmittedApplication() {
-        AppUser candidate = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
-        AppUser creator = new AppUser(9L, "joe", "1234", "joerecruiter@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
         Job job = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true, true);
 
         List<Job> jobsSubmitted = new ArrayList<>();
@@ -120,7 +130,6 @@ class JobServiceTest {
     @Test
     @Disabled
     void createJobApplicationCreatesJobApplicationSuccessfully() throws IOException {
-        AppUser candidate = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
         when(jobRepository.getReferenceById(any(Long.class))).thenReturn(mock(Job.class));
 
         MultipartFile file = mock(MultipartFile.class);
@@ -150,7 +159,6 @@ class JobServiceTest {
         Long id = 1L;
 
         JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
-        AppUser creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
         request.setCreator(creator);
 
         String returnValue = underTest.editJob(Mockito.mock(Optional.class), request);
@@ -160,18 +168,41 @@ class JobServiceTest {
 
     @Test
     void createJobApplicationWithEmptyResumeThatIsMandatory() {
-        AppUser candidate = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
-        AppUser creator = new AppUser(9L, "joe", "1234", "joerecruiter@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
         Job job = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true, true);
         assertThrows(NullPointerException.class, () -> underTest.createJobApplication(mock(JobApplicationRequest.class), candidate,job.getID(), null, null));
     }
 
     @Test
     void createJobApplicationWithEmptyCoverLetterThatIsMandatory() {
-        AppUser candidate = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
-        AppUser creator = new AppUser(9L, "joe", "1234", "joerecruiter@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
         Job job = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true, true);
         assertThrows(NullPointerException.class, () -> underTest.createJobApplication(mock(JobApplicationRequest.class), candidate, job.getID(), mock(MultipartFile.class), null));
+    }
+
+    @Test
+    void saveJobFilterThrowsErrorWhenRoleIsNotCandidateOrNotRecruiter() {
+        AppUser companyUser = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.COMPANY, AuthProvider.LOCAL);
+        assertThrows(IllegalStateException.class, () -> underTest.saveJobFilter(companyUser, JobType.FULLTIME, true, true));
+    }
+
+    @Test
+    void saveJobFilterSavesWhenJobFilterExists() {
+        JobFilter jobFilter = new JobFilter(candidate, JobType.FULLTIME, true, true);
+
+        when(jobFilterRepository.findJobFilterByAppUser(candidate)).thenReturn(Optional.of(jobFilter));
+
+        underTest.saveJobFilter(candidate, JobType.FULLTIME, true, true);
+        verify(jobFilterRepository).save(any(JobFilter.class));
+    }
+
+    @Test
+    void saveJobFilterSavesWhenJobFilterDoesNotExists() {
+        JobFilter jobFilter = null;
+
+        when(jobFilterRepository.findJobFilterByAppUser(candidate)).thenReturn(Optional.ofNullable(jobFilter));
+
+        underTest.saveJobFilter(candidate, JobType.FULLTIME, true, true);
+
+        verify(jobFilterRepository).save(any(JobFilter.class));
     }
 
 }

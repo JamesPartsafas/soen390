@@ -28,4 +28,22 @@ public interface JobRepository extends JpaRepository<Job, Long>{
      */
     @Query(value = "SELECT j FROM Job j WHERE LOWER(j.company) LIKE %:search% OR LOWER(j.position) LIKE %:search%")
     List<Job> findJobsBySearch(@Param("search") String search);
+
+    /**
+     * Retrieve all internal jobs with the specified job type.
+     *
+     * @param jobType the type of job (fulltime, parttime, contract, etc.).
+     * @return a list of internal jobs that meet the job type preference.
+     */
+    @Query(value = "SELECT j FROM Job j WHERE j.type = :jobType AND j.isExternal = false")
+    List<Job> findInternalJobsByJobType(@Param("jobType") JobType jobType);
+
+    /**
+     * Retrieve all external jobs with the specified job type.
+     *
+     * @param jobType the type of job (fulltime, parttime, contract, etc.).
+     * @return a list of external jobs that meet the job type preference.
+     */
+    @Query(value = "SELECT j FROM Job j WHERE j.type = :jobType AND j.isExternal = true")
+    List<Job> findExternalJobsByJobType(@Param("jobType") JobType jobType);
 }

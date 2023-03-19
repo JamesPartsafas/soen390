@@ -36,40 +36,53 @@ public class JobController {
     /**
      * Retrieve and display all job postings.
      *
+     * @param jobType the type of job (fulltime, parttime, contract, etc.).
+     * @param showInternalJobs the filtered show internal jobs preference (yes/no).
+     * @param showExternalJobs the filtered show external jobs preference (yes/no).
+     * @param filterPassed boolean value to see if the filter has been called.
      * @param searchTerm jobs to search for.
      * @param model an object carrying data attributes passed to the view.
      * @return the view containing all jobs.
      */
     @GetMapping("/jobs")
-    public String viewJobPosting(@RequestParam(required = false) String searchTerm, Model model) {
+    public String viewJobPosting(@RequestParam(required = false) JobType jobType, @RequestParam(required = false) boolean showInternalJobs, @RequestParam(required = false) boolean showExternalJobs, @RequestParam(required = false) boolean filterPassed, @RequestParam(required = false) String searchTerm, Model model) {
         if (!authService.isUserAuthenticated()) {
             return "redirect:/";
         }
 
         List<Job> jobs;
+        JobFilter jobFilter;
 
-        if (searchTerm != null) {
+        if (filterPassed) {
+            jobs = jobService.getAllJobsByFilter(jobType, showInternalJobs, showExternalJobs);
+
+            jobFilter = jobService.saveJobFilter(authService.getAuthenticatedUser(), jobType, showInternalJobs, showExternalJobs);
+
+            model.addAttribute("jobTypeFilter", jobFilter.getJobType());
+            model.addAttribute("showInternalJobsFilter", jobFilter.isShowInternalJobs());
+            model.addAttribute("showExternalJobsFilter", jobFilter.isShowExternalJobs());
+        }
+        else if (searchTerm != null) {
             jobs = jobService.getAllJobsBySearch(searchTerm.toLowerCase());
         } else {
             jobs = jobService.getAllJobs();
         }
 
-        List<Job> jobsSubmitted = jobService.getAllJobsAlreadySubmittedByUser(authService.getAuthenticatedUser());
-
         model.addAttribute("jobs", jobs);
-        model.addAttribute("jobsSubmitted", jobsSubmitted);
+        model.addAttribute("jobsSubmitted", jobService.getAllJobsAlreadySubmittedByUser(authService.getAuthenticatedUser()));
         model.addAttribute("searchTerm", searchTerm);
+        model.addAttribute("jobTypes", JobType.values());
 
         return "pages/jobs";
     }
 
-    /**
-     * Retrieve all the information for a specific job.
-     *
-     * @param jobId the id of the specific job.
-     * @param model an object carrying data attributes passed to the view.
-     * @return the jobs page.
-     */
+        /**
+         * Retrieve all the information for a specific job.
+         *
+         * @param jobId the id of the specific job.
+         * @param model an object carrying data attributes passed to the view.
+         * @return the jobs page.
+         */
     @GetMapping("/job/{jobId}")
     public String getJob(@PathVariable Long jobId, Model model) {
         Optional<Job> optionalJob = jobService.getJob(jobId);
