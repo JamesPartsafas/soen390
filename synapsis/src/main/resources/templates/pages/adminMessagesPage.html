@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="_layout">
+<div layout:fragment="content">
+    <div th:each="messageList: ${listOfListOfMessages}" class="border-solid border-2 rounded-2xl p-[8px] m-[8px]">
+        <p th:each="message: ${messageList}" th:text="${message.content}" th:class="${message.reportStatus.toString() == 'REPORTED'} ? 'text-red-600'" ></p>
+        <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0">Warn</button>
+        <button class="btn bg-primary btn-primary font-sans text-sm w-20 h-9 p-0">Ban</button>
+    </div>
+</div>

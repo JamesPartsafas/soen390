@@ -2,6 +2,7 @@ const messageForm = document.querySelector('#messageForm');
 const messageInput = document.querySelector('#message');
 const messageArea = document.querySelector('#messageArea');
 const connectingElement = document.querySelector('.connecting');
+const csrfToken = document.querySelector('meta[name="_csrf"]').content;
 
 let chatId = document.querySelector('#chat').value.trim();
 let senderId = document.querySelector('#sender').value.trim();
@@ -93,8 +94,24 @@ function showMessage(message) {
     } else if (message.type === 'ERROR') {
         onError(`Could not send message: ${message.content}`);
     } else {
-        messageArea.innerHTML += `<li>${message.content}</li>`;
+        messageArea.innerHTML += createMessageElement(message.id, message.content);
     }
+}
+
+function createMessageElement(messageId, messageContent) {
+    return `
+        <li class="flex items-center">
+            <p>${messageContent}</p>
+            ${messageId !== 0 ? 
+                `<form action="${window.location.origin + '/chat/report'}" method="POST">
+                    <input type="hidden" name="_csrf" value="${csrfToken}"/>
+                    <input type="hidden" name="messageID" value="${messageId}" />
+                    <input type="hidden" name="chatID" value="${chatId}" />
+                    <button class="btn bg-primary btn-primary font-sans text-sm w-20 h-9 p-0" type="submit">Report</button>
+                </form>`
+            : ''}
+        </li>
+    `;
 }
 
 connect();

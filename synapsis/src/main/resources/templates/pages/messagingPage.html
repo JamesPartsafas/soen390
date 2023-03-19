@@ -2,16 +2,22 @@
 <html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
 <div layout:fragment="content">
-
+    <p th:if="${reportStatus != null}" th:text="${reportStatus}"></p>
     <div id="chat-page">
         <div class="chat-container">
             <div class="connecting">
                 Connecting...
             </div>
-            <!-- page that will be displayed once the user clicks on a specific chat with a specific user -->
 
             <ul id="messageArea">
-                <li th:each="message: ${messages}" th:text="${message.getContent()}"></li>
+                <li th:each="message: ${messages}" class="flex items-center">
+                    <p th:text="${message.getContent()}"></p>
+                    <form th:if="${message.getSender().getId() != authenticatedUserID}" th:action="@{/chat/report}" method="POST">
+                        <input type="hidden" name="messageID" th:value="${message.getId()}" />
+                        <input type="hidden" name="chatID" th:value="${chatId}" />
+                        <button class="btn bg-primary btn-primary font-sans text-sm w-20 h-9 p-0" type="submit">Report</button>
+                    </form>
+                </li>
             </ul>
 
             <form id="messageForm" name="messageForm" nameForm="messageForm">
