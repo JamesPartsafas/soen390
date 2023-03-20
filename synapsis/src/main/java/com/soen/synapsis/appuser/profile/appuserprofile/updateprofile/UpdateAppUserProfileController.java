@@ -54,7 +54,7 @@ public class UpdateAppUserProfileController {
 
         model.addAttribute("updateAppUserProfileRequest", new UpdateAppUserProfileRequest());
         model.addAttribute("profile", profile);
-        if (profile.getAppUser().getResume() != null) {
+        if (profile.getAppUser() != null && profile.getAppUser().getResume() != null) {
             model.addAttribute("default_resume", profile.getAppUser().getResume().getFileName());
         }
 
