@@ -74,11 +74,14 @@ public class NotificationService {
 
         String recipientId = notification.getRecipient().getId().toString();
         simpMessagingTemplate.convertAndSendToUser(recipientId, "/specific/notification/" + recipientId, notificationDTO);
-        if (appUser.isEmailNotificationsOn()) {
+        
+        if ((notification.getType() == NotificationType.JOB && appUser.getSettings().isJobEmailNotificationsOn()) ||
+                (notification.getType() == NotificationType.MESSAGE && appUser.getSettings().isMessageEmailNotificationsOn()) ||
+                (notification.getType() == NotificationType.CONNECTION && appUser.getSettings().isConnectionEmailNotificationsOn())) {
             emailService.sendSimpleMessage(
                     appUser.getEmail(),
                     "You have a new " + notification.getType().toString(),
-                    "Here is your new notification: \n\n" + notification.toString()
+                    "Here is your new notification: \n\n" + notification
             );
         }
     }
