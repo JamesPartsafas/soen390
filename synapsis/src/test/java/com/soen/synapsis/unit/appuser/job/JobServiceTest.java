@@ -1,7 +1,6 @@
 package com.soen.synapsis.unit.appuser.job;
 
 import com.soen.synapsis.appuser.AppUser;
-import com.soen.synapsis.appuser.AppUserRepository;
 import com.soen.synapsis.appuser.AuthProvider;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.job.*;
@@ -10,10 +9,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.springframework.web.multipart.MultipartFile;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -32,8 +32,6 @@ class JobServiceTest {
     @Mock
     private JobApplicationRepository jobApplicationRepository;
     @Mock
-    AppUserRepository appUserRepository;
-    @Mock
     NotificationService notificationService;
     @Mock
     private JobFilterRepository jobFilterRepository;
@@ -46,7 +44,7 @@ class JobServiceTest {
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
 
-        underTest = new JobService(jobRepository, jobApplicationRepository, appUserRepository, notificationService, jobFilterRepository);
+        underTest = new JobService(jobRepository, jobApplicationRepository, notificationService, jobFilterRepository);
 
         candidate = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
         creator = new AppUser(9L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
@@ -127,6 +125,7 @@ class JobServiceTest {
         assertThrows(IllegalStateException.class, () -> underTest.checkIfUserAlreadySubmittedApplication(candidate, job.getID()));
 
     }
+
     @Test
     @Disabled
     void createJobApplicationCreatesJobApplicationSuccessfully() throws IOException {
@@ -169,7 +168,7 @@ class JobServiceTest {
     @Test
     void createJobApplicationWithEmptyResumeThatIsMandatory() {
         Job job = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true, true);
-        assertThrows(NullPointerException.class, () -> underTest.createJobApplication(mock(JobApplicationRequest.class), candidate,job.getID(), null, null));
+        assertThrows(NullPointerException.class, () -> underTest.createJobApplication(mock(JobApplicationRequest.class), candidate, job.getID(), null, null));
     }
 
     @Test
