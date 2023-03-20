@@ -99,28 +99,6 @@ public class Message {
         this.id = id;
     }
 
-    /**
-     * Creates a new message instance from the given data.
-     * The ID of the message is set automatically.
-     * @param chat the instance of the Chat that the message is related to
-     * @param content the content of the message in a string format
-     * @param sender the instance of the sender user
-     * @param read a flag to indicate whether the receiver viewed the message
-     * @param reportStatus an indicator whether the message has been reported, unreported or reviewed
-     * @param createdAt a timestamp representing the time the message is created
-     * @param fileName The name of the file included in the message
-     * @param file The base64 of the file included in the message
-     */
-    public Message(Chat chat, String content, AppUser sender, boolean read, ReportStatus reportStatus, Timestamp createdAt, String fileName, String file) {
-        this.chat = chat;
-        this.content = content;
-        this.sender = sender;
-        this.read = read;
-        this.reportStatus = reportStatus;
-        this.createdAt = createdAt;
-        this.fileName = fileName;
-        this.file = file;
-    }
 
     /**
      * Creates a new message instance from the given data.
@@ -166,6 +144,29 @@ public class Message {
      */
     public Message(Chat chat, String content, AppUser sender, String fileName, String file) {
         this(chat, content, sender, false, ReportStatus.UNREPORTED, new Timestamp(System.currentTimeMillis()), fileName, file);
+    }
+
+    /**
+     * Creates a new message instance from the given data.
+     * The ID of the message is set automatically.
+     * @param chat the instance of the Chat that the message is related to
+     * @param content the content of the message in a string format
+     * @param sender the instance of the sender user
+     * @param read a flag to indicate whether the receiver viewed the message
+     * @param reportStatus an indicator whether the message has been reported, unreported or reviewed
+     * @param createdAt a timestamp representing the time the message is created
+     * @param fileName The name of the file included in the message
+     * @param file The base64 of the file included in the message
+     */
+    public Message(Chat chat, String content, AppUser sender, boolean read, ReportStatus reportStatus, Timestamp createdAt, String fileName, String file) {
+        this.chat = chat;
+        this.content = content;
+        this.sender = sender;
+        this.read = read;
+        this.reportStatus = reportStatus;
+        this.createdAt = createdAt;
+        this.fileName = fileName;
+        this.file = file;
     }
 
     public Long getId() {
