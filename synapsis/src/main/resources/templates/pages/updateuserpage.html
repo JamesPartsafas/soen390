@@ -17,6 +17,12 @@
                 <input type="file" name="image" accept="image/png, image/jpeg" />
                 <br>
 
+                <label>Upload Default Resume</label>
+                <input type="file" name="defaultResume" accept=".pdf,.docx" />
+                <br>
+                <label th:if="${default_resume != null}">Current Default Resume</label><br>
+                <p th:if="${default_resume != null}" th:text ="${default_resume}"></p>
+                <br>
                 <label>Description</label><br>
                 <textarea id="description" name="description"
                           class="w-full py-3 px-4 mb-3 h-32 resize-y font-normal tracking-tight text-gray-900  resize-y"
