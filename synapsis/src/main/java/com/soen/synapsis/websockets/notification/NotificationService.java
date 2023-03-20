@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Service layer for Notification-related functionality.
@@ -25,10 +26,11 @@ public class NotificationService {
     /**
      * Constructor to create an instance of the MessageService.
      * This is annotated by autowired for automatic dependency injection
+     *
      * @param notificationRepository Used to interact with the Notification table in the database
-     * @param appUserService Used to interact with the AppUser service layer
-     * @param simpMessagingTemplate Used to send notification to a user via the WebSocket connection.
-     * @param emailService Used to send emails to a user
+     * @param appUserService         Used to interact with the AppUser service layer
+     * @param simpMessagingTemplate  Used to send notification to a user via the WebSocket connection.
+     * @param emailService           Used to send emails to a user
      */
     @Autowired
     public NotificationService(NotificationRepository notificationRepository,
@@ -43,10 +45,17 @@ public class NotificationService {
 
     /**
      * Saves the notification in the database for the given recipient.
+     *
      * @param notificationDTO The DTO representation of the notification to be saved.
      */
     public void saveNotification(NotificationDTO notificationDTO) {
-        AppUser appUser = appUserService.getAppUser(notificationDTO.getRecipient_id()).get();
+        AppUser appUser;
+        try {
+            appUser = appUserService.getAppUser(notificationDTO.getRecipientId()).get();
+        } catch (NoSuchElementException e) {
+            throw new IllegalStateException("Recipient ID not valid");
+        }
+
         saveNotification(notificationDTO, appUser);
     }
 
@@ -54,8 +63,9 @@ public class NotificationService {
      * Saves a notification for a given AppUser using a NotificationDTO object.
      * Also sends the notification to the user via web socket and,
      * if the user has email notifications on, sends an email to the user's email address.
+     *
      * @param notificationDTO the NotificationDTO object representing the notification to be saved
-     * @param appUser the AppUser who should receive the notification
+     * @param appUser         the AppUser who should receive the notification
      */
     public void saveNotification(NotificationDTO notificationDTO, AppUser appUser) {
         Notification notification = new Notification(appUser, notificationDTO.getType(), notificationDTO.getText(), notificationDTO.getUrl(), false);
@@ -75,8 +85,9 @@ public class NotificationService {
 
     /**
      * Update the seen flag of a notification and send the updated notification object to the user's specific channel.
+     *
      * @param notificationDTO the NotificationDTO object containing the id of the notification to be updated
-     * @param seenValue the new seen flag value to be set for the notification
+     * @param seenValue       the new seen flag value to be set for the notification
      */
     public void updateSeen(NotificationDTO notificationDTO, boolean seenValue) {
         Notification notification = notificationRepository.getNotificationById(notificationDTO.getId());
@@ -90,6 +101,7 @@ public class NotificationService {
 
     /**
      * Get the list of 5 most recent notifications for a specific user from the past 7 days.
+     *
      * @param userId the id of the user whose notifications are to be fetched
      * @return a list of NotificationDTO objects representing the notifications
      */
