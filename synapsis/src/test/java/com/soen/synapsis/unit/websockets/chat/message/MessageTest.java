@@ -24,6 +24,8 @@ class MessageTest {
     private boolean read;
     private ReportStatus reportStatus;
     private Timestamp createdAt;
+    private String fileName;
+    private String file;
 
     @BeforeEach
     void setUp() {
@@ -34,7 +36,9 @@ class MessageTest {
         read = false;
         reportStatus = ReportStatus.REVIEWED;
         createdAt = new Timestamp(System.currentTimeMillis());
-        underTest = new Message(id, chat, content, sender, read, reportStatus, createdAt);
+        fileName = "test_file_name.png";
+        file = "iVBORw0KGgoAAAANSUhEUgAAAkUAAACBCAYAAADOmM5KAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAA";
+        underTest = new Message(id, chat, content, sender, read, reportStatus, createdAt, fileName, file);
     }
 
     @Test
@@ -115,6 +119,28 @@ class MessageTest {
         Timestamp newCreatedAt = new Timestamp(System.nanoTime());
         underTest.setCreatedAt(newCreatedAt);
         assertEquals(newCreatedAt, underTest.getCreatedAt());
+    }
+
+    @Test
+    void getFileName() {
+        assertEquals(underTest.getFileName(), fileName);
+    }
+
+    @Test
+    void setFileName() {
+        underTest.setFileName("new.png");
+        assertEquals(underTest.getFileName(), "new.png");
+    }
+
+    @Test
+    void getFile() {
+        assertEquals(underTest.getFile(), file);
+    }
+
+    @Test
+    void setFile() {
+        underTest.setFile("123r4t5y6u7i8");
+        assertEquals(underTest.getFile(), "123r4t5y6u7i8");
     }
 
     @Test

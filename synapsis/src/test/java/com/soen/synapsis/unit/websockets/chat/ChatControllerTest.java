@@ -16,6 +16,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -207,6 +208,80 @@ class ChatControllerTest {
     }
 
     @Test
+    void sendMessageSendsAnErrorMessageWhenContentIsNull() {
+        Authentication mockAuth = mock(Authentication.class);
+        when(mockAuth.getPrincipal()).thenReturn(new AppUserDetails(user1));
+        SecurityContextHolder.getContext().setAuthentication(mockAuth);
+
+        MessageDTO messageDTO = new MessageDTO(null, MessageType.TEXT, user2.getId(), user1.getId(), null, null);
+
+        underTest.sendMessage(mockAuth, 1L, messageDTO);
+
+        ArgumentCaptor<MessageDTO> messageDTOCaptor = ArgumentCaptor.forClass(MessageDTO.class);
+        verify(simpMessagingTemplate).convertAndSendToUser(any(String.class), any(String.class), messageDTOCaptor.capture());
+        MessageDTO capturedMessageDTO = messageDTOCaptor.getValue();
+
+        assertEquals(MessageType.ERROR, capturedMessageDTO.getType());
+    }
+
+    @Test
+    void sendMessageSendsAnErrorMessageWhenFileNameIsLargerThan50Bytes() {
+        Authentication mockAuth = mock(Authentication.class);
+        when(mockAuth.getPrincipal()).thenReturn(new AppUserDetails(user1));
+        SecurityContextHolder.getContext().setAuthentication(mockAuth);
+
+        String fileName = StringUtils.repeat("*", 51);
+        MessageDTO messageDTO = new MessageDTO("uniqueContent", MessageType.TEXT, user2.getId(), user1.getId(), fileName, null);
+
+        underTest.sendMessage(mockAuth, 1L, messageDTO);
+
+        ArgumentCaptor<MessageDTO> messageDTOCaptor = ArgumentCaptor.forClass(MessageDTO.class);
+        verify(simpMessagingTemplate).convertAndSendToUser(any(String.class), any(String.class), messageDTOCaptor.capture());
+        MessageDTO capturedMessageDTO = messageDTOCaptor.getValue();
+
+        assertEquals(MessageType.ERROR, capturedMessageDTO.getType());
+    }
+
+    @Test
+    void sendMessageSendsAnErrorMessageWhenFileInBase64IsLargerThan64600Bytes() {
+        Authentication mockAuth = mock(Authentication.class);
+        when(mockAuth.getPrincipal()).thenReturn(new AppUserDetails(user1));
+        SecurityContextHolder.getContext().setAuthentication(mockAuth);
+
+        String fileName = StringUtils.repeat("*", 49);
+        String file = StringUtils.repeat("*", 64601);
+        MessageDTO messageDTO = new MessageDTO("uniqueContent", MessageType.TEXT, user2.getId(), user1.getId(), fileName, file);
+
+        underTest.sendMessage(mockAuth, 1L, messageDTO);
+
+        ArgumentCaptor<MessageDTO> messageDTOCaptor = ArgumentCaptor.forClass(MessageDTO.class);
+        verify(simpMessagingTemplate).convertAndSendToUser(any(String.class), any(String.class), messageDTOCaptor.capture());
+        MessageDTO capturedMessageDTO = messageDTOCaptor.getValue();
+
+        assertEquals(MessageType.ERROR, capturedMessageDTO.getType());
+    }
+
+    @Test
+    void sendMessageSendsAnErrorMessageWhenContentIsLargerThan255Bytes() {
+        Authentication mockAuth = mock(Authentication.class);
+        when(mockAuth.getPrincipal()).thenReturn(new AppUserDetails(user1));
+        SecurityContextHolder.getContext().setAuthentication(mockAuth);
+
+        String fileName = StringUtils.repeat("*", 49);
+        String file = StringUtils.repeat("*", 64599);
+        String content = StringUtils.repeat("*", 256);
+        MessageDTO messageDTO = new MessageDTO(content, MessageType.TEXT, user2.getId(), user1.getId(), fileName, file);
+
+        underTest.sendMessage(mockAuth, 1L, messageDTO);
+
+        ArgumentCaptor<MessageDTO> messageDTOCaptor = ArgumentCaptor.forClass(MessageDTO.class);
+        verify(simpMessagingTemplate).convertAndSendToUser(any(String.class), any(String.class), messageDTOCaptor.capture());
+        MessageDTO capturedMessageDTO = messageDTOCaptor.getValue();
+
+        assertEquals(MessageType.ERROR, capturedMessageDTO.getType());
+    }
+
+    @Test
     void sendMessageForwardsMessageWhenAuthUserIsSenderUser() {
         Authentication mockAuth = mock(Authentication.class);
         when(mockAuth.getPrincipal()).thenReturn(new AppUserDetails(user1));
@@ -220,7 +295,7 @@ class ChatControllerTest {
         verify(simpMessagingTemplate).convertAndSendToUser(any(String.class), any(String.class), messageDTOCaptor.capture());
         MessageDTO capturedMessageDTO = messageDTOCaptor.getValue();
 
-        verify(chatService).saveMessage(1L, user1, messageDTO.getContent());
+        verify(chatService).saveMessage(1L, user1, messageDTO);
         assertEquals(messageDTO.getContent(), capturedMessageDTO.getContent());
     }
 

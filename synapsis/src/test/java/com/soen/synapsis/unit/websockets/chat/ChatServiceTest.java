@@ -6,6 +6,7 @@ import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.websockets.chat.Chat;
 import com.soen.synapsis.websockets.chat.ChatRepository;
 import com.soen.synapsis.websockets.chat.ChatService;
+import com.soen.synapsis.websockets.chat.MessageDTO;
 import com.soen.synapsis.websockets.chat.message.Message;
 import com.soen.synapsis.websockets.chat.message.MessageService;
 import org.junit.jupiter.api.AfterEach;
@@ -60,18 +61,18 @@ class ChatServiceTest {
     void saveMessageThrowsWhenChatDoesNotExist() {
         when(chatRepository.findById(any(Long.class))).thenReturn(Optional.empty());
         assertThrows(IllegalStateException.class,
-                () -> underTest.saveMessage(1L, null, ""));
+                () -> underTest.saveMessage(1L, null, new MessageDTO()));
     }
 
     @Test
     void saveMessageCallsMessageAndChatRepositorySaveWhenChatExist() {
         AppUser appUser = new AppUser(1L, "Joe Man", "1234", "joecandidate@mail.com", Role.CANDIDATE);
-        String content = "content";
         Chat chat = new Chat();
+        MessageDTO messageDTO = new MessageDTO();
         when(chatRepository.findById(any(Long.class))).thenReturn(Optional.of(chat));
-        when(messageService.saveMessage(any(Chat.class), any(AppUser.class), any(String.class))).thenReturn(new Message());
-        underTest.saveMessage(1L, appUser, content);
-        verify(messageService).saveMessage(chat, appUser, content);
+        when(messageService.saveMessage(any(Chat.class), any(AppUser.class), any(MessageDTO.class))).thenReturn(new Message());
+        underTest.saveMessage(1L, appUser, messageDTO);
+        verify(messageService).saveMessage(chat, appUser, messageDTO);
         verify(chatRepository).save(chat);
     }
 
