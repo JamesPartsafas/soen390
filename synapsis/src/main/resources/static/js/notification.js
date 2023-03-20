@@ -4,6 +4,7 @@ let recipientId = document.querySelector('#userId').innerHTML;
 function connectNotification() {
     const notificationSocket = new SockJS('/ws');
     notificationStompClient = Stomp.over(notificationSocket);
+    notificationStompClient.debug = () => {};
     notificationStompClient.connect({}, onNotificationSocketConnected, onError);
 }
 
