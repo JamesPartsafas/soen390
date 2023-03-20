@@ -3,6 +3,7 @@ package com.soen.synapsis.unit.websockets.chat.message;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.websockets.chat.Chat;
+import com.soen.synapsis.websockets.chat.MessageDTO;
 import com.soen.synapsis.websockets.chat.message.Message;
 import com.soen.synapsis.websockets.chat.message.MessageRepository;
 import com.soen.synapsis.websockets.chat.message.MessageService;
@@ -48,11 +49,10 @@ class MessageServiceTest {
 
     @Test
     void saveMessageCallsSaveMethod() {
-        String content = "content";
         Message message = Mockito.mock(Message.class);
         when(messageRepository.save(any(Message.class))).thenReturn(message);
 
-        underTest.saveMessage(chat, sender, content);
+        underTest.saveMessage(chat, sender, new MessageDTO());
 
         verify(messageRepository).save(any(Message.class));
     }
