@@ -233,6 +233,7 @@ public class AppUserServiceTest {
         assertEquals(true, companyUser.getVerificationStatus());
         verify(appUserRepository).save(companyUser);
     }
+    @Test
     void emptyResumeUploadReturns() throws IOException {
         MultipartFile file = mock(MultipartFile.class);
         when(file.getBytes()).thenReturn(new byte[]{});

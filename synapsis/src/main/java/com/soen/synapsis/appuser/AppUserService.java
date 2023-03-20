@@ -222,7 +222,6 @@ public class AppUserService {
     }
 
     /**
-<<<<<<< Updated upstream
      * Marks company user as verified.
      * @param appUser The user to be made a recruiter.
      */
