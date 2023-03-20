@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -141,7 +142,8 @@ public class ChatController {
 
     /**
      * This method handles sending a message in a chat to the receiving user.
-     * If the message type is not TYPE, the sending user will receive an ERROR message.
+     * If the message type is not TEXT or the message content is empty or if the message exceeds the permitted size,
+     * the sending user will receive an ERROR message.
      * @param authentication an instance of the Authentication interface representing the user's authentication information
      * @param chatID a Long representing the ID of the chat
      * @param message a MessageDTO object representing the content of the message to be sent and saved
@@ -153,6 +155,19 @@ public class ChatController {
                 throw new IllegalStateException("Message Type should only be TEXT");
             }
 
+            String content = message.getContent();
+
+            if (content == null) {
+                throw new IllegalStateException("Message Content cannot be null");
+            }
+
+            String fileName = message.getFileName();
+            String file = message.getFile();
+
+            if ((fileName != null && fileName.length() > 50) || (file != null && file.length() > 64600) || content.length() > 255) {
+                throw  new IllegalStateException("Message exceeds permitted size limit");
+            }
+
             AppUserAuth appUserAuth = (AppUserAuth) authentication.getPrincipal();
             AppUser appUser = appUserAuth.getAppUser();
 
@@ -160,7 +175,7 @@ public class ChatController {
                 throw new IllegalStateException("Sender ID is not valid");
             }
 
-            Long messageId = chatService.saveMessage(chatID, appUser, message.getContent());
+            Long messageId = chatService.saveMessage(chatID, appUser, message);
             message.setId(messageId);
             simpMessagingTemplate.convertAndSendToUser(message.getReceiverId().toString(), "/queue/chat/" + chatID, message);
         } catch (Exception exception) {

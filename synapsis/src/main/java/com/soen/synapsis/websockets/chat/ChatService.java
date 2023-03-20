@@ -54,11 +54,11 @@ public class ChatService {
      * Saves a new message in a chat and updates the chat's last updated time.
      * @param chatID The id of the chat where the message will be saved.
      * @param appUser The user who sent the message.
-     * @param content The content of the message to be saved.
+     * @param messageDTO Represents the message sent by the sender.
      * @return The id of the saved message.
      * @throws IllegalStateException if the chat does not exist.
      */
-    public Long saveMessage(Long chatID, AppUser appUser, String content) {
+    public Long saveMessage(Long chatID, AppUser appUser, MessageDTO messageDTO) {
         Optional<Chat> retrievedChat = findChatById(chatID);
 
         if (retrievedChat.isEmpty()) {
@@ -66,7 +66,7 @@ public class ChatService {
         }
 
         Chat chat = retrievedChat.get();
-        Message savedMessage = messageService.saveMessage(chat, appUser, content);
+        Message savedMessage = messageService.saveMessage(chat, appUser, messageDTO);
         chat.setLastUpdated(savedMessage.getCreatedAt());
         chatRepository.save(chat);
 
