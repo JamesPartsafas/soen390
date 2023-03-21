@@ -227,4 +227,15 @@ public class AppUserService {
         appUserRepository.save(appUser);
 
     }
+
+    /**
+     * Marks company user as non-verified.
+     * @param appUser The user to be made a recruiter.
+     */
+    public void markCompanyAsNonVerified(AppUser appUser) {
+
+        appUser.setVerificationStatus(false);
+        appUserRepository.save(appUser);
+
+    }
 }

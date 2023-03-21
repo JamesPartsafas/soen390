@@ -277,4 +277,37 @@ public class AppUserController {
             return "redirect:/";
         }
     }
+
+    /**
+     * Allows administrator to mark a COMPANY user as non-verified.
+     * @param id The id of the company user to be mark as non-verified.
+     * @return View containing user profile. If the requester is not authenticated, redirects to home page.
+     */
+    @PostMapping("/admin/unverifyCompany")
+    public String markCompanyAsNonVerified(@RequestParam("companyUserId") Long id) {
+        try {
+            if(!authService.doesUserHaveRole(Role.ADMIN)) {
+                throw new IllegalStateException("You must be an admin to unmark a company as non-verified.");
+            }
+            Optional<AppUser> optionalAppUser = appUserService.getAppUser(id);
+
+            if(optionalAppUser.isEmpty()) {
+                return "redirect:/";
+            }
+
+            AppUser appUser = optionalAppUser.get();
+
+            if(appUser.getRole() != Role.COMPANY) {
+                throw new IllegalStateException("The user must be a verified company to be marked as a non-verified company.");
+            }
+
+            appUserService.markCompanyAsNonVerified(appUser);
+            String userProfileURL = "redirect:/user/" + id;
+
+            return userProfileURL;
+        }
+        catch (IllegalStateException e) {
+            return "redirect:/";
+        }
+    }
 }
