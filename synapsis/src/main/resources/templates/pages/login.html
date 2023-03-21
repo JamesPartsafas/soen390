@@ -33,9 +33,11 @@
 
     <form th:action="@{/login}" method="post">
 
-        <p th:if="${param.error}" class="bg-primary-variant shadow-lg border border-primary rounded-md text-center m-4 p-4">Invalid login credentials</p>
+        <p th:if="${param.error}" th:utext="${session[SPRING_SECURITY_LAST_EXCEPTION]}"
+           class="bg-primary-variant shadow-lg border border-primary rounded-md text-center m-4 p-4"></p>
 
-        <p th:if="${param.logout}" class="bg-light shadow-lg border border-grey rounded-md text-center m-4 p-4">You have successfully logged out</p>
+        <p th:if="${param.logout}" class="bg-light shadow-lg border border-grey rounded-md text-center m-4 p-4">You have
+            successfully logged out</p>
 
         <div class="container flex flex-row justify-center mt-32 w-10/12">
             <div class="flex w-1/2 justify-center">
