@@ -1,28 +1,43 @@
 package com.soen.synapsis.appuser.connection;
 
 import com.soen.synapsis.appuser.AppUser;
-import com.soen.synapsis.appuser.AppUserDetails;
 import com.soen.synapsis.appuser.AppUserRepository;
 import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.websockets.notification.NotificationDTO;
+import com.soen.synapsis.websockets.notification.NotificationService;
+import com.soen.synapsis.websockets.notification.NotificationType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * A service class to work with connections.
+ */
 @Service
 public class ConnectionService {
     private final ConnectionRepository connectionRepository;
     private final AppUserRepository appUserRepository;
+    private final NotificationService notificationService;
 
-    public ConnectionService(ConnectionRepository connectionRepository, AppUserRepository appUserRepository) {
+    @Autowired
+    public ConnectionService(ConnectionRepository connectionRepository, AppUserRepository appUserRepository, NotificationService notificationService) {
         this.connectionRepository = connectionRepository;
         this.appUserRepository = appUserRepository;
+        this.notificationService = notificationService;
     }
 
-    public List<AppUser> getConnections(AppUserDetails appUser) {
-        List<Connection> connectionsRequesters = connectionRepository.findAcceptedConnectionsByRequesterID(appUser.getID());
-        List<Connection> connectionsReceivers = connectionRepository.findAcceptedConnectionsByReceiverID(appUser.getID());
+    /**
+     * Retrieve all the connections of a user.
+     *
+     * @param appUser the user that we want to retrieve the connections.
+     * @return a list of appuser that you are connected with.
+     */
+    public List<AppUser> getConnections(AppUser appUser) {
+        List<Connection> connectionsRequesters = connectionRepository.findAcceptedConnectionsByRequesterID(appUser.getId());
+        List<Connection> connectionsReceivers = connectionRepository.findAcceptedConnectionsByReceiverID(appUser.getId());
 
         List<Long> allConnectionIDs = new ArrayList<>();
 
@@ -49,12 +64,25 @@ public class ConnectionService {
         return allConnections;
     }
 
-    public List<AppUser> getPendingConnectionRequest(AppUserDetails user) {
-        return connectionRepository.findPendingConnectionsByReceiverID(user.getID());
+    /**
+     * Retrieve the users that send you a connection request.
+     *
+     * @param user the user that we want to get the pending connection requests from.
+     * @return a list of appuser where there is a pending connection.
+     */
+    public List<AppUser> getPendingConnectionRequest(AppUser user) {
+        return connectionRepository.findPendingConnectionsByReceiverID(user.getId());
     }
 
-    public String rejectConnection(AppUserDetails user, Long id) {
-        ConnectionKey connectionKey = new ConnectionKey(id, user.getID());
+    /**
+     * Reject a connection request from another user.
+     *
+     * @param user the logged-in user.
+     * @param id the user that you are rejecting the request.
+     * @return the network page.
+     */
+    public String rejectConnection(AppUser user, Long id) {
+        ConnectionKey connectionKey = new ConnectionKey(id, user.getId());
         Optional<Connection> retrievedConnection = connectionRepository.findById(connectionKey);
 
         if (!retrievedConnection.isPresent()) {
@@ -72,8 +100,15 @@ public class ConnectionService {
         return "redirect:/network";
     }
 
-    public String acceptConnection(AppUserDetails user, Long id) {
-        ConnectionKey connectionKey = new ConnectionKey(id, user.getID());
+    /**
+     * Accept a connection request from another user.
+     *
+     * @param user the logged-in user.
+     * @param id the user that you are accepting the request.
+     * @return the network page.
+     */
+    public String acceptConnection(AppUser user, Long id) {
+        ConnectionKey connectionKey = new ConnectionKey(id, user.getId());
         Optional<Connection> retrievedConnection = connectionRepository.findById(connectionKey);
 
         if (!retrievedConnection.isPresent()) {
@@ -89,10 +124,28 @@ public class ConnectionService {
         connection.setPending(false);
         connectionRepository.save(connection);
 
+        AppUser requester = connection.getRequester();
+        AppUser accepter = connection.getReceiver();
+
+        NotificationDTO requesterNotificationDTO = new NotificationDTO(0L, requester.getId(), NotificationType.CONNECTION, "Your connection request was accepted!", "/network", false);
+        notificationService.saveNotification(requesterNotificationDTO, requester);
+
+        NotificationDTO accepterNotificationDTO = new NotificationDTO(0L, accepter.getId(), NotificationType.CONNECTION, "You accepted a new connection!", "/network", false);
+        notificationService.saveNotification(accepterNotificationDTO, accepter);
+
         return "redirect:/network";
     }
 
-    public String makeConnection(AppUser requester, AppUser receiver) {
+    /**
+     * Create a connection request with another user.
+     *
+     * @param requesterId the logged-in user.
+     * @param receiverId the user that you are sending a request to.
+     */
+    public void connect(Long requesterId, Long receiverId) {
+        AppUser requester = appUserRepository.getReferenceById(requesterId);
+        AppUser receiver = appUserRepository.getReferenceById(receiverId);
+
         if (requester.getRole() == Role.ADMIN) {
             throw new IllegalStateException("Admins cannot make connections.");
         }
@@ -113,24 +166,57 @@ public class ConnectionService {
         Connection connection = new Connection(cKey1, requester, receiver, true);
         connectionRepository.save(connection);
 
-        return "pages/network";
+        NotificationDTO notificationDTO = new NotificationDTO(0L, receiver.getId(), NotificationType.CONNECTION, "You have a new connection request!", "/network", false);
+        notificationService.saveNotification(notificationDTO, receiver);
     }
 
+    /**
+     * Disconnect with another user.
+     *
+     * @param requesterId the logged-in user.
+     * @param receiverId the user that you are disconnecting with.
+     */
     public void disconnect(Long requesterId, Long receiverId) {
-        ConnectionKey connectionKey = new ConnectionKey(requesterId, receiverId);
-        connectionRepository.deleteById(connectionKey);
+        ConnectionKey connectionKey1 = new ConnectionKey(requesterId, receiverId);
+        ConnectionKey connectionKey2 = new ConnectionKey(receiverId, requesterId);
+
+        connectionRepository.findById(connectionKey1).ifPresentOrElse(
+                connectionRepository::delete,
+                () -> connectionRepository.findById(connectionKey2).ifPresent(connectionRepository::delete));
     }
 
+    /**
+     * Check if two users are connected.
+     *
+     * @param requesterId the first appuser
+     * @param receiverId the second appuser
+     * @return true if the two users are connected; otherwise false
+     */
     public boolean isConnectedWith(Long requesterId, Long receiverId) {
-        ConnectionKey connectionKey = new ConnectionKey(requesterId, receiverId);
-        Optional<Connection> retrievedConnection = connectionRepository.findById(connectionKey);
+        Optional<Connection> connectionWhenSentConnection = connectionRepository.findAcceptedConnectionsByRequesterIDAndReceiverID(requesterId, receiverId);
+        Optional<Connection> connectionWhenReceivedConnection = connectionRepository.findAcceptedConnectionsByRequesterIDAndReceiverID(receiverId, requesterId);
 
-        if (!retrievedConnection.isPresent()) {
+        if (connectionWhenSentConnection.isEmpty() && connectionWhenReceivedConnection.isEmpty()) {
             return false;
         }
 
-        Connection connection = retrievedConnection.get();
-
-        return !connection.isPending();
+        return true;
     }
+
+    /**
+     * Check if there's a pending connection request between two users.
+     *
+     * @param requesterId the first appuser.
+     * @param receiverId the second appuser.
+     * @return true if there is a pending connection between the two users; otherwise false
+     */
+    public boolean isPendingConnectionWith(Long requesterId, Long receiverId) {
+        Optional<Connection> retrievedConnection = connectionRepository.findPendingConnectionsByRequesterIDAndReceiverID(requesterId, receiverId);
+        if (retrievedConnection.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
 }
+

@@ -8,8 +8,7 @@ import com.soen.synapsis.appuser.job.JobType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JobTest {
 
@@ -23,6 +22,11 @@ class JobTest {
     private JobType type;
     private int numAvailable;
     private int numApplicants;
+    private boolean isExternal;
+    private String externalLink;
+    private boolean needResume;
+    private boolean needCover;
+    private boolean needPortfolio;
 
     @BeforeEach
     void setUp() {
@@ -35,12 +39,19 @@ class JobTest {
         type = JobType.FULLTIME;
         numAvailable = 5;
         numApplicants = 0;
-        undertest = new Job(creator, position, company, address, description, type, numAvailable);
+        isExternal = false;
+        externalLink = "";
+        needResume = true;
+        needCover = true;
+        needPortfolio = true;
+        undertest = new Job(creator, position, company, address, description, type, numAvailable, isExternal, externalLink, needResume, needCover, needPortfolio);
         undertest.setID(id);
     }
 
     @Test
-    void getID() { assertEquals(id, undertest.getID());}
+    void getID() {
+        assertEquals(id, undertest.getID());
+    }
 
     @Test
     void setID() {
@@ -50,7 +61,9 @@ class JobTest {
     }
 
     @Test
-    void getCreator() { assertEquals(creator, undertest.getCreator());}
+    void getCreator() {
+        assertEquals(creator, undertest.getCreator());
+    }
 
     @Test
     void getPosition() {
@@ -134,5 +147,80 @@ class JobTest {
         int newNumApplicants = 13;
         undertest.setNumApplicants(newNumApplicants);
         assertEquals(newNumApplicants, undertest.getNumApplicants());
+    }
+
+    @Test
+    void getIsExternal() {
+        assertEquals(isExternal, undertest.getIsExternal());
+    }
+
+    @Test
+    void setIsExternal() {
+        boolean newIsExternal = true;
+        undertest.setIsExternal(newIsExternal);
+        assertEquals(newIsExternal, undertest.getIsExternal());
+    }
+
+    @Test
+    void getExternalLink() {
+        assertEquals(externalLink, undertest.getExternalLink());
+    }
+
+    @Test
+    void setExternalLink() {
+        String newExternalLink = "https://www.google.com/";
+        undertest.setExternalLink(newExternalLink);
+        assertEquals(newExternalLink, undertest.getExternalLink());
+    }
+
+    @Test
+    void getNeedResume() {
+        assertEquals(needResume, undertest.getNeedResume());
+    }
+
+    @Test
+    void setNeedResume() {
+        boolean newNeedResume = false;
+        undertest.setNeedResume(newNeedResume);
+        assertEquals(newNeedResume, undertest.getNeedResume());
+    }
+
+    @Test
+    void getNeedCover() {
+        assertEquals(needCover, undertest.getNeedCover());
+    }
+
+    @Test
+    void setNeedCover() {
+        boolean newNeedCover = false;
+        undertest.setNeedCover(newNeedCover);
+        assertEquals(newNeedCover, undertest.getNeedCover());
+    }
+
+    @Test
+    void getNeedPortfolio() {
+        assertEquals(needCover, undertest.getNeedCover());
+    }
+
+    @Test
+    void setNeedPortfolio() {
+        boolean newNeedPortfolio = false;
+        undertest.setNeedPortfolio(newNeedPortfolio);
+        assertEquals(newNeedPortfolio, undertest.getNeedPortfolio());
+    }
+
+    @Test
+    void testToString() {
+        String s = "Job{" +
+                "id=" + id +
+                ", position='" + position + '\'' +
+                ", company='" + company + '\'' +
+                ", address=" + address +
+                ", description=" + description +
+                ", type=" + type +
+                ", numAvailable=" + numAvailable +
+                ", numApplicants=" + numApplicants +
+                '}';
+        assertEquals(s, undertest.toString());
     }
 }

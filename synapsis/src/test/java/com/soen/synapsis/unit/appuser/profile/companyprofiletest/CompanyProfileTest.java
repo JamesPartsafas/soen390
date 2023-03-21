@@ -13,6 +13,7 @@ public class CompanyProfileTest {
     private CompanyProfile underTest;
     private AppUser appUser;
     private Long id;
+    private String description;
     private String website;
     private String industry;
     private String companySize;
@@ -23,12 +24,13 @@ public class CompanyProfileTest {
     void setUp() {
         appUser = new AppUser(1L, "joe doe", "12345678", "joe@gmail.com", Role.COMPANY);
         id = 4L;
+        description = "description";
         website = "www.google.com";
         industry = "technology";
         companySize = "1000";
         location = "Canada";
         speciality = "Speech Recognition";
-        underTest = new CompanyProfile(appUser, id, website, industry, companySize, location, speciality);
+        underTest = new CompanyProfile(appUser, id, description, website, industry, companySize, location, speciality);
     }
 
     @Test
@@ -59,6 +61,19 @@ public class CompanyProfileTest {
         assertEquals(newAppUser, underTest.getAppUser());
     }
 
+    @Test
+    void getDescription() {
+        assertEquals(description, underTest.getDescription());
+    }
+
+    @Test
+    void setDescription() {
+        String newDescription = "new description";
+
+        underTest.setDescription(newDescription);
+
+        assertEquals(newDescription, underTest.getDescription());
+    }
 
     @Test
     void getWebsite() {
@@ -82,7 +97,7 @@ public class CompanyProfileTest {
 
     @Test
     void setIndustry() {
-        String newIndustry= "Medical";
+        String newIndustry = "Medical";
 
         underTest.setIndustry(newIndustry);
 
@@ -132,6 +147,7 @@ public class CompanyProfileTest {
 
         assertEquals(newSpeciality, underTest.getSpeciality());
     }
+
     @Test
     void testToString() {
         assertThat(underTest.toString()).isNotNull();

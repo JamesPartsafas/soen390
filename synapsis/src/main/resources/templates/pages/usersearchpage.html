@@ -1,14 +1,36 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="_layout">
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="_layout">
 <div layout:fragment="content">
     <div th:if="${users.size() == 0}">
-        <p class="font-sans text-base font-light mt-2 ml-4">No users exists with that name</p>
+        <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+            <!-- If there are no users that satisfy the search criteria then nothing will be returned-->
+            <span class="font-medium"></span> No users exists with that name !
+        </div>
     </div>
-
-    <div th:if="${users.size() > 0}" th:each="user: ${users}">
-        <p class="font-sans text-base font-light mt-2 ml-4" th:text="${user.name}"></p>
-        <p class="font-sans text-base font-light mt-2 ml-4">CraigsTutor</p>
-        <a th:href="@{/user/{id}(id=${user.getId()})}">Check Profile</a>
+    <div th:if="${users.size() > 0}" th:each="user: ${users}"
+         class="max-w-lg h-[10rem]  mt-5 ml-5 bg-neutral-100  border-gray-200 rounded-lg shadow">
+        <div class="flex">
+            <img class="flex-none  w-14 h-14 mt-5 rounded-full w-16 h-20" src="../../assets/default_user.svg"
+                 alt="Default"/>
+            <table>
+                <tr>
+                    <td>
+                        <p class="text-xl  pt-8 pl-2 flex-initial w-64 font-bold mt-2" th:text="${user.name}"></p>
+                    </td>
+                    <td>
+                        <a th:href="@{/user/{id}(id=${user.getId()})}"
+                           class=" flex-initial object-right text-center  mt-10 w-32 h-16 btn bg-red-500 text-white rounded-full">Check
+                            Profile</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="font-sans flex-none  text-base font-bold ml-2">CraigsTutor</p>
+                </tr>
+                </td>
+            </table>
+        </div>
     </div>
 </div>
 </html>

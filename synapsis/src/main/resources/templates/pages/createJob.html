@@ -1,81 +1,84 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.ultraq.net.nz/thymeleaf/layout">
-<head>
-  <meta charset="UTF-8">
-  <title>Synapsis</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'primary': '#fa2742',
-            'primary-variant': '#fc9ca8',
-            'black': '#1d2228',
-            'black-variant': '#3c4653',
-            'grey': '#8f949b',
-            'light': '#e1e2e2',
-            'facebook-blue': '#1877F2',
-            'true-black': '#000000'
-          },
-          fontFamily: {
-            sans: ['Merriweather Sans', 'sans-serif'],
-            serif: ['Catamaran', 'serif'],
-          }
-        }
-
-      }
-    }
-  </script>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<div>
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="_layout">
+<div layout:fragment="content">
 
   <form th:action="@{/createjob}" method="post">
 
     <p th:if="${param.error}">Invalid input.</p>
 
-    <div class="container flex flex-row justify-center mt-32">
-      <div class="flex-none w-1/2 mr-12">
-        <img src="" alt="Website Example">
-      </div>
-      <div class="flex-none container flex flex-wrap flex-col justify-center content-center mt-8 w-80 border rounded-sm">
-        <div class="mt-6">
-          <img src="" class="w-8 inline" alt="S">
-          <img src="/assets/synapsis_black.svg" class="inline h-10 w-48" alt="Synapsis Logo">
-        </div>
-        <input id="position" name="position" placeholder="Position"
-               class="font-thin font-serif mt-4 pl-3 h-14 w-3/4 content-center border rounded-md"
-               required/>
-        <input id="company" name="company" placeholder="Company"
-               class="font-thin font-serif pl-3 mt-3 h-14 w-3/4 content-center border rounded-md"
-               required/>
-        <input id="address" name="address" placeholder="Address"
-               class="font-thin font-serif pl-3 mt-3 h-14 w-3/4 content-center border rounded-md"
-               required/>
-        <input id="description" name="description" placeholder="Description"
-               class="font-thin font-serif pl-3 mt-3 h-14 w-3/4 content-center border rounded-md"
-               required/>
-        <label for="type">Type</label>
-        <select id="type" name="type" required>
-          <option value="FULLTIME">Full-time</option>
-          <option value="PARTTIME">Part-time</option>
-          <option value="CONTRACT">Contract</option>
-          <option value="TEMPORARY">Temporary</option>
-          <option value="VOLUNTEER">Volunteer</option>
-          <option value="INTERNSHIP">Internship</option>
-          <option value="OTHER">Other</option>
-        </select>
-        <input id="numAvailable" name="numAvailable" type="number" min="1" placeholder="Available Positions"
-               class="font-thin font-serif pl-3 mt-3 h-14 w-3/4 content-center border rounded-md"
-               required/>
+    <div class="flex flex-col border p-8  mx-auto mt-10 shadow-xl w-1/2 mb-20 rounded-xl">
 
-        <button type="submit" class="btn btn-primary mt-3 bg-primary text-base justify-self-end">Create
-        </button>
+      <div class="mb-4">
+        <img src="../../assets/synapsis_logo.svg" class="object-contain h-12 w-12" alt="Synapsis Logo">
       </div>
+
+      <p class="font-thin text-3xl m-2 text-center text-black-variant">Create a Job</p>
+      <input id="position" name="position" placeholder="Job Position"
+             class="font-thin font-serif border border-grey mt-4 pl-3 h-14 content-center rounded-md hover:bg-light"
+             required/>
+      <input id="company" name="company" placeholder="Company Name"
+             class="font-thin font-serif border border-grey mt-4 pl-3 h-14 content-center rounded-md hover:bg-light"
+             required/>
+      <input id="address" name="address" placeholder="Address"
+             class="font-thin font-serif border border-grey mt-4 pl-3 h-14 content-center rounded-md hover:bg-light"
+             required/>
+      <textarea rows="5" id="description" name="description" placeholder="Description"
+                class="font-thin font-serif border border-grey mt-4 p-3 mb-4 content-center rounded-md hover:bg-light"
+                required></textarea>
+
+      <label for="type" class="font-thin text-grey font-serif">Job Type</label>
+      <select id="type" name="type" class="mt-2 bg-white border text-sm h-14 border-grey
+      text-grey rounded-md focus:border-blue-500 p-3 hover:bg-light" required>
+        <option value="FULLTIME">Full-time</option>
+        <option value="PARTTIME">Part-time</option>
+        <option value="CONTRACT">Contract</option>
+        <option value="TEMPORARY">Temporary</option>
+        <option value="VOLUNTEER">Volunteer</option>
+        <option value="INTERNSHIP">Internship</option>
+        <option value="OTHER">Other</option>
+      </select>
+
+      <input id="numAvailable" name="numAvailable" type="number" min="1" placeholder="Available Positions"
+             class="font-thin font-serif border border-grey mt-4 pl-3 h-14 mb-4
+             content-center rounded-md hover:bg-light" required/>
+
+      <div class="border border-grey p-3 rounded-md hover:bg-light">
+        <p class="text-grey font-serif">Indicate which documents are mandatory for this application</p>
+        <fieldset class="font-serif text-grey">
+          <input type="checkbox" name="needResume" id="needResume">
+          <label for="needResume">Resume</label><br>
+          <input type="checkbox" name= "needCover" id="needCover">
+          <label for="needCover">Cover Letter</label><br>
+          <input type="checkbox" name= "needPortfolio" id="needPortfolio">
+          <label for="needPortfolio">Portfolio</label><br>
+        </fieldset>
+      </div>
+
+      <div class="border border-grey p-3 mt-4 rounded-md hover:bg-light">
+        <fieldset required>
+          <legend class="font-thin font-serif text-grey">Is this job hosted elsewhere?</legend>
+          <div>
+            <input th:value="${true}" type="radio" name="isExternal" id="external" onclick="EnableLinkBox()"/>
+            <label for="external" class="font-thin font-serif text-grey">Yes (Third Party Platform)</label>
+            <br/>
+
+            <input th:value="${false}" type="radio" name="isExternal" id="internal" onclick="EnableLinkBox()"/>
+            <label for="internal" class="font-thin font-serif text-grey">No (on Synapsis)</label>
+          </div>
+
+          <input id="externalLink" name="externalLink" placeholder="If yes, enter the link to the third party website" class="font-thin font-serif
+                 border border-grey mt-4 pl-3 h-14 content-center rounded-md hover:bg-light w-full" disabled />
+        </fieldset>
+      </div>
+
+      <button type="submit" class="btn btn-primary mt-3 bg-primary text-base mx-auto p-4 rounded-2xl font-thin
+        transition hover:-translate-y-0.5 duration-150 hover:bg-opacity-60">Create
+      </button>
     </div>
 
   </form>
+
+  <script type="text/javascript" th:src="@{/js/createJob.js}"></script>
 
 </div>
 </html>

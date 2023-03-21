@@ -3,17 +3,17 @@ package com.soen.synapsis.unit.appuser.profile.companyprofiletest;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
-import com.soen.synapsis.appuser.registration.RegistrationRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UpdateCompanyProfileRequestTest {
     private CompanyProfile underTest;
     private AppUser appUser;
     private Long id;
+    private String description;
     private String website;
     private String industry;
     private String companySize;
@@ -24,12 +24,27 @@ class UpdateCompanyProfileRequestTest {
     void setUp() {
         appUser = new AppUser(3L, "joe carmen", "12345678", "carmen@gmail.com", Role.COMPANY);
         id = 3L;
+        description = "description";
         website = "www.google.com";
         industry = "buisness";
         companySize = "100";
         location = "Canada";
         speciality = "Investments";
-        underTest = new CompanyProfile(appUser, id, website, industry, companySize, location, speciality);
+        underTest = new CompanyProfile(appUser, id, description, website, industry, companySize, location, speciality);
+    }
+
+    @Test
+    void getDescription() {
+        assertEquals(description, underTest.getDescription());
+    }
+
+    @Test
+    void setDescription() {
+        String newDescription = "new description";
+
+        underTest.setDescription(newDescription);
+
+        assertEquals(newDescription, underTest.getDescription());
     }
 
     @Test

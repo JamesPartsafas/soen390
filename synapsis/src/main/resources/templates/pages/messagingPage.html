@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="_layout">
+<div layout:fragment="content">
+    <p th:if="${reportStatus != null}" th:text="${reportStatus}"></p>
+    <div id="chat-page">
+        <div class="chat-container">
+            <div class="connecting">
+                Connecting...
+            </div>
+
+            <ul id="messageArea">
+                <li th:each="message : ${messages}" class="flex items-center">
+                    <div class="flex flex-col items-start">
+                        <th:block th:if="${message.fileName != null and message.file != null}">
+                            <img th:if="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}" th:src="${message.file}" th:alt="${message.fileName}" />
+                            <a th:unless="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}" th:download="${message.fileName}" th:text="'Download' + ${message.fileName}"></a>
+                        </th:block>
+                        <p th:text="${message.getContent()}"></p>
+                    </div>
+                    <form th:if="${message.getSender().getId() != authenticatedUserID}" th:action="@{/chat/report}" method="POST">
+                        <input type="hidden" name="messageID" th:value="${message.getId()}" />
+                        <input type="hidden" name="chatID" th:value="${chatId}" />
+                        <button class="btn bg-primary btn-primary font-sans text-sm w-20 h-9 p-0" type="submit">Report</button>
+                    </form>
+                </li>
+            </ul>
+
+            <form id="messageForm" name="messageForm" nameForm="messageForm">
+                <input id="chat" class="hidden" th:value="${chatId}"/>
+                <input id="sender" class="hidden" th:value="${senderId}"/>
+                <input id="receiver" class="hidden" th:value="${receiverId}"/>
+                <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control"/>
+                <input type="file" id="file" name="file"/>
+                <button type="submit" class="primary">Send</button>
+            </form>
+
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+</div>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="_layout">
+<div layout:fragment="content">
+
+  <form th:action="@{/editjob}" method="post">
+
+    <input type="hidden" name="jobId" th:value="${jobId}" />
+
+    <p th:if="${param.error}">Invalid input.</p>
+
+    <div class="flex flex-col border p-8  mx-auto mt-10 shadow-xl w-1/2 mb-20 rounded-xl">
+
+      <div class="mb-4">
+        <img src="../../assets/synapsis_logo.svg" class="object-contain h-12 w-12" alt="Synapsis Logo">
+      </div>
+
+      <p class="font-thin text-3xl m-2 text-center text-black-variant">Edit a Job</p>
+      <label for="position" class="font-thin text-grey font-serif">Job Position</label>
+      <input id="position" name="position" th:value="${position}"
+             class="font-thin font-serif border border-grey pl-3 h-14 content-center rounded-md hover:bg-light"
+             required/>
+      <label for="company" class="font-thin text-grey font-serif mt-4">Company Name</label>
+      <input id="company" name="company" th:value="${company}"
+             class="font-thin font-serif border border-grey pl-3 h-14 content-center rounded-md hover:bg-light"
+             required/>
+      <label for="address" class="font-thin text-grey font-serif mt-4">Address</label>
+      <input id="address" name="address" th:value="${address}"
+             class="font-thin font-serif border border-grey pl-3 h-14 content-center rounded-md hover:bg-light"
+             required/>
+      <label for="description" class="font-thin text-grey font-serif mt-4">Description</label>
+      <textarea rows="5" id="description" name="description" th:text="${description}"
+                class="font-thin font-serif border border-grey p-3 mb-4 content-center rounded-md hover:bg-light"
+                required></textarea>
+
+      <label for="type" class="font-thin text-grey font-serif">Job Type</label>
+      <select id="type" name="type" class="mt-2 bg-white border text-sm h-14 border-grey
+      text-grey rounded-md focus:border-blue-500 p-3 hover:bg-light" required>
+        <option th:selected="${type.toString() == 'FULLTIME'}" value="FULLTIME">Full-time</option>
+        <option th:selected="${type.toString() == 'PARTTIME'}" value="PARTTIME">Part-time</option>
+        <option th:selected="${type.toString() == 'CONTRACT'}" value="CONTRACT">Contract</option>
+        <option th:selected="${type.toString() == 'TEMPORARY'}" value="TEMPORARY">Temporary</option>
+        <option th:selected="${type.toString() == 'VOLUNTEER'}" value="VOLUNTEER">Volunteer</option>
+        <option th:selected="${type.toString() == 'INTERNSHIP'}" value="INTERNSHIP">Internship</option>
+        <option th:selected="${type.toString() == 'OTHER'}" value="OTHER">Other</option>
+      </select>
+
+      <input id="numAvailable" name="numAvailable" type="number" th:value="${num_available}" min="1" placeholder="Available Positions"
+             class="font-thin font-serif border border-grey mt-4 pl-3 h-14 mb-4
+             content-center rounded-md hover:bg-light" required/>
+
+      <div class="border border-grey p-3 rounded-md hover:bg-light">
+        <p class="text-grey font-serif">Indicate which documents are mandatory for this application</p>
+        <fieldset class="font-serif text-grey">
+          <input type="checkbox" name="needResume" id="needResume" th:checked="${need_resume}">
+          <label for="needResume">Resume</label><br>
+          <input type="checkbox" name= "needCover" id="needCover" th:checked="${need_cover}">
+          <label for="needCover">Cover Letter</label><br>
+          <input type="checkbox" name= "needPortfolio" id="needPortfolio" th:checked="${need_portfolio}">
+          <label for="needPortfolio">Portfolio</label><br>
+        </fieldset>
+      </div>
+
+      <div class="border border-grey p-3 mt-4 rounded-md hover:bg-light">
+        <fieldset required>
+          <legend class="font-thin font-serif text-grey">Is this job hosted elsewhere?</legend>
+          <div>
+            <input th:checked="${is_external}" th:value="${true}" type="radio" name="isExternal" id="external" onclick="EnableLinkBox()"/>
+            <label for="external" class="font-thin font-serif text-grey">Yes (Third Party Platform)</label>
+            <br/>
+
+            <input th:checked="${!is_external}" th:value="${false}" type="radio" name="isExternal" id="internal" onclick="EnableLinkBox()"/>
+            <label for="internal" class="font-thin font-serif text-grey">No (on Synapsis)</label>
+          </div>
+
+          <input th:value="${external_link}" id="externalLink" name="externalLink" placeholder="If yes, enter the link to the third party website" class="font-thin font-serif
+                 border border-grey mt-4 pl-3 h-14 content-center rounded-md hover:bg-light w-full" disabled />
+        </fieldset>
+      </div>
+
+      <div class="flex mt-3 mx-auto space-x-4">
+        <button type="submit" class="btn btn-primary bg-primary text-base rounded-2xl font-thin
+        hover:bg-opacity-60 p-4 w-20">Save
+        </button>
+
+        <a th:href="'job/' + ${jobId}" class="text-white font-thin bg-primary rounded-2xl
+        hover:bg-opacity-60 h-16 px-4 py-[20px] w-20">Cancel</a>
+      </div>
+
+    </div>
+
+  </form>
+
+  <script type="text/javascript" th:src="@{/js/createJob.js}"></script>
+
+</div>
+</html>

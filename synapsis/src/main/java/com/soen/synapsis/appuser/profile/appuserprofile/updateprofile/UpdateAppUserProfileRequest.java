@@ -1,6 +1,10 @@
 package com.soen.synapsis.appuser.profile.appuserprofile.updateprofile;
 
+/**
+ * This UpdateAppUserProfileRequest class serves as the request to update the app user profile.
+ */
 public class UpdateAppUserProfileRequest {
+    private String description;
     private String education;
     private String skill;
     private String work;
@@ -11,10 +15,29 @@ public class UpdateAppUserProfileRequest {
     private String award;
     private String language;
 
+    /**
+     * Empty constructor.
+     */
     public UpdateAppUserProfileRequest() {
     }
 
-    public UpdateAppUserProfileRequest(String education, String skill, String work, String phone, String volunteering, String course, String project, String award, String language) {
+    /**
+     * Create a new update app user profile request given the inputs data.
+     * @param description the description of the app user profile update request.
+     * @param education the education of the app user profile update request.
+     * @param skill the skill of the app user profile update request.
+     * @param work the work of the app user profile update request.
+     * @param phone the phone of the app user profile update request.
+     * @param volunteering the volunteering of the app user profile update request.
+     * @param course the course of the app user profile update request.
+     * @param project the project of the app user profile update request.
+     * @param award the award of the app user profile update request.
+     * @param language the language of the app user profile update request.
+     */
+    public UpdateAppUserProfileRequest(String description, String education, String skill,
+                                       String work, String phone, String volunteering, String course,
+                                       String project, String award, String language) {
+        this.description = description;
         this.education = education;
         this.skill = skill;
         this.work = work;
@@ -24,6 +47,14 @@ public class UpdateAppUserProfileRequest {
         this.project = project;
         this.award = award;
         this.language = language;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getEducation() {

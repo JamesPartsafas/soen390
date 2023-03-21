@@ -65,14 +65,28 @@ class AppUserRepositoryTest {
                 Role.CANDIDATE);
 
         underTest.saveAll(Arrays.asList(appUser1, appUser2));
-        List<AppUser> users = underTest.findByNameContainingIgnoreCaseAndIdNot(name, 2L);
+        List<AppUser> users = underTest.findByNameContainingIgnoreCaseAndIdNotAndRoleNot(name, 2L, Role.ADMIN);
         assertTrue(users.size() == 1);
     }
 
     @Test
     void itShouldNotFindUsersByNameIfUserNameDoesNotExist() {
         String name = "oh";
-        List<AppUser> users = underTest.findByNameContainingIgnoreCaseAndIdNot(name, 2L);
+        List<AppUser> users = underTest.findByNameContainingIgnoreCaseAndIdNotAndRoleNot(name, 2L, Role.ADMIN);
+        assertTrue(users.size() == 0);
+    }
+
+    @Test
+    void itShouldNotFindUsersByNameIfUserIsAdmin() {
+        String name = "oh";
+        AppUser appUser = new AppUser(1L,
+                "John User 1",
+                "1234",
+                "joeuser1test@mail.com",
+                Role.ADMIN);
+
+        underTest.save(appUser);
+        List<AppUser> users = underTest.findByNameContainingIgnoreCaseAndIdNotAndRoleNot(name, 2L, Role.ADMIN);
         assertTrue(users.size() == 0);
     }
 }

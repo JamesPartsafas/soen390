@@ -3,19 +3,18 @@ package com.soen.synapsis.unit.appuser.profile.userprofiletest;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
-import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
-import com.soen.synapsis.appuser.registration.RegistrationRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UpdateAppUserProfileRequestTest {
 
     private AppUserProfile underTest;
     private AppUser appUser;
     private Long id;
+    private String description;
     private String education;
     private String skill;
     private String work;
@@ -30,6 +29,7 @@ class UpdateAppUserProfileRequestTest {
     void setUp() {
         appUser = new AppUser(6L, "joe goldberg", "12345678", "goldjoe@gmail.com", Role.CANDIDATE);
         id = 3L;
+        description = "description";
         education = "engineering";
         skill = "self learner";
         work = "developer";
@@ -39,7 +39,21 @@ class UpdateAppUserProfileRequestTest {
         project = "amaznotwebsite";
         award = "beststudentaward";
         language = "French";
-        underTest = new AppUserProfile(appUser, id, education, skill, work, course, phone, volunteering, project, award, language);
+        underTest = new AppUserProfile(appUser, id, description, education, skill, work, course, phone, volunteering, project, award, language);
+    }
+
+    @Test
+    void getDescription() {
+        assertEquals(description, underTest.getDescription());
+    }
+
+    @Test
+    void setDescription() {
+        String newDescription = "new description";
+
+        underTest.setDescription(newDescription);
+
+        assertEquals(newDescription, underTest.getDescription());
     }
 
     @Test

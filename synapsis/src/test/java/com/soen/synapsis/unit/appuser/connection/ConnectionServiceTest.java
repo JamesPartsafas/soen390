@@ -1,13 +1,13 @@
 package com.soen.synapsis.unit.appuser.connection;
 
 import com.soen.synapsis.appuser.AppUser;
-import com.soen.synapsis.appuser.AppUserDetails;
 import com.soen.synapsis.appuser.AppUserRepository;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.connection.Connection;
 import com.soen.synapsis.appuser.connection.ConnectionKey;
 import com.soen.synapsis.appuser.connection.ConnectionRepository;
 import com.soen.synapsis.appuser.connection.ConnectionService;
+import com.soen.synapsis.websockets.notification.NotificationService;
 import org.checkerframework.checker.nullness.Opt;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +33,8 @@ public class ConnectionServiceTest {
     private ConnectionRepository connectionRepository;
     @Mock
     private AppUserRepository appUserRepository;
+    @Mock
+    NotificationService notificationService;
     private AutoCloseable autoCloseable;
     private AppUser candidateUser1;
     private AppUser candidateUser2;
@@ -43,13 +45,13 @@ public class ConnectionServiceTest {
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new ConnectionService(connectionRepository, appUserRepository);
+        underTest = new ConnectionService(connectionRepository, appUserRepository, notificationService);
 
         candidateUser1 = new AppUser(1L, "Joe Man", "1234", "joeman@email.com", Role.CANDIDATE);
-        candidateUser2 = new AppUser(2L,"Joe Woman", "1234", "joewoman@email.com", Role.CANDIDATE);
-        companyUser = new AppUser(3L,"Company", "1234", "company@email.com", Role.COMPANY);
-        recruiterUser = new AppUser(4L,"Recruiter", "1234", "recruiter@email.com", Role.RECRUITER);
-        adminUser = new AppUser(5L,"Admin", "1234", "admin@email.com", Role.ADMIN);
+        candidateUser2 = new AppUser(2L, "Joe Woman", "1234", "joewoman@email.com", Role.CANDIDATE);
+        companyUser = new AppUser(3L, "Company", "1234", "company@email.com", Role.COMPANY);
+        recruiterUser = new AppUser(4L, "Recruiter", "1234", "recruiter@email.com", Role.RECRUITER);
+        adminUser = new AppUser(5L, "Admin", "1234", "admin@email.com", Role.ADMIN);
     }
 
     @AfterEach
@@ -58,69 +60,73 @@ public class ConnectionServiceTest {
     }
 
     @Test
-    void makeConnectionSuccessfulWithCandidateRoles() {
-        String returnValue = underTest.makeConnection(candidateUser1, candidateUser2);
+    void connectSuccessfulWithCandidateRoles() {
+        when(appUserRepository.getReferenceById(any(Long.class))).thenReturn(candidateUser1);
+
+        underTest.connect(candidateUser1.getId(), candidateUser2.getId());
 
         ArgumentCaptor<Connection> connectionArgumentCaptor = ArgumentCaptor.forClass(Connection.class);
         verify(connectionRepository).save(connectionArgumentCaptor.capture());
-
-        assertEquals("pages/network", returnValue);
     }
 
     @Test
-    void makeConnectionSuccessfulWithCompanyRoles() {
-        String returnValue = underTest.makeConnection(companyUser, candidateUser1);
+    void connectSuccessfulWithCompanyRoles() {
+        when(appUserRepository.getReferenceById(any(Long.class))).thenReturn(companyUser);
+
+        underTest.connect(companyUser.getId(), candidateUser1.getId());
 
         ArgumentCaptor<Connection> connectionArgumentCaptor = ArgumentCaptor.forClass(Connection.class);
         verify(connectionRepository).save(connectionArgumentCaptor.capture());
-
-        assertEquals("pages/network", returnValue);
     }
 
     @Test
-    void makeConnectionSuccessfulWithRecruiterRoles() {
-        String returnValue = underTest.makeConnection(recruiterUser, candidateUser1);
+    void connectSuccessfulWithRecruiterRoles() {
+        when(appUserRepository.getReferenceById(any(Long.class))).thenReturn(recruiterUser);
+
+        underTest.connect(recruiterUser.getId(), candidateUser1.getId());
 
         ArgumentCaptor<Connection> connectionArgumentCaptor = ArgumentCaptor.forClass(Connection.class);
         verify(connectionRepository).save(connectionArgumentCaptor.capture());
-
-        assertEquals("pages/network", returnValue);
     }
 
     @Test
-    void makeConnectionFailWithAdminRequesterRole() {
+    void connectWillFailWithAdminRequesterRole() {
+        when(appUserRepository.getReferenceById(any(Long.class))).thenReturn(adminUser);
+
         ArgumentCaptor<Connection> connectionArgumentCaptor = ArgumentCaptor.forClass(Connection.class);
         verify(connectionRepository, never()).save(connectionArgumentCaptor.capture());
 
         assertThrows(IllegalStateException.class,
-                () -> underTest.makeConnection(adminUser, candidateUser1),
+                () -> underTest.connect(adminUser.getId(), candidateUser1.getId()),
                 "Admins cannot make connections.");
     }
 
     @Test
-    void makeConnectionFailWithAdminReceiverRole() {
+    void connectWillFailWithAdminReceiverRole() {
+        when(appUserRepository.getReferenceById(any(Long.class))).thenReturn(adminUser);
+
         ArgumentCaptor<Connection> connectionArgumentCaptor = ArgumentCaptor.forClass(Connection.class);
         verify(connectionRepository, never()).save(connectionArgumentCaptor.capture());
 
         assertThrows(IllegalStateException.class,
-                () -> underTest.makeConnection(candidateUser1, adminUser),
+                () -> underTest.connect(candidateUser1.getId(), adminUser.getId()),
                 "Admins cannot receive connections.");
     }
 
     @Test
     void willThrowWhenConnectionExists() {
-        given(connectionRepository.existsById(Mockito.any(ConnectionKey.class))).willReturn(true);
+        when(appUserRepository.getReferenceById(any(Long.class))).thenReturn(candidateUser1);
+        when(connectionRepository.existsById(any(ConnectionKey.class))).thenReturn(true);
 
         verify(connectionRepository, never()).save(any());
 
         assertThrows(IllegalStateException.class,
-                () -> underTest.makeConnection(candidateUser1, candidateUser2),
+                () -> underTest.connect(candidateUser1.getId(), candidateUser2.getId()),
                 "Connection has already been made.");
     }
 
     @Test
     void getConnections() {
-        AppUserDetails appUserDetails = new AppUserDetails(candidateUser1);
         ConnectionKey connectionKey = new ConnectionKey(candidateUser1.getId(), candidateUser2.getId());
         Connection connection = new Connection(connectionKey, candidateUser1, candidateUser2, false);
 
@@ -132,7 +138,7 @@ public class ConnectionServiceTest {
         given(connectionRepository.findAcceptedConnectionsByRequesterID(Mockito.any(Long.class))).willReturn(allConnectionsIDs);
         given(appUserRepository.getReferenceById(Mockito.any(Long.class))).willReturn(candidateUser2);
 
-        List<AppUser> returnValue = underTest.getConnections(appUserDetails);
+        List<AppUser> returnValue = underTest.getConnections(candidateUser1);
 
         verify(connectionRepository).findAcceptedConnectionsByRequesterID(candidateUser1.getId());
         verify(connectionRepository).findAcceptedConnectionsByReceiverID(candidateUser1.getId());
@@ -142,11 +148,10 @@ public class ConnectionServiceTest {
 
     @Test
     void rejectConnectionWithNonExistentConnection() {
-        AppUserDetails appUserDetails = new AppUserDetails(candidateUser1);
         ArgumentCaptor<ConnectionKey> connectionArgumentCaptor = ArgumentCaptor.forClass(ConnectionKey.class);
         verify(connectionRepository, never()).deleteById(connectionArgumentCaptor.capture());
 
-        assertThrows(IllegalStateException.class, () -> underTest.rejectConnection(appUserDetails, candidateUser2.getId()));
+        assertThrows(IllegalStateException.class, () -> underTest.rejectConnection(candidateUser1, candidateUser2.getId()));
     }
 
     @Test
@@ -158,8 +163,7 @@ public class ConnectionServiceTest {
         ArgumentCaptor<ConnectionKey> connectionArgumentCaptor = ArgumentCaptor.forClass(ConnectionKey.class);
         verify(connectionRepository, never()).deleteById(connectionArgumentCaptor.capture());
 
-        AppUserDetails appUserDetails = new AppUserDetails(candidateUser1);
-        assertThrows(IllegalStateException.class, () -> underTest.rejectConnection(appUserDetails, candidateUser2.getId()));
+        assertThrows(IllegalStateException.class, () -> underTest.rejectConnection(candidateUser1, candidateUser2.getId()));
     }
 
     @Test
@@ -171,17 +175,15 @@ public class ConnectionServiceTest {
         ArgumentCaptor<ConnectionKey> connectionArgumentCaptor = ArgumentCaptor.forClass(ConnectionKey.class);
         verify(connectionRepository, atMostOnce()).deleteById(connectionArgumentCaptor.capture());
 
-        AppUserDetails appUserDetails = new AppUserDetails(candidateUser1);
-        assertEquals(underTest.rejectConnection(appUserDetails, candidateUser2.getId()), "redirect:/network");
+        assertEquals(underTest.rejectConnection(candidateUser1, candidateUser2.getId()), "redirect:/network");
     }
 
     @Test
     void acceptConnectionWithNonExistentConnection() {
-        AppUserDetails appUserDetails = new AppUserDetails(candidateUser1);
         ArgumentCaptor<ConnectionKey> connectionArgumentCaptor = ArgumentCaptor.forClass(ConnectionKey.class);
         verify(connectionRepository, never()).deleteById(connectionArgumentCaptor.capture());
 
-        assertThrows(IllegalStateException.class, () -> underTest.acceptConnection(appUserDetails, candidateUser2.getId()));
+        assertThrows(IllegalStateException.class, () -> underTest.acceptConnection(candidateUser1, candidateUser2.getId()));
     }
 
     @Test
@@ -193,8 +195,7 @@ public class ConnectionServiceTest {
         ArgumentCaptor<ConnectionKey> connectionArgumentCaptor = ArgumentCaptor.forClass(ConnectionKey.class);
         verify(connectionRepository, never()).deleteById(connectionArgumentCaptor.capture());
 
-        AppUserDetails appUserDetails = new AppUserDetails(candidateUser1);
-        assertThrows(IllegalStateException.class, () -> underTest.acceptConnection(appUserDetails, candidateUser2.getId()));
+        assertThrows(IllegalStateException.class, () -> underTest.acceptConnection(candidateUser1, candidateUser2.getId()));
     }
 
     @Test
@@ -206,21 +207,32 @@ public class ConnectionServiceTest {
         ArgumentCaptor<ConnectionKey> connectionArgumentCaptor = ArgumentCaptor.forClass(ConnectionKey.class);
         verify(connectionRepository, atMostOnce()).deleteById(connectionArgumentCaptor.capture());
 
-        AppUserDetails appUserDetails = new AppUserDetails(candidateUser1);
-        assertEquals(underTest.acceptConnection(appUserDetails, candidateUser2.getId()), "redirect:/network");
+        assertEquals(underTest.acceptConnection(candidateUser1, candidateUser2.getId()), "redirect:/network");
     }
 
     @Test
-    void disconnectDeletesTheConnection() {
-        ArgumentCaptor<ConnectionKey> connectionArgumentCaptor = ArgumentCaptor.forClass(ConnectionKey.class);
-
+    void disconnectDeletesTheConnectionWhenOrderOfFirstAndSecondCandidatesIsCorrect() {
+        ConnectionKey connectionKey = new ConnectionKey(candidateUser2.getId(), candidateUser1.getId());
+        Connection connection = new Connection(connectionKey,candidateUser2, candidateUser1, false);
+        when(connectionRepository.findById(connectionKey)).thenReturn(Optional.of(connection));
         underTest.disconnect(candidateUser2.getId(), candidateUser1.getId());
-        verify(connectionRepository, atMostOnce()).deleteById(connectionArgumentCaptor.capture());
+        verify(connectionRepository, atMostOnce()).delete(connection);
+    }
+
+    @Test
+    void disconnectDeletesTheConnectionWhenOrderOfFirstAndSecondCandidatesIsReversed() {
+        ConnectionKey connectionKey1 = new ConnectionKey(candidateUser2.getId(), candidateUser1.getId());
+        ConnectionKey connectionKey2 = new ConnectionKey(candidateUser1.getId(), candidateUser2.getId());
+        Connection connection = new Connection(connectionKey1,candidateUser2, candidateUser1, false);
+        when(connectionRepository.findById(connectionKey1)).thenReturn(Optional.empty());
+        when(connectionRepository.findById(connectionKey2)).thenReturn(Optional.of(connection));
+        underTest.disconnect(candidateUser2.getId(), candidateUser1.getId());
+        verify(connectionRepository, atMostOnce()).delete(connection);
     }
 
     @Test
     void isConnectedWithReturnsFalseIfConnectionDoesNotExist() {
-        when(connectionRepository.findById(any(ConnectionKey.class))).thenReturn(Optional.empty());
+        when(connectionRepository.findAcceptedConnectionsByRequesterIDAndReceiverID(any(Long.class), any(Long.class))).thenReturn(Optional.empty());
 
         assertFalse(underTest.isConnectedWith(candidateUser2.getId(), candidateUser1.getId()));
     }
@@ -230,7 +242,7 @@ public class ConnectionServiceTest {
         ConnectionKey connectionKey = new ConnectionKey(candidateUser2.getId(), candidateUser1.getId());
         Connection connection = new Connection(connectionKey, candidateUser2, candidateUser1, true);
 
-        when(connectionRepository.findById(any(ConnectionKey.class))).thenReturn(Optional.of(connection));
+        when(connectionRepository.findAcceptedConnectionsByRequesterIDAndReceiverID(any(Long.class), any(Long.class))).thenReturn(Optional.empty());
 
         assertFalse(underTest.isConnectedWith(candidateUser2.getId(), candidateUser1.getId()));
     }
@@ -240,8 +252,24 @@ public class ConnectionServiceTest {
         ConnectionKey connectionKey = new ConnectionKey(candidateUser2.getId(), candidateUser1.getId());
         Connection connection = new Connection(connectionKey, candidateUser2, candidateUser1, false);
 
-        when(connectionRepository.findById(any(ConnectionKey.class))).thenReturn(Optional.of(connection));
+        when(connectionRepository.findAcceptedConnectionsByRequesterIDAndReceiverID(any(Long.class), any(Long.class))).thenReturn(Optional.of(connection));
 
         assertTrue(underTest.isConnectedWith(candidateUser2.getId(), candidateUser1.getId()));
+    }
+
+    @Test
+    void isPendingConnectionWithReturnsFalse() {
+        Optional<Connection> connection = Optional.empty();
+        when(connectionRepository.findPendingConnectionsByRequesterIDAndReceiverID(any(Long.class), any(Long.class))).thenReturn(connection);
+        boolean returnValue = underTest.isPendingConnectionWith(any(Long.class), any(Long.class));
+        assertFalse(returnValue);
+    }
+
+    @Test
+    void isPendingConnectionWithReturnsTrue() {
+        Optional<Connection> connection = Optional.of(mock(Connection.class));
+        when(connectionRepository.findPendingConnectionsByRequesterIDAndReceiverID(any(Long.class), any(Long.class))).thenReturn(connection);
+        boolean returnValue = underTest.isPendingConnectionWith(any(Long.class), any(Long.class));
+        assertTrue(returnValue);
     }
 }
