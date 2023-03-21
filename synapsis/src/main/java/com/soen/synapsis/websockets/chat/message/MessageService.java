@@ -2,6 +2,7 @@ package com.soen.synapsis.websockets.chat.message;
 
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.websockets.chat.Chat;
+import com.soen.synapsis.websockets.chat.MessageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -36,11 +37,11 @@ public class MessageService {
      * Creates and saves an instance of the message in the database
      * @param chat Used to identify the chat the message was sent in
      * @param sender Used to identify the sender of the message
-     * @param content Represents the content of the message
+     * @param messageDTO Represents the message sent by the sender
      * @return The created message
      */
-    public Message saveMessage(Chat chat, AppUser sender, String content) {
-        Message message = new Message(chat, content, sender);
+    public Message saveMessage(Chat chat, AppUser sender, MessageDTO messageDTO) {
+        Message message = new Message(chat, messageDTO.getContent(), sender, messageDTO.getFileName(), messageDTO.getFile());
         messageRepository.save(message);
         return message;
     }

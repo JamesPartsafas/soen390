@@ -15,6 +15,8 @@ class MessageDTOTest {
     private MessageType type;
     private Long receiverId;
     private Long senderId;
+    private String fileName;
+    private String file;
 
     @BeforeEach
     void setUp() {
@@ -23,7 +25,9 @@ class MessageDTOTest {
         type = MessageType.TEXT;
         receiverId = 2L;
         senderId = 1L;
-        underTest = new MessageDTO(id, content, type, receiverId, senderId);
+        fileName = "test_file_name.png";
+        file = "iVBORw0KGgoAAAANSUhEUgAAAkUAAACBCAYAAADOmM5KAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAA";
+        underTest = new MessageDTO(id, content, type, receiverId, senderId, fileName, file);
     }
 
     @Test
@@ -79,6 +83,28 @@ class MessageDTOTest {
     void setSenderId() {
         underTest.setSenderId(4L);
         assertEquals(4L, underTest.getSenderId());
+    }
+
+    @Test
+    void getFileName() {
+        assertEquals(underTest.getFileName(), fileName);
+    }
+
+    @Test
+    void setFileName() {
+        underTest.setFileName("new.png");
+        assertEquals(underTest.getFileName(), "new.png");
+    }
+
+    @Test
+    void getFile() {
+        assertEquals(underTest.getFile(), file);
+    }
+
+    @Test
+    void setFile() {
+        underTest.setFile("123r4t5y6u7i8");
+        assertEquals(underTest.getFile(), "123r4t5y6u7i8");
     }
 
     @Test
