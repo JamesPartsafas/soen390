@@ -50,6 +50,8 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 
+    @Column
+    private Boolean isBanned;
 
     @ManyToOne
     @JoinColumn(name = "company_id")
@@ -83,6 +85,19 @@ public class AppUser {
         this.securityAnswer1 = securityAnswer1;
         this.securityAnswer2 = securityAnswer2;
         this.securityAnswer3 = securityAnswer3;
+    }
+
+    public AppUser(Long id, String name, String password, String email, Role role, AuthProvider authProvider, String securityAnswer1, String securityAnswer2, String securityAnswer3, Boolean isBanned) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.authProvider = authProvider;
+        this.securityAnswer1 = securityAnswer1;
+        this.securityAnswer2 = securityAnswer2;
+        this.securityAnswer3 = securityAnswer3;
+        this.isBanned = isBanned;
     }
 
     public AppUser(Long id, String name, String password, String email, Role role, AuthProvider authProvider) {
@@ -177,6 +192,14 @@ public class AppUser {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Boolean getIsBanned() {
+        return isBanned;
+    }
+
+    public void setIsBanned(Boolean isBanned) {
+        this.isBanned = isBanned;
     }
 
     public boolean getVerificationStatus() {

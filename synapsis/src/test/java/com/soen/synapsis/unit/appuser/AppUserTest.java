@@ -24,6 +24,7 @@ class AppUserTest {
     private String password;
     private String email;
     private Role role;
+    private Boolean isBanned;
     private AuthProvider authProvider;
     private String securityAnswer1;
     private String securityAnswer2;
@@ -36,11 +37,12 @@ class AppUserTest {
         password = "1234";
         email = "joeunittest@mail.com";
         role = Role.CANDIDATE;
+        isBanned = false;
         authProvider = AuthProvider.LOCAL;
         securityAnswer1 = "a";
         securityAnswer2 = "a";
         securityAnswer3 = "a";
-        underTest = new AppUser(id, name, password, email, role, authProvider, securityAnswer1, securityAnswer2, securityAnswer3);
+        underTest = new AppUser(id, name, password, email, role, authProvider, securityAnswer1, securityAnswer2, securityAnswer3, isBanned);
     }
 
     @AfterEach
@@ -118,6 +120,19 @@ class AppUserTest {
         assertEquals(newRole, underTest.getRole());
     }
 
+    @Test
+    void getIsBanned() {
+        assertEquals(isBanned, underTest.getIsBanned());
+    }
+
+    @Test
+    void setIsBanned() {
+        Boolean newIsBanned = true;
+
+        underTest.setIsBanned(newIsBanned);
+
+        assertEquals(newIsBanned, underTest.getIsBanned());
+    }
 
     @Test
     void getAuthProvider() {

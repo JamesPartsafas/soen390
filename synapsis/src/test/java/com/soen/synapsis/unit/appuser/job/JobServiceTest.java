@@ -15,6 +15,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -127,24 +129,30 @@ class JobServiceTest {
         assertThrows(IllegalStateException.class, () -> underTest.checkIfUserAlreadySubmittedApplication(candidate, job.getID()));
 
     }
+
     @Test
-    @Disabled
     void createJobApplicationCreatesJobApplicationSuccessfully() throws IOException {
-        when(jobRepository.getReferenceById(any(Long.class))).thenReturn(mock(Job.class));
+        Long jobId = 1L;
+        Job job = new Job(jobId, creator, "position",
+                "company", "address", "description", JobType.FULLTIME, 5,
+                5, false, null, true, true, false);
+        JobApplicationRequest request = new JobApplicationRequest(job, candidate, Timestamp.from(Instant.now()),
+                JobApplicationStatus.SUBMITTED, candidate.getEmail(), "Joe", "User", "123-456-1234",
+                "1234 street", "Montreal", "Canada", true, null);
 
-        MultipartFile file = mock(MultipartFile.class);
-        when(file.getBytes()).thenReturn(new byte[]{});
+        when(jobRepository.findAllJobsAlreadySubmittedByUserID(candidate.getId())).thenReturn(new ArrayList<>());
+        when(jobRepository.getReferenceById(jobId)).thenReturn(job);
 
-        String encodedResume = "test";
+        byte[] byteArray = "1234".getBytes();
+        MultipartFile resume = mock(MultipartFile.class);
+        when(resume.getBytes()).thenReturn(byteArray);
+        MultipartFile coverLetter = mock(MultipartFile.class);
+        when(coverLetter.getBytes()).thenReturn(byteArray);
 
-        when(Base64.getEncoder()).thenReturn(Base64.getEncoder());
-        when(Base64.getEncoder().encodeToString(any(byte[].class))).thenReturn(encodedResume);
-        when(anyString().isEmpty()).thenReturn(false);
+        underTest.createJobApplication(request, candidate, jobId, resume, coverLetter);
 
-        underTest.createJobApplication(mock(JobApplicationRequest.class), candidate, 1L, file, file);
-
-        verify(jobRepository).save(any(Job.class));
-        verify(jobApplicationRepository).save(any(JobApplication.class));
+        verify(jobRepository, times(1)).save(any(Job.class));
+        verify(jobApplicationRepository, times(1)).save(any(JobApplication.class));
     }
 
     @Test

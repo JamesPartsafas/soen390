@@ -110,4 +110,21 @@ public class MessageService {
 
         return result;
     }
+
+    /**
+     * Marks a message that was reported as resolved.
+     * @param messageId the message to mark as resolved.
+     */
+    public void resolveReport(Long messageId) {
+        Optional<Message> optionalReportedMessage = messageRepository.findById(messageId);
+
+        if (optionalReportedMessage.isEmpty()) {
+            return;
+        }
+
+        Message reportedMessage = optionalReportedMessage.get();
+
+        reportedMessage.setReportStatus(ReportStatus.REVIEWED);
+        messageRepository.save(reportedMessage);
+    }
 }

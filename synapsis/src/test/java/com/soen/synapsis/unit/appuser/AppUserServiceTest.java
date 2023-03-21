@@ -240,4 +240,26 @@ public class AppUserServiceTest {
         assertEquals(false, companyUser.getVerificationStatus());
         verify(appUserRepository).save(companyUser);
     }
+
+    @Test
+    void banUserThatIsNotFoundReturnsFalse() {
+        Long id = 1L;
+        when(appUserRepository.findById(id)).thenReturn(Optional.empty());
+
+        Boolean returnValue = underTest.banUser(id);
+
+        assertEquals(false, returnValue);
+    }
+
+    @Test
+    void banUserThatIsFoundReturnsTrue() {
+        Long id = 1L;
+        AppUser appUser = new AppUser("Joe Man", "1234", "email@mail.com", Role.CANDIDATE);
+        when(appUserRepository.findById(id)).thenReturn(Optional.of(appUser));
+
+        Boolean returnValue = underTest.banUser(id);
+
+        assertEquals(true, appUser.getIsBanned());
+        assertEquals(true, returnValue);
+    }
 }

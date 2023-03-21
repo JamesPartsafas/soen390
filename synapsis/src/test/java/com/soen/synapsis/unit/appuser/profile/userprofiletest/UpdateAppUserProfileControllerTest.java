@@ -2,6 +2,7 @@ package com.soen.synapsis.unit.appuser.profile.userprofiletest;
 
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AppUserService;
+import com.soen.synapsis.appuser.AuthService;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.profile.appuserprofile.updateprofile.UpdateAppUserProfileController;
 import com.soen.synapsis.appuser.profile.appuserprofile.updateprofile.UpdateAppUserProfileRequest;
@@ -27,6 +28,8 @@ class UpdateAppUserProfileControllerTest {
     private UpdateAppUserProfileService updateAppUserProfileService;
     @Mock
     AppUserService appUserService;
+    @Mock
+    AuthService authService;
 
     private AutoCloseable autoCloseable;
     private UpdateAppUserProfileController underTest;
@@ -34,7 +37,7 @@ class UpdateAppUserProfileControllerTest {
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new UpdateAppUserProfileController(updateAppUserProfileService, appUserService);
+        underTest = new UpdateAppUserProfileController(updateAppUserProfileService, authService, appUserService);
     }
 
     @AfterEach
@@ -44,6 +47,7 @@ class UpdateAppUserProfileControllerTest {
 
     @Test
     void viewUpdateAppUserPage() {
+        when(authService.doesUserHaveRole(Role.CANDIDATE, Role.RECRUITER)).thenReturn(false);
         String returnedPage = underTest.updateAppUserProfile(Mockito.mock(Model.class));
         assertEquals("redirect:/", returnedPage);
     }

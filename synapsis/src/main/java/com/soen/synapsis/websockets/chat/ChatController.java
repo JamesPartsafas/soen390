@@ -251,4 +251,37 @@ public class ChatController {
         model.addAttribute("listOfListOfMessages", reportedMessage);
         return "pages/adminMessagesPage";
     }
+
+    /**
+     * Ignores the user report of a message and takes no action
+     * @param messageId The ID of the reported message
+     * @return View of admin chats page
+     */
+    @PostMapping("/chats/ignore")
+    public String ignoreReport(@RequestParam("messageId") Long messageId) {
+        if (!authService.doesUserHaveRole(Role.ADMIN)) {
+            return "redirect:/";
+        }
+
+        chatService.resolveReport(messageId);
+
+        return "redirect:/chats";
+    }
+
+    /**
+     * Brings the admin to the chat page with the reported user so a warning can be written
+     * @param senderId The reported user ID
+     * @param messageId The reported message ID
+     * @return View of the chat page with the reported user
+     */
+    @PostMapping("/chats/warnUser")
+    public String warnUser(@RequestParam("senderId") Long senderId, @RequestParam("messageId") Long messageId) {
+        if (!authService.doesUserHaveRole(Role.ADMIN)) {
+            return "redirect:/";
+        }
+
+        chatService.resolveReport(messageId);
+
+        return chatService.createChat(authService.getAuthenticatedUser(), senderId);
+    }
 }
