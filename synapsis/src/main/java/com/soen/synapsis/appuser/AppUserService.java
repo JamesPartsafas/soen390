@@ -219,7 +219,7 @@ public class AppUserService {
 
     /**
      * Marks company user as verified.
-     * @param appUser The user to be made a recruiter.
+     * @param appUser The user to be set as verified.
      */
     public void markCompanyAsVerified(AppUser appUser) {
 
@@ -230,7 +230,7 @@ public class AppUserService {
 
     /**
      * Marks company user as non-verified.
-     * @param appUser The user to be made a recruiter.
+     * @param appUser The user to be set as non-verified.
      */
     public void markCompanyAsNonVerified(AppUser appUser) {
 
