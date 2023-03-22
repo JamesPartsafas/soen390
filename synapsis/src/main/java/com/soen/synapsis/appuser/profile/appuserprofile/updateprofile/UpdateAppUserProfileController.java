@@ -54,6 +54,9 @@ public class UpdateAppUserProfileController {
 
         model.addAttribute("updateAppUserProfileRequest", new UpdateAppUserProfileRequest());
         model.addAttribute("profile", profile);
+        if (profile.getAppUser() != null && profile.getAppUser().getResume() != null) {
+            model.addAttribute("default_resume", profile.getAppUser().getResume().getFileName());
+        }
 
         return "pages/updateuserpage";
     }
@@ -67,7 +70,7 @@ public class UpdateAppUserProfileController {
      * @return the app user profile page.
      */
     @PostMapping("/user/update")
-    public String updateAppUserProfile(UpdateAppUserProfileRequest request, @RequestParam("image") MultipartFile file,
+    public String updateAppUserProfile(UpdateAppUserProfileRequest request, @RequestParam("image") MultipartFile file, @RequestParam("defaultResume") MultipartFile defaultResume,
                                        BindingResult bindingResult, Model model) {
         if (!authService.doesUserHaveRole(Role.CANDIDATE, Role.RECRUITER)) {
             return "redirect:/";
@@ -80,6 +83,7 @@ public class UpdateAppUserProfileController {
             AppUser appUser = authService.getAuthenticatedUser();
 
             appUserService.uploadProfilePicture(file, appUser);
+            appUserService.uploadDefaultResume(defaultResume, appUser);
 
             return updateAppUserProfileService.updateProfile(request, appUser);
         } catch (Exception e) {

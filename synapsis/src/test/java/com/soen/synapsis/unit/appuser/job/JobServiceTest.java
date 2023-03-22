@@ -4,6 +4,7 @@ import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AuthProvider;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.job.*;
+import com.soen.synapsis.appuser.profile.ResumeRepository;
 import com.soen.synapsis.websockets.notification.NotificationService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,6 +36,8 @@ class JobServiceTest {
     NotificationService notificationService;
     @Mock
     private JobFilterRepository jobFilterRepository;
+    @Mock
+    private ResumeRepository resumeRepository;
     private AutoCloseable autoCloseable;
     private JobService underTest;
     private AppUser candidate;
@@ -44,7 +47,7 @@ class JobServiceTest {
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
 
-        underTest = new JobService(jobRepository, jobApplicationRepository, notificationService, jobFilterRepository);
+        underTest = new JobService(jobRepository, jobApplicationRepository, notificationService, jobFilterRepository, resumeRepository);
 
         candidate = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
         creator = new AppUser(9L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
@@ -204,4 +207,9 @@ class JobServiceTest {
         verify(jobFilterRepository).save(any(JobFilter.class));
     }
 
+    @Test
+    void getResumeByAppUser() {
+        AppUser appUser= new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
+        assertEquals(null, underTest.getResumeByAppUser(appUser));
+    }
 }

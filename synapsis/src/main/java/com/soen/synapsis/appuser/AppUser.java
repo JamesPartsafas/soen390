@@ -1,5 +1,6 @@
 package com.soen.synapsis.appuser;
 
+import com.soen.synapsis.appuser.profile.Resume;
 import com.soen.synapsis.appuser.profile.ProfilePicture;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
@@ -67,6 +68,8 @@ public class AppUser {
     @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
     private ProfilePicture profilePicture;
 
+    @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
+    private Resume defaultResume;
     @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
     private Settings settings;
 
@@ -318,6 +321,14 @@ public class AppUser {
 
     public void setSettings(Settings settings) {
         this.settings = settings;
+    }
+
+    public Resume getResume() {
+        return defaultResume;
+    }
+
+    public void setResume(Resume defaultResume) {
+        this.defaultResume = defaultResume;
     }
 
     @Override
