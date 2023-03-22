@@ -35,13 +35,26 @@
                 <input name="country" type="text" placeholder="Country" class="font-thin font-serif border border-grey pl-3 rounded-md hover:bg-light md:w-1/2 w-full h-14" required />
             </div>
 
+            <div class="mt-4">
+                <p class="font-thin font-serif text-grey" th:if="${default_resume} != null"> Current Default Resume</p>
+                <p class="font-thin font-serif text-black" th:if="${default_resume} != null" th:text="${default_resume}"></p>
+            </div>
+
             <!-- Upload Resume -->
-            <div th:if="${need_resume}" class="mt-4">
+            <div th:if="${need_resume} == true and ${default_resume} == null" class="mt-4">
                 <p class="font-thin font-serif text-grey">Upload Resume *</p>
                 <input name="resume" class="w-full text-lg file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx" required/>
             </div>
-            <div th:unless="${need_resume}" class="mt-4">
+            <div th:if="${need_resume} == true and ${default_resume} != null" class="mt-4">
+                <p class="font-thin font-serif text-grey">Replace Resume</p>
+                <input name="resume" class="w-full text-lg file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx"/>
+            </div>
+            <div th:if="${need_resume} == false and ${default_resume} == null" class="mt-4">
                 <p class="font-thin font-serif text-grey">Upload Resume</p>
+                <input name="resume" class="w-full text-lg file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx"/>
+            </div>
+            <div th:if="${need_resume} == false and ${default_resume} != null" class="mt-4">
+                <p class="font-thin font-serif text-grey">Replace Resume</p>
                 <input name="resume" class="w-full text-lg file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx"/>
             </div>
 
