@@ -68,7 +68,14 @@ public class AppUserDetailsTest {
     }
 
     @Test
-    void isEnabledReturnsTrue() {
+    void isEnabledReturnsTrueOnNullIsBanned() {
+        underTest.getAppUser().setIsBanned(null);
+        assertTrue(underTest.isEnabled());
+    }
+
+    @Test
+    void isEnabledReturnsTrueOnFalseIsBanned() {
+        underTest.getAppUser().setIsBanned(false);
         assertTrue(underTest.isEnabled());
     }
 

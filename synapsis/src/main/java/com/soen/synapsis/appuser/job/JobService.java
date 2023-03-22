@@ -1,11 +1,11 @@
 package com.soen.synapsis.appuser.job;
 
 import com.soen.synapsis.appuser.AppUser;
-import com.soen.synapsis.appuser.AppUserRepository;
 import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.appuser.profile.Resume;
+import com.soen.synapsis.appuser.profile.ResumeRepository;
 import com.soen.synapsis.websockets.notification.NotificationDTO;
 import com.soen.synapsis.websockets.notification.NotificationService;
-import com.soen.synapsis.websockets.notification.NotificationType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * A service class to work with jobs.
@@ -24,18 +26,18 @@ import java.util.Optional;
 public class JobService {
 
     private final JobRepository jobRepository;
-    private final AppUserRepository appUserRepository;
     private final NotificationService notificationService;
     private final JobApplicationRepository jobApplicationRepository;
     private final JobFilterRepository jobFilterRepository;
+    private final ResumeRepository resumeRepository;
 
     @Autowired
-    public JobService(JobRepository jobRepository, JobApplicationRepository jobApplicationRepository, AppUserRepository appUserRepository, NotificationService notificationService, JobFilterRepository jobFilterRepository) {
+    public JobService(JobRepository jobRepository, JobApplicationRepository jobApplicationRepository, NotificationService notificationService, JobFilterRepository jobFilterRepository, ResumeRepository resumeRepository) {
         this.jobRepository = jobRepository;
         this.jobApplicationRepository = jobApplicationRepository;
-        this.appUserRepository = appUserRepository;
         this.notificationService = notificationService;
         this.jobFilterRepository = jobFilterRepository;
+        this.resumeRepository = resumeRepository;
     }
 
     /**
@@ -96,15 +98,19 @@ public class JobService {
         Job job = new Job(creator, position, company, address, description, type, numAvailable, isExternal, externalLink, needResume, needCover, needPortfolio);
         jobRepository.save(job);
 
+        Executor executor = Executors.newSingleThreadExecutor();
+        JobNotificationSender notificationSender = new JobNotificationSender(job, jobFilterRepository, notificationService);
+        executor.execute(notificationSender);
+
         return "redirect:/job/" + job.getID();
     }
 
     /**
      * Create a new job application.
      *
-     * @param request the job application request.
+     * @param request   the job application request.
      * @param applicant the user submitting the application.
-     * @param jobId the job id.
+     * @param jobId     the job id.
      */
     public void createJobApplication(JobApplicationRequest request, AppUser applicant, Long jobId, MultipartFile resume, MultipartFile coverLetter) throws IOException {
 
@@ -132,19 +138,29 @@ public class JobService {
                 request.getLinks()
         );
 
+        Resume defaultResume = resumeRepository.findByAppUser(applicant);
         String encodedResume = Base64.getEncoder().encodeToString(resume.getBytes());
-        if(encodedResume.isEmpty()) {
+
+        if(job.getNeedResume() && encodedResume.isEmpty() && defaultResume == null) {
             throw new IllegalStateException("It is mandatory to upload your resume.");
         }
-        jobApplication.setResume(encodedResume);
+        if(encodedResume.isEmpty() && defaultResume != null) {
+            jobApplication.setResume(defaultResume.getDefaultResume());
+        }
+        if(!encodedResume.isEmpty() && defaultResume == null) {
+            jobApplication.setResume(encodedResume);
+        }
+        if(!encodedResume.isEmpty() && defaultResume != null) {
+            jobApplication.setResume(encodedResume);
+        }
 
-        if(job.getNeedCover()) {
-                String encodedCoverLetter = Base64.getEncoder().encodeToString(coverLetter.getBytes());
-                if (encodedCoverLetter.isEmpty()) {
-                    throw new IllegalStateException("It is mandatory to upload your cover letter.");
-                }
-                jobApplication.setCoverLetter(encodedCoverLetter);
+        if (job.getNeedCover()) {
+            String encodedCoverLetter = Base64.getEncoder().encodeToString(coverLetter.getBytes());
+            if (encodedCoverLetter.isEmpty()) {
+                throw new IllegalStateException("It is mandatory to upload your cover letter.");
             }
+            jobApplication.setCoverLetter(encodedCoverLetter);
+        }
 
         job.setNumApplicants(job.getNumApplicants() + 1);
         jobRepository.save(job);
@@ -156,7 +172,7 @@ public class JobService {
      * Check if user already submitted the job application form.
      *
      * @param applicant the user submitting the application.
-     * @param jobId the job id.
+     * @param jobId     the job id.
      */
     public void checkIfUserAlreadySubmittedApplication(AppUser applicant, Long jobId) {
         List<Job> jobsSubmitted = getAllJobsAlreadySubmittedByUser(applicant);
@@ -182,7 +198,7 @@ public class JobService {
      * Edit a job posting.
      *
      * @param optionalJob the job to be edited.
-     * @param request the job request.
+     * @param request     the job request.
      * @return the job page.
      */
     public String editJob(Optional<Job> optionalJob, JobRequest request) {
@@ -206,24 +222,12 @@ public class JobService {
 
         jobRepository.save(job);
 
-        sendJobNotifications(job.getID());
+
+        Executor executor = Executors.newSingleThreadExecutor();
+        JobNotificationSender notificationSender = new JobNotificationSender(job, jobFilterRepository, notificationService);
+        executor.execute(notificationSender);
 
         return "redirect:/job/" + job.getID();
-    }
-
-    //This should be changed to however we are implementing suggested jobs
-    private void sendJobNotifications(Long jobId) {
-        for (AppUser appUser : appUserRepository.findAll()) {
-            NotificationDTO notificationDTO = new NotificationDTO(
-                    0L,
-                    appUser.getId(),
-                    NotificationType.JOB,
-                    "You have a new job suggestion!",
-                    "/job/" + jobId,
-                    false
-            );
-            notificationService.saveNotification(notificationDTO, appUser);
-        }
     }
 
     /**
@@ -239,7 +243,7 @@ public class JobService {
     /**
      * Retrieve all jobs given the filter preferences.
      *
-     * @param jobType the type of job (fulltime, parttime, contract, etc).
+     * @param jobType          the type of job (fulltime, parttime, contract, etc).
      * @param showInternalJobs true if we want internal jobs to be retrieved; otherwise false.
      * @param showExternalJobs true if we want external jobs to be retrieved; otherwise false.
      * @return a list of jobs that meet the filtered preferences.
@@ -247,11 +251,11 @@ public class JobService {
     public List<Job> getAllJobsByFilter(JobType jobType, boolean showInternalJobs, boolean showExternalJobs) {
         List<Job> jobs = new ArrayList<>();
 
-        if(showInternalJobs) {
+        if (showInternalJobs) {
             jobs.addAll(jobRepository.findInternalJobsByJobType(jobType));
         }
 
-        if(showExternalJobs) {
+        if (showExternalJobs) {
             jobs.addAll(jobRepository.findExternalJobsByJobType(jobType));
         }
 
@@ -261,8 +265,8 @@ public class JobService {
     /**
      * Save a job filter preference for a user.
      *
-     * @param appUser the user whose filter preferences is saved.
-     * @param jobType the type of job preference (fulltime, parttime, contract, etc).
+     * @param appUser          the user whose filter preferences is saved.
+     * @param jobType          the type of job preference (fulltime, parttime, contract, etc).
      * @param showInternalJobs true if we want internal jobs to be retrieved; otherwise false.
      * @param showExternalJobs true if we want external jobs to be retrieved; otherwise false.
      * @return the newly created job filter.
@@ -289,4 +293,13 @@ public class JobService {
         return jobFilter;
     }
 
+    /**
+     * Gets the resume of a given app user.
+     *
+     * @param appUser an object representing the app user
+     * @return the resume of the app user.
+     */
+    public Resume getResumeByAppUser(AppUser appUser) {
+       return resumeRepository.findByAppUser(appUser);
+    }
 }

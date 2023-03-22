@@ -88,7 +88,7 @@ class JobControllerTest {
 
         searchTerm = "software developer";
 
-        String returnValue = underTest.viewJobPosting(mock(JobType.class), true, true, false,searchTerm, mock(Model.class));
+        String returnValue = underTest.viewJobPosting(mock(JobType.class), true, true, false, searchTerm, mock(Model.class));
 
         assertEquals("pages/jobs", returnValue);
     }
@@ -156,7 +156,7 @@ class JobControllerTest {
 
         String returnValue = underTest.getJob(job1.getID(), mock(Model.class));
 
-        assertEquals("pages/jobapplicationexternal", returnValue);
+        assertEquals("pages/jobApplicationExternal", returnValue);
     }
 
     @Test
@@ -246,7 +246,7 @@ class JobControllerTest {
     void createJobApplicationCreatedJobApplicationSuccessfully() {
         when(authService.isUserAuthenticated()).thenReturn(true);
 
-        assertEquals("redirect:/applicationsuccess", underTest.createJobApplication(mock(JobApplicationRequest.class), 1L, mock(MultipartFile.class), mock(MultipartFile.class),mock(BindingResult.class), mock(Model.class)));
+        assertEquals("redirect:/applicationsuccess", underTest.createJobApplication(mock(JobApplicationRequest.class), 1L, mock(MultipartFile.class), mock(MultipartFile.class), mock(BindingResult.class), mock(Model.class)));
     }
 
     @Test

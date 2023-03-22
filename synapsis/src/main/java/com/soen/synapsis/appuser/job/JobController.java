@@ -3,11 +3,15 @@ package com.soen.synapsis.appuser.job;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AuthService;
 import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.appuser.profile.Resume;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -36,12 +40,12 @@ public class JobController {
     /**
      * Retrieve and display all job postings.
      *
-     * @param jobType the type of job (fulltime, parttime, contract, etc.).
+     * @param jobType          the type of job (fulltime, parttime, contract, etc.).
      * @param showInternalJobs the filtered show internal jobs preference (yes/no).
      * @param showExternalJobs the filtered show external jobs preference (yes/no).
-     * @param filterPassed boolean value to see if the filter has been called.
-     * @param searchTerm jobs to search for.
-     * @param model an object carrying data attributes passed to the view.
+     * @param filterPassed     boolean value to see if the filter has been called.
+     * @param searchTerm       jobs to search for.
+     * @param model            an object carrying data attributes passed to the view.
      * @return the view containing all jobs.
      */
     @GetMapping("/jobs")
@@ -61,8 +65,7 @@ public class JobController {
             model.addAttribute("jobTypeFilter", jobFilter.getJobType());
             model.addAttribute("showInternalJobsFilter", jobFilter.isShowInternalJobs());
             model.addAttribute("showExternalJobsFilter", jobFilter.isShowExternalJobs());
-        }
-        else if (searchTerm != null) {
+        } else if (searchTerm != null) {
             jobs = jobService.getAllJobsBySearch(searchTerm.toLowerCase());
         } else {
             jobs = jobService.getAllJobs();
@@ -76,13 +79,13 @@ public class JobController {
         return "pages/jobs";
     }
 
-        /**
-         * Retrieve all the information for a specific job.
-         *
-         * @param jobId the id of the specific job.
-         * @param model an object carrying data attributes passed to the view.
-         * @return the jobs page.
-         */
+    /**
+     * Retrieve all the information for a specific job.
+     *
+     * @param jobId the id of the specific job.
+     * @param model an object carrying data attributes passed to the view.
+     * @return the jobs page.
+     */
     @GetMapping("/job/{jobId}")
     public String getJob(@PathVariable Long jobId, Model model) {
         Optional<Job> optionalJob = jobService.getJob(jobId);
@@ -115,7 +118,7 @@ public class JobController {
         model.addAttribute("isJobSubmitted", jobsSubmitted.contains(job));
 
         if (job.getIsExternal()) {
-            return "pages/jobapplicationexternal";
+            return "pages/jobApplicationExternal";
         } else {
             return "pages/job";
         }
@@ -139,9 +142,9 @@ public class JobController {
     /**
      * Create a job posting.
      *
-     * @param request the job application request.
+     * @param request       the job application request.
      * @param bindingResult an object that contains errors that may have occurred.
-     * @param model an object carrying data attributes passed to the view.
+     * @param model         an object carrying data attributes passed to the view.
      * @return the created job page.
      */
     @PostMapping("/createjob")
@@ -186,7 +189,7 @@ public class JobController {
 
         try {
             jobService.checkIfUserAlreadySubmittedApplication(applicant, jobId);
-        } catch(Exception e) {
+        } catch (Exception e) {
             return "redirect:/jobs";
         }
 
@@ -197,6 +200,12 @@ public class JobController {
         model.addAttribute("position", job.getPosition());
         model.addAttribute("need_resume", job.getNeedResume());
         model.addAttribute("need_cover", job.getNeedCover());
+
+        Resume resume = jobService.getResumeByAppUser(applicant);
+
+        if (resume != null) {
+            model.addAttribute("default_resume", resume.getFileName());
+        }
 
         if (job.getIsExternal()) {
             model.addAttribute("authorization", authService.getAuthenticatedUser().getId() == retrievedJob.get().getCreator().getId());
@@ -222,10 +231,10 @@ public class JobController {
     /**
      * Submit a job application form.
      *
-     * @param request the applicant's request data.
+     * @param request       the applicant's request data.
      * @param bindingResult an object that contains errors that may have occurred.
-     * @param model an object carrying data attributes passed to the view.
-     * @param jobId the job id.
+     * @param model         an object carrying data attributes passed to the view.
+     * @param jobId         the job id.
      * @return the application success page.
      */
     @PostMapping("/jobapplication")
@@ -320,10 +329,10 @@ public class JobController {
     /**
      * Edit a specific job.
      *
-     * @param jobId the job id.
-     * @param request the job request.
+     * @param jobId         the job id.
+     * @param request       the job request.
      * @param bindingResult an object that contains errors that may have occurred.
-     * @param model an object carrying data attributes passed to the view.
+     * @param model         an object carrying data attributes passed to the view.
      * @return the edit job page.
      */
     @PostMapping("/editjob")
@@ -345,8 +354,7 @@ public class JobController {
 
             return response;
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             model.addAttribute("error", "There was an error editing the job. " + e.getMessage());
             return editJob(jobId, model);
         }
