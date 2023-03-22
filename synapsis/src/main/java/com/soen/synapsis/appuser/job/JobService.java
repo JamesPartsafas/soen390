@@ -139,7 +139,7 @@ public class JobService {
         Resume defaultResume = resumeRepository.findByAppUser(applicant);
         String encodedResume = Base64.getEncoder().encodeToString(resume.getBytes());
 
-        if(encodedResume.isEmpty() && defaultResume == null) {
+        if(job.getNeedResume() && encodedResume.isEmpty() && defaultResume == null) {
             throw new IllegalStateException("It is mandatory to upload your resume.");
         }
         if(encodedResume.isEmpty() && defaultResume != null) {
