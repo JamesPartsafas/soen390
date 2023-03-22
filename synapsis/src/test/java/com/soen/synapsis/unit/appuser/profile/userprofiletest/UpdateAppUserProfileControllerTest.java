@@ -45,7 +45,7 @@ class UpdateAppUserProfileControllerTest {
     @Test
     void viewUpdateAppUserPage() {
         String returnedPage = underTest.updateAppUserProfile(Mockito.mock(Model.class));
-        assertEquals("pages/updateuserpage", returnedPage);
+        assertEquals("redirect:/", returnedPage);
     }
 
 
