@@ -4,6 +4,7 @@ import com.soen.synapsis.appuser.*;
 import com.soen.synapsis.appuser.connection.ConnectionService;
 import com.soen.synapsis.utilities.SecurityUtilities;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
+import com.soen.synapsis.websockets.chat.ChatService;
 import org.aspectj.weaver.ast.Not;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,13 +27,15 @@ class AppUserControllerTest {
     private ConnectionService connectionService;
     @Mock
     private AuthService authService;
+    @Mock
+    private ChatService chatService;
     private AutoCloseable autoCloseable;
     private AppUserController underTest;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new AppUserController(appUserService, connectionService, authService);
+        underTest = new AppUserController(appUserService, connectionService, authService, chatService);
     }
 
     @AfterEach
@@ -248,5 +251,30 @@ class AppUserControllerTest {
         when(appUserService.getAppUser(NotCompanyUser.getId())).thenReturn(Optional.of(NotCompanyUser));
 
         assertEquals("redirect:/", underTest.markCompanyAsNonVerified(NotCompanyUser.getId()));
+    }
+
+    @Test
+    void banUserWhenNotAdminRedirects() {
+        String redirect = "redirect:/";
+        when(authService.doesUserHaveRole(Role.ADMIN)).thenReturn(false);
+
+        String returnValue = underTest.banUser(1L, 1L);
+
+        assertEquals(redirect, returnValue);
+    }
+
+    @Test
+    void banUserAsAdminMarksResolved() {
+        String redirect = "redirect:/chats";
+        Long senderId = 1L;
+        Long messageId = 1L;
+        when(authService.doesUserHaveRole(Role.ADMIN)).thenReturn(true);
+        when(appUserService.banUser(senderId)).thenReturn(true);
+
+        String returnValue = underTest.banUser(senderId, messageId);
+
+        verify(appUserService, times(1)).banUser(senderId);
+        verify(chatService, times(1)).resolveReport(messageId);
+        assertEquals(redirect, returnValue);
     }
 }

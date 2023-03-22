@@ -132,4 +132,27 @@ class MessageServiceTest {
         assertEquals(result.size(), 1);
         assertEquals(result.get(0).size(), 5);
     }
+
+    @Test
+    void resolveReportOnUnfoundMessageReturns() {
+        Long messageId = 1L;
+        when(messageRepository.findById(messageId)).thenReturn(Optional.empty());
+
+        underTest.resolveReport(messageId);
+
+        verify(messageRepository, times(1)).findById(messageId);
+    }
+
+    @Test
+    void resolveReportMarksMessageReviewed() {
+        Long messageId = 1L;
+        Message message = new Message(messageId, chat, "message 1", sender, false, ReportStatus.REPORTED, new Timestamp(System.currentTimeMillis()));
+
+        when(messageRepository.findById(messageId)).thenReturn(Optional.of(message));
+
+        underTest.resolveReport(messageId);
+
+        assertEquals(ReportStatus.REVIEWED, message.getReportStatus());
+        verify(messageRepository, times(1)).save(message);
+    }
 }
