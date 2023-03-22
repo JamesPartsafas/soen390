@@ -264,4 +264,24 @@ public class AppUserService {
         appUserRepository.save(appUser);
 
     }
+
+    /**
+     * Ban user from site, so they can no longer log-in
+     * @param appUserId The ID of the user to ban
+     * @return true if the user was successfully banned, false otherwise
+     */
+    public boolean banUser(Long appUserId) {
+        Optional<AppUser> optionalAppUser = getAppUser(appUserId);
+
+        if (optionalAppUser.isEmpty()) {
+            return false;
+        }
+
+        AppUser appUser = optionalAppUser.get();
+
+        appUser.setIsBanned(true);
+        appUserRepository.save(appUser);
+
+        return true;
+    }
 }
