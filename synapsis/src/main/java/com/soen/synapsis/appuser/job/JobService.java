@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -75,7 +76,7 @@ public class JobService {
      * @param request the job application request.
      * @return the job page.
      */
-    public String createJob(JobRequest request) throws MalformedURLException {
+    public String createJob(JobRequest request) throws Exception {
 
         if (request.getCreator().getRole() != Role.RECRUITER) {
             throw new IllegalStateException("This user is not a recruiter.");
@@ -301,11 +302,11 @@ public class JobService {
      * @param url The URL for the external link.
      * @throws MalformedURLException MalformedURLException is thrown when a malformed syntax is found in the input String url.
      */
-    public void isValidURL(String url) throws MalformedURLException  {
+    public void isValidURL(String url) throws Exception {
         try {
             new URL(url).toURI();
-        } catch (Exception e) {
-            throw new MalformedURLException ("Invalid URL for external link.");
+        } catch (MalformedURLException | URISyntaxException e) {
+            throw new Exception ("Invalid URL for external link.");
         }
     }
 

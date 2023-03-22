@@ -15,13 +15,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -90,13 +90,20 @@ class JobServiceTest {
     }
 
     @Test
-    void createValidJob() {
-        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
+    void createValidJob() throws Exception {
+        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "https://google.com", true, true, true);
         request.setCreator(creator);
 
         String returnValue = underTest.createJob(request);
 
         assertEquals("redirect:/job/null", returnValue);
+    }
+
+    @Test
+    void createJobWithInvalidExternalLinkURLThrowsException() {
+        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
+
+        assertThrows(Exception.class, () -> underTest.createJob(request));
     }
 
     @Test
@@ -203,6 +210,16 @@ class JobServiceTest {
         underTest.saveJobFilter(candidate, JobType.FULLTIME, true, true);
 
         verify(jobFilterRepository).save(any(JobFilter.class));
+    }
+
+    @Test
+    void isValidURLSuccess() throws Exception {
+        underTest.isValidURL("https://google.com");
+    }
+
+    @Test
+    void isValidURLThrowsException() {
+        assertThrows(Exception.class, () -> underTest.isValidURL(""));
     }
 
 }
