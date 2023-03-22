@@ -74,3 +74,7 @@ VALUES (5, 'VBA Developer', 'Macrosoft', '123 King Street',
 
 INSERT INTO notification (recipient_id, text, url, seen, creation_time)
 VALUES (1, 'This is a notification. It brings you to messages.', '/chats', false, '2023-03-01');
+
+INSERT INTO settings (app_user_id, job_email_notifications_on, message_email_notifications_on,
+                      connection_email_notifications_on)
+VALUES (1, true, true, true);

@@ -2,6 +2,7 @@ const messageForm = document.querySelector('#messageForm');
 const messageInput = document.querySelector('#message');
 const messageArea = document.querySelector('#messageArea');
 const connectingElement = document.querySelector('.connecting');
+const fileInput = document.querySelector('#file');
 const csrfToken = document.querySelector('meta[name="_csrf"]').content;
 
 let chatId = document.querySelector('#chat').value.trim();
@@ -30,21 +31,43 @@ function onError(error) {
     setTimeout(() => connectingElement.classList.add('hidden'), 30 * 10e3);
 }
 
-function sendMessage(event) {
+async function sendMessage(event) {
     event.preventDefault();
     const messageContent = messageInput.value.trim();
 
     if (messageContent && stompClient) {
-        const chatMessage = {
-            id: 0,
-            content: messageInput.value,
-            type: 'TEXT',
-            senderId,
-            receiverId
-        };
-
         try {
-            stompClient.send(`/app/chat/${chatId}`, {}, JSON.stringify(chatMessage));
+            const fileName = getFileName();
+
+            if (fileName?.length > 50) {
+                throw new Error('FileName is too long. Max length is 50.')
+            }
+
+            const content = messageInput.value;
+
+            if (content.length > 255) {
+                throw new Error('Message is too long. Max length is 255.')
+            }
+
+            const chatMessage = {
+                id: 0,
+                content,
+                type: 'TEXT',
+                senderId,
+                receiverId,
+                file: await getFileBase64(),
+                fileName
+            };
+
+            const chatMessageStr = JSON.stringify(chatMessage);
+
+            if (chatMessageStr.length > 65536) {
+                throw new Error('Message size exceeds limit of 65KB.')
+            }
+
+            stompClient.send(`/app/chat/${chatId}`, {}, chatMessageStr);
+            fileInput.value = '';
+
             sendNotification("You have a message.", `/chat/${chatId}`, receiverId, 'MESSAGE');
             showMessage(chatMessage);
         } catch (e) {
@@ -77,6 +100,35 @@ function sendRead(messageId) {
     }
 }
 
+function getFileBase64() {
+    return new Promise((resolve, reject) => {
+        if (!fileInput || fileInput.files?.length === 0) {
+            resolve(null);
+            return;
+        }
+
+        const file = fileInput.files[0];
+
+        if (file.size > 48448) {
+            reject('File size is larger than the limit of 48KB.');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    })
+}
+
+function getFileName() {
+    if (!fileInput || fileInput.files?.length === 0) {
+        return null;
+    }
+
+    return fileInput.files[0].name;
+}
+
 function onMessageReceived(payload) {
     const message = JSON.parse(payload.body);
 
@@ -94,24 +146,42 @@ function showMessage(message) {
     } else if (message.type === 'ERROR') {
         onError(`Could not send message: ${message.content}`);
     } else {
-        messageArea.innerHTML += createMessageElement(message.id, message.content);
+        messageArea.innerHTML += createMessageElement(message);
     }
 }
 
-function createMessageElement(messageId, messageContent) {
+function createMessageElement(message) {
     return `
         <li class="flex items-center">
-            <p>${messageContent}</p>
-            ${messageId !== 0 ? 
+            <div class="flex flex-col items-start">
+                ${generateFileContainerElement(message)}
+                <p>${message.content}</p>
+            </div>
+            ${message.id !== 0 ? 
                 `<form action="${window.location.origin + '/chat/report'}" method="POST">
                     <input type="hidden" name="_csrf" value="${csrfToken}"/>
-                    <input type="hidden" name="messageID" value="${messageId}" />
+                    <input type="hidden" name="messageID" value="${message.id}" />
                     <input type="hidden" name="chatID" value="${chatId}" />
                     <button class="btn bg-primary btn-primary font-sans text-sm w-20 h-9 p-0" type="submit">Report</button>
                 </form>`
             : ''}
         </li>
     `;
+}
+
+function generateFileContainerElement(message) {
+    if (!message.fileName || !message.file){
+        return '';
+    }
+
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
+    const fileExtension = message.fileName.slice(message.fileName.lastIndexOf('.')).toLowerCase();
+
+    if (imageExtensions.includes(fileExtension)) {
+        return `<img src="${message.file}" alt="${message.fileName}}"/>`
+    } else {
+        return `<a href="${message.file}" download="${message.fileName}">Download ${message.fileName}</a>`
+    }
 }
 
 connect();

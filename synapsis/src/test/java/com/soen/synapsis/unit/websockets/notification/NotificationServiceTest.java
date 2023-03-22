@@ -3,6 +3,7 @@ package com.soen.synapsis.unit.websockets.notification;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AppUserService;
 import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.appuser.settings.Settings;
 import com.soen.synapsis.websockets.notification.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,6 +49,7 @@ public class NotificationServiceTest {
     @Test
     void saveNotificationSuccessful() {
         AppUser appUser = new AppUser(1L, "name", "12345678", "name@mail.com", Role.CANDIDATE);
+        appUser.setSettings(new Settings(1L, appUser, true, true, true));
         NotificationDTO notificationDTO = new NotificationDTO(1L, 1L, NotificationType.CONNECTION, "text", "url", false);
 
         underTest.saveNotification(notificationDTO, appUser);
@@ -58,7 +60,7 @@ public class NotificationServiceTest {
     @Test
     void saveNotificationEmailSentWhenUserHasSetting() {
         AppUser appUser = new AppUser(1L, "name", "12345678", "name@mail.com", Role.CANDIDATE);
-        appUser.setEmailNotificationsOn(true);
+        appUser.setSettings(new Settings(1L, appUser, true, true, true));
         NotificationDTO notification = new NotificationDTO(1L, 1L, NotificationType.CONNECTION, "text", "url", false);
 
         underTest.saveNotification(notification, appUser);
@@ -73,7 +75,7 @@ public class NotificationServiceTest {
     @Test
     void saveNotificationEmailNotSentWhenUserDoesNotHaveSetting() {
         AppUser appUser = new AppUser(1L, "name", "12345678", "name@mail.com", Role.CANDIDATE);
-        appUser.setEmailNotificationsOn(false);
+        appUser.setSettings(new Settings(1L, appUser, true, true, false));
         NotificationDTO notification = new NotificationDTO(1L, 1L, NotificationType.CONNECTION, "text", "url", false);
 
         underTest.saveNotification(notification, appUser);
