@@ -2,6 +2,7 @@ package com.soen.synapsis.unit.appuser;
 
 import com.soen.synapsis.appuser.*;
 import com.soen.synapsis.appuser.profile.ProfilePictureRepository;
+import com.soen.synapsis.appuser.profile.ResumeRepository;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfileRepository;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfileRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -30,13 +31,15 @@ public class AppUserServiceTest {
     private CompanyProfileRepository companyProfileRepository;
     @Mock
     private ProfilePictureRepository profilePictureRepository;
+    @Mock
+    private ResumeRepository resumeRepository;
     private AutoCloseable autoCloseable;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
         underTest = new AppUserService(appUserRepository, appUserProfileRepository,
-                companyProfileRepository, profilePictureRepository);
+                companyProfileRepository, profilePictureRepository, resumeRepository);
     }
 
     @AfterEach
@@ -229,6 +232,16 @@ public class AppUserServiceTest {
 
         assertEquals(true, companyUser.getVerificationStatus());
         verify(appUserRepository).save(companyUser);
+    }
+
+    @Test
+    void emptyResumeUploadReturns() throws IOException {
+        MultipartFile file = mock(MultipartFile.class);
+        when(file.getBytes()).thenReturn(new byte[]{});
+
+        underTest.uploadDefaultResume(file, mock(AppUser.class));
+
+        verify(file).getBytes();
     }
 
     @Test

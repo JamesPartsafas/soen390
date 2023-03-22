@@ -3,6 +3,7 @@ package com.soen.synapsis.appuser.job;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AuthService;
 import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.appuser.profile.Resume;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -197,6 +198,12 @@ public class JobController {
         model.addAttribute("position", job.getPosition());
         model.addAttribute("need_resume", job.getNeedResume());
         model.addAttribute("need_cover", job.getNeedCover());
+
+        Resume resume = jobService.getResumeByAppUser(applicant);
+
+        if(resume != null) {
+            model.addAttribute("default_resume", resume.getFileName());
+        }
 
         if (job.getIsExternal()) {
             model.addAttribute("authorization", authService.getAuthenticatedUser().getId() == retrievedJob.get().getCreator().getId());

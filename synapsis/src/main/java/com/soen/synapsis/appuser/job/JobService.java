@@ -3,6 +3,8 @@ package com.soen.synapsis.appuser.job;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AppUserRepository;
 import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.appuser.profile.Resume;
+import com.soen.synapsis.appuser.profile.ResumeRepository;
 import com.soen.synapsis.websockets.notification.NotificationDTO;
 import com.soen.synapsis.websockets.notification.NotificationService;
 import com.soen.synapsis.websockets.notification.NotificationType;
@@ -28,14 +30,16 @@ public class JobService {
     private final NotificationService notificationService;
     private final JobApplicationRepository jobApplicationRepository;
     private final JobFilterRepository jobFilterRepository;
+    private final ResumeRepository resumeRepository;
 
     @Autowired
-    public JobService(JobRepository jobRepository, JobApplicationRepository jobApplicationRepository, AppUserRepository appUserRepository, NotificationService notificationService, JobFilterRepository jobFilterRepository) {
+    public JobService(JobRepository jobRepository, JobApplicationRepository jobApplicationRepository, AppUserRepository appUserRepository, NotificationService notificationService, JobFilterRepository jobFilterRepository, ResumeRepository resumeRepository) {
         this.jobRepository = jobRepository;
         this.jobApplicationRepository = jobApplicationRepository;
         this.appUserRepository = appUserRepository;
         this.notificationService = notificationService;
         this.jobFilterRepository = jobFilterRepository;
+        this.resumeRepository = resumeRepository;
     }
 
     /**
@@ -132,11 +136,21 @@ public class JobService {
                 request.getLinks()
         );
 
+        Resume defaultResume = resumeRepository.findByAppUser(applicant);
         String encodedResume = Base64.getEncoder().encodeToString(resume.getBytes());
-        if(encodedResume.isEmpty()) {
+
+        if(job.getNeedResume() && encodedResume.isEmpty() && defaultResume == null) {
             throw new IllegalStateException("It is mandatory to upload your resume.");
         }
-        jobApplication.setResume(encodedResume);
+        if(encodedResume.isEmpty() && defaultResume != null) {
+            jobApplication.setResume(defaultResume.getDefaultResume());
+        }
+        if(!encodedResume.isEmpty() && defaultResume == null) {
+            jobApplication.setResume(encodedResume);
+        }
+        if(!encodedResume.isEmpty() && defaultResume != null) {
+            jobApplication.setResume(encodedResume);
+        }
 
         if(job.getNeedCover()) {
                 String encodedCoverLetter = Base64.getEncoder().encodeToString(coverLetter.getBytes());
@@ -287,6 +301,16 @@ public class JobService {
         jobFilterRepository.save(jobFilter);
 
         return jobFilter;
+    }
+
+    /**
+     * Gets the resume of a given app user.
+     *
+     * @param appUser an object representing the app user
+     * @return the resume of the app user.
+     */
+    public Resume getResumeByAppUser(AppUser appUser) {
+       return resumeRepository.findByAppUser(appUser);
     }
 
 }
