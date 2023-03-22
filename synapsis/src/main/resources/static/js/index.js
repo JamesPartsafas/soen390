@@ -2,11 +2,22 @@
 
 //Adds event listeners for the language selector
 window.onload = function() {
-    localStorage.setItem('localLang', 'EN')
-    const selector = document.querySelector('.langSelector')
+    const selector = document.querySelector('#langSelector')
     let currentLang = localStorage.getItem('localLang')
+    if (localStorage.getItem('localLang') === null) {
+        localStorage.setItem('localLang', 'langEN')
+    }
+    else {
+        changeLang(currentLang)
+    }
     if (selector) {
-        selector.addEventListener('change', () => {
+        selector.addEventListener('change', (event) => {
+            if (currentLang == 'langEN') {
+                currentLang = 'langFR'
+            }
+            else {
+                currentLang = 'langEN'
+            }
             changeLang(currentLang)
         })
     }
@@ -14,29 +25,28 @@ window.onload = function() {
 
 //Changes the language when toggled via the language selector
 function changeLang(currentLang) {
-    const langCode = 'lang' + currentLang
-    const elements = document.getElementsByClassName(langCode)
-    if (currentLang == 'EN') {
+    const elements = document.getElementsByClassName(currentLang)
+    if (currentLang == 'langEN') {
         const newLangCode = 'langFR'
         const visibleElements = document.getElementsByClassName(newLangCode)
         for (const elem of elements) {
             elem.style.display = 'none'
         }
         for (const visibleElem of visibleElements) {
-            visibleElem.style.display = 'inline'
+            visibleElem.style.display = 'block'
         }
-        localStorage.setItem('localLang', 'FR')
+        localStorage.setItem('localLang', 'langFR')
     }
-    else {
+    if (currentLang == 'langFR') {
         const newLangCode = 'langEN'
         const visibleElements = document.getElementsByClassName(newLangCode)
         for (const elem of elements) {
             elem.style.display = 'none'
         }
         for (const visibleElem of visibleElements) {
-            visibleElem.style.display = 'inline'
+            visibleElem.style.display = 'block'
         }
-        localStorage.setItem('localLang', 'EN')
+        localStorage.setItem('localLang', 'langEN')
     }
 }
 
