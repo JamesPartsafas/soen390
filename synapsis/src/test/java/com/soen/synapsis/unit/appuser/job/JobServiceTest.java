@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -23,8 +24,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -93,13 +93,20 @@ class JobServiceTest {
     }
 
     @Test
-    void createValidJob() {
-        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
+    void createValidJob() throws Exception {
+        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "https://google.com", true, true, true);
         request.setCreator(creator);
 
         String returnValue = underTest.createJob(request);
 
         assertEquals("redirect:/job/null", returnValue);
+    }
+
+    @Test
+    void createJobWithInvalidExternalLinkURLThrowsException() {
+        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
+
+        assertThrows(Exception.class, () -> underTest.createJob(request));
     }
 
     @Test
@@ -164,7 +171,7 @@ class JobServiceTest {
     }
 
     @Test
-    void editJob() {
+    void editJob() throws Exception {
         Long id = 1L;
 
         JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
@@ -215,8 +222,19 @@ class JobServiceTest {
     }
 
     @Test
+    void isValidURLSuccess() throws Exception {
+        underTest.isValidURL("https://google.com");
+    }
+
+    @Test
+    void isValidURLThrowsException() {
+        assertThrows(Exception.class, () -> underTest.isValidURL(""));
+    }
+
+    @Test
     void getResumeByAppUser() {
         AppUser appUser= new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
         assertEquals(null, underTest.getResumeByAppUser(appUser));
     }
+
 }

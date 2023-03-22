@@ -162,6 +162,7 @@ public class JobController {
 
         } catch (Exception e) {
             model.addAttribute("error", "There was an error creating a new job. " + e.getMessage());
+            model.addAttribute("request", request);
             return createJob(model);
         }
     }

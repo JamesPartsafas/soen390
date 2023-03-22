@@ -166,7 +166,7 @@ class JobControllerTest {
     }
 
     @Test
-    void sendValidCreateJobInfo() {
+    void sendValidCreateJobInfo() throws Exception {
         request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
         request.setCreator(creator);
         when(authService.getAuthenticatedUser()).thenReturn(creator);
