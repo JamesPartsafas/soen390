@@ -1,5 +1,6 @@
 -- Password is 12345678, all security answers = "a"
-INSERT INTO app_user (name, password, email, role, auth_provider, security_answer1, security_answer2, security_answer3, verification_status)
+INSERT INTO app_user (name, password, email, role, auth_provider, security_answer1, security_answer2, security_answer3,
+                      verification_status)
 VALUES ('Joe User', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'joeuser@mail.com', 'CANDIDATE',
         'LOCAL', '$2a$10$6.8QMAk88DPFHH//rEchFOZpsYqe8eJYsx0bYHQuB1QCuEp69pf1q',
         '$2a$10$6.8QMAk88DPFHH//rEchFOZpsYqe8eJYsx0bYHQuB1QCuEp69pf1q',
@@ -77,4 +78,9 @@ VALUES (1, 'This is a notification. It brings you to messages.', '/chats', false
 
 INSERT INTO settings (app_user_id, job_email_notifications_on, message_email_notifications_on,
                       connection_email_notifications_on)
-VALUES (1, true, true, true);
+VALUES (1, true, true, true),
+       (2, true, true, true),
+       (3, true, true, true),
+       (4, true, true, true),
+       (5, true, true, true),
+       (6, true, true, true);
