@@ -206,12 +206,16 @@ public class JobService {
      * @param request the job request.
      * @return the job page.
      */
-    public String editJob(Optional<Job> optionalJob, JobRequest request) {
+    public String editJob(Optional<Job> optionalJob, JobRequest request) throws Exception {
 
         Job job = optionalJob.get();
 
         if (job == null)
             return "redirect:/";
+
+        if (request.getIsExternal()) {
+            isValidURL(request.getExternalLink());
+        }
 
         job.setPosition(request.getPosition());
         job.setCompany(request.getCompany());

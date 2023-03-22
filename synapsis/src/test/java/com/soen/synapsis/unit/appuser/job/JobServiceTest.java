@@ -173,7 +173,7 @@ class JobServiceTest {
     }
 
     @Test
-    void editJob() {
+    void editJob() throws Exception {
         Long id = 1L;
 
         JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
