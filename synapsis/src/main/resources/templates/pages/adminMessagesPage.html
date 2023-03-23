@@ -5,11 +5,41 @@
         <div th:each="message: ${messageList}">
             <th:block th:if="${message.fileName != null and message.file != null}">
                 <img th:if="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}" th:src="${message.file}" th:alt="${message.fileName}" />
-                <a th:unless="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}" th:download="${message.fileName}" th:text="'Download' + ${message.fileName}"></a>
+                <a th:unless="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}" th:download="${message.fileName}" th:text="'Download ' + ${message.fileName}"></a>
             </th:block>
             <p th:text="${message.content}" th:class="${messageList.indexOf(message) + 1 == messageList.size()} ? 'text-red-600'" ></p>
         </div>
-        <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0">Warn</button>
-        <button class="btn bg-primary btn-primary font-sans text-sm w-20 h-9 p-0">Ban</button>
+
+        <!-- Button to warn user -->
+        <form th:action="@{/chats/warnUser}" method="post">
+            <div th:each="message: ${messageList}">
+                <div th:if="${messageList.indexOf(message) + 1 == messageList.size()}">
+                    <input type="number" name="senderId" th:value="${message.sender.id}" hidden>
+                    <input type="number" name="messageId" th:value="${message.id}" hidden>
+                </div>
+            </div>
+            <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0">Warn</button>
+        </form>
+
+        <!-- Button to ban user -->
+        <form th:action="@{/user/banUser}" method="post">
+            <div th:each="message: ${messageList}">
+                <div th:if="${messageList.indexOf(message) + 1 == messageList.size()}">
+                    <input type="number" name="senderId" th:value="${message.sender.id}" hidden>
+                    <input type="number" name="messageId" th:value="${message.id}" hidden>
+                </div>
+            </div>
+            <button type="submit" class="btn bg-primary btn-primary font-sans text-sm w-20 h-9 p-0">Ban</button>
+        </form>
+
+        <!-- Button to ignore report -->
+        <form th:action="@{/chats/ignore}" method="post">
+            <div th:each="message: ${messageList}">
+                <div th:if="${messageList.indexOf(message) + 1 == messageList.size()}">
+                    <input type="number" name="messageId" th:value="${message.id}" hidden>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-secondary font-sans text-sm w-20 h-9 p-0">Ignore</button>
+        </form>
     </div>
 </div>

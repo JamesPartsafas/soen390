@@ -186,16 +186,20 @@ public class JobApplicationTest {
     void getResume() { assertEquals(resume, underTest.getResume()); }
 
     @Test
-    @Disabled
     void setResume() {
+        String newResume = "1234";
+        underTest.setResume(newResume);
+        assertEquals(newResume, underTest.getResume());
     }
 
     @Test
     void getCoverLetter() { assertEquals(coverLetter, underTest.getCoverLetter()); }
 
     @Test
-    @Disabled
     void setCoverLetter() {
+        String newCoverLetter = "1234";
+        underTest.setCoverLetter(newCoverLetter);
+        assertEquals(newCoverLetter, underTest.getCoverLetter());
     }
 
     @Test

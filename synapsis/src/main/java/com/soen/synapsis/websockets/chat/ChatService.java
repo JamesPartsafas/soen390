@@ -126,4 +126,12 @@ public class ChatService {
     public List<List<Message>> getReportedMessages() {
         return messageService.getReportedMessages();
     }
+
+    /**
+     * Marks a message that was reported as resolved.
+     * @param messageId the message to mark as resolved.
+     */
+    public void resolveReport(Long messageId) {
+        messageService.resolveReport(messageId);
+    }
 }

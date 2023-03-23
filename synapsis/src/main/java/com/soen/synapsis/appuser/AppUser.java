@@ -1,5 +1,6 @@
 package com.soen.synapsis.appuser;
 
+import com.soen.synapsis.appuser.profile.Resume;
 import com.soen.synapsis.appuser.profile.ProfilePicture;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
@@ -50,6 +51,8 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 
+    @Column
+    private Boolean isBanned;
 
     @ManyToOne
     @JoinColumn(name = "company_id")
@@ -68,6 +71,8 @@ public class AppUser {
     private ProfilePicture profilePicture;
 
     @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
+    private Resume defaultResume;
+    @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
     private Settings settings;
 
     protected AppUser() {
@@ -83,6 +88,19 @@ public class AppUser {
         this.securityAnswer1 = securityAnswer1;
         this.securityAnswer2 = securityAnswer2;
         this.securityAnswer3 = securityAnswer3;
+    }
+
+    public AppUser(Long id, String name, String password, String email, Role role, AuthProvider authProvider, String securityAnswer1, String securityAnswer2, String securityAnswer3, Boolean isBanned) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.authProvider = authProvider;
+        this.securityAnswer1 = securityAnswer1;
+        this.securityAnswer2 = securityAnswer2;
+        this.securityAnswer3 = securityAnswer3;
+        this.isBanned = isBanned;
     }
 
     public AppUser(Long id, String name, String password, String email, Role role, AuthProvider authProvider) {
@@ -177,6 +195,14 @@ public class AppUser {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Boolean getIsBanned() {
+        return isBanned;
+    }
+
+    public void setIsBanned(Boolean isBanned) {
+        this.isBanned = isBanned;
     }
 
     public boolean getVerificationStatus() {
@@ -318,6 +344,14 @@ public class AppUser {
 
     public void setSettings(Settings settings) {
         this.settings = settings;
+    }
+
+    public Resume getResume() {
+        return defaultResume;
+    }
+
+    public void setResume(Resume defaultResume) {
+        this.defaultResume = defaultResume;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.soen.synapsis.unit.appuser;
 
 import com.soen.synapsis.appuser.*;
 import com.soen.synapsis.appuser.profile.ProfilePictureRepository;
+import com.soen.synapsis.appuser.profile.ResumeRepository;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfileRepository;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfileRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -30,13 +31,15 @@ public class AppUserServiceTest {
     private CompanyProfileRepository companyProfileRepository;
     @Mock
     private ProfilePictureRepository profilePictureRepository;
+    @Mock
+    private ResumeRepository resumeRepository;
     private AutoCloseable autoCloseable;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
         underTest = new AppUserService(appUserRepository, appUserProfileRepository,
-                companyProfileRepository, profilePictureRepository);
+                companyProfileRepository, profilePictureRepository, resumeRepository);
     }
 
     @AfterEach
@@ -229,5 +232,47 @@ public class AppUserServiceTest {
 
         assertEquals(true, companyUser.getVerificationStatus());
         verify(appUserRepository).save(companyUser);
+    }
+
+    @Test
+    void emptyResumeUploadReturns() throws IOException {
+        MultipartFile file = mock(MultipartFile.class);
+        when(file.getBytes()).thenReturn(new byte[]{});
+
+        underTest.uploadDefaultResume(file, mock(AppUser.class));
+
+        verify(file).getBytes();
+    }
+
+    @Test
+    void markCompanyAsNonVerifiedSucceeds() {
+        AppUser companyUser = new AppUser(2L, "Joe Man", "1234", "joecompany@mail.com", Role.COMPANY, false);
+
+        underTest.markCompanyAsNonVerified(companyUser);
+
+        assertEquals(false, companyUser.getVerificationStatus());
+        verify(appUserRepository).save(companyUser);
+    }
+
+    @Test
+    void banUserThatIsNotFoundReturnsFalse() {
+        Long id = 1L;
+        when(appUserRepository.findById(id)).thenReturn(Optional.empty());
+
+        Boolean returnValue = underTest.banUser(id);
+
+        assertEquals(false, returnValue);
+    }
+
+    @Test
+    void banUserThatIsFoundReturnsTrue() {
+        Long id = 1L;
+        AppUser appUser = new AppUser("Joe Man", "1234", "email@mail.com", Role.CANDIDATE);
+        when(appUserRepository.findById(id)).thenReturn(Optional.of(appUser));
+
+        Boolean returnValue = underTest.banUser(id);
+
+        assertEquals(true, appUser.getIsBanned());
+        assertEquals(true, returnValue);
     }
 }

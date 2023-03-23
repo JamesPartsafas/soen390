@@ -20,8 +20,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class ChatServiceTest {
 
@@ -119,5 +118,14 @@ class ChatServiceTest {
     void getReportedMessagesCallsTheMethodInMessageService() {
         underTest.getReportedMessages();
         verify(messageService).getReportedMessages();
+    }
+
+    @Test
+    void resolveReportCallsMessageService() {
+        Long messageId = 1L;
+
+        underTest.resolveReport(messageId);
+
+        verify(messageService, times(1)).resolveReport(messageId);
     }
 }

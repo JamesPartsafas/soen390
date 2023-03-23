@@ -399,4 +399,53 @@ class ChatControllerTest {
         when(authService.doesUserHaveRole(Role.ADMIN)).thenReturn(true);
         assertEquals("pages/adminMessagesPage", underTest.getReportMessage(Mockito.mock(Model.class)));
     }
+
+    @Test
+    void ignoreReportWithoutAdminRedirects() {
+        String redirect = "redirect:/";
+
+        when(authService.doesUserHaveRole(Role.ADMIN)).thenReturn(false);
+
+        String returnValue = underTest.ignoreReport(1L);
+
+        assertEquals(redirect, returnValue);
+    }
+
+    @Test
+    void ignoreReportResolves() {
+        String redirect = "redirect:/chats";
+        Long messageId = 1L;
+
+        when(authService.doesUserHaveRole(Role.ADMIN)).thenReturn(true);
+
+        String returnValue = underTest.ignoreReport(messageId);
+
+        verify(chatService, times(1)).resolveReport(messageId);
+        assertEquals(redirect, returnValue);
+    }
+
+    @Test
+    void warnUserWithoutAdminRedirects() {
+        String redirect = "redirect:/";
+
+        when(authService.doesUserHaveRole(Role.ADMIN)).thenReturn(false);
+
+        String returnValue = underTest.warnUser(1L, 1L);
+
+        assertEquals(redirect, returnValue);
+    }
+
+    @Test
+    void warnUserResolvesAndCreatesChat() {
+        Long senderId = 1L;
+        Long messageId = 1L;
+
+        when(authService.doesUserHaveRole(Role.ADMIN)).thenReturn(true);
+        when(authService.getAuthenticatedUser()).thenReturn(user1);
+
+        underTest.warnUser(senderId, messageId);
+
+        verify(chatService, times(1)).resolveReport(messageId);
+        verify(chatService, times(1)).createChat(user1, senderId);
+    }
 }

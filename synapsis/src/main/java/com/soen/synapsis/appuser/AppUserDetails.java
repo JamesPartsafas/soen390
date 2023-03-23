@@ -79,11 +79,14 @@ public class AppUserDetails implements UserDetails, AppUserAuth {
     /**
      * Verifies if account is enabled for use.
      * Used by authentication framework.
-     * @return Always returns true.
+     * @return The opposite of the user's isBanned value.
      */
     @Override
     public boolean isEnabled() {
-        return true;
+        if (appUser.getIsBanned() == null)
+            return true;
+
+        return !appUser.getIsBanned();
     }
 
     public Role getRole() {

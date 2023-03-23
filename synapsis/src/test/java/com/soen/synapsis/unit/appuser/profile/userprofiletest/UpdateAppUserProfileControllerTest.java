@@ -2,6 +2,7 @@ package com.soen.synapsis.unit.appuser.profile.userprofiletest;
 
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AppUserService;
+import com.soen.synapsis.appuser.AuthService;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.profile.appuserprofile.updateprofile.UpdateAppUserProfileController;
 import com.soen.synapsis.appuser.profile.appuserprofile.updateprofile.UpdateAppUserProfileRequest;
@@ -27,6 +28,8 @@ class UpdateAppUserProfileControllerTest {
     private UpdateAppUserProfileService updateAppUserProfileService;
     @Mock
     AppUserService appUserService;
+    @Mock
+    AuthService authService;
 
     private AutoCloseable autoCloseable;
     private UpdateAppUserProfileController underTest;
@@ -34,7 +37,7 @@ class UpdateAppUserProfileControllerTest {
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new UpdateAppUserProfileController(updateAppUserProfileService, appUserService);
+        underTest = new UpdateAppUserProfileController(updateAppUserProfileService, authService, appUserService);
     }
 
     @AfterEach
@@ -44,6 +47,7 @@ class UpdateAppUserProfileControllerTest {
 
     @Test
     void viewUpdateAppUserPage() {
+        when(authService.doesUserHaveRole(Role.CANDIDATE, Role.RECRUITER)).thenReturn(false);
         String returnedPage = underTest.updateAppUserProfile(Mockito.mock(Model.class));
         assertEquals("redirect:/", returnedPage);
     }
@@ -52,7 +56,7 @@ class UpdateAppUserProfileControllerTest {
     @Test
     void UpdateAppUserInfo() {
         UpdateAppUserProfileRequest request = new UpdateAppUserProfileRequest("description", "Computer Science", "Problem-solving", "developer", "5144433344", "food delivery", "Data Structures", "ConUhack project", "2022 best employee", "English");
-        underTest.updateAppUserProfile(request, mock(MultipartFile.class), mock(BindingResult.class), mock(Model.class));
+        underTest.updateAppUserProfile(request, mock(MultipartFile.class), mock(MultipartFile.class), mock(BindingResult.class), mock(Model.class));
         updateAppUserProfileService.updateProfile(request, new AppUser(1L, "joe",
                 "12345678", "joe@mail.com", Role.CANDIDATE));
     }
@@ -65,7 +69,7 @@ class UpdateAppUserProfileControllerTest {
         BindingResult bindingResult = mock(BindingResult.class);
         when(bindingResult.hasErrors()).thenReturn(true);
 
-        underTest.updateAppUserProfile(request, mock(MultipartFile.class), bindingResult, model);
+        underTest.updateAppUserProfile(request, mock(MultipartFile.class), mock(MultipartFile.class), bindingResult, model);
         updateAppUserProfileService.updateProfile(request, new AppUser(1L, "joe",
                 "12345678", "joe@mail.com", Role.CANDIDATE));
     }
