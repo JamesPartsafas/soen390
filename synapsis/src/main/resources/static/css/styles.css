@@ -29,6 +29,11 @@
     --container-width-sm: 90%;
 
     --transition-ease: all 400ms ease;
+
+}
+
+.langFR, button.langFR {
+    display: none;
 }
 
 html {
