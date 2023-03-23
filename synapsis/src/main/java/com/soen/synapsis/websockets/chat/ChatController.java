@@ -83,6 +83,9 @@ public class ChatController {
         return "pages/chatPage";
     }
 
+
+
+
     /**
      * Retrieves all the messages for a specific chat for the authenticated user have
      * @param chatID The chat's page to retrieve
@@ -133,6 +136,8 @@ public class ChatController {
             model.addAttribute("receiverId", chat.getCreator().getId());
         }
 
+        List<Chat> chats = chatService.findChatsByUserId(authService.getAuthenticatedUser().getId());
+        model.addAttribute("chats", chats);
         model.addAttribute("chatId", chat.getId());
         model.addAttribute("messages", messages);
         model.addAttribute("authenticatedUserID", authenticatedUserId);
