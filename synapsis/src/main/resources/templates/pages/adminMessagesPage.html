@@ -5,7 +5,7 @@
         <div th:each="message: ${messageList}">
             <th:block th:if="${message.fileName != null and message.file != null}">
                 <img th:if="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}" th:src="${message.file}" th:alt="${message.fileName}" />
-                <a th:unless="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}" th:download="${message.fileName}" th:text="'Download ' + ${message.fileName}"></a>
+                <a th:unless="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}" th:href="@{/downloadFile/{messageId}(messageId=${message.id})}" th:text="'Download ' + ${message.fileName}"></a>
             </th:block>
             <p th:text="${message.content}" th:class="${messageList.indexOf(message) + 1 == messageList.size()} ? 'text-red-600'" ></p>
         </div>

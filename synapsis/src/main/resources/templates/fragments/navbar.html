@@ -100,7 +100,7 @@
                 </ul>
             </div>
         </div>
-        <div class="invisible w-0 h-0" th:text="${#authentication.getPrincipal().getId()}" id="userId"></div>
+        <div class="invisible w-0 h-0" th:text="${globalUserId}" id="userId"></div>
         <script src="/js/notification.js"></script>
     </nav>
 
@@ -172,7 +172,7 @@
                 </ul>
             </div>
         </div>
-        <div class="invisible w-0 h-0" th:text="${#authentication.getPrincipal().getId()}" id="userId"></div>
+        <div class="invisible w-0 h-0" th:text="${globalUserId}" id="userId"></div>
         <script src="/js/notification.js"></script>
     </nav>
 </div>

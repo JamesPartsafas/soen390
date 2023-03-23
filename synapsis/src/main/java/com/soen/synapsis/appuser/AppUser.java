@@ -111,7 +111,8 @@ public class AppUser {
         this(id, name, password, email, role, AuthProvider.LOCAL);
     }
 
-    public AppUser(String name, String password, String email, Role role, AuthProvider authProvider, String securityAnswer1, String securityAnswer2, String securityAnswer3) {
+    public AppUser(String name, String password, String email, Role role, AuthProvider authProvider,
+                   String securityAnswer1, String securityAnswer2, String securityAnswer3) {
         this.name = name;
         this.password = password;
         this.email = email;
