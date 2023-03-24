@@ -33,6 +33,9 @@ public class Chat {
     @Column(name = "last_updated", nullable = false)
     private Timestamp lastUpdated;
 
+    @Column()
+    private byte[] secretKey;
+
     /**
      * Default Constructor.
      * Assigns the default values to all the instance variables
@@ -48,7 +51,18 @@ public class Chat {
      * @param participant Represents the receiver of the chat
      */
     public Chat(AppUser creator, AppUser participant) {
-        this(creator, participant, new Timestamp(System.currentTimeMillis()));
+        this(creator, participant, new Timestamp(System.currentTimeMillis()), null);
+    }
+
+    /**
+     * Creates a new chat instance from the given data.
+     * The ID of the chat is set automatically.
+     * @param creator Represents the initiator of the chat
+     * @param participant Represents the receiver of the chat
+     * @param secretKey The encryption key associated to this chat
+     */
+    public Chat(AppUser creator, AppUser participant, byte[] secretKey) {
+        this(creator, participant, new Timestamp(System.currentTimeMillis()), secretKey);
     }
 
     /**
@@ -57,11 +71,13 @@ public class Chat {
      * @param creator Represents the initiator of the chat
      * @param participant Represents the receiver of the chat
      * @param lastUpdated Represents the timestamp where the chat was last updated. This should only be updated on the creation of a new message.
+     * @param secretKey The encryption key associated to this chat
      */
-    public Chat(AppUser creator, AppUser participant, Timestamp lastUpdated) {
+    public Chat(AppUser creator, AppUser participant, Timestamp lastUpdated, byte[] secretKey) {
         this.creator = creator;
         this.participant = participant;
         this.lastUpdated = lastUpdated;
+        this.secretKey = secretKey;
     }
 
     /**
@@ -71,12 +87,14 @@ public class Chat {
      * @param creator Represents the initiator of the chat
      * @param participant Represents the receiver of the chat
      * @param lastUpdated Represents the timestamp where the chat was last updated. This should only be updated on the creation of a new message.
+     * @param secretKey The encryption key associated to this chat
      */
-    public Chat(Long id, AppUser creator, AppUser participant, Timestamp lastUpdated) {
+    public Chat(Long id, AppUser creator, AppUser participant, Timestamp lastUpdated, byte[] secretKey) {
         this.id = id;
         this.creator = creator;
         this.participant = participant;
         this.lastUpdated = lastUpdated;
+        this.secretKey = secretKey;
     }
 
     public Long getId() {
@@ -101,6 +119,14 @@ public class Chat {
 
     public void setParticipant(AppUser secondUser) {
         this.participant = secondUser;
+    }
+
+    public byte[] getSecretKey() {
+        return secretKey;
+    }
+
+    public void setSecretKey(byte[] secretKey) {
+        this.secretKey = secretKey;
     }
 
     public List<Message> getMessages() {

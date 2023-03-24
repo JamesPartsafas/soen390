@@ -2,6 +2,7 @@ package com.soen.synapsis.websockets.chat;
 
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AppUserService;
+import com.soen.synapsis.utility.crypto.CryptoService;
 import com.soen.synapsis.websockets.chat.message.Message;
 import com.soen.synapsis.websockets.chat.message.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ public class ChatService {
     private ChatRepository chatRepository;
     private MessageService messageService;
     private AppUserService appUserService;
+    private CryptoService cryptoService;
 
     /**
      * Constructor to create an instance of the MessageService.
@@ -26,12 +28,14 @@ public class ChatService {
      * @param chatRepository Used to interact with the Chat table in the database
      * @param messageService Used to interact with the Message service layer
      * @param appUserService Used to interact with the AppUser service layer
+     * @param cryptoService Used to interact with the Crypto service layer
      */
     @Autowired
-    public ChatService(ChatRepository chatRepository, MessageService messageService, AppUserService appUserService) {
+    public ChatService(ChatRepository chatRepository, MessageService messageService, AppUserService appUserService, CryptoService cryptoService) {
         this.chatRepository = chatRepository;
         this.messageService = messageService;
         this.appUserService = appUserService;
+        this.cryptoService = cryptoService;
     }
 
     /**
@@ -104,7 +108,7 @@ public class ChatService {
             return "redirect:/chat/" + retrievedChat.get().getId();
         }
 
-        Chat newChat = new Chat(user, retrievedUser.get());
+        Chat newChat = new Chat(user, retrievedUser.get(), cryptoService.generateSymmetricKey().getEncoded());
         chatRepository.save(newChat);
 
         return "redirect:/chat/" + newChat.getId();
