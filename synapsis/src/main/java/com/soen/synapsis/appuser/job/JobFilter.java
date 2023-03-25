@@ -15,30 +15,35 @@ public class JobFilter {
     @JoinColumn(name = "app_user_id")
     private AppUser appUser;
 
-    @Column(nullable = false)
+    @Column()
     private JobType jobType;
 
-    @Column(nullable = false)
+    @Column()
     private boolean showInternalJobs;
 
-    @Column(nullable = false)
+    @Column()
     private boolean showExternalJobs;
+
+    @Column()
+    private String searchTerm;
 
     protected JobFilter() {}
 
-    public JobFilter(Long id, AppUser appUser, JobType jobType, boolean showInternalJobs, boolean showExternalJobs) {
+    public JobFilter(Long id, AppUser appUser, JobType jobType, boolean showInternalJobs, boolean showExternalJobs, String searchTerm) {
         this.id = id;
         this.appUser = appUser;
         this.jobType = jobType;
         this.showInternalJobs = showInternalJobs;
         this.showExternalJobs = showExternalJobs;
+        this.searchTerm = searchTerm;
     }
 
-    public JobFilter(AppUser appUser, JobType jobType, boolean showInternalJobs, boolean showExternalJobs) {
+    public JobFilter(AppUser appUser, JobType jobType, boolean showInternalJobs, boolean showExternalJobs, String searchTerm) {
         this.appUser = appUser;
         this.jobType = jobType;
         this.showInternalJobs = showInternalJobs;
         this.showExternalJobs = showExternalJobs;
+        this.searchTerm = searchTerm;
     }
 
     public Long getId() {
@@ -81,15 +86,19 @@ public class JobFilter {
         this.showExternalJobs = showExternalJobs;
     }
 
+    public String getSearchTerm() { return searchTerm; }
+
+    public void setSearchTerm(String searchTerm) { this.searchTerm = searchTerm; }
+
     @Override
     public String toString() {
         return "JobFilter{" +
                 "id=" + id +
                 ", appUser=" + appUser +
                 ", jobType=" + jobType +
-                ", showExternalJobs=" + showExternalJobs +
                 ", showInternalJobs=" + showInternalJobs +
+                ", showExternalJobs=" + showExternalJobs +
+                ", searchTerm='" + searchTerm + '\'' +
                 '}';
     }
-
 }

@@ -28,7 +28,8 @@
                     <input type="radio" id="external-no" name="showExternalJobs" value="false" th:checked="${showExternalJobsFilter != null and !showExternalJobsFilter}">
                     <label for="external-no" class="text-grey font-serif">No</label><br><br>
 
-                    <input type="hidden" name="filterPassed" value="true">
+                    <input type="hidden" name="isFilteringJobs" value="true">
+                    <input type="hidden" name="searchTerm" th:value="${searchTerm}">
                     <div class="flex justify-center">
                         <button type="submit" class="btn btn-primary bg-primary text-base mx-auto rounded-2xl font-thin transition hover:-translate-y-0.5 duration-150 hover:bg-opacity-60">Filter Jobs</button>
                     </div>
@@ -41,7 +42,7 @@
             <form th:action="@{/jobs}" class="h-full md:col-span-3 col-span-1" method="get">
                 <div class="flex h-14 space-x-1">
                     <button type="submit" class="w-10 h-full border rounded-md"><i class="fa-solid fa-magnifying-glass"></i></button>
-                    <input class="border rounded-md w-full h-full pl-4 font-sans text-xl font-light" placeholder="Search Jobs" name="searchTerm">
+                    <input th:value="${searchTerm}" class="border rounded-md w-full h-full pl-4 font-sans text-xl font-light" placeholder="Search Jobs" name="searchTerm">
                 </div>
             </form>
 
@@ -50,12 +51,6 @@
                   No results found.
                 </div>
               </div>
-
-
-              <div th:if="${jobs.size() > 0 and searchTerm != null}" class="h-14 md:col-span-3 col-span-1">
-                Searching for <span th:text="${searchTerm}"></span>
-              </div>
-
 
             <div th:if="${jobs.size() > 0}" th:each="job: ${jobs}" class="flex flex-col inline-block rounded-2xl shadow w-56 min-h-min bg-white mt-4 mr-4 pb-4">
 
@@ -80,9 +75,7 @@
               </div>
             </div>
           </div>
-
         </div>
-
 
 </div>
 </html>

@@ -43,13 +43,13 @@ public class JobController {
      * @param jobType          the type of job (fulltime, parttime, contract, etc.).
      * @param showInternalJobs the filtered show internal jobs preference (yes/no).
      * @param showExternalJobs the filtered show external jobs preference (yes/no).
-     * @param filterPassed     boolean value to see if the filter has been called.
+     * @param isFilteringJobs  boolean value to see if the filter has been called.
      * @param searchTerm       jobs to search for.
      * @param model            an object carrying data attributes passed to the view.
      * @return the view containing all jobs.
      */
     @GetMapping("/jobs")
-    public String viewJobPosting(@RequestParam(required = false) JobType jobType, @RequestParam(required = false) boolean showInternalJobs, @RequestParam(required = false) boolean showExternalJobs, @RequestParam(required = false) boolean filterPassed, @RequestParam(required = false) String searchTerm, Model model) {
+    public String viewJobPosting(@RequestParam(required = false) JobType jobType, @RequestParam(required = false) boolean showInternalJobs, @RequestParam(required = false) boolean showExternalJobs, @RequestParam(required = false) boolean isFilteringJobs, @RequestParam(required = false) String searchTerm, Model model) {
         if (!authService.isUserAuthenticated()) {
             return "redirect:/";
         }
@@ -57,16 +57,27 @@ public class JobController {
         List<Job> jobs;
         JobFilter jobFilter;
 
-        if (filterPassed) {
+        if (isFilteringJobs && searchTerm != null) {
+            jobs = jobService.getAllJobsByFilterAndSearchTerm(jobType, showInternalJobs, showExternalJobs, searchTerm);
+
+            jobFilter = jobService.saveJobFilter(authService.getAuthenticatedUser(), jobType, showInternalJobs, showExternalJobs, searchTerm);
+
+            model.addAttribute("jobTypeFilter", jobFilter.getJobType());
+            model.addAttribute("showInternalJobsFilter", jobFilter.isShowInternalJobs());
+            model.addAttribute("showExternalJobsFilter", jobFilter.isShowExternalJobs());
+        }
+        else if (isFilteringJobs) {
             jobs = jobService.getAllJobsByFilter(jobType, showInternalJobs, showExternalJobs);
 
-            jobFilter = jobService.saveJobFilter(authService.getAuthenticatedUser(), jobType, showInternalJobs, showExternalJobs);
+            jobFilter = jobService.saveJobFilter(authService.getAuthenticatedUser(), jobType, showInternalJobs, showExternalJobs, null);
 
             model.addAttribute("jobTypeFilter", jobFilter.getJobType());
             model.addAttribute("showInternalJobsFilter", jobFilter.isShowInternalJobs());
             model.addAttribute("showExternalJobsFilter", jobFilter.isShowExternalJobs());
         } else if (searchTerm != null) {
             jobs = jobService.getAllJobsBySearch(searchTerm.toLowerCase());
+
+            jobService.saveJobFilter(authService.getAuthenticatedUser(), null, true, true, searchTerm);
         } else {
             jobs = jobService.getAllJobs();
         }
