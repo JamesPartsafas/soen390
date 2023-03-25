@@ -85,7 +85,7 @@ class JobServiceTest {
 
     @Test
     void getAllJobsByFilterWithAllJobTypesReturnsJobs() {
-        JobType jobType = JobType.ALL;
+        JobType jobType = JobType.ANY;
 
         underTest.getAllJobsByFilter(jobType, true, true);
 
@@ -107,7 +107,7 @@ class JobServiceTest {
     @Test
     void getAllJobsByFilterAndSearchTermWithAllJobTypesReturnsJobs() {
         String searchTerm = "developer";
-        JobType jobType = JobType.ALL;
+        JobType jobType = JobType.ANY;
 
         underTest.getAllJobsByFilterAndSearchTerm(jobType, true, true, searchTerm);
 

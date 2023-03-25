@@ -8,5 +8,5 @@ public enum JobType {
     VOLUNTEER,
     INTERNSHIP,
     OTHER,
-    ALL
+    ANY
 }

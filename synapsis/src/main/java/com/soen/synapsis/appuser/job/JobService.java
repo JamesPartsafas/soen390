@@ -261,7 +261,7 @@ public class JobService {
     public List<Job> getAllJobsByFilter(JobType jobType, boolean showInternalJobs, boolean showExternalJobs) {
         List<Job> jobs = new ArrayList<>();
 
-        if (jobType == JobType.ALL) {
+        if (jobType == JobType.ANY) {
             if (showInternalJobs) {
                 jobs.addAll(jobRepository.findInternalJobs());
             }
@@ -295,7 +295,7 @@ public class JobService {
     public List<Job> getAllJobsByFilterAndSearchTerm(JobType jobType, boolean showInternalJobs, boolean showExternalJobs, String searchTerm) {
         List<Job> jobs = new ArrayList<>();
 
-        if (jobType == JobType.ALL) {
+        if (jobType == JobType.ANY) {
             if (showInternalJobs) {
                 jobs.addAll(jobRepository.findInternalJobsBySearchTerm(searchTerm));
             }
