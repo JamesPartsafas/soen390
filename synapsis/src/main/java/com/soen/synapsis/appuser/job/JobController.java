@@ -379,7 +379,7 @@ public class JobController {
             jobs.add(jobService.getJob(jid));
         }
 
-        List<Job> jobsSubmitted = jobService.getAllJobsAlreadySubmittedByUser(authService.getAuthenticatedUser());
+        List<Job> jobsSubmitted = jobService.getAllJobsAlreadySubmittedByUser(appUser);
 
         model.addAttribute("jobs", jobs);
         model.addAttribute("jobsSubmitted", jobsSubmitted);
