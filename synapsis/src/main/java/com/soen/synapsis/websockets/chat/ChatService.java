@@ -2,6 +2,7 @@ package com.soen.synapsis.websockets.chat;
 
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AppUserService;
+import com.soen.synapsis.utility.crypto.CryptoService;
 import com.soen.synapsis.websockets.chat.message.Message;
 import com.soen.synapsis.websockets.chat.message.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ public class ChatService {
     private ChatRepository chatRepository;
     private MessageService messageService;
     private AppUserService appUserService;
+    private CryptoService cryptoService;
 
     /**
      * Constructor to create an instance of the MessageService.
@@ -26,12 +28,14 @@ public class ChatService {
      * @param chatRepository Used to interact with the Chat table in the database
      * @param messageService Used to interact with the Message service layer
      * @param appUserService Used to interact with the AppUser service layer
+     * @param cryptoService Used to interact with the Crypto service layer
      */
     @Autowired
-    public ChatService(ChatRepository chatRepository, MessageService messageService, AppUserService appUserService) {
+    public ChatService(ChatRepository chatRepository, MessageService messageService, AppUserService appUserService, CryptoService cryptoService) {
         this.chatRepository = chatRepository;
         this.messageService = messageService;
         this.appUserService = appUserService;
+        this.cryptoService = cryptoService;
     }
 
     /**
@@ -54,11 +58,11 @@ public class ChatService {
      * Saves a new message in a chat and updates the chat's last updated time.
      * @param chatID The id of the chat where the message will be saved.
      * @param appUser The user who sent the message.
-     * @param content The content of the message to be saved.
+     * @param messageDTO Represents the message sent by the sender.
      * @return The id of the saved message.
      * @throws IllegalStateException if the chat does not exist.
      */
-    public Long saveMessage(Long chatID, AppUser appUser, String content) {
+    public Long saveMessage(Long chatID, AppUser appUser, MessageDTO messageDTO) {
         Optional<Chat> retrievedChat = findChatById(chatID);
 
         if (retrievedChat.isEmpty()) {
@@ -66,7 +70,7 @@ public class ChatService {
         }
 
         Chat chat = retrievedChat.get();
-        Message savedMessage = messageService.saveMessage(chat, appUser, content);
+        Message savedMessage = messageService.saveMessage(chat, appUser, messageDTO);
         chat.setLastUpdated(savedMessage.getCreatedAt());
         chatRepository.save(chat);
 
@@ -104,9 +108,34 @@ public class ChatService {
             return "redirect:/chat/" + retrievedChat.get().getId();
         }
 
-        Chat newChat = new Chat(user, retrievedUser.get());
+        Chat newChat = new Chat(user, retrievedUser.get(), cryptoService.generateSymmetricKey().getEncoded());
         chatRepository.save(newChat);
 
         return "redirect:/chat/" + newChat.getId();
+    }
+
+    /**
+     * Delegate the setting the message reportStatus to reported to the MessageService
+     * @param authenticatedUser the authenticated user who is reporting the message
+     * @param messageID the ID of the message to report
+     */
+    public void setMessageReportStatus(AppUser authenticatedUser, Long messageID) {
+        messageService.setMessageReportStatus(authenticatedUser, messageID);
+    }
+
+    /**
+     * Delegate the process of fetching the messages to the MessageService
+     * @return A list of lists containing the reported messages and their previous messages.
+     */
+    public List<List<Message>> getReportedMessages() {
+        return messageService.getReportedMessages();
+    }
+
+    /**
+     * Marks a message that was reported as resolved.
+     * @param messageId the message to mark as resolved.
+     */
+    public void resolveReport(Long messageId) {
+        messageService.resolveReport(messageId);
     }
 }

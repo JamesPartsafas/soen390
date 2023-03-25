@@ -4,6 +4,7 @@ import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.websockets.chat.Chat;
 import com.soen.synapsis.websockets.chat.message.Message;
+import com.soen.synapsis.websockets.chat.message.ReportStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +22,10 @@ class MessageTest {
     private String content;
     private AppUser sender;
     private boolean read;
+    private ReportStatus reportStatus;
     private Timestamp createdAt;
+    private String fileName;
+    private String file;
 
     @BeforeEach
     void setUp() {
@@ -30,8 +34,11 @@ class MessageTest {
         content = "content";
         sender = new AppUser("name", "password", "email@mail.com", Role.CANDIDATE);
         read = false;
+        reportStatus = ReportStatus.REVIEWED;
         createdAt = new Timestamp(System.currentTimeMillis());
-        underTest = new Message(id, chat, content, sender, read, createdAt);
+        fileName = "test_file_name.png";
+        file = "iVBORw0KGgoAAAANSUhEUgAAAkUAAACBCAYAAADOmM5KAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAA";
+        underTest = new Message(id, chat, content, sender, read, reportStatus, createdAt, fileName, file);
     }
 
     @Test
@@ -92,6 +99,17 @@ class MessageTest {
     }
 
     @Test
+    void getReportStatus() {
+        assertEquals(reportStatus, underTest.getReportStatus());
+    }
+
+    @Test
+    void setReportStatus() {
+        underTest.setReportStatus(ReportStatus.REPORTED);
+        assertEquals(ReportStatus.REPORTED, underTest.getReportStatus());
+    }
+
+    @Test
     void getCreatedAt() {
         assertEquals(createdAt, underTest.getCreatedAt());
     }
@@ -101,6 +119,28 @@ class MessageTest {
         Timestamp newCreatedAt = new Timestamp(System.nanoTime());
         underTest.setCreatedAt(newCreatedAt);
         assertEquals(newCreatedAt, underTest.getCreatedAt());
+    }
+
+    @Test
+    void getFileName() {
+        assertEquals(underTest.getFileName(), fileName);
+    }
+
+    @Test
+    void setFileName() {
+        underTest.setFileName("new.png");
+        assertEquals(underTest.getFileName(), "new.png");
+    }
+
+    @Test
+    void getFile() {
+        assertEquals(underTest.getFile(), file);
+    }
+
+    @Test
+    void setFile() {
+        underTest.setFile("123r4t5y6u7i8");
+        assertEquals(underTest.getFile(), "123r4t5y6u7i8");
     }
 
     @Test

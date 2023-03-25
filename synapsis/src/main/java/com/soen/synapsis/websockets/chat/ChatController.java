@@ -3,6 +3,7 @@ package com.soen.synapsis.websockets.chat;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AppUserAuth;
 import com.soen.synapsis.appuser.AuthService;
+import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.websockets.chat.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -60,7 +62,8 @@ public class ChatController {
     }
 
     /**
-     * Retrieves all the chats that the authenticated user have
+     * If the user is not an admin, the method retrieves all the chats that the authenticated user have
+     * else redirects to the admin review page.
      * @param model Allows for data to be passed to view.
      * @return The view containing all the chats if the user is authenticated else redirects to the home page.
      */
@@ -70,11 +73,18 @@ public class ChatController {
             return "redirect:/";
         }
 
+        if (authService.doesUserHaveRole(Role.ADMIN)) {
+            return "redirect:/chat/admin";
+        }
+
         List<Chat> chats = chatService.findChatsByUserId(authService.getAuthenticatedUser().getId());
         model.addAttribute("chats", chats);
 
         return "pages/chatPage";
     }
+
+
+
 
     /**
      * Retrieves all the messages for a specific chat for the authenticated user have
@@ -126,15 +136,19 @@ public class ChatController {
             model.addAttribute("receiverId", chat.getCreator().getId());
         }
 
+        List<Chat> chats = chatService.findChatsByUserId(authService.getAuthenticatedUser().getId());
+        model.addAttribute("chats", chats);
         model.addAttribute("chatId", chat.getId());
         model.addAttribute("messages", messages);
+        model.addAttribute("authenticatedUserID", authenticatedUserId);
 
         return "pages/messagingPage";
     }
 
     /**
      * This method handles sending a message in a chat to the receiving user.
-     * If the message type is not TYPE, the sending user will receive an ERROR message.
+     * If the message type is not TEXT or the message content is empty or if the message exceeds the permitted size,
+     * the sending user will receive an ERROR message.
      * @param authentication an instance of the Authentication interface representing the user's authentication information
      * @param chatID a Long representing the ID of the chat
      * @param message a MessageDTO object representing the content of the message to be sent and saved
@@ -146,6 +160,19 @@ public class ChatController {
                 throw new IllegalStateException("Message Type should only be TEXT");
             }
 
+            String content = message.getContent();
+
+            if (content == null) {
+                throw new IllegalStateException("Message Content cannot be null");
+            }
+
+            String fileName = message.getFileName();
+            String file = message.getFile();
+
+            if ((fileName != null && fileName.length() > 50) || (file != null && file.length() > 64600) || content.length() > 255) {
+                throw  new IllegalStateException("Message exceeds permitted size limit");
+            }
+
             AppUserAuth appUserAuth = (AppUserAuth) authentication.getPrincipal();
             AppUser appUser = appUserAuth.getAppUser();
 
@@ -153,7 +180,7 @@ public class ChatController {
                 throw new IllegalStateException("Sender ID is not valid");
             }
 
-            Long messageId = chatService.saveMessage(chatID, appUser, message.getContent());
+            Long messageId = chatService.saveMessage(chatID, appUser, message);
             message.setId(messageId);
             simpMessagingTemplate.convertAndSendToUser(message.getReceiverId().toString(), "/queue/chat/" + chatID, message);
         } catch (Exception exception) {
@@ -191,4 +218,75 @@ public class ChatController {
         }
     }
 
+    /**
+     * This method is used to report a chat message.
+     * @param messageID The ID of the message to be reported.
+     * @param chatID The ID of the chat to which the message belongs.
+     * @param model The model object to add attributes to.
+     * @return Returns the chat page with an updated model attribute to show if the process succeeded or not.
+     */
+    @PostMapping("/chat/report")
+    public String reportMessage(@RequestParam("messageID") Long messageID, @RequestParam("chatID") Long chatID, Model model) {
+        if (!authService.isUserAuthenticated()) {
+            return "redirect:/";
+        }
+
+        try {
+            chatService.setMessageReportStatus(authService.getAuthenticatedUser(), messageID);
+            model.addAttribute("reportStatus", "Reported Message Successfully");
+        } catch (Exception e) {
+            model.addAttribute("reportStatus", e.getMessage());
+        }
+
+        return getChatById(chatID, model);
+    }
+
+    /**
+     * Retrieves reported messages and displays them on the admin messages page.
+     * @param model  Allows for data to be passed to view.
+     * @return The view of the admin reported messages' page if the user is an admin else redirects to the home page
+     */
+    @GetMapping ("/chat/admin")
+    public String getReportMessage(Model model) {
+        if (!authService.doesUserHaveRole(Role.ADMIN)) {
+            return "redirect:/";
+        }
+
+        List<List<Message>> reportedMessage = chatService.getReportedMessages();
+        model.addAttribute("listOfListOfMessages", reportedMessage);
+        return "pages/adminMessagesPage";
+    }
+
+    /**
+     * Ignores the user report of a message and takes no action
+     * @param messageId The ID of the reported message
+     * @return View of admin chats page
+     */
+    @PostMapping("/chats/ignore")
+    public String ignoreReport(@RequestParam("messageId") Long messageId) {
+        if (!authService.doesUserHaveRole(Role.ADMIN)) {
+            return "redirect:/";
+        }
+
+        chatService.resolveReport(messageId);
+
+        return "redirect:/chats";
+    }
+
+    /**
+     * Brings the admin to the chat page with the reported user so a warning can be written
+     * @param senderId The reported user ID
+     * @param messageId The reported message ID
+     * @return View of the chat page with the reported user
+     */
+    @PostMapping("/chats/warnUser")
+    public String warnUser(@RequestParam("senderId") Long senderId, @RequestParam("messageId") Long messageId) {
+        if (!authService.doesUserHaveRole(Role.ADMIN)) {
+            return "redirect:/";
+        }
+
+        chatService.resolveReport(messageId);
+
+        return chatService.createChat(authService.getAuthenticatedUser(), senderId);
+    }
 }

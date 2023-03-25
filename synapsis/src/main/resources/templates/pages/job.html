@@ -57,6 +57,7 @@
 
     </div>
 
+<!-- Both recruiters and candidates can apply to jobs. However, only those recruiters who created a particular job can edit/delete it.-->
     <div th:if="${role.toString()=='CANDIDATE'}" class="mx-auto my-4 transition hover:-translate-y-0.5 duration-150 ">
       <!--Add link below-->
       <div th:if="${isJobSubmitted}">
@@ -79,6 +80,10 @@
         <button class="mb-4 text-white font-thin bg-primary mx-auto p-4 rounded-2xl
               hover:bg-opacity-60 transition hover:-translate-y-0.5 duration-150" type="submit">Delete</button>
       </form>
+
+        <a th:unless="${isJobSubmitted}" th:href="@{/jobapplication/{id}(id=${jobId})}" class="mb-4 bg-primary text-white mx-auto p-4 rounded-2xl font-thin hover:bg-opacity-60
+        transition hover:-translate-y-0.5 duration-15">Apply Now at Synapsis</a>
+
     </div>
 
   </div>

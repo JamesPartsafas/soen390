@@ -21,6 +21,7 @@ class ChatTest {
     private AppUser firstUser;
     private AppUser secondUser;
     private List<Message> messages;
+    private byte[] secretKey;
     private Timestamp lastUpdated;
 
     @BeforeEach
@@ -30,8 +31,9 @@ class ChatTest {
         secondUser = new AppUser(2L, "Joe Man2", "1234", "joecandidate2@mail.com", Role.CANDIDATE);
         messages = new ArrayList<>();
         messages.add(new Message());
+        secretKey = "123".getBytes();
         lastUpdated = new Timestamp(System.currentTimeMillis());
-        underTest = new Chat(id, firstUser, secondUser, lastUpdated);
+        underTest = new Chat(id, firstUser, secondUser, lastUpdated, secretKey);
         underTest.setMessages(messages);
     }
 
@@ -79,6 +81,18 @@ class ChatTest {
     void setMessages() {
         underTest.setMessages(new ArrayList<>());
         assertEquals(0, underTest.getMessages().size());
+    }
+
+    @Test
+    void getSecretKey() {
+        assertEquals(secretKey, underTest.getSecretKey());
+    }
+
+    @Test
+    void setSecretKey() {
+        byte[] newBytes = "567".getBytes();
+        underTest.setSecretKey(newBytes);
+        assertEquals(newBytes, underTest.getSecretKey());
     }
 
     @Test

@@ -8,6 +8,7 @@ import com.soen.synapsis.appuser.connection.ConnectionKey;
 import com.soen.synapsis.appuser.connection.ConnectionRepository;
 import com.soen.synapsis.appuser.connection.ConnectionService;
 import com.soen.synapsis.websockets.notification.NotificationService;
+import org.checkerframework.checker.nullness.Opt;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -210,11 +211,23 @@ public class ConnectionServiceTest {
     }
 
     @Test
-    void disconnectDeletesTheConnection() {
-        ArgumentCaptor<ConnectionKey> connectionArgumentCaptor = ArgumentCaptor.forClass(ConnectionKey.class);
-
+    void disconnectDeletesTheConnectionWhenOrderOfFirstAndSecondCandidatesIsCorrect() {
+        ConnectionKey connectionKey = new ConnectionKey(candidateUser2.getId(), candidateUser1.getId());
+        Connection connection = new Connection(connectionKey,candidateUser2, candidateUser1, false);
+        when(connectionRepository.findById(connectionKey)).thenReturn(Optional.of(connection));
         underTest.disconnect(candidateUser2.getId(), candidateUser1.getId());
-        verify(connectionRepository, atMostOnce()).deleteById(connectionArgumentCaptor.capture());
+        verify(connectionRepository, atMostOnce()).delete(connection);
+    }
+
+    @Test
+    void disconnectDeletesTheConnectionWhenOrderOfFirstAndSecondCandidatesIsReversed() {
+        ConnectionKey connectionKey1 = new ConnectionKey(candidateUser2.getId(), candidateUser1.getId());
+        ConnectionKey connectionKey2 = new ConnectionKey(candidateUser1.getId(), candidateUser2.getId());
+        Connection connection = new Connection(connectionKey1,candidateUser2, candidateUser1, false);
+        when(connectionRepository.findById(connectionKey1)).thenReturn(Optional.empty());
+        when(connectionRepository.findById(connectionKey2)).thenReturn(Optional.of(connection));
+        underTest.disconnect(candidateUser2.getId(), candidateUser1.getId());
+        verify(connectionRepository, atMostOnce()).delete(connection);
     }
 
     @Test

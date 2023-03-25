@@ -3,9 +3,11 @@ package com.soen.synapsis.unit.websockets.chat;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AppUserService;
 import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.utility.crypto.CryptoService;
 import com.soen.synapsis.websockets.chat.Chat;
 import com.soen.synapsis.websockets.chat.ChatRepository;
 import com.soen.synapsis.websockets.chat.ChatService;
+import com.soen.synapsis.websockets.chat.MessageDTO;
 import com.soen.synapsis.websockets.chat.message.Message;
 import com.soen.synapsis.websockets.chat.message.MessageService;
 import org.junit.jupiter.api.AfterEach;
@@ -19,8 +21,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class ChatServiceTest {
 
@@ -36,7 +37,7 @@ class ChatServiceTest {
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new ChatService(chatRepository, messageService, appUserService);
+        underTest = new ChatService(chatRepository, messageService, appUserService, new CryptoService());
     }
 
     @AfterEach
@@ -60,18 +61,18 @@ class ChatServiceTest {
     void saveMessageThrowsWhenChatDoesNotExist() {
         when(chatRepository.findById(any(Long.class))).thenReturn(Optional.empty());
         assertThrows(IllegalStateException.class,
-                () -> underTest.saveMessage(1L, null, ""));
+                () -> underTest.saveMessage(1L, null, new MessageDTO()));
     }
 
     @Test
     void saveMessageCallsMessageAndChatRepositorySaveWhenChatExist() {
         AppUser appUser = new AppUser(1L, "Joe Man", "1234", "joecandidate@mail.com", Role.CANDIDATE);
-        String content = "content";
         Chat chat = new Chat();
+        MessageDTO messageDTO = new MessageDTO();
         when(chatRepository.findById(any(Long.class))).thenReturn(Optional.of(chat));
-        when(messageService.saveMessage(any(Chat.class), any(AppUser.class), any(String.class))).thenReturn(new Message());
-        underTest.saveMessage(1L, appUser, content);
-        verify(messageService).saveMessage(chat, appUser, content);
+        when(messageService.saveMessage(any(Chat.class), any(AppUser.class), any(MessageDTO.class))).thenReturn(new Message());
+        underTest.saveMessage(1L, appUser, messageDTO);
+        verify(messageService).saveMessage(chat, appUser, messageDTO);
         verify(chatRepository).save(chat);
     }
 
@@ -104,5 +105,28 @@ class ChatServiceTest {
         when(chatRepository.findByUserIds(any(Long.class), any(Long.class))).thenReturn(Optional.empty());
         underTest.createChat(appUser, 2L);
         verify(chatRepository).save(any(Chat.class));
+    }
+
+    @Test
+    void setMessageReportStatusCallsTheMethodInMessageService() {
+        AppUser appUser = new AppUser(1L, "Joe Man", "1234", "joecandidate@mail.com", Role.CANDIDATE);
+        long messageID = 2L;
+        underTest.setMessageReportStatus(appUser, messageID);
+        verify(messageService).setMessageReportStatus(appUser, messageID);
+    }
+
+    @Test
+    void getReportedMessagesCallsTheMethodInMessageService() {
+        underTest.getReportedMessages();
+        verify(messageService).getReportedMessages();
+    }
+
+    @Test
+    void resolveReportCallsMessageService() {
+        Long messageId = 1L;
+
+        underTest.resolveReport(messageId);
+
+        verify(messageService, times(1)).resolveReport(messageId);
     }
 }

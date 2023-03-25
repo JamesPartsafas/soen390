@@ -1,10 +1,10 @@
 package com.soen.synapsis.appuser;
 
-import com.soen.synapsis.appuser.job.Job;
+import com.soen.synapsis.appuser.profile.Resume;
 import com.soen.synapsis.appuser.profile.ProfilePicture;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
-
+import com.soen.synapsis.appuser.settings.Settings;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -42,6 +42,9 @@ public class AppUser {
     private String email;
 
     @Column(nullable = false)
+    private boolean verificationStatus;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -49,10 +52,10 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 
-    @Column(columnDefinition = "boolean default true")
-    private boolean emailNotificationsOn;
+    @Column
+    private Boolean isBanned;
 
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne
     @JoinColumn(name = "company_id")
     private AppUser company;
 
@@ -71,6 +74,11 @@ public class AppUser {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Long> savedJobs;
 
+    @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
+    private Resume defaultResume;
+    @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
+    private Settings settings;
+
     protected AppUser() {
     }
 
@@ -86,6 +94,19 @@ public class AppUser {
         this.securityAnswer3 = securityAnswer3;
     }
 
+    public AppUser(Long id, String name, String password, String email, Role role, AuthProvider authProvider, String securityAnswer1, String securityAnswer2, String securityAnswer3, Boolean isBanned) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.authProvider = authProvider;
+        this.securityAnswer1 = securityAnswer1;
+        this.securityAnswer2 = securityAnswer2;
+        this.securityAnswer3 = securityAnswer3;
+        this.isBanned = isBanned;
+    }
+
     public AppUser(Long id, String name, String password, String email, Role role, AuthProvider authProvider) {
         this(id, name, password, email, role, authProvider, null, null, null);
     }
@@ -94,7 +115,8 @@ public class AppUser {
         this(id, name, password, email, role, AuthProvider.LOCAL);
     }
 
-    public AppUser(String name, String password, String email, Role role, AuthProvider authProvider, String securityAnswer1, String securityAnswer2, String securityAnswer3) {
+    public AppUser(String name, String password, String email, Role role, AuthProvider authProvider,
+                   String securityAnswer1, String securityAnswer2, String securityAnswer3) {
         this.name = name;
         this.password = password;
         this.email = email;
@@ -129,6 +151,15 @@ public class AppUser {
         this.email = email;
         this.role = role;
         this.company = company;
+    }
+
+    public AppUser(Long id, String name, String password, String email, Role role, boolean verificationStatus) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.verificationStatus = verificationStatus;
     }
 
     public Long getId() {
@@ -169,6 +200,22 @@ public class AppUser {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Boolean getIsBanned() {
+        return isBanned;
+    }
+
+    public void setIsBanned(Boolean isBanned) {
+        this.isBanned = isBanned;
+    }
+
+    public boolean getVerificationStatus() {
+        return verificationStatus;
+    }
+
+    public void setVerificationStatus(boolean verificationStatus) {
+        this.verificationStatus = verificationStatus;
     }
 
     public AuthProvider getAuthProvider() {
@@ -296,12 +343,20 @@ public class AppUser {
         this.profilePicture = profilePicture;
     }
 
-    public boolean isEmailNotificationsOn() {
-        return emailNotificationsOn;
+    public Settings getSettings() {
+        return settings;
     }
 
-    public void setEmailNotificationsOn(boolean emailNotificationsOn) {
-        this.emailNotificationsOn = emailNotificationsOn;
+    public void setSettings(Settings settings) {
+        this.settings = settings;
+    }
+
+    public Resume getResume() {
+        return defaultResume;
+    }
+
+    public void setResume(Resume defaultResume) {
+        this.defaultResume = defaultResume;
     }
 
     public void addSavedJob(Long jid) {
@@ -329,7 +384,6 @@ public class AppUser {
                 ", email='" + email + '\'' +
                 ", role=" + role +
                 ", authProvider=" + authProvider +
-                ", emailNotificationsOn=" + emailNotificationsOn +
                 '}';
     }
 }

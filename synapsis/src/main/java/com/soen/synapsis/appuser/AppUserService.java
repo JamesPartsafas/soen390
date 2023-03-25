@@ -1,6 +1,7 @@
 package com.soen.synapsis.appuser;
 
-import com.soen.synapsis.appuser.job.Job;
+import com.soen.synapsis.appuser.profile.Resume;
+import com.soen.synapsis.appuser.profile.ResumeRepository;
 import com.soen.synapsis.appuser.profile.ProfilePicture;
 import com.soen.synapsis.appuser.profile.ProfilePictureRepository;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
@@ -26,6 +27,7 @@ public class AppUserService {
     private AppUserProfileRepository appUserProfileRepository;
     private CompanyProfileRepository companyProfileRepository;
     private ProfilePictureRepository profilePictureRepository;
+    private ResumeRepository defaultResumeRepository;
     private final BCryptPasswordEncoder encoder;
 
     public AppUserService(AppUserRepository appUserRepository) {
@@ -35,11 +37,12 @@ public class AppUserService {
 
     @Autowired
     public AppUserService(AppUserRepository appUserRepository, AppUserProfileRepository appUserProfileRepository,
-                          CompanyProfileRepository companyProfileRepository, ProfilePictureRepository profilePictureRepository) {
+                          CompanyProfileRepository companyProfileRepository, ProfilePictureRepository profilePictureRepository, ResumeRepository defaultResumeRepository) {
         this.appUserRepository = appUserRepository;
         this.appUserProfileRepository = appUserProfileRepository;
         this.companyProfileRepository = companyProfileRepository;
         this.profilePictureRepository = profilePictureRepository;
+        this.defaultResumeRepository = defaultResumeRepository;
         this.encoder = new BCryptPasswordEncoder();
     }
 
@@ -230,4 +233,67 @@ public class AppUserService {
         return "redirect:/savedjobs";
     }
 
+    /**
+     * Marks company user as verified.
+     * @param appUser The user to be set as verified.
+     */
+    public void markCompanyAsVerified(AppUser appUser) {
+
+        appUser.setVerificationStatus(true);
+        appUserRepository.save(appUser);
+    }
+    /**
+     * Saves a default resume to the database
+     * @param defaultResume Resume to be saved.
+     * @param appUser The resume is associated to.
+     * @throws IOException Thrown if the file is corrupted and cannot be correctly converted to a byte stream.
+     */
+    public void uploadDefaultResume(MultipartFile defaultResume, AppUser appUser) throws IOException {
+        String encodedDefaultResume = Base64.getEncoder().encodeToString(defaultResume.getBytes());
+        String fileName = defaultResume.getOriginalFilename();
+        if (encodedDefaultResume.isEmpty())
+            return;
+
+        Resume newDefaultResume = defaultResumeRepository.findByAppUser(appUser);
+
+        if (newDefaultResume != null) {
+            newDefaultResume.setDefaultResume(encodedDefaultResume);
+            newDefaultResume.setFileName(fileName);
+        } else {
+            newDefaultResume = new Resume(appUser, encodedDefaultResume, fileName);
+        }
+
+        defaultResumeRepository.save(newDefaultResume);
+    }
+
+    /**
+     * Marks company user as non-verified.
+     * @param appUser The user to be set as non-verified.
+     */
+    public void markCompanyAsNonVerified(AppUser appUser) {
+
+        appUser.setVerificationStatus(false);
+        appUserRepository.save(appUser);
+
+    }
+
+    /**
+     * Ban user from site, so they can no longer log-in
+     * @param appUserId The ID of the user to ban
+     * @return true if the user was successfully banned, false otherwise
+     */
+    public boolean banUser(Long appUserId) {
+        Optional<AppUser> optionalAppUser = getAppUser(appUserId);
+
+        if (optionalAppUser.isEmpty()) {
+            return false;
+        }
+
+        AppUser appUser = optionalAppUser.get();
+
+        appUser.setIsBanned(true);
+        appUserRepository.save(appUser);
+
+        return true;
+    }
 }

@@ -70,5 +70,14 @@ class JobRepositoryTest {
         assertEquals(1, underTest.findJobsBySearch(searchTerm.toLowerCase()).size());
     }
 
+    @Test
+    void itShouldFindAllInternalJobsByJobTypeFilter() {
+        assertEquals(0, underTest.findInternalJobsByJobType(JobType.CONTRACT).size());
+    }
+
+    @Test
+    void itShouldFindAllExternalJobsByJobTypeFilter() {
+        assertEquals(0, underTest.findExternalJobsByJobType(JobType.CONTRACT).size());
+    }
 
 }

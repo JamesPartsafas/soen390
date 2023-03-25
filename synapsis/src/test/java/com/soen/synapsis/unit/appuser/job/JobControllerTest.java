@@ -39,6 +39,7 @@ class JobControllerTest {
     private Job job3;
     private JobRequest request;
     private String searchTerm;
+    private JobFilter jobFilter;
 
     @BeforeEach
     void setUp() {
@@ -62,6 +63,7 @@ class JobControllerTest {
 
         request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
 
+        jobFilter = new JobFilter(candidate, JobType.FULLTIME, true, true);
     }
 
     @AfterEach
@@ -74,7 +76,7 @@ class JobControllerTest {
         when(authService.isUserAuthenticated()).thenReturn(true);
         when(jobService.getAllJobs()).thenReturn(allJobs);
 
-        String returnValue = underTest.viewJobPosting(searchTerm, mock(Model.class));
+        String returnValue = underTest.viewJobPosting(mock(JobType.class), true, true, false, searchTerm, mock(Model.class));
 
         assertEquals("pages/jobs", returnValue);
     }
@@ -86,7 +88,19 @@ class JobControllerTest {
 
         searchTerm = "software developer";
 
-        String returnValue = underTest.viewJobPosting(searchTerm, mock(Model.class));
+        String returnValue = underTest.viewJobPosting(mock(JobType.class), true, true, false, searchTerm, mock(Model.class));
+
+        assertEquals("pages/jobs", returnValue);
+    }
+
+    @Test
+    void viewJobPostingByFilterPreferencesReturnsAllJobs() {
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(authService.getAuthenticatedUser()).thenReturn(candidate);
+        when(jobService.getAllJobsByFilter(any(JobType.class), any(boolean.class), any(boolean.class))).thenReturn(allJobs);
+        when(jobService.saveJobFilter(candidate, JobType.FULLTIME, true, true)).thenReturn(jobFilter);
+
+        String returnValue = underTest.viewJobPosting(JobType.FULLTIME, true, true, true, searchTerm, mock(Model.class));
 
         assertEquals("pages/jobs", returnValue);
     }
@@ -95,7 +109,7 @@ class JobControllerTest {
     void viewJobPostingWhenNotAuthenticatedRedirects() {
         when(jobService.getAllJobs()).thenReturn(allJobs);
 
-        String returnValue = underTest.viewJobPosting(searchTerm, mock(Model.class));
+        String returnValue = underTest.viewJobPosting(mock(JobType.class), true, true, false, searchTerm, mock(Model.class));
 
         assertEquals("redirect:/", returnValue);
     }
@@ -142,7 +156,7 @@ class JobControllerTest {
 
         String returnValue = underTest.getJob(job1.getID(), mock(Model.class));
 
-        assertEquals("pages/jobapplicationexternal", returnValue);
+        assertEquals("pages/jobApplicationExternal", returnValue);
     }
 
     @Test
@@ -152,7 +166,7 @@ class JobControllerTest {
     }
 
     @Test
-    void sendValidCreateJobInfo() {
+    void sendValidCreateJobInfo() throws Exception {
         request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
         request.setCreator(creator);
         when(authService.getAuthenticatedUser()).thenReturn(creator);
@@ -232,7 +246,7 @@ class JobControllerTest {
     void createJobApplicationCreatedJobApplicationSuccessfully() {
         when(authService.isUserAuthenticated()).thenReturn(true);
 
-        assertEquals("redirect:/applicationsuccess", underTest.createJobApplication(mock(JobApplicationRequest.class), 1L, mock(MultipartFile.class), mock(MultipartFile.class),mock(BindingResult.class), mock(Model.class)));
+        assertEquals("redirect:/applicationsuccess", underTest.createJobApplication(mock(JobApplicationRequest.class), 1L, mock(MultipartFile.class), mock(MultipartFile.class), mock(BindingResult.class), mock(Model.class)));
     }
 
     @Test

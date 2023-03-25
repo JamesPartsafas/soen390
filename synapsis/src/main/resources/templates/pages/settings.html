@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="_layout">
+<div layout:fragment="content">
+    <div class="flex flex-col md:flex-row justify-evenly mt-16">
+        <div class="flex flex-col w-[602px] 2xl:w-2/5 bg-light rounded-2xl p-6 mr-4">
+            <h1 class="text-5xl font-black font-serif mb-4">Notification Preferences</h1>
+            <h3 class="text-4xl font-serif mb-4">Email Notifications</h3>
+            <form th:action="@{/updateSettings}" th:object="${updateSettingsRequest}" method="post">
+                <div class="block ml-4 font-serif text-2xl mb-4">
+                    <p class="inline">Recommended Jobs</p>
+                    <label class="switch float-right mr-16">
+                        <input type="checkbox" name="jobEmailNotificationsOn"
+                               th:checked="${settings.isJobEmailNotificationsOn()}">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="block ml-4 font-serif text-2xl mb-4">
+                    <p class="inline">Messages from other Users</p>
+                    <label class="switch float-right mr-16">
+                        <input type="checkbox" name="messageEmailNotificationsOn"
+                               th:checked="${settings.isMessageEmailNotificationsOn()}">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="block ml-4 font-serif text-2xl mb-4">
+                    <p class="inline">Connection Changes</p>
+                    <label class="switch float-right mr-16">
+                        <input type="checkbox" name="connectionEmailNotificationsOn"
+                               th:checked="${settings.isConnectionEmailNotificationsOn()}">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="flex">
+                    <button type="submit" class="btn btn-primary mt-3 bg-primary font-sans mx-auto">
+                        Save
+                    </button>
+                </div>
+            </form>
+
+        </div>
+        <div class="flex flex-col w-[354px] 2xl:w-1/4 self-start bg-light rounded-2xl p-6 mt-10 md:mt-0">
+            <a class="text-2xl text-black-variant font-serif font-bold hover:text-black" th:href="@{/passwordupdate}">
+                Change Password</a>
+            <hr class="mt-4 mb-4 bg-black h-0.5">
+            <a class="text-2xl text-primary font-serif font-bold hover:text-primary-variant">Delete
+                Account</a>
+        </div>
+    </div>
+</div>
+</html>

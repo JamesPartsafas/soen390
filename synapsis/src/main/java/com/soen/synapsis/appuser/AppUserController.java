@@ -5,6 +5,7 @@ import com.soen.synapsis.appuser.job.Job;
 import com.soen.synapsis.appuser.job.JobService;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
+import com.soen.synapsis.websockets.chat.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -25,18 +26,21 @@ public class AppUserController {
     private final AppUserService appUserService;
     private final ConnectionService connectionService;
     private final AuthService authService;
+    private final ChatService chatService;
 
     @Autowired
-    public AppUserController(AppUserService appUserService, ConnectionService connectionService) {
+    public AppUserController(AppUserService appUserService, ConnectionService connectionService, ChatService chatService) {
         this.appUserService = appUserService;
         this.connectionService = connectionService;
         this.authService = new AuthService();
+        this.chatService = chatService;
     }
 
-    public AppUserController(AppUserService appUserService, ConnectionService connectionService, AuthService authService) {
+    public AppUserController(AppUserService appUserService, ConnectionService connectionService, AuthService authService, ChatService chatService) {
         this.appUserService = appUserService;
         this.connectionService = connectionService;
         this.authService = authService;
+        this.chatService = chatService;
     }
 
     /**
@@ -91,6 +95,7 @@ public class AppUserController {
         model.addAttribute("role", appUser.getRole());
         model.addAttribute("myRole", authService.getAuthenticatedUser().getRole());
         model.addAttribute("myId", authService.getAuthenticatedUser().getId());
+        model.addAttribute("verificationStatus", appUser.getVerificationStatus());
         if(appUser.getRole() ==  Role.RECRUITER) {
             model.addAttribute("companyId", appUser.getCompany().getId());
         }
@@ -262,5 +267,92 @@ public class AppUserController {
         }
         AppUser appUser = authService.getAuthenticatedUser();
         return appUserService.deleteSavedJob(jobId, appUser);
+    }
+
+    /**
+     * Allows administrator to mark a COMPANY user as verified.
+     * @param id The id of the company user to be marked as verified.
+     * @return View containing user profile. If the requester is not authenticated, redirects to home page.
+     */
+    @PostMapping("/admin/verifyCompany")
+    public String markCompanyAsVerified(@RequestParam("companyUserId") Long id) {
+        try {
+            if(!authService.doesUserHaveRole(Role.ADMIN)) {
+                throw new IllegalStateException("You must be an admin to mark a company as verified.");
+            }
+            Optional<AppUser> optionalAppUser = appUserService.getAppUser(id);
+
+            if(optionalAppUser.isEmpty()) {
+                return "redirect:/";
+            }
+
+            AppUser appUser = optionalAppUser.get();
+
+            if(appUser.getRole() != Role.COMPANY) {
+                throw new IllegalStateException("The user must be a company to be marked as a verified company.");
+            }
+
+            appUserService.markCompanyAsVerified(appUser);
+            String userProfileURL = "redirect:/user/" + id;
+
+            return userProfileURL;
+        }
+        catch (IllegalStateException e) {
+            return "redirect:/";
+        }
+    }
+
+    /**
+     * Allows administrator to mark a COMPANY user as non-verified.
+     * @param id The id of the company user to be mark as non-verified.
+     * @return View containing user profile. If the requester is not authenticated, redirects to home page.
+     */
+    @PostMapping("/admin/unverifyCompany")
+    public String markCompanyAsNonVerified(@RequestParam("companyUserId") Long id) {
+        try {
+            if(!authService.doesUserHaveRole(Role.ADMIN)) {
+                throw new IllegalStateException("You must be an admin to unmark a company as non-verified.");
+            }
+            Optional<AppUser> optionalAppUser = appUserService.getAppUser(id);
+
+            if(optionalAppUser.isEmpty()) {
+                return "redirect:/";
+            }
+
+            AppUser appUser = optionalAppUser.get();
+
+            if(appUser.getRole() != Role.COMPANY) {
+                throw new IllegalStateException("The user must be a verified company to be marked as a non-verified company.");
+            }
+
+            appUserService.markCompanyAsNonVerified(appUser);
+            String userProfileURL = "redirect:/user/" + id;
+
+            return userProfileURL;
+        }
+        catch (IllegalStateException e) {
+            return "redirect:/";
+        }
+    }
+
+    /**
+     * Bans a user if the admin has determined they have sent a message
+     * that is not allowed
+     * @param senderId The ID of the user to be banned
+     * @return Chats page, so admin can continue monitoring chat reports
+     */
+    @PostMapping("/user/banUser")
+    public String banUser(@RequestParam("senderId") Long senderId, @RequestParam("messageId") Long messageId) {
+        if (!authService.doesUserHaveRole(Role.ADMIN)) {
+            return "redirect:/";
+        }
+
+        boolean appUserBanned = appUserService.banUser(senderId);
+
+        if (appUserBanned) {
+            chatService.resolveReport(messageId);
+        }
+
+        return "redirect:/chats";
     }
 }
