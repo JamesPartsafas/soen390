@@ -92,6 +92,7 @@ public class AppUser {
         this.securityAnswer1 = securityAnswer1;
         this.securityAnswer2 = securityAnswer2;
         this.securityAnswer3 = securityAnswer3;
+        this.savedJobs = new HashSet<Long>();
     }
 
     public AppUser(Long id, String name, String password, String email, Role role, AuthProvider authProvider, String securityAnswer1, String securityAnswer2, String securityAnswer3, Boolean isBanned) {
@@ -105,6 +106,7 @@ public class AppUser {
         this.securityAnswer2 = securityAnswer2;
         this.securityAnswer3 = securityAnswer3;
         this.isBanned = isBanned;
+        this.savedJobs = new HashSet<Long>();
     }
 
     public AppUser(Long id, String name, String password, String email, Role role, AuthProvider authProvider) {

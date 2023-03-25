@@ -64,6 +64,7 @@ class JobControllerTest {
         request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
 
         jobFilter = new JobFilter(candidate, JobType.FULLTIME, true, true);
+        candidate.addSavedJob(1L);
     }
 
     @AfterEach
@@ -74,6 +75,7 @@ class JobControllerTest {
     @Test
     void viewJobPostingReturnsAllJobs() {
         when(authService.isUserAuthenticated()).thenReturn(true);
+        when(authService.getAuthenticatedUser()).thenReturn(candidate);
         when(jobService.getAllJobs()).thenReturn(allJobs);
 
         String returnValue = underTest.viewJobPosting(mock(JobType.class), true, true, false, searchTerm, mock(Model.class));
@@ -82,8 +84,17 @@ class JobControllerTest {
     }
 
     @Test
+    void viewSavedJobs() {
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(authService.getAuthenticatedUser()).thenReturn(candidate);
+        String returnValue = underTest.getSavedJobs(mock(Model.class));
+        assertEquals("pages/savedjobs", returnValue);
+    }
+
+    @Test
     void viewJobPostingBySearchTermReturnsAllJobs() {
         when(authService.isUserAuthenticated()).thenReturn(true);
+        when(authService.getAuthenticatedUser()).thenReturn(candidate);
         when(jobService.getAllJobs()).thenReturn(allJobs);
 
         searchTerm = "software developer";
