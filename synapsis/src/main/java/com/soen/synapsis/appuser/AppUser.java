@@ -5,9 +5,10 @@ import com.soen.synapsis.appuser.profile.ProfilePicture;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
 import com.soen.synapsis.appuser.settings.Settings;
-
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -70,6 +71,9 @@ public class AppUser {
     @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
     private ProfilePicture profilePicture;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<Long> savedJobs;
+
     @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
     private Resume defaultResume;
     @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
@@ -88,6 +92,7 @@ public class AppUser {
         this.securityAnswer1 = securityAnswer1;
         this.securityAnswer2 = securityAnswer2;
         this.securityAnswer3 = securityAnswer3;
+        this.savedJobs = new HashSet<Long>();
     }
 
     public AppUser(Long id, String name, String password, String email, Role role, AuthProvider authProvider, String securityAnswer1, String securityAnswer2, String securityAnswer3, Boolean isBanned) {
@@ -101,6 +106,7 @@ public class AppUser {
         this.securityAnswer2 = securityAnswer2;
         this.securityAnswer3 = securityAnswer3;
         this.isBanned = isBanned;
+        this.savedJobs = new HashSet<Long>();
     }
 
     public AppUser(Long id, String name, String password, String email, Role role, AuthProvider authProvider) {
@@ -353,6 +359,18 @@ public class AppUser {
 
     public void setResume(Resume defaultResume) {
         this.defaultResume = defaultResume;
+    }
+
+    public void addSavedJob(Long jid) {
+        savedJobs.add(jid);
+    }
+
+    public void removeSavedJob(Long jid) {
+        savedJobs.remove(jid);
+    }
+
+    public Set<Long> getSavedJobs() {
+        return savedJobs;
     }
 
     @Override
