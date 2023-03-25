@@ -1,11 +1,14 @@
 package com.soen.synapsis.appuser;
 
+import com.soen.synapsis.appuser.job.Job;
 import com.soen.synapsis.appuser.profile.ProfilePicture;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -64,6 +67,9 @@ public class AppUser {
 
     @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
     private ProfilePicture profilePicture;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<Long> savedJobs;
 
     protected AppUser() {
     }
@@ -296,6 +302,18 @@ public class AppUser {
 
     public void setEmailNotificationsOn(boolean emailNotificationsOn) {
         this.emailNotificationsOn = emailNotificationsOn;
+    }
+
+    public void addSavedJob(Long jid) {
+        savedJobs.add(jid);
+    }
+
+    public void removeSavedJob(Long jid) {
+        savedJobs.remove(jid);
+    }
+
+    public Set<Long> getSavedJobs() {
+        return savedJobs;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.soen.synapsis.appuser;
 
+import com.soen.synapsis.appuser.job.Job;
 import com.soen.synapsis.appuser.profile.ProfilePicture;
 import com.soen.synapsis.appuser.profile.ProfilePictureRepository;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
@@ -216,4 +217,17 @@ public class AppUserService {
             throw new IllegalStateException("This email does not belong to any user.");
         }
     }
+
+    public String saveJob(Long jid, AppUser appUser) {
+        appUser.addSavedJob(jid);
+        appUserRepository.save(appUser);
+        return "redirect:/savedjobs";
+    }
+
+    public String deleteSavedJob(Long jid, AppUser appUser) {
+        appUser.removeSavedJob(jid);
+        appUserRepository.save(appUser);
+        return "redirect:/savedjobs";
+    }
+
 }

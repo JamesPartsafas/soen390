@@ -1,6 +1,8 @@
 package com.soen.synapsis.appuser;
 
 import com.soen.synapsis.appuser.connection.ConnectionService;
+import com.soen.synapsis.appuser.job.Job;
+import com.soen.synapsis.appuser.job.JobService;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -242,5 +244,23 @@ public class AppUserController {
     @GetMapping("/updateuserpage")
     public String getUpdateUserProfile() {
         return "pages/updateuserpage";
+    }
+
+    @PostMapping("/savejob")
+    public String saveJob(@RequestParam("jobId") Long jobId) {
+        if (!authService.isUserAuthenticated()) {
+            return "redirect:/";
+        }
+        AppUser appUser = authService.getAuthenticatedUser();
+        return appUserService.saveJob(jobId, appUser);
+    }
+
+    @PostMapping("/deletesavedjob")
+    public String deleteSavedJob(@RequestParam("jobId") Long jobId) {
+        if (!authService.isUserAuthenticated()) {
+            return "redirect:/";
+        }
+        AppUser appUser = authService.getAuthenticatedUser();
+        return appUserService.deleteSavedJob(jobId, appUser);
     }
 }
