@@ -63,7 +63,7 @@ class JobControllerTest {
 
         request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
 
-        jobFilter = new JobFilter(candidate, JobType.FULLTIME, true, true);
+        jobFilter = new JobFilter(candidate, JobType.FULLTIME, true, true, "");
     }
 
     @AfterEach
@@ -94,11 +94,25 @@ class JobControllerTest {
     }
 
     @Test
-    void viewJobPostingByFilterPreferencesReturnsAllJobs() {
+    void viewJobPostingByFilteringJobsReturnsAllJobs() {
         when(authService.isUserAuthenticated()).thenReturn(true);
         when(authService.getAuthenticatedUser()).thenReturn(candidate);
         when(jobService.getAllJobsByFilter(any(JobType.class), any(boolean.class), any(boolean.class))).thenReturn(allJobs);
-        when(jobService.saveJobFilter(candidate, JobType.FULLTIME, true, true)).thenReturn(jobFilter);
+        when(jobService.saveJobFilter(candidate, JobType.FULLTIME, true, true, null)).thenReturn(jobFilter);
+
+        String returnValue = underTest.viewJobPosting(JobType.FULLTIME, true, true, true, searchTerm, mock(Model.class));
+
+        assertEquals("pages/jobs", returnValue);
+    }
+
+    @Test
+    void viewJobPostingByFilteringJobsAndBySearchTermReturnsAllJobs() {
+        searchTerm = "software developer";
+
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(authService.getAuthenticatedUser()).thenReturn(candidate);
+        when(jobService.getAllJobsByFilter(any(JobType.class), any(boolean.class), any(boolean.class))).thenReturn(allJobs);
+        when(jobService.saveJobFilter(candidate, JobType.FULLTIME, true, true, searchTerm)).thenReturn(jobFilter);
 
         String returnValue = underTest.viewJobPosting(JobType.FULLTIME, true, true, true, searchTerm, mock(Model.class));
 

@@ -41,7 +41,7 @@ public class JobNotificationSenderTest {
     @Test
     public void runSuccessfulExternal() {
         List<JobFilter> jobFilterList = new ArrayList<>();
-        jobFilterList.add(new JobFilter(mock(AppUser.class), JobType.FULLTIME, true, true));
+        jobFilterList.add(new JobFilter(mock(AppUser.class), JobType.FULLTIME, true, true, ""));
 
         when(job.getIsExternal()).thenReturn(true);
         when(job.getType()).thenReturn(JobType.FULLTIME);
@@ -55,7 +55,7 @@ public class JobNotificationSenderTest {
     @Test
     public void runSuccessfulInternal() {
         List<JobFilter> jobFilterList = new ArrayList<>();
-        jobFilterList.add(new JobFilter(mock(AppUser.class), JobType.FULLTIME, true, true));
+        jobFilterList.add(new JobFilter(mock(AppUser.class), JobType.FULLTIME, true, true, ""));
         when(job.getIsExternal()).thenReturn(false);
         when(job.getType()).thenReturn(JobType.FULLTIME);
         when(jobFilterRepository.findAllInternalJobFiltersMatchingJob(JobType.FULLTIME)).thenReturn(jobFilterList);
