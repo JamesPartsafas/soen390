@@ -77,7 +77,7 @@ public class JobController {
         } else if (searchTerm != null) {
             jobs = jobService.getAllJobsBySearch(searchTerm.toLowerCase());
 
-            jobService.saveJobFilter(authService.getAuthenticatedUser(), null, true, true, searchTerm);
+            jobService.saveJobFilter(authService.getAuthenticatedUser(), JobType.ANY, true, true, searchTerm);
         } else {
             jobs = jobService.getAllJobs();
         }

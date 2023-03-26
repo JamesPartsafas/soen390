@@ -45,7 +45,9 @@ public class JobNotificationSenderTest {
 
         when(job.getIsExternal()).thenReturn(true);
         when(job.getType()).thenReturn(JobType.FULLTIME);
-        when(jobFilterRepository.findAllExternalJobFiltersMatchingJob(JobType.FULLTIME)).thenReturn(jobFilterList);
+        when(job.getPosition()).thenReturn("");
+        when(job.getCompany()).thenReturn("");
+        when(jobFilterRepository.findAllExternalJobFiltersMatchingJobTypeAndSearchTerm(JobType.FULLTIME, job.getPosition(), job.getCompany())).thenReturn(jobFilterList);
 
         underTest.run();
 
@@ -58,7 +60,9 @@ public class JobNotificationSenderTest {
         jobFilterList.add(new JobFilter(mock(AppUser.class), JobType.FULLTIME, true, true, ""));
         when(job.getIsExternal()).thenReturn(false);
         when(job.getType()).thenReturn(JobType.FULLTIME);
-        when(jobFilterRepository.findAllInternalJobFiltersMatchingJob(JobType.FULLTIME)).thenReturn(jobFilterList);
+        when(job.getPosition()).thenReturn("");
+        when(job.getCompany()).thenReturn("");
+        when(jobFilterRepository.findAllInternalJobFiltersMatchingJobTypeAndSearchTerm(JobType.FULLTIME, job.getPosition(), job.getCompany())).thenReturn(jobFilterList);
 
         underTest.run();
 
