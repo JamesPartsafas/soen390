@@ -221,6 +221,18 @@ public class AppUserService {
         }
     }
 
+    public String saveJob(Long jid, AppUser appUser) {
+        appUser.addSavedJob(jid);
+        appUserRepository.save(appUser);
+        return "redirect:/savedjobs";
+    }
+
+    public String deleteSavedJob(Long jid, AppUser appUser) {
+        appUser.removeSavedJob(jid);
+        appUserRepository.save(appUser);
+        return "redirect:/savedjobs";
+    }
+
     /**
      * Marks company user as verified.
      * @param appUser The user to be set as verified.

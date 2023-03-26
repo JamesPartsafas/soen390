@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * A controller class to work with jobs.
@@ -85,7 +87,9 @@ public class JobController {
         model.addAttribute("jobs", jobs);
         model.addAttribute("jobsSubmitted", jobService.getAllJobsAlreadySubmittedByUser(authService.getAuthenticatedUser()));
         model.addAttribute("searchTerm", searchTerm);
+        model.addAttribute("savedJobs", authService.getAuthenticatedUser().getSavedJobs());
         model.addAttribute("jobTypes", JobType.values());
+
 
         return "pages/jobs";
     }
@@ -370,5 +374,27 @@ public class JobController {
             model.addAttribute("error", "There was an error editing the job. " + e.getMessage());
             return editJob(jobId, model);
         }
+    }
+
+    @GetMapping("/savedjobs")
+    public String getSavedJobs(Model model) {
+        if (!authService.isUserAuthenticated()) {
+            return "redirect:/";
+        }
+
+        AppUser appUser = authService.getAuthenticatedUser();
+        Set<Long> savedJobs = appUser.getSavedJobs();
+
+        List<Optional<Job>> jobs = new ArrayList<Optional<Job>>();
+        for (Long jid : savedJobs) {
+            jobs.add(jobService.getJob(jid));
+        }
+
+        List<Job> jobsSubmitted = jobService.getAllJobsAlreadySubmittedByUser(appUser);
+
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("jobsSubmitted", jobsSubmitted);
+
+        return "pages/savedjobs";
     }
 }

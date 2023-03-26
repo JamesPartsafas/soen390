@@ -5,6 +5,7 @@ import com.soen.synapsis.appuser.AppUserService;
 import com.soen.synapsis.appuser.AuthProvider;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.utility.Constants;
+import com.soen.synapsis.utility.crypto.CryptoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -75,6 +76,7 @@ public class RegistrationService {
 
         //User does not exist. Create the account.
         AppUser createdUser = new AppUser(name, Constants.SSO_PASSWORD, email, Role.CANDIDATE, AuthProvider.GOOGLE);
+
         appUserService.signUpUser(createdUser);
 
         return createdUser;

@@ -28,7 +28,7 @@
                             <a th:href="@{/chat/{id}(id=${chat.id})}" class="flex pl-8 pt-12">
                                 <img class=" w-[60px] h-[60px] rounded-t-2xl" src="/assets/default_user.svg">
                                 <div>
-                                    <p th:text="${chat.creator.id == #authentication.principal.id ? chat.participant.name : chat.creator.name}"
+                                    <p th:text="${chat.creator.id == globalUserId ? chat.participant.name : chat.creator.name}"
                                        class=" text-xl font-bold"></p>
                                 </div>
                             </a>
