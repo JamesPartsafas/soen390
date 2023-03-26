@@ -14,6 +14,7 @@
         </div>
       </div>
 
+      <!-- Displaying all saved jobs -->
       <div class="grid grid-cols-1 md:grid-cols-3 md:gap-3">
 
         <div th:if="${jobs.size() > 0}" th:each="job: ${jobs}" class="flex flex-col inline-block rounded-2xl shadow w-56 min-h-min bg-white mt-4 mr-4 pb-4">
@@ -31,11 +32,10 @@
 
 
           <div class="flex mt-auto justify-evenly">
-
               <form th:action="@{/deletesavedjob}" method="post">
                 <input type="hidden" name="jobId" th:value="${job.get().getID()}" />
                 <button class="text-white bg-primary mx-auto p-4 rounded-2xl
-              hover:bg-opacity-60 transition hover:-translate-y-0.5 duration-150" type="submit">Unsave</button>
+                  hover:bg-opacity-60 transition hover:-translate-y-0.5 duration-150" type="submit">Unsave</button>
               </form>
 
                <div th:if="${jobsSubmitted.contains(job.get())}">
@@ -45,7 +45,6 @@
                <div th:unless="${jobsSubmitted.contains(job.get())}">
                  <a th:href="@{/jobapplication/{id}(id=${job.get().getID()})}" class="inline-block px-4 py-4 text-white bg-primary rounded-2xl">Apply</a>
                </div>
-
           </div>
 
         </div>
