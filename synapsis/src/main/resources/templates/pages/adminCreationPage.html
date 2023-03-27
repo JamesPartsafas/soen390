@@ -5,8 +5,8 @@
 <div layout:fragment="content">
 
     <form th:action= "@{/admincreation}" th:object="${registrationRequest}" method="post">
-        <div class="container flex items-center justify-center mb-8 w-1/2">
-            <div class="relative flex flex-col p-6 border space-y-8 rounded-sm border-black-variant bg-grey shadow-lg w-full m-8 hover:bg-white">
+        <div class="container flex items-center justify-center mb-8 w-full">
+            <div class="relative flex flex-col p-6 border space-y-8 rounded-sm border shadow-xl w-4/5 lg:w-2/3 m-8 e">
 
                 <p class="font-thin text-3xl font-serif text-black-variant text-center">Create Admin</p>
                 <p th:text="${error}" class="font-light text-red-500"></p>
