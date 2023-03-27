@@ -8,6 +8,7 @@ import com.soen.synapsis.appuser.registration.EmailValidator;
 import com.soen.synapsis.appuser.registration.RegistrationRequest;
 import com.soen.synapsis.appuser.registration.RegistrationService;
 import com.soen.synapsis.utility.Constants;
+import com.soen.synapsis.utility.crypto.CryptoService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

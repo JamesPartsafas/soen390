@@ -275,4 +275,22 @@ public class AppUserServiceTest {
         assertEquals(true, appUser.getIsBanned());
         assertEquals(true, returnValue);
     }
+
+    @Test
+    void saveJob() {
+        AppUser appUser = new AppUser(2L, "joecandidate", "1234", "joecandidateunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
+        String returnValue = underTest.saveJob(1L, appUser);
+        assertEquals("redirect:/savedjobs", returnValue);
+        verify(appUserRepository, times(1)).save(appUser);
+    }
+
+    @Test
+    void deleteSavedJob() {
+        AppUser appUser = new AppUser(2L, "joecandidate", "1234", "joecandidateunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
+        String returnValue = underTest.saveJob(1L, appUser);
+        assertEquals("redirect:/savedjobs", returnValue);
+        returnValue = underTest.deleteSavedJob(1L, appUser);
+        assertEquals("redirect:/savedjobs", returnValue);
+        verify(appUserRepository, times(2)).save(appUser);
+    }
 }
