@@ -31,9 +31,6 @@ VALUES ('Tony Recruiter', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/
         'RECRUITER', 'LOCAL', false);
 
 INSERT INTO connection (receiver_id, requester_id, pending)
-VALUES (1, 2, false);
-
-INSERT INTO connection (receiver_id, requester_id, pending)
 VALUES (3, 1, false);
 
 INSERT INTO connection (receiver_id, requester_id, pending)
