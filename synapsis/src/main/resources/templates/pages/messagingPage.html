@@ -87,6 +87,7 @@
                             <img th:if="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}" th:src="${message.file}" th:alt="${message.fileName}" />
                             <a th:unless="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}" th:href="@{/downloadFile/{messageId}(messageId=${message.id})}" th:download="${message.fileName}" th:text="'Download ' + ${message.fileName}"></a>
                         </th:block>
+                        <p th:text="${message.getSender().name}" class="text-sm"></p>
                         <p th:text="${message.getContent()}"></p>
                         <form th:if="${message.getSender().getId() != authenticatedUserID}" th:action="@{/chat/report}" method="POST">
                             <input type="hidden" name="messageID" th:value="${message.getId()}" />
