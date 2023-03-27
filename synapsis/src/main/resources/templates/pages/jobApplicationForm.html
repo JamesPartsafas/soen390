@@ -7,13 +7,13 @@
 
     <form th:action="@{/jobapplication}" method="post" enctype="multipart/form-data">
 
-        <div class="flex flex-col border p-8 mx-auto mt-10 shadow-xl w-1/2 mb-20 rounded-sm">
+        <div class="flex flex-col border p-8 mx-auto mt-10 shadow-xl w-4/5 lg:w-2/3 mb-20 rounded-sm">
 
             <div class="mb-2">
                 <img src="../../assets/synapsis_logo.svg" class="object-contain h-12 w-12" alt="Synapsis Logo">
             </div>
 
-            <p class="font-bold text-3xl text-black-variant text-center">Application for [[${company}]] - [[${position}]]</p>
+            <p class="font-bold text-lg md:text-xl lg:text-3xl text-black-variant text-center">Application for [[${company}]] - [[${position}]]</p>
             <p class="font-thin text-grey text-center mb-4">Please complete the form below to apply for this position.</p>
 
             <input type="hidden" name="jobId" th:value="${jobId}">
@@ -43,32 +43,32 @@
             <!-- Upload Resume -->
             <div th:if="${need_resume} == true and ${default_resume} == null" class="mt-4">
                 <p class="font-thin font-serif text-grey">Upload Resume *</p>
-                <input name="resume" class="w-full text-lg file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx" required/>
+                <input name="resume" class="w-full text-sm file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx" required/>
             </div>
             <div th:if="${need_resume} == true and ${default_resume} != null" class="mt-4">
                 <p class="font-thin font-serif text-grey">Replace Resume</p>
-                <input name="resume" class="w-full text-lg file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx"/>
+                <input name="resume" class="w-full text-sm file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx"/>
             </div>
             <div th:if="${need_resume} == false and ${default_resume} == null" class="mt-4">
                 <p class="font-thin font-serif text-grey">Upload Resume</p>
-                <input name="resume" class="w-full text-lg file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx"/>
+                <input name="resume" class="w-full text-sm file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx"/>
             </div>
             <div th:if="${need_resume} == false and ${default_resume} != null" class="mt-4">
                 <p class="font-thin font-serif text-grey">Replace Resume</p>
-                <input name="resume" class="w-full text-lg file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx"/>
+                <input name="resume" class="w-full text-sm file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx"/>
             </div>
 
             <!-- Upload Cover Letter -->
             <div th:if="${need_cover}" class="mt-4">
                 <p class="font-thin font-serif text-grey">Upload Cover Letter *</p>
-                <input name="coverLetter" class="w-full text-lg file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx" required>
+                <input name="coverLetter" class="w-full text-sm file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx" required>
             </div>
             <div th:unless="${need_cover}" class="mt-4">
                 <p class="font-thin font-serif text-grey">Upload Cover Letter</p>
-                <input name="coverLetter" class="w-full text-lg file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx">
+                <input name="coverLetter" class="w-full text-sm file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx">
             </div>
 
-            <div class="border border-grey p-3 mt-4 rounded-md hover:bg-light text-black-variant">
+            <div class="border border-grey p-3 mt-4 rounded-md hover:bg-light text-black-variant text-sm md:text-base lg:text-base">
                 <p>Are you legally allowed to work in Canada? *</p>
                 <input type="radio" id="yes" name="legallyAllowedToWork" value="true" required>
                 <label for="yes">Yes</label><br>

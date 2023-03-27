@@ -30,18 +30,14 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <div>
-
     <form th:action="@{/login}" method="post">
-
         <p th:if="${param.error}" class="bg-primary-variant shadow-lg border border-primary rounded-md text-center m-4 p-4">Invalid login credentials</p>
-
         <p th:if="${param.logout}" class="bg-light shadow-lg border border-grey rounded-md text-center m-4 p-4">You have successfully logged out</p>
-
-        <div class="container flex flex-row justify-center mt-32 w-10/12">
-            <div class="flex w-1/2 justify-center">
-                <img src="../../assets/hero1.png" alt="Website Example">
+        <div class="flex flex-row justify-center content-center mt-24 w-full">
+            <div class="hidden md:flex lg:flex w-9/10 md:w-1/2 lg:w-2/3 mr-4 justify-center">
+                <img src="../../assets/hero1.png" alt="Hero Image">
             </div>
-            <div class="flex-none container flex flex-wrap flex-col justify-center content-center mt-8 w-80 border rounded-sm">
+            <div class="flex flex-row flex-wrap justify-center content-center mt-8 w-80 border rounded-sm">
                 <div class="mt-6">
                     <img src="../../assets/synapsis_red.svg" class="inline h-10 w-48" alt="Synapsis Logo">
                 </div>
@@ -59,17 +55,17 @@
 
                 <a th:href="@{/oauth2/authorization/google}" class="mt-5 h-14 bg-white rounded-md drop-shadow-md">
                     <div class="mt-4">
-                        <img class="ml-3 mb-1 w-6 h-6 inline" src="/assets/google-logo.png">
-                        <div class="ml-2 mr-3 text-center text-black text-xl font-serif font-normal inline">Sign In with
+                        <img class="ml-3 mb-1 w-5 h-5 inline" src="/assets/google-logo.png">
+                        <div class="mx-3 text-center text-black text-xl font-serif font-normal inline">Sign In with
                             Google
                         </div>
                     </div>
                 </a>
 
-                <div class="mt-5 mb-4 text-black font-serif font-normal text-base ">
+                <div class="mt-5 mb-2 text-black font-serif font-normal text-base">
                     Don't have an account? <a th:href="@{/register}" class="text-primary">Click here</a>
                 </div>
-                <div class="mt-5 mb-4 text-black font-serif font-normal text-base ">
+                <div class="mb-4 text-black font-serif font-normal text-base">
                     Forgot your password? <a th:href="@{/passwordreset}" class="text-primary">Click here</a>
                 </div>
             </div>
@@ -77,7 +73,7 @@
 
     </form>
 
-    <div class="container flex flex-row justify-center items-center mt-48">
+    <div class="container flex-row justify-center items-center mt-48 hidden lg:flex">
         <div class="flex-none mr-4">
             <img src="/assets/synapsis_red.svg" class="h-3 w-14 inline" alt="Synapsis Logo">
             <div class="inline font-light text-grey text-xs">
