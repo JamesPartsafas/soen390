@@ -28,7 +28,7 @@ public interface JobFilterRepository extends JpaRepository<JobFilter, Long> {
      * @param company the company of the new job.
      * @return a list of job filters that meet the job's criteria.
      */
-    @Query(value = "SELECT jf FROM JobFilter jf  WHERE (jf.jobType = 'ANY' or jf.jobType = :type) and jf.showInternalJobs = true and (:position LIKE CONCAT('%', LOWER(jf.searchTerm), '%') or :company LIKE CONCAT('%', LOWER(jf.searchTerm), '%'))")
+    @Query(value = "SELECT jf FROM JobFilter jf  WHERE (jf.jobType = 7 or jf.jobType = :type) and jf.showInternalJobs = true and (:position LIKE CONCAT('%', LOWER(jf.searchTerm), '%') or :company LIKE CONCAT('%', LOWER(jf.searchTerm), '%'))")
     List<JobFilter> findAllInternalJobFiltersMatchingJobTypeAndSearchTerm(@Param("type") JobType type, @Param("position") String position, @Param("company") String company);
 
     /**
@@ -39,6 +39,6 @@ public interface JobFilterRepository extends JpaRepository<JobFilter, Long> {
      * @param company the company of the job.
      * @return a list of job filters that meet the job's criteria.
      */
-    @Query(value = "SELECT jf FROM JobFilter jf  WHERE (jf.jobType = 'ANY' or jf.jobType = :type) and jf.showExternalJobs = true and (:position LIKE CONCAT('%', LOWER(jf.searchTerm), '%') or :company LIKE CONCAT('%', LOWER(jf.searchTerm), '%'))")
+    @Query(value = "SELECT jf FROM JobFilter jf  WHERE (jf.jobType = 7 or jf.jobType = :type) and jf.showExternalJobs = true and (:position LIKE CONCAT('%', LOWER(jf.searchTerm), '%') or :company LIKE CONCAT('%', LOWER(jf.searchTerm), '%'))")
     List<JobFilter> findAllExternalJobFiltersMatchingJobTypeAndSearchTerm(@Param("type") JobType type, @Param("position") String position, @Param("company") String company);
 }
