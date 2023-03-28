@@ -74,13 +74,45 @@ class JobServiceTest {
     }
 
     @Test
-    void getAllJobsByFilterReturnsJobs() {
+    void getAllJobsByFilterWithOneJobTypeReturnsJobs() {
         JobType jobType = JobType.FULLTIME;
 
         underTest.getAllJobsByFilter(jobType, true, true);
 
         verify(jobRepository, times(1)).findInternalJobsByJobType(jobType);
         verify(jobRepository, times(1)).findExternalJobsByJobType(jobType);
+    }
+
+    @Test
+    void getAllJobsByFilterWithAllJobTypesReturnsJobs() {
+        JobType jobType = JobType.ANY;
+
+        underTest.getAllJobsByFilter(jobType, true, true);
+
+        verify(jobRepository, times(1)).findInternalJobs();
+        verify(jobRepository, times(1)).findExternalJobs();
+    }
+
+    @Test
+    void getAllJobsByFilterAndSearchTermWithOneJobTypeReturnsJobs() {
+        String searchTerm = "developer";
+        JobType jobType = JobType.FULLTIME;
+
+        underTest.getAllJobsByFilterAndSearchTerm(jobType, true, true, searchTerm);
+
+        verify(jobRepository, times(1)).findInternalJobsByJobTypeAndSearchTerm(jobType, searchTerm);
+        verify(jobRepository, times(1)).findExternalJobsByJobTypeAndSearchTerm(jobType, searchTerm);
+    }
+
+    @Test
+    void getAllJobsByFilterAndSearchTermWithAllJobTypesReturnsJobs() {
+        String searchTerm = "developer";
+        JobType jobType = JobType.ANY;
+
+        underTest.getAllJobsByFilterAndSearchTerm(jobType, true, true, searchTerm);
+
+        verify(jobRepository, times(1)).findInternalJobsBySearchTerm(searchTerm);
+        verify(jobRepository, times(1)).findExternalJobsBySearchTerm(searchTerm);
     }
 
     @Test
@@ -197,16 +229,16 @@ class JobServiceTest {
     @Test
     void saveJobFilterThrowsErrorWhenRoleIsNotCandidateOrNotRecruiter() {
         AppUser companyUser = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.COMPANY, AuthProvider.LOCAL);
-        assertThrows(IllegalStateException.class, () -> underTest.saveJobFilter(companyUser, JobType.FULLTIME, true, true));
+        assertThrows(IllegalStateException.class, () -> underTest.saveJobFilter(companyUser, JobType.FULLTIME, true, true, ""));
     }
 
     @Test
     void saveJobFilterSavesWhenJobFilterExists() {
-        JobFilter jobFilter = new JobFilter(candidate, JobType.FULLTIME, true, true);
+        JobFilter jobFilter = new JobFilter(candidate, JobType.FULLTIME, true, true, "");
 
         when(jobFilterRepository.findJobFilterByAppUser(candidate)).thenReturn(Optional.of(jobFilter));
 
-        underTest.saveJobFilter(candidate, JobType.FULLTIME, true, true);
+        underTest.saveJobFilter(candidate, JobType.FULLTIME, true, true, "");
         verify(jobFilterRepository).save(any(JobFilter.class));
     }
 
@@ -216,7 +248,7 @@ class JobServiceTest {
 
         when(jobFilterRepository.findJobFilterByAppUser(candidate)).thenReturn(Optional.ofNullable(jobFilter));
 
-        underTest.saveJobFilter(candidate, JobType.FULLTIME, true, true);
+        underTest.saveJobFilter(candidate, JobType.FULLTIME, true, true, "");
 
         verify(jobFilterRepository).save(any(JobFilter.class));
     }

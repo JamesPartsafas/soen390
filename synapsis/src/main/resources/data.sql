@@ -68,7 +68,7 @@ VALUES (5, 'VBA Developer', 'Macrosoft', '123 King Street',
         0, 1, 1, true, 'https://www.google.com/', true, true, true),
        (5, 'Software Developer', 'Macrosoft', '123 King Street',
         'We are looking for a Software Developer to build and implement functional programs. You will work with other Developers and Product Managers throughout the software development life cycle. In this role, you should be a team player with a keen eye for detail and problem-solving skills. If you also have experience in Agile frameworks and popular coding languages (e.g. JavaScript), we’d like to meet you.',
-        0, 2, 0, false, '', true, false, false);
+        1, 2, 0, false, '', true, false, false);
 
 INSERT INTO notification (recipient_id, text, url, seen, creation_time)
 VALUES (1, 'This is a notification. It brings you to messages.', '/chats', false, '2023-03-01');

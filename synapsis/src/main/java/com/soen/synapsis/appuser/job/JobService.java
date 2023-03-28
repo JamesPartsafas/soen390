@@ -4,7 +4,6 @@ import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.profile.Resume;
 import com.soen.synapsis.appuser.profile.ResumeRepository;
-import com.soen.synapsis.websockets.notification.NotificationDTO;
 import com.soen.synapsis.websockets.notification.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -262,12 +261,57 @@ public class JobService {
     public List<Job> getAllJobsByFilter(JobType jobType, boolean showInternalJobs, boolean showExternalJobs) {
         List<Job> jobs = new ArrayList<>();
 
-        if (showInternalJobs) {
-            jobs.addAll(jobRepository.findInternalJobsByJobType(jobType));
+        if (jobType == JobType.ANY) {
+            if (showInternalJobs) {
+                jobs.addAll(jobRepository.findInternalJobs());
+            }
+
+            if (showExternalJobs) {
+                jobs.addAll(jobRepository.findExternalJobs());
+            }
+
+        } else {
+            if (showInternalJobs) {
+                jobs.addAll(jobRepository.findInternalJobsByJobType(jobType));
+            }
+
+            if (showExternalJobs) {
+                jobs.addAll(jobRepository.findExternalJobsByJobType(jobType));
+            }
         }
 
-        if (showExternalJobs) {
-            jobs.addAll(jobRepository.findExternalJobsByJobType(jobType));
+        return jobs;
+    }
+
+    /**
+     * Retrieve all jobs given the filter preferences and the search term.
+     *
+     * @param jobType          the type of job (fulltime, parttime, contract, etc).
+     * @param showInternalJobs true if we want internal jobs to be retrieved; otherwise false.
+     * @param showExternalJobs true if we want external jobs to be retrieved; otherwise false.
+     * @param searchTerm       the search key for the jobs being looked up.
+     * @return
+     */
+    public List<Job> getAllJobsByFilterAndSearchTerm(JobType jobType, boolean showInternalJobs, boolean showExternalJobs, String searchTerm) {
+        List<Job> jobs = new ArrayList<>();
+
+        if (jobType == JobType.ANY) {
+            if (showInternalJobs) {
+                jobs.addAll(jobRepository.findInternalJobsBySearchTerm(searchTerm));
+            }
+
+            if (showExternalJobs) {
+                jobs.addAll(jobRepository.findExternalJobsBySearchTerm(searchTerm));
+            }
+
+        } else {
+            if (showInternalJobs) {
+                jobs.addAll(jobRepository.findInternalJobsByJobTypeAndSearchTerm(jobType, searchTerm));
+            }
+
+            if (showExternalJobs) {
+                jobs.addAll(jobRepository.findExternalJobsByJobTypeAndSearchTerm(jobType, searchTerm));
+            }
         }
 
         return jobs;
@@ -280,9 +324,10 @@ public class JobService {
      * @param jobType          the type of job preference (fulltime, parttime, contract, etc).
      * @param showInternalJobs true if we want internal jobs to be retrieved; otherwise false.
      * @param showExternalJobs true if we want external jobs to be retrieved; otherwise false.
+     * @param searchTerm       the search key for the jobs being looked up.
      * @return the newly created job filter.
      */
-    public JobFilter saveJobFilter(AppUser appUser, JobType jobType, boolean showInternalJobs, boolean showExternalJobs) {
+    public JobFilter saveJobFilter(AppUser appUser, JobType jobType, boolean showInternalJobs, boolean showExternalJobs, String searchTerm) {
         if (appUser.getRole() != Role.CANDIDATE && appUser.getRole() != Role.RECRUITER) {
             throw new IllegalStateException("Permission denied. Only Candidates and Recruiters can save job filters.");
         }
@@ -295,8 +340,9 @@ public class JobService {
             jobFilter.setJobType(jobType);
             jobFilter.setShowInternalJobs(showInternalJobs);
             jobFilter.setShowExternalJobs(showExternalJobs);
+            jobFilter.setSearchTerm(searchTerm);
         } else {
-            jobFilter = new JobFilter(appUser, jobType, showInternalJobs, showExternalJobs);
+            jobFilter = new JobFilter(appUser, jobType, showInternalJobs, showExternalJobs, searchTerm);
         }
 
         jobFilterRepository.save(jobFilter);

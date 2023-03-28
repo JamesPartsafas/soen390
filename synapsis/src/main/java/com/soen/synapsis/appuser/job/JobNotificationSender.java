@@ -19,18 +19,26 @@ public class JobNotificationSender implements Runnable {
         this.notificationService = notificationService;
     }
 
+    /**
+     * The run method contains the sendJobNotifications code to be executed in a separate thread, independently of the main thread of the application.
+     */
     @Override
     public void run() {
         sendJobNotifications(this.job);
     }
 
+    /**
+     * Send a notification about a new job that matches the users' filter preferences.
+     *
+     * @param job the new created or edited job.
+     */
     @Async
     public void sendJobNotifications(Job job) {
         List<JobFilter> jobFilters;
         if (job.getIsExternal()) {
-            jobFilters = jobFilterRepository.findAllExternalJobFiltersMatchingJob(job.getType());
+            jobFilters = jobFilterRepository.findAllExternalJobFiltersMatchingJobTypeAndSearchTerm(job.getType(), job.getPosition().toLowerCase(), job.getCompany().toLowerCase());
         } else {
-            jobFilters = jobFilterRepository.findAllInternalJobFiltersMatchingJob(job.getType());
+            jobFilters = jobFilterRepository.findAllInternalJobFiltersMatchingJobTypeAndSearchTerm(job.getType(), job.getPosition().toLowerCase(), job.getCompany().toLowerCase());
         }
 
         for (JobFilter jobFilter : jobFilters) {
