@@ -6,8 +6,25 @@
     </li>
     <li th:each="notification : ${notificationList}">
         <a th:onclick="'sendSeen(' + ${notification.id} + ')'" th:href="${notification.url}"
-           class="flex justify-between items-center">
-            <div th:text="${notification.text}" class="flex-none w-44 mr-2 pr-2"></div>
+           class="flex justify-between items-start">
+            <div th:if="${notification.getType().toString() == 'MESSAGE'}">
+                <div class=" w-1 h-1 float-left mr-2 ml-1 ">
+                <i class="fa-sharp fa-solid fa-message "></i></div>
+                <div th:text="${notification.text}" class="flex-none  ml-3 pl-3 text-left text-sm">
+                </div>
+            </div>
+            <div th:if="${notification.getType().toString() =='CONNECTION'}">
+                <div class=" w-1 h-1 float-left mr-2 ml-1 ">
+                    <i class="fa-solid fa-user-group"></i></div>
+                <div th:text="${notification.text}" class="flex-none  ml-4 pl-3 text-left text-sm">
+                </div>
+            </div>
+            <div th:if="${notification.getType().toString() =='JOB'}">
+                <div class=" w-1 h-1 float-left mr-2 ml-1 ">
+                    <i class="fa-solid fa-briefcase"></i></div>
+                <div th:text="${notification.text}" class="flex-none  ml-4 pl-3 text-left text-sm">
+                </div>
+            </div>
             <div id="unseen" th:if="${!notification.seen}"
                  class="flex-none w-2 h-2 bg-red-400 rounded-full mr-2 pr-2"></div>
         </a>
