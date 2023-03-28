@@ -25,7 +25,7 @@ public class JobFilterRepositoryTest {
     void setUp() {
         appUser = new AppUser(1L, "Joe Man1", "1234", "joecandidate1@mail.com", Role.RECRUITER);
 
-        JobFilter jobFilter = new JobFilter(appUser, JobType.FULLTIME, true, true);
+        JobFilter jobFilter = new JobFilter(appUser, JobType.FULLTIME, true, true, "");
 
         underTest.save(jobFilter);
     }
