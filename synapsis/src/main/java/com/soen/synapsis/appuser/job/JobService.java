@@ -2,6 +2,8 @@ package com.soen.synapsis.appuser.job;
 
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.appuser.profile.CoverLetter;
+import com.soen.synapsis.appuser.profile.CoverLetterRepository;
 import com.soen.synapsis.appuser.profile.Resume;
 import com.soen.synapsis.appuser.profile.ResumeRepository;
 import com.soen.synapsis.websockets.notification.NotificationDTO;
@@ -33,14 +35,16 @@ public class JobService {
     private final JobApplicationRepository jobApplicationRepository;
     private final JobFilterRepository jobFilterRepository;
     private final ResumeRepository resumeRepository;
+    private final CoverLetterRepository coverLetterRepository;
 
     @Autowired
-    public JobService(JobRepository jobRepository, JobApplicationRepository jobApplicationRepository, NotificationService notificationService, JobFilterRepository jobFilterRepository, ResumeRepository resumeRepository) {
+    public JobService(JobRepository jobRepository, JobApplicationRepository jobApplicationRepository, NotificationService notificationService, JobFilterRepository jobFilterRepository, ResumeRepository resumeRepository, CoverLetterRepository coverLetterRepository) {
         this.jobRepository = jobRepository;
         this.jobApplicationRepository = jobApplicationRepository;
         this.notificationService = notificationService;
         this.jobFilterRepository = jobFilterRepository;
         this.resumeRepository = resumeRepository;
+        this.coverLetterRepository = coverLetterRepository;
     }
 
     /**
@@ -148,6 +152,9 @@ public class JobService {
         Resume defaultResume = resumeRepository.findByAppUser(applicant);
         String encodedResume = Base64.getEncoder().encodeToString(resume.getBytes());
 
+        CoverLetter defaultCoverLetter = coverLetterRepository.findByAppUser(applicant);
+        String encodedCoverLetter = Base64.getEncoder().encodeToString(coverLetter.getBytes());
+
         if(job.getNeedResume() && encodedResume.isEmpty() && defaultResume == null) {
             throw new IllegalStateException("It is mandatory to upload your resume.");
         }
@@ -161,11 +168,16 @@ public class JobService {
             jobApplication.setResume(encodedResume);
         }
 
-        if (job.getNeedCover()) {
-            String encodedCoverLetter = Base64.getEncoder().encodeToString(coverLetter.getBytes());
-            if (encodedCoverLetter.isEmpty()) {
-                throw new IllegalStateException("It is mandatory to upload your cover letter.");
-            }
+        if(job.getNeedCover() && encodedCoverLetter.isEmpty() && defaultCoverLetter == null) {
+            throw new IllegalStateException("It is mandatory to upload your cover letter.");
+        }
+        if(encodedCoverLetter.isEmpty() && defaultCoverLetter != null) {
+            jobApplication.setCoverLetter(defaultCoverLetter.getDefaultCoverLetter());
+        }
+        if(!encodedCoverLetter.isEmpty() && defaultCoverLetter == null) {
+            jobApplication.setCoverLetter(encodedCoverLetter);
+        }
+        if(!encodedCoverLetter.isEmpty() && defaultCoverLetter != null) {
             jobApplication.setCoverLetter(encodedCoverLetter);
         }
 
@@ -326,5 +338,15 @@ public class JobService {
      */
     public Resume getResumeByAppUser(AppUser appUser) {
        return resumeRepository.findByAppUser(appUser);
+    }
+
+    /**
+     * Gets the cover letter of a given app user.
+     *
+     * @param appUser an object representing the app user
+     * @return the cover letter of the app user.
+     */
+    public CoverLetter getCoverLetterByAppUser(AppUser appUser) {
+        return coverLetterRepository.findByAppUser(appUser);
     }
 }

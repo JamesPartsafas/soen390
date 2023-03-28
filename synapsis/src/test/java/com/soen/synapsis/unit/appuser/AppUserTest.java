@@ -3,6 +3,7 @@ package com.soen.synapsis.unit.appuser;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AuthProvider;
 import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.appuser.profile.CoverLetter;
 import com.soen.synapsis.appuser.profile.ProfilePicture;
 import com.soen.synapsis.appuser.profile.Resume;
 import org.hamcrest.CoreMatchers;
@@ -275,5 +276,14 @@ class AppUserTest {
         Set<Long> testSet = new HashSet<Long>();
         testSet.add(1L);
         assertEquals(underTest.getSavedJobs(), testSet);
+    }
+
+    @Test
+    void setCoverLetter() {
+        CoverLetter defaultCoverLetter = new CoverLetter();
+
+        underTest.setCoverLetter(defaultCoverLetter);
+
+        assertEquals(defaultCoverLetter, underTest.getCoverLetter());
     }
 }
