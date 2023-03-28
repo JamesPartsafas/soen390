@@ -1,6 +1,9 @@
 //Insert common scripts to this file
 
-//Adds event listeners for the language selector
+/**
+ * Upon loading the window, retrieves the stored language and set that page to that language.
+ * At the same time, creates an event listener for the language selector.
+ */
 window.onload = function() {
     const selector = document.querySelector('.langSelector')
     let currentLang = localStorage.getItem('localLang')
@@ -25,6 +28,10 @@ window.onload = function() {
     }
 }
 
+/**
+ * Changes the language to the complement (e.g. EN to FR, FR to EN)
+ * @param currentLang The language currently in use.
+ */
 //Changes the language when toggled via the language selector
 function changeLang(currentLang) {
     const elements = document.getElementsByClassName(currentLang)
@@ -48,7 +55,9 @@ function changeLang(currentLang) {
     }
 }
 
-//Displays profile picture
+/**
+ * Displays the profile picture.
+ */
 const convertBase64ToImage = () => {
     const base64Text = document.getElementById('base64Image').innerText
     if (base64Text == "")

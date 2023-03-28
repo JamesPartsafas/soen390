@@ -20,7 +20,7 @@ public class GlobalControllerAdvice {
     }
 
     /**
-     * Sets the ID of the current authenticated user
+     * Gets the ID of the current authenticated user
      * @return The ID of the current user, mapped to globalUserId
      */
     @ModelAttribute("globalUserId")
@@ -29,5 +29,17 @@ public class GlobalControllerAdvice {
             return null;
 
         return authService.getAuthenticatedUser().getId();
+    }
+
+    /**
+     * Gets the name of the current authenticated user
+     * @return The name of the current user, mapped to globalUserName
+     */
+    @ModelAttribute("globalUserName")
+    public String getUserName() {
+        if (!authService.isUserAuthenticated())
+            return null;
+
+        return authService.getAuthenticatedUser().getName();
     }
 }
