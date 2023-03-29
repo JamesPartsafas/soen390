@@ -158,26 +158,26 @@ public class JobService {
         if(job.getNeedResume() && encodedResume.isEmpty() && defaultResume == null) {
             throw new IllegalStateException("It is mandatory to upload your resume.");
         }
-        if(encodedResume.isEmpty() && defaultResume != null) {
+        else if(encodedResume.isEmpty() && defaultResume != null) {
             jobApplication.setResume(defaultResume.getDefaultResume());
         }
-        if(!encodedResume.isEmpty() && defaultResume == null) {
+        else if(!encodedResume.isEmpty() && defaultResume == null) {
             jobApplication.setResume(encodedResume);
         }
-        if(!encodedResume.isEmpty() && defaultResume != null) {
+        else if(!encodedResume.isEmpty() && defaultResume != null) {
             jobApplication.setResume(encodedResume);
         }
 
         if(job.getNeedCover() && encodedCoverLetter.isEmpty() && defaultCoverLetter == null) {
             throw new IllegalStateException("It is mandatory to upload your cover letter.");
         }
-        if(encodedCoverLetter.isEmpty() && defaultCoverLetter != null) {
+        else if(encodedCoverLetter.isEmpty() && defaultCoverLetter != null) {
             jobApplication.setCoverLetter(defaultCoverLetter.getDefaultCoverLetter());
         }
-        if(!encodedCoverLetter.isEmpty() && defaultCoverLetter == null) {
+        else if(!encodedCoverLetter.isEmpty() && defaultCoverLetter == null) {
             jobApplication.setCoverLetter(encodedCoverLetter);
         }
-        if(!encodedCoverLetter.isEmpty() && defaultCoverLetter != null) {
+        else if(!encodedCoverLetter.isEmpty() && defaultCoverLetter != null) {
             jobApplication.setCoverLetter(encodedCoverLetter);
         }
 
