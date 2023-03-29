@@ -128,6 +128,7 @@ public class JobController {
         model.addAttribute("need_resume", job.getNeedResume());
         model.addAttribute("need_cover", job.getNeedCover());
         model.addAttribute("need_portfolio", job.getNeedPortfolio());
+        model.addAttribute("savedJobs", authService.getAuthenticatedUser().getSavedJobs());
 
         AppUser candidate = authService.getAuthenticatedUser();
         List<Job> jobsSubmitted = jobService.getAllJobsAlreadySubmittedByUser(candidate);
