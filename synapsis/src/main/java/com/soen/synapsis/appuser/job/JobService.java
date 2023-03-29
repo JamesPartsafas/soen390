@@ -2,15 +2,19 @@ package com.soen.synapsis.appuser.job;
 
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.appuser.profile.CoverLetter;
+import com.soen.synapsis.appuser.profile.CoverLetterRepository;
 import com.soen.synapsis.appuser.profile.Resume;
 import com.soen.synapsis.appuser.profile.ResumeRepository;
-import com.soen.synapsis.websockets.notification.NotificationDTO;
 import com.soen.synapsis.websockets.notification.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -30,14 +34,16 @@ public class JobService {
     private final JobApplicationRepository jobApplicationRepository;
     private final JobFilterRepository jobFilterRepository;
     private final ResumeRepository resumeRepository;
+    private final CoverLetterRepository coverLetterRepository;
 
     @Autowired
-    public JobService(JobRepository jobRepository, JobApplicationRepository jobApplicationRepository, NotificationService notificationService, JobFilterRepository jobFilterRepository, ResumeRepository resumeRepository) {
+    public JobService(JobRepository jobRepository, JobApplicationRepository jobApplicationRepository, NotificationService notificationService, JobFilterRepository jobFilterRepository, ResumeRepository resumeRepository, CoverLetterRepository coverLetterRepository) {
         this.jobRepository = jobRepository;
         this.jobApplicationRepository = jobApplicationRepository;
         this.notificationService = notificationService;
         this.jobFilterRepository = jobFilterRepository;
         this.resumeRepository = resumeRepository;
+        this.coverLetterRepository = coverLetterRepository;
     }
 
     /**
@@ -75,10 +81,14 @@ public class JobService {
      * @param request the job application request.
      * @return the job page.
      */
-    public String createJob(JobRequest request) {
+    public String createJob(JobRequest request) throws Exception {
 
         if (request.getCreator().getRole() != Role.RECRUITER) {
             throw new IllegalStateException("This user is not a recruiter.");
+        }
+
+        if (request.getIsExternal()) {
+            isValidURL(request.getExternalLink());
         }
 
         AppUser creator = request.getCreator();
@@ -141,24 +151,32 @@ public class JobService {
         Resume defaultResume = resumeRepository.findByAppUser(applicant);
         String encodedResume = Base64.getEncoder().encodeToString(resume.getBytes());
 
+        CoverLetter defaultCoverLetter = coverLetterRepository.findByAppUser(applicant);
+        String encodedCoverLetter = Base64.getEncoder().encodeToString(coverLetter.getBytes());
+
         if(job.getNeedResume() && encodedResume.isEmpty() && defaultResume == null) {
             throw new IllegalStateException("It is mandatory to upload your resume.");
         }
-        if(encodedResume.isEmpty() && defaultResume != null) {
+        else if(encodedResume.isEmpty() && defaultResume != null) {
             jobApplication.setResume(defaultResume.getDefaultResume());
         }
-        if(!encodedResume.isEmpty() && defaultResume == null) {
+        else if(!encodedResume.isEmpty() && defaultResume == null) {
             jobApplication.setResume(encodedResume);
         }
-        if(!encodedResume.isEmpty() && defaultResume != null) {
+        else if(!encodedResume.isEmpty() && defaultResume != null) {
             jobApplication.setResume(encodedResume);
         }
 
-        if (job.getNeedCover()) {
-            String encodedCoverLetter = Base64.getEncoder().encodeToString(coverLetter.getBytes());
-            if (encodedCoverLetter.isEmpty()) {
-                throw new IllegalStateException("It is mandatory to upload your cover letter.");
-            }
+        if(job.getNeedCover() && encodedCoverLetter.isEmpty() && defaultCoverLetter == null) {
+            throw new IllegalStateException("It is mandatory to upload your cover letter.");
+        }
+        else if(encodedCoverLetter.isEmpty() && defaultCoverLetter != null) {
+            jobApplication.setCoverLetter(defaultCoverLetter.getDefaultCoverLetter());
+        }
+        else if(!encodedCoverLetter.isEmpty() && defaultCoverLetter == null) {
+            jobApplication.setCoverLetter(encodedCoverLetter);
+        }
+        else if(!encodedCoverLetter.isEmpty() && defaultCoverLetter != null) {
             jobApplication.setCoverLetter(encodedCoverLetter);
         }
 
@@ -201,12 +219,16 @@ public class JobService {
      * @param request     the job request.
      * @return the job page.
      */
-    public String editJob(Optional<Job> optionalJob, JobRequest request) {
+    public String editJob(Optional<Job> optionalJob, JobRequest request) throws Exception {
 
         Job job = optionalJob.get();
 
         if (job == null)
             return "redirect:/";
+
+        if (request.getIsExternal()) {
+            isValidURL(request.getExternalLink());
+        }
 
         job.setPosition(request.getPosition());
         job.setCompany(request.getCompany());
@@ -251,12 +273,57 @@ public class JobService {
     public List<Job> getAllJobsByFilter(JobType jobType, boolean showInternalJobs, boolean showExternalJobs) {
         List<Job> jobs = new ArrayList<>();
 
-        if (showInternalJobs) {
-            jobs.addAll(jobRepository.findInternalJobsByJobType(jobType));
+        if (jobType == JobType.ANY) {
+            if (showInternalJobs) {
+                jobs.addAll(jobRepository.findInternalJobs());
+            }
+
+            if (showExternalJobs) {
+                jobs.addAll(jobRepository.findExternalJobs());
+            }
+
+        } else {
+            if (showInternalJobs) {
+                jobs.addAll(jobRepository.findInternalJobsByJobType(jobType));
+            }
+
+            if (showExternalJobs) {
+                jobs.addAll(jobRepository.findExternalJobsByJobType(jobType));
+            }
         }
 
-        if (showExternalJobs) {
-            jobs.addAll(jobRepository.findExternalJobsByJobType(jobType));
+        return jobs;
+    }
+
+    /**
+     * Retrieve all jobs given the filter preferences and the search term.
+     *
+     * @param jobType          the type of job (fulltime, parttime, contract, etc).
+     * @param showInternalJobs true if we want internal jobs to be retrieved; otherwise false.
+     * @param showExternalJobs true if we want external jobs to be retrieved; otherwise false.
+     * @param searchTerm       the search key for the jobs being looked up.
+     * @return
+     */
+    public List<Job> getAllJobsByFilterAndSearchTerm(JobType jobType, boolean showInternalJobs, boolean showExternalJobs, String searchTerm) {
+        List<Job> jobs = new ArrayList<>();
+
+        if (jobType == JobType.ANY) {
+            if (showInternalJobs) {
+                jobs.addAll(jobRepository.findInternalJobsBySearchTerm(searchTerm));
+            }
+
+            if (showExternalJobs) {
+                jobs.addAll(jobRepository.findExternalJobsBySearchTerm(searchTerm));
+            }
+
+        } else {
+            if (showInternalJobs) {
+                jobs.addAll(jobRepository.findInternalJobsByJobTypeAndSearchTerm(jobType, searchTerm));
+            }
+
+            if (showExternalJobs) {
+                jobs.addAll(jobRepository.findExternalJobsByJobTypeAndSearchTerm(jobType, searchTerm));
+            }
         }
 
         return jobs;
@@ -269,9 +336,10 @@ public class JobService {
      * @param jobType          the type of job preference (fulltime, parttime, contract, etc).
      * @param showInternalJobs true if we want internal jobs to be retrieved; otherwise false.
      * @param showExternalJobs true if we want external jobs to be retrieved; otherwise false.
+     * @param searchTerm       the search key for the jobs being looked up.
      * @return the newly created job filter.
      */
-    public JobFilter saveJobFilter(AppUser appUser, JobType jobType, boolean showInternalJobs, boolean showExternalJobs) {
+    public JobFilter saveJobFilter(AppUser appUser, JobType jobType, boolean showInternalJobs, boolean showExternalJobs, String searchTerm) {
         if (appUser.getRole() != Role.CANDIDATE && appUser.getRole() != Role.RECRUITER) {
             throw new IllegalStateException("Permission denied. Only Candidates and Recruiters can save job filters.");
         }
@@ -284,13 +352,28 @@ public class JobService {
             jobFilter.setJobType(jobType);
             jobFilter.setShowInternalJobs(showInternalJobs);
             jobFilter.setShowExternalJobs(showExternalJobs);
+            jobFilter.setSearchTerm(searchTerm);
         } else {
-            jobFilter = new JobFilter(appUser, jobType, showInternalJobs, showExternalJobs);
+            jobFilter = new JobFilter(appUser, jobType, showInternalJobs, showExternalJobs, searchTerm);
         }
 
         jobFilterRepository.save(jobFilter);
 
         return jobFilter;
+    }
+
+    /**
+     * Validate that the given external link URL is good
+     *
+     * @param url The URL for the external link.
+     * @throws MalformedURLException MalformedURLException is thrown when a malformed syntax is found in the input String url.
+     */
+    public void isValidURL(String url) throws Exception {
+        try {
+            new URL(url).toURI();
+        } catch (MalformedURLException | URISyntaxException e) {
+            throw new Exception("Invalid URL for external link.");
+        }
     }
 
     /**
@@ -301,5 +384,15 @@ public class JobService {
      */
     public Resume getResumeByAppUser(AppUser appUser) {
        return resumeRepository.findByAppUser(appUser);
+    }
+
+    /**
+     * Gets the cover letter of a given app user.
+     *
+     * @param appUser an object representing the app user
+     * @return the cover letter of the app user.
+     */
+    public CoverLetter getCoverLetterByAppUser(AppUser appUser) {
+        return coverLetterRepository.findByAppUser(appUser);
     }
 }

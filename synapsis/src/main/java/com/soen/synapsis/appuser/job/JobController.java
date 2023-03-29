@@ -3,6 +3,7 @@ package com.soen.synapsis.appuser.job;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AuthService;
 import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.appuser.profile.CoverLetter;
 import com.soen.synapsis.appuser.profile.Resume;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,8 +15,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * A controller class to work with jobs.
@@ -43,13 +46,13 @@ public class JobController {
      * @param jobType          the type of job (fulltime, parttime, contract, etc.).
      * @param showInternalJobs the filtered show internal jobs preference (yes/no).
      * @param showExternalJobs the filtered show external jobs preference (yes/no).
-     * @param filterPassed     boolean value to see if the filter has been called.
+     * @param isFilteringJobs  boolean value to see if the filter has been called.
      * @param searchTerm       jobs to search for.
      * @param model            an object carrying data attributes passed to the view.
      * @return the view containing all jobs.
      */
     @GetMapping("/jobs")
-    public String viewJobPosting(@RequestParam(required = false) JobType jobType, @RequestParam(required = false) boolean showInternalJobs, @RequestParam(required = false) boolean showExternalJobs, @RequestParam(required = false) boolean filterPassed, @RequestParam(required = false) String searchTerm, Model model) {
+    public String viewJobPosting(@RequestParam(required = false) JobType jobType, @RequestParam(required = false) boolean showInternalJobs, @RequestParam(required = false) boolean showExternalJobs, @RequestParam(required = false) boolean isFilteringJobs, @RequestParam(required = false) String searchTerm, Model model) {
         if (!authService.isUserAuthenticated()) {
             return "redirect:/";
         }
@@ -57,16 +60,27 @@ public class JobController {
         List<Job> jobs;
         JobFilter jobFilter;
 
-        if (filterPassed) {
+        if (isFilteringJobs && searchTerm != null) {
+            jobs = jobService.getAllJobsByFilterAndSearchTerm(jobType, showInternalJobs, showExternalJobs, searchTerm);
+
+            jobFilter = jobService.saveJobFilter(authService.getAuthenticatedUser(), jobType, showInternalJobs, showExternalJobs, searchTerm);
+
+            model.addAttribute("jobTypeFilter", jobFilter.getJobType());
+            model.addAttribute("showInternalJobsFilter", jobFilter.isShowInternalJobs());
+            model.addAttribute("showExternalJobsFilter", jobFilter.isShowExternalJobs());
+        }
+        else if (isFilteringJobs) {
             jobs = jobService.getAllJobsByFilter(jobType, showInternalJobs, showExternalJobs);
 
-            jobFilter = jobService.saveJobFilter(authService.getAuthenticatedUser(), jobType, showInternalJobs, showExternalJobs);
+            jobFilter = jobService.saveJobFilter(authService.getAuthenticatedUser(), jobType, showInternalJobs, showExternalJobs, null);
 
             model.addAttribute("jobTypeFilter", jobFilter.getJobType());
             model.addAttribute("showInternalJobsFilter", jobFilter.isShowInternalJobs());
             model.addAttribute("showExternalJobsFilter", jobFilter.isShowExternalJobs());
         } else if (searchTerm != null) {
             jobs = jobService.getAllJobsBySearch(searchTerm.toLowerCase());
+
+            jobService.saveJobFilter(authService.getAuthenticatedUser(), JobType.ANY, true, true, searchTerm);
         } else {
             jobs = jobService.getAllJobs();
         }
@@ -74,7 +88,9 @@ public class JobController {
         model.addAttribute("jobs", jobs);
         model.addAttribute("jobsSubmitted", jobService.getAllJobsAlreadySubmittedByUser(authService.getAuthenticatedUser()));
         model.addAttribute("searchTerm", searchTerm);
+        model.addAttribute("savedJobs", authService.getAuthenticatedUser().getSavedJobs());
         model.addAttribute("jobTypes", JobType.values());
+        model.addAttribute("role", authService.getAuthenticatedUser().getRole());
 
         return "pages/jobs";
     }
@@ -162,6 +178,7 @@ public class JobController {
 
         } catch (Exception e) {
             model.addAttribute("error", "There was an error creating a new job. " + e.getMessage());
+            model.addAttribute("request", request);
             return createJob(model);
         }
     }
@@ -202,9 +219,14 @@ public class JobController {
         model.addAttribute("need_cover", job.getNeedCover());
 
         Resume resume = jobService.getResumeByAppUser(applicant);
+        CoverLetter coverLetter = jobService.getCoverLetterByAppUser(applicant);
 
         if (resume != null) {
             model.addAttribute("default_resume", resume.getFileName());
+        }
+
+        if (coverLetter != null) {
+            model.addAttribute("default_cover_letter", coverLetter.getFileName());
         }
 
         if (job.getIsExternal()) {
@@ -358,5 +380,28 @@ public class JobController {
             model.addAttribute("error", "There was an error editing the job. " + e.getMessage());
             return editJob(jobId, model);
         }
+    }
+
+    @GetMapping("/savedjobs")
+    public String getSavedJobs(Model model) {
+        if (!authService.isUserAuthenticated()) {
+            return "redirect:/";
+        }
+
+        AppUser appUser = authService.getAuthenticatedUser();
+        Set<Long> savedJobs = appUser.getSavedJobs();
+
+
+        List<Optional<Job>> jobs = new ArrayList<Optional<Job>>();
+        for (Long jid : savedJobs) {
+            jobs.add(jobService.getJob(jid));
+        }
+
+        List<Job> jobsSubmitted = jobService.getAllJobsAlreadySubmittedByUser(appUser);
+
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("jobsSubmitted", jobsSubmitted);
+
+        return "pages/savedjobs";
     }
 }

@@ -4,6 +4,7 @@ import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AuthProvider;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.job.*;
+import com.soen.synapsis.appuser.profile.CoverLetterRepository;
 import com.soen.synapsis.appuser.profile.ResumeRepository;
 import com.soen.synapsis.websockets.notification.NotificationService;
 import org.junit.jupiter.api.AfterEach;
@@ -16,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -23,8 +25,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -40,6 +41,8 @@ class JobServiceTest {
     private JobFilterRepository jobFilterRepository;
     @Mock
     private ResumeRepository resumeRepository;
+    @Mock
+    private CoverLetterRepository coverLetterRepository;
     private AutoCloseable autoCloseable;
     private JobService underTest;
     private AppUser candidate;
@@ -49,7 +52,7 @@ class JobServiceTest {
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
 
-        underTest = new JobService(jobRepository, jobApplicationRepository, notificationService, jobFilterRepository, resumeRepository);
+        underTest = new JobService(jobRepository, jobApplicationRepository, notificationService, jobFilterRepository, resumeRepository, coverLetterRepository);
 
         candidate = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
         creator = new AppUser(9L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
@@ -74,13 +77,45 @@ class JobServiceTest {
     }
 
     @Test
-    void getAllJobsByFilterReturnsJobs() {
+    void getAllJobsByFilterWithOneJobTypeReturnsJobs() {
         JobType jobType = JobType.FULLTIME;
 
         underTest.getAllJobsByFilter(jobType, true, true);
 
         verify(jobRepository, times(1)).findInternalJobsByJobType(jobType);
         verify(jobRepository, times(1)).findExternalJobsByJobType(jobType);
+    }
+
+    @Test
+    void getAllJobsByFilterWithAllJobTypesReturnsJobs() {
+        JobType jobType = JobType.ANY;
+
+        underTest.getAllJobsByFilter(jobType, true, true);
+
+        verify(jobRepository, times(1)).findInternalJobs();
+        verify(jobRepository, times(1)).findExternalJobs();
+    }
+
+    @Test
+    void getAllJobsByFilterAndSearchTermWithOneJobTypeReturnsJobs() {
+        String searchTerm = "developer";
+        JobType jobType = JobType.FULLTIME;
+
+        underTest.getAllJobsByFilterAndSearchTerm(jobType, true, true, searchTerm);
+
+        verify(jobRepository, times(1)).findInternalJobsByJobTypeAndSearchTerm(jobType, searchTerm);
+        verify(jobRepository, times(1)).findExternalJobsByJobTypeAndSearchTerm(jobType, searchTerm);
+    }
+
+    @Test
+    void getAllJobsByFilterAndSearchTermWithAllJobTypesReturnsJobs() {
+        String searchTerm = "developer";
+        JobType jobType = JobType.ANY;
+
+        underTest.getAllJobsByFilterAndSearchTerm(jobType, true, true, searchTerm);
+
+        verify(jobRepository, times(1)).findInternalJobsBySearchTerm(searchTerm);
+        verify(jobRepository, times(1)).findExternalJobsBySearchTerm(searchTerm);
     }
 
     @Test
@@ -93,13 +128,20 @@ class JobServiceTest {
     }
 
     @Test
-    void createValidJob() {
-        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
+    void createValidJob() throws Exception {
+        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "https://google.com", true, true, true);
         request.setCreator(creator);
 
         String returnValue = underTest.createJob(request);
 
         assertEquals("redirect:/job/null", returnValue);
+    }
+
+    @Test
+    void createJobWithInvalidExternalLinkURLThrowsException() {
+        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
+
+        assertThrows(Exception.class, () -> underTest.createJob(request));
     }
 
     @Test
@@ -164,7 +206,7 @@ class JobServiceTest {
     }
 
     @Test
-    void editJob() {
+    void editJob() throws Exception {
         Long id = 1L;
 
         JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
@@ -190,16 +232,16 @@ class JobServiceTest {
     @Test
     void saveJobFilterThrowsErrorWhenRoleIsNotCandidateOrNotRecruiter() {
         AppUser companyUser = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.COMPANY, AuthProvider.LOCAL);
-        assertThrows(IllegalStateException.class, () -> underTest.saveJobFilter(companyUser, JobType.FULLTIME, true, true));
+        assertThrows(IllegalStateException.class, () -> underTest.saveJobFilter(companyUser, JobType.FULLTIME, true, true, ""));
     }
 
     @Test
     void saveJobFilterSavesWhenJobFilterExists() {
-        JobFilter jobFilter = new JobFilter(candidate, JobType.FULLTIME, true, true);
+        JobFilter jobFilter = new JobFilter(candidate, JobType.FULLTIME, true, true, "");
 
         when(jobFilterRepository.findJobFilterByAppUser(candidate)).thenReturn(Optional.of(jobFilter));
 
-        underTest.saveJobFilter(candidate, JobType.FULLTIME, true, true);
+        underTest.saveJobFilter(candidate, JobType.FULLTIME, true, true, "");
         verify(jobFilterRepository).save(any(JobFilter.class));
     }
 
@@ -209,14 +251,30 @@ class JobServiceTest {
 
         when(jobFilterRepository.findJobFilterByAppUser(candidate)).thenReturn(Optional.ofNullable(jobFilter));
 
-        underTest.saveJobFilter(candidate, JobType.FULLTIME, true, true);
+        underTest.saveJobFilter(candidate, JobType.FULLTIME, true, true, "");
 
         verify(jobFilterRepository).save(any(JobFilter.class));
+    }
+
+    @Test
+    void isValidURLSuccess() throws Exception {
+        underTest.isValidURL("https://google.com");
+    }
+
+    @Test
+    void isValidURLThrowsException() {
+        assertThrows(Exception.class, () -> underTest.isValidURL(""));
     }
 
     @Test
     void getResumeByAppUser() {
         AppUser appUser= new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
         assertEquals(null, underTest.getResumeByAppUser(appUser));
+    }
+
+    @Test
+    void getCoverLetterByAppUser() {
+        AppUser appUser= new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
+        assertEquals(null, underTest.getCoverLetterByAppUser(appUser));
     }
 }

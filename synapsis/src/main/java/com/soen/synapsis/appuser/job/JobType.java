@@ -7,5 +7,6 @@ public enum JobType {
     TEMPORARY,
     VOLUNTEER,
     INTERNSHIP,
-    OTHER
+    OTHER,
+    ANY
 }

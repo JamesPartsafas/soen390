@@ -19,6 +19,7 @@ public class JobFilterTest {
     private JobType jobType;
     private boolean showInternalJobs;
     private boolean showExternalJobs;
+    private String searchTerm;
 
     @BeforeEach
     void setUp() {
@@ -27,7 +28,8 @@ public class JobFilterTest {
         showInternalJobs = true;
         showExternalJobs = true;
         appUser = new AppUser(1L, "Joe Man1", "1234", "joecandidate1@mail.com", Role.CANDIDATE);
-        underTest = new JobFilter(id, appUser, jobType, showInternalJobs, showExternalJobs);
+        searchTerm = "";
+        underTest = new JobFilter(id, appUser, jobType, showInternalJobs, showExternalJobs, searchTerm);
     }
 
     @Test
@@ -86,6 +88,16 @@ public class JobFilterTest {
     void setShowExternalJobs() {
         underTest.setShowExternalJobs(true);
         assertEquals(true, underTest.isShowExternalJobs());
+    }
+
+    @Test
+    void getSearchTerm() { assertEquals(searchTerm, underTest.getSearchTerm()); }
+
+    @Test
+    void setSearchTerm() {
+        String newSearchTerm = "developer";
+        underTest.setSearchTerm(newSearchTerm);
+        assertEquals(newSearchTerm, underTest.getSearchTerm());
     }
 
     @Test

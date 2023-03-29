@@ -3,12 +3,17 @@ package com.soen.synapsis.unit.appuser;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AuthProvider;
 import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.appuser.profile.CoverLetter;
 import com.soen.synapsis.appuser.profile.ProfilePicture;
 import com.soen.synapsis.appuser.profile.Resume;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -244,5 +249,41 @@ class AppUserTest {
         underTest.setResume(defaultResume);
 
         assertEquals(defaultResume, underTest.getResume());
+    }
+
+    @Test
+    void addSavedJob() {
+        underTest.addSavedJob(1L);
+        Set<Long> testSet = new HashSet<Long>();
+        testSet.add(1L);
+        assertEquals(underTest.getSavedJobs(), testSet);
+    }
+
+    @Test
+    void removeSavedJob() {
+        underTest.addSavedJob(1L);
+        Set<Long> testSet = new HashSet<Long>();
+        testSet.add(1L);
+        assertEquals(underTest.getSavedJobs(), testSet);
+        underTest.removeSavedJob(1L);
+        testSet.remove(1L);
+        assertEquals(underTest.getSavedJobs(), testSet);
+    }
+
+    @Test
+    void getSavedJobs() {
+        underTest.addSavedJob(1L);
+        Set<Long> testSet = new HashSet<Long>();
+        testSet.add(1L);
+        assertEquals(underTest.getSavedJobs(), testSet);
+    }
+
+    @Test
+    void setCoverLetter() {
+        CoverLetter defaultCoverLetter = new CoverLetter();
+
+        underTest.setCoverLetter(defaultCoverLetter);
+
+        assertEquals(defaultCoverLetter, underTest.getCoverLetter());
     }
 }

@@ -277,4 +277,24 @@ class AppUserControllerTest {
         verify(chatService, times(1)).resolveReport(messageId);
         assertEquals(redirect, returnValue);
     }
+
+    @Test
+    void saveJob() {
+        AppUser appUser = new AppUser(2L, "joecandidate", "1234", "joecandidateunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(authService.getAuthenticatedUser()).thenReturn(appUser);
+        underTest.saveJob(1L);
+        verify(appUserService, times(1)).saveJob(1L, appUser);
+    }
+
+    @Test
+    void deleteJob() {
+        AppUser appUser = new AppUser(2L, "joecandidate", "1234", "joecandidateunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(authService.getAuthenticatedUser()).thenReturn(appUser);
+        underTest.saveJob(1L);
+        verify(appUserService, times(1)).saveJob(1L, appUser);
+        underTest.deleteSavedJob(1L);
+        verify(appUserService, times(1)).deleteSavedJob(1L, appUser);
+    }
 }

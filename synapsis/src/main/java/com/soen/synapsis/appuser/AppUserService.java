@@ -1,9 +1,6 @@
 package com.soen.synapsis.appuser;
 
-import com.soen.synapsis.appuser.profile.Resume;
-import com.soen.synapsis.appuser.profile.ResumeRepository;
-import com.soen.synapsis.appuser.profile.ProfilePicture;
-import com.soen.synapsis.appuser.profile.ProfilePictureRepository;
+import com.soen.synapsis.appuser.profile.*;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfileRepository;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
@@ -28,6 +25,7 @@ public class AppUserService {
     private CompanyProfileRepository companyProfileRepository;
     private ProfilePictureRepository profilePictureRepository;
     private ResumeRepository defaultResumeRepository;
+    private CoverLetterRepository defaultCoverLetterRepository;
     private final BCryptPasswordEncoder encoder;
 
     public AppUserService(AppUserRepository appUserRepository) {
@@ -37,12 +35,13 @@ public class AppUserService {
 
     @Autowired
     public AppUserService(AppUserRepository appUserRepository, AppUserProfileRepository appUserProfileRepository,
-                          CompanyProfileRepository companyProfileRepository, ProfilePictureRepository profilePictureRepository, ResumeRepository defaultResumeRepository) {
+                          CompanyProfileRepository companyProfileRepository, ProfilePictureRepository profilePictureRepository, ResumeRepository defaultResumeRepository, CoverLetterRepository defaultCoverLetterRepository) {
         this.appUserRepository = appUserRepository;
         this.appUserProfileRepository = appUserProfileRepository;
         this.companyProfileRepository = companyProfileRepository;
         this.profilePictureRepository = profilePictureRepository;
         this.defaultResumeRepository = defaultResumeRepository;
+        this.defaultCoverLetterRepository = defaultCoverLetterRepository;
         this.encoder = new BCryptPasswordEncoder();
     }
 
@@ -221,6 +220,18 @@ public class AppUserService {
         }
     }
 
+    public String saveJob(Long jid, AppUser appUser) {
+        appUser.addSavedJob(jid);
+        appUserRepository.save(appUser);
+        return "redirect:/savedjobs";
+    }
+
+    public String deleteSavedJob(Long jid, AppUser appUser) {
+        appUser.removeSavedJob(jid);
+        appUserRepository.save(appUser);
+        return "redirect:/savedjobs";
+    }
+
     /**
      * Marks company user as verified.
      * @param appUser The user to be set as verified.
@@ -283,5 +294,29 @@ public class AppUserService {
         appUserRepository.save(appUser);
 
         return true;
+    }
+
+    /**
+     * Saves a default cover letter to the database.
+     * @param defaultCoverLetter CoverLetter to be saved.
+     * @param appUser The cover letter is associated to.
+     * @throws IOException Thrown if the file is corrupted and cannot be correctly converted to a byte stream.
+     */
+    public void uploadDefaultCoverLetter(MultipartFile defaultCoverLetter, AppUser appUser) throws IOException {
+        String encodedDefaultCoverLetter = Base64.getEncoder().encodeToString(defaultCoverLetter.getBytes());
+        String fileName = defaultCoverLetter.getOriginalFilename();
+        if (encodedDefaultCoverLetter.isEmpty())
+            return;
+
+        CoverLetter newCoverLetter = defaultCoverLetterRepository.findByAppUser(appUser);
+
+        if (newCoverLetter != null) {
+            newCoverLetter.setDefaultCoverLetter(encodedDefaultCoverLetter);
+            newCoverLetter.setFileName(fileName);
+        } else {
+            newCoverLetter = new CoverLetter(appUser, encodedDefaultCoverLetter, fileName);
+        }
+
+        defaultCoverLetterRepository.save(newCoverLetter);
     }
 }

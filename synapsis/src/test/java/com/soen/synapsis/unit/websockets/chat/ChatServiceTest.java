@@ -3,6 +3,7 @@ package com.soen.synapsis.unit.websockets.chat;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AppUserService;
 import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.utility.crypto.CryptoService;
 import com.soen.synapsis.websockets.chat.Chat;
 import com.soen.synapsis.websockets.chat.ChatRepository;
 import com.soen.synapsis.websockets.chat.ChatService;
@@ -36,7 +37,7 @@ class ChatServiceTest {
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new ChatService(chatRepository, messageService, appUserService);
+        underTest = new ChatService(chatRepository, messageService, appUserService, new CryptoService());
     }
 
     @AfterEach

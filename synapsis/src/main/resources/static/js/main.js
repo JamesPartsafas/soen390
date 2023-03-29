@@ -152,10 +152,12 @@ function showMessage(message) {
 
 function createMessageElement(message) {
     return `
-        <li class="flex items-center">
-            <div class="flex flex-col items-start">
+        <li>
+                  <div class="flex-none w-2/3 items-start">
+            
                 ${generateFileContainerElement(message)}
-                <p>${message.content}</p>
+                <p class="rounded-lg shadow bg-gray-300 p-2 mt-5 text-center ${message.id ===0 ?'text-yellow-400':'text-blue-500'}"
+                                               >${message.content}</p>
             </div>
             ${message.id !== 0 ? 
                 `<form action="${window.location.origin + '/chat/report'}" method="POST">

@@ -1,7 +1,10 @@
 package com.soen.synapsis.unit.websockets.chat.message;
 
 import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AppUserRepository;
+import com.soen.synapsis.appuser.AppUserService;
 import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.utility.crypto.CryptoService;
 import com.soen.synapsis.websockets.chat.Chat;
 import com.soen.synapsis.websockets.chat.MessageDTO;
 import com.soen.synapsis.websockets.chat.message.Message;
@@ -37,7 +40,7 @@ class MessageServiceTest {
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new MessageService(messageRepository);
+        underTest = new MessageService(messageRepository, new CryptoService());
         chat = new Chat();
         sender = new AppUser(1L, "Joe Man", "1234", "joecandidate@mail.com", Role.CANDIDATE);
     }
@@ -50,6 +53,8 @@ class MessageServiceTest {
     @Test
     void saveMessageCallsSaveMethod() {
         Message message = Mockito.mock(Message.class);
+        when(message.getFile()).thenReturn("123");
+        when(message.getFileName()).thenReturn("123.txt");
         when(messageRepository.save(any(Message.class))).thenReturn(message);
 
         underTest.saveMessage(chat, sender, new MessageDTO());
