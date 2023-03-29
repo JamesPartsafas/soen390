@@ -3,6 +3,7 @@ package com.soen.synapsis.appuser.job;
 import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AuthService;
 import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.appuser.profile.CoverLetter;
 import com.soen.synapsis.appuser.profile.Resume;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -218,9 +219,14 @@ public class JobController {
         model.addAttribute("need_cover", job.getNeedCover());
 
         Resume resume = jobService.getResumeByAppUser(applicant);
+        CoverLetter coverLetter = jobService.getCoverLetterByAppUser(applicant);
 
         if (resume != null) {
             model.addAttribute("default_resume", resume.getFileName());
+        }
+
+        if (coverLetter != null) {
+            model.addAttribute("default_cover_letter", coverLetter.getFileName());
         }
 
         if (job.getIsExternal()) {

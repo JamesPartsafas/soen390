@@ -57,6 +57,9 @@ public class UpdateAppUserProfileController {
         if (profile.getAppUser() != null && profile.getAppUser().getResume() != null) {
             model.addAttribute("default_resume", profile.getAppUser().getResume().getFileName());
         }
+        if (profile.getAppUser() != null && profile.getAppUser().getCoverLetter() != null) {
+            model.addAttribute("default_cover_letter", profile.getAppUser().getCoverLetter().getFileName());
+        }
 
         return "pages/updateuserpage";
     }
@@ -70,7 +73,7 @@ public class UpdateAppUserProfileController {
      * @return the app user profile page.
      */
     @PostMapping("/user/update")
-    public String updateAppUserProfile(UpdateAppUserProfileRequest request, @RequestParam("image") MultipartFile file, @RequestParam("defaultResume") MultipartFile defaultResume,
+    public String updateAppUserProfile(UpdateAppUserProfileRequest request, @RequestParam("image") MultipartFile file, @RequestParam("defaultResume") MultipartFile defaultResume, @RequestParam("defaultCoverLetter") MultipartFile defaultCoverLetter,
                                        BindingResult bindingResult, Model model) {
         if (!authService.doesUserHaveRole(Role.CANDIDATE, Role.RECRUITER)) {
             return "redirect:/";
@@ -84,6 +87,7 @@ public class UpdateAppUserProfileController {
 
             appUserService.uploadProfilePicture(file, appUser);
             appUserService.uploadDefaultResume(defaultResume, appUser);
+            appUserService.uploadDefaultCoverLetter(defaultCoverLetter, appUser);
 
             return updateAppUserProfileService.updateProfile(request, appUser);
         } catch (Exception e) {

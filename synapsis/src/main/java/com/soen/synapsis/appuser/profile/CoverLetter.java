@@ -5,10 +5,10 @@ import com.soen.synapsis.appuser.AppUser;
 import javax.persistence.*;
 
 /**
- * This Resume class serves as the entity to store the default resume of an app user.
+ * This CoverLetter class serves as the entity to store the default cover letter of an app user.
  */
 @Entity
-public class Resume {
+public class CoverLetter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,40 +19,39 @@ public class Resume {
     private AppUser appUser;
 
     @Column(nullable = true, columnDefinition="TEXT")
-    private String defaultResume;
+    private String defaultCoverLetter;
 
     @Column(nullable = true, columnDefinition = "TEXT")
     private String fileName;
 
-
     /**
      * Default constructor
      */
-    public Resume() {}
+    public CoverLetter() {}
 
     /**
-     * Create a new default resume given the app user id, the app user object, a resume and the file name of the resume.
+     * Create a new default cover letter given the app user id, the app user object, a cover letter and the file name of the cover letter.
      * @param id the app user id.
      * @param appUser the object representing the app user.
-     * @param defaultResume the encoded resume of the default resume
-     * @param fileName the file name of the resume
+     * @param defaultCoverLetter the encoded cover letter of the default cover letter.
+     * @param fileName the file name of the cover letter.
      */
-    public Resume(Long id, AppUser appUser, String defaultResume, String fileName) {
+    public CoverLetter(Long id, AppUser appUser, String defaultCoverLetter, String fileName) {
         this.id = id;
         this.appUser = appUser;
-        this.defaultResume = defaultResume;
+        this.defaultCoverLetter = defaultCoverLetter;
         this.fileName = fileName;
     }
 
     /**
-     * Create a new default resume given the app user object, a resume and the file name of the resume.
+     * Create a new default cover letter given the app user object, a cover letter and the file name of the cover letter.
      * @param appUser the object representing the app user.
-     * @param defaultResume the encoded resume for the default resume.
-     * @param fileName the file name of the resume.
+     * @param defaultCoverLetter the encoded cover letter for the default cover letter.
+     * @param fileName the file name of the cover letter.
      */
-    public Resume(AppUser appUser, String defaultResume, String fileName) {
+    public CoverLetter(AppUser appUser, String defaultCoverLetter, String fileName) {
         this.appUser = appUser;
-        this.defaultResume = defaultResume;
+        this.defaultCoverLetter = defaultCoverLetter;
         this.fileName = fileName;
     }
 
@@ -72,12 +71,12 @@ public class Resume {
         this.appUser = appUser;
     }
 
-    public String getDefaultResume() {
-        return defaultResume;
+    public String getDefaultCoverLetter() {
+        return defaultCoverLetter;
     }
 
-    public void setDefaultResume(String defaultResume) {
-        this.defaultResume = defaultResume;
+    public void setDefaultCoverLetter(String defaultCoverLetter) {
+        this.defaultCoverLetter = defaultCoverLetter;
     }
 
     public String getFileName() {
@@ -90,10 +89,10 @@ public class Resume {
 
     @Override
     public String toString() {
-        return "DefaultResume{" +
+        return "CoverLetter{" +
                 "id=" + id +
                 ", appUser=" + appUser +
-                ", defaultResume='" + defaultResume + '\'' +
+                ", defaultCoverLetter='" + defaultCoverLetter + '\'' +
                 ", fileName='" + fileName + '\'' +
                 '}';
     }

@@ -40,6 +40,11 @@
                 <p class="font-thin font-serif text-black" th:if="${default_resume} != null" th:text="${default_resume}"></p>
             </div>
 
+            <div class="mt-4">
+                <p class="font-thin font-serif text-grey" th:if="${default_cover_letter} != null"> Current Default Cover Letter</p>
+                <p class="font-thin font-serif text-black" th:if="${default_cover_letter} != null" th:text="${default_cover_letter}"></p>
+            </div>
+
             <!-- Upload Resume -->
             <div th:if="${need_resume} == true and ${default_resume} == null" class="mt-4">
                 <p class="font-thin font-serif text-grey">Upload Resume *</p>
@@ -59,13 +64,21 @@
             </div>
 
             <!-- Upload Cover Letter -->
-            <div th:if="${need_cover}" class="mt-4">
+            <div th:if="${need_cover} == true and ${default_cover_letter} == null" class="mt-4">
                 <p class="font-thin font-serif text-grey">Upload Cover Letter *</p>
-                <input name="coverLetter" class="w-full text-sm file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx" required>
+                <input name="coverLetter" class="w-full text-sm file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx" required/>
             </div>
-            <div th:unless="${need_cover}" class="mt-4">
+            <div th:if="${need_cover} == true and ${default_cover_letter} != null" class="mt-4">
+                <p class="font-thin font-serif text-grey">Replace Cover Letter</p>
+                <input name="coverLetter" class="w-full text-sm file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx"/>
+            </div>
+            <div th:if="${need_cover} == false and ${default_cover_letter} == null" class="mt-4">
                 <p class="font-thin font-serif text-grey">Upload Cover Letter</p>
-                <input name="coverLetter" class="w-full text-sm file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx">
+                <input name="coverLetter" class="w-full text-sm file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx"/>
+            </div>
+            <div th:if="${need_cover} == false and ${default_cover_letter} != null" class="mt-4">
+                <p class="font-thin font-serif text-grey">Replace Cover Letter</p>
+                <input name="coverLetter" class="w-full text-sm file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx"/>
             </div>
 
             <div class="border border-grey p-3 mt-4 rounded-md hover:bg-light text-black-variant text-sm md:text-base lg:text-base">

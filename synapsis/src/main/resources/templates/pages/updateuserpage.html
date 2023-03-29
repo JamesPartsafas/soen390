@@ -20,8 +20,13 @@
                 <label>Upload Default Resume</label>
                 <input type="file" name="defaultResume" accept=".pdf,.docx" />
                 <br>
+                <label>Upload Default Cover Letter</label>
+                <input type="file" name="defaultCoverLetter" accept=".pdf,.docx" />
+                <br>
                 <label th:if="${default_resume != null}">Current Default Resume</label><br>
                 <p th:if="${default_resume != null}" th:text ="${default_resume}"></p>
+                <label th:if="${default_cover_letter != null}">Current Default Cover Letter</label><br>
+                <p th:if="${default_cover_letter != null}" th:text ="${default_cover_letter}"></p>
                 <br>
                 <label>Description</label><br>
                 <textarea id="description" name="description"
