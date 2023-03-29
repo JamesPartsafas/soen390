@@ -33,6 +33,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     /**
      * Used to retrieve currently used authentication provider, set up with the correct
      * password encoder.
+     *
      * @return The app's authentication provider, used by Spring Security.
      */
     @Bean
@@ -47,6 +48,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     /**
      * Specifies access control along certain routes, as well as redirect info
      * if the user is not authenticated or does not have the correct role.
+     *
      * @param httpSecurity Passed in by Spring Security to be modified by the method.
      * @throws Exception Thrown if configuration is improperly formatted.
      */
@@ -67,16 +69,22 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .formLogin()
-                    .loginPage("/login")
-                    .defaultSuccessUrl("/", true)
-                    .usernameParameter("email")
+                .loginPage("/login")
+                .failureHandler(authenticationFailureHandler())
+                .defaultSuccessUrl("/", true)
+                .usernameParameter("email")
                 .and()
                 .oauth2Login()
-                    .loginPage("/login")
-                    .userInfoEndpoint().userService(oAuth2UserService)
-                    .and()
+                .loginPage("/login")
+                .userInfoEndpoint().userService(oAuth2UserService)
+                .and()
                 .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/")
                 .and().exceptionHandling().accessDeniedPage("/accessDenied");
 
+    }
+
+    @Bean
+    public CustomAuthenticationFailureHandler authenticationFailureHandler() {
+        return new CustomAuthenticationFailureHandler();
     }
 }
