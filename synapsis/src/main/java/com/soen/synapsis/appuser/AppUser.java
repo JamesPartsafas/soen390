@@ -1,5 +1,6 @@
 package com.soen.synapsis.appuser;
 
+import com.soen.synapsis.appuser.profile.CoverLetter;
 import com.soen.synapsis.appuser.profile.Resume;
 import com.soen.synapsis.appuser.profile.ProfilePicture;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
@@ -76,6 +77,8 @@ public class AppUser {
 
     @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
     private Resume defaultResume;
+    @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
+    private CoverLetter defaultCoverLetter;
     @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
     private Settings settings;
 
@@ -359,6 +362,14 @@ public class AppUser {
 
     public void setResume(Resume defaultResume) {
         this.defaultResume = defaultResume;
+    }
+
+    public CoverLetter getCoverLetter() {
+        return defaultCoverLetter;
+    }
+
+    public void setCoverLetter(CoverLetter defaultCoverLetter) {
+        this.defaultCoverLetter = defaultCoverLetter;
     }
 
     public void addSavedJob(Long jid) {
