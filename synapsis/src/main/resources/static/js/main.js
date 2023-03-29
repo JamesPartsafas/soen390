@@ -215,13 +215,11 @@ function showMessage(message) {
 function createMessageElement(message) {
     return `
         <li>
-            <div class="flex flex-row w-2/3 items-start">
-                ${generateFileContainerElement(message)}
-                <p class="shadow bg-neutral-100 border-gray-200 rounded-lg w-2/3 p-2 mt-5 text-right">
-                    ${message.content}
-                </p>
+            <div class="p-2 px-4 m-2 ml-96 bg-neutral-100 rounded-lg text-right w-1/2 flex flex-row-reverse">
+                ${message.content}
             </div>
             ${message.id !== 0 ? 
+        
                 `<form action="${window.location.origin + '/chat/report'}" method="POST">
                     <input type="hidden" name="_csrf" value="${csrfToken}"/>
                     <input type="hidden" name="messageID" value="${message.id}" />

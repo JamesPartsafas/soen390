@@ -55,7 +55,7 @@ class GlobalControllerAdviceTest {
     @Test
     void getUserNameReturnsName() {
         String name = "Joe";
-        AppUser appUser = new AppUser("name", "pass", "email", Role.CANDIDATE);
+        AppUser appUser = new AppUser("Joe", "pass", "email", Role.CANDIDATE);
 
         when(authService.isUserAuthenticated()).thenReturn(true);
         when(authService.getAuthenticatedUser()).thenReturn(appUser);
