@@ -46,13 +46,13 @@
                             <a th:unless="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}" th:href="@{/downloadFile/{messageId}(messageId=${message.id})}" th:download="${message.fileName}" th:text="'Download ' + ${message.fileName}"></a>
                         </th:block>
                         <!--Messages sent by user-->
-                        <div th:if="${message.getSender().name == globalUserName}"
+                        <div th:if="${message.getSender().getId() == globalUserId}"
                              class="p-2 px-4 m-2 ml-96 bg-neutral-100 rounded-lg text-right w-1/2 flex flex-row-reverse">
                             <p th:text="${message.getContent()}"></p>
                         </div>
 
                         <!--Messages received by user-->
-                        <div th:if="${message.getSender().name != globalUserName}"
+                        <div th:if="${message.getSender().getId() != globalUserId}"
                              class="p-2 px-2 m-2 bg-neutral-100 rounded-lg w-1/2 flex flex-row">
                             <i class="fa-solid fa-ellipsis-vertical fa-sm p-3 px-4" style="color: #c0c0c0;"
                                data-popover-target="popover-click" data-popover-trigger="click" type="button"></i>
