@@ -5,7 +5,7 @@
 
   <div class="w-1/2 mx-auto">
     <div class="mx-auto">
-
+      <a th:href="@{/jobs}" class="btn btn-primary bg-primary text-base mx-auto rounded-2xl font-thin transition hover:-translate-y-0.5 duration-150 hover:bg-opacity-60">Back</a>
       <p class="text-2xl font-serif font-black-variant font-thin mb-4 text-center">Saved Jobs</p>
 
       <div th:if="${jobs.size() == 0}">
@@ -35,7 +35,7 @@
               <form th:action="@{/deletesavedjob}" method="post">
                 <input type="hidden" name="jobId" th:value="${job.get().getID()}" />
                 <button class="text-white bg-primary mx-auto p-4 rounded-2xl
-                  hover:bg-opacity-60 transition hover:-translate-y-0.5 duration-150" type="submit">Unsave</button>
+                  hover:bg-opacity-60 transition hover:-translate-y-0.5 duration-150" type="submit"><i class="fa-solid fa-bookmark"></i></button>
               </form>
 
                <div th:if="${jobsSubmitted.contains(job.get())}">
