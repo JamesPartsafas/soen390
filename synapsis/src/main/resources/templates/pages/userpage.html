@@ -196,23 +196,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- In case the authenticated user is a recruiter then they can have the option of creating a job -->
-        <div th:if="${showControls}">
-        <div th:if="${role.toString() =='RECRUITER'}" class="w-1/2 mt-8 ml-80 ">
-            <div class="flex max-w-md  bg-neutral-100 h-[11rem]  border-gray-200 rounded-lg shadow">
-                <a th:href="@{/createjob}">
-                    <p class="text-xl font-normal mt-6 ml-72  text-gray-900">
-                        Create a job
-                        <a th:href="@{/createjob}">
-                            <i class="fa-regular fa-square-plus"></i>
-                        </a>
-                </a>
-                </p>
-            </div>
-        </div>
-    </div>
-
     </div>
 </div>
 </html>

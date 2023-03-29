@@ -2,12 +2,26 @@
 <html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
 <div layout:fragment="content">
-
     <div class="flex mx-auto justify-center mt-10 space-x-12">
         <!--Job Filters-->
         <div class="border rounded-md self-start p-4 w-1/6">
-                <h1 class="text-3xl text-center text-black-variant mb-4">Job Filters</h1>
-                <form th:action="@{/jobs}" method="get">
+            <div th:if="${role.toString() =='RECRUITER'}">
+                <div class="flex justify-center mt-5">
+                <a  th:href="@{/createjob}" class="btn btn-primary bg-primary text-base mx-auto rounded-2xl font-thin transition hover:-translate-y-0.5 duration-150 hover:bg-opacity-60">Create a Job
+                    <i class="fa-regular fa-square-plus"></i>
+                </a>
+                </div>
+               <br> <hr class="border-t border-grey-light">
+            </div>
+                <div class="flex justify-center mt-1">
+                    <a  th:href="@{/savedjobs}" class="text-lg text-center text-black-variant mb-4 mt-5">Saved Jobs
+                        <i class="fa-solid fa-bookmark"></i>
+                    </a>
+                </div>
+                <hr class="border-t border-grey-light">
+                <h1 class="text-3xl text-center text-black-variant mb-4 mt-5">Job Filters</h1>
+                <hr class="border-t border-grey-light">
+            <form th:action="@{/jobs}" method="get">
                     <label class="font-thin text-grey font-serif">Job Type</label>
                     <fieldset class="font-serif text-grey">
                         <div th:each="jobType : ${jobTypes}">
@@ -84,7 +98,7 @@
                     <form th:action="@{/savejob}" method="post">
                         <input type="hidden" name="jobId" th:value="${job.getID()}" />
                         <button class="text-white bg-primary p-4 rounded-2xl
-              hover:bg-opacity-60 transition hover:-translate-y-0.5 duration-150" type="submit">Save</button>
+              hover:bg-opacity-60 transition hover:-translate-y-0.5 duration-150" type="submit"><i class="fa-regular fa-bookmark"></i></button>
                     </form>
                 </div>
 
@@ -92,7 +106,7 @@
                     <form th:action="@{/deletesavedjob}" method="post">
                         <input type="hidden" name="jobId" th:value="${job.getID()}" />
                         <button class="text-white bg-primary p-4 rounded-2xl
-              hover:bg-opacity-60 transition hover:-translate-y-0.5 duration-150" type="submit">Unsave</button>
+              hover:bg-opacity-60 transition hover:-translate-y-0.5 duration-150" type="submit"><i class="fa-solid fa-bookmark"></i></button>
                     </form>
                 </div>
 

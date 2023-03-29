@@ -2,6 +2,7 @@ package com.soen.synapsis.appuser;
 
 import com.soen.synapsis.appuser.connection.ConnectionService;
 import com.soen.synapsis.appuser.job.Job;
+import com.soen.synapsis.appuser.job.JobRequest;
 import com.soen.synapsis.appuser.job.JobService;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;

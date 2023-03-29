@@ -78,7 +78,7 @@ public class JobController {
         model.addAttribute("searchTerm", searchTerm);
         model.addAttribute("savedJobs", authService.getAuthenticatedUser().getSavedJobs());
         model.addAttribute("jobTypes", JobType.values());
-
+        model.addAttribute("role", authService.getAuthenticatedUser().getRole());
 
         return "pages/jobs";
     }
@@ -373,6 +373,7 @@ public class JobController {
 
         AppUser appUser = authService.getAuthenticatedUser();
         Set<Long> savedJobs = appUser.getSavedJobs();
+
 
         List<Optional<Job>> jobs = new ArrayList<Optional<Job>>();
         for (Long jid : savedJobs) {
