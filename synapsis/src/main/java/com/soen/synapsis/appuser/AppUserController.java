@@ -236,6 +236,11 @@ public class AppUserController {
         return "pages/updateuserpage";
     }
 
+    /**
+     * Allows users to save a job.
+     * @param jobId The id of job being saved.
+     * @return View containing saved jobs. If the requester is not authenticated, redirects to home page.
+     */
     @PostMapping("/savejob")
     public String saveJob(@RequestParam("jobId") Long jobId) {
         if (!authService.isUserAuthenticated()) {
@@ -245,6 +250,11 @@ public class AppUserController {
         return appUserService.saveJob(jobId, appUser);
     }
 
+    /**
+     * Allows users to unsave a job.
+     * @param jobId The id of job being unsaved.
+     * @return View containing saved jobs. If the requester is not authenticated, redirects to home page.
+     */
     @PostMapping("/deletesavedjob")
     public String deleteSavedJob(@RequestParam("jobId") Long jobId) {
         if (!authService.isUserAuthenticated()) {

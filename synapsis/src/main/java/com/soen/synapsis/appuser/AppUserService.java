@@ -220,12 +220,24 @@ public class AppUserService {
         }
     }
 
+    /**
+     * Allows users to save a job.
+     * @param jid The id of job being saved.
+     * @param appUser The currently authenticated user.
+     * @return View containing saved jobs.
+     */
     public String saveJob(Long jid, AppUser appUser) {
         appUser.addSavedJob(jid);
         appUserRepository.save(appUser);
         return "redirect:/savedjobs";
     }
 
+    /**
+     * Allows users to unsave a job.
+     * @param jid The id of job being unsaved.
+     * @param appUser The currently authenticated user.
+     * @return View containing saved jobs.
+     */
     public String deleteSavedJob(Long jid, AppUser appUser) {
         appUser.removeSavedJob(jid);
         appUserRepository.save(appUser);
