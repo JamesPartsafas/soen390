@@ -2,46 +2,6 @@
 <html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
 <div layout:fragment="content">
-    <!--    <p th:if="${reportStatus != null}" th:text="${reportStatus}"></p>-->
-    <!--    <div id="chat-page">-->
-    <!--        <div class="chat-container">-->
-    <!--            <div class="connecting">-->
-    <!--                Connecting...-->
-    <!--            </div>-->
-
-    <!--            <ul id="messageArea">-->
-    <!--                <li th:each="message : ${messages}" class="flex items-center">-->
-    <!--                    <div class="flex flex-col items-start">-->
-    <!--                        <th:block th:if="${message.fileName != null and message.file != null}">-->
-    <!--                            <img th:if="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}" th:src="${message.file}" th:alt="${message.fileName}" />-->
-    <!--                            <a th:unless="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}" th:download="${message.fileName}" th:text="'Download' + ${message.fileName}"></a>-->
-    <!--                        </th:block>-->
-    <!--                        <p th:text="${message.getContent()}"></p>-->
-    <!--                    </div>-->
-    <!--                    <form th:if="${message.getSender().getId() != authenticatedUserID}" th:action="@{/chat/report}" method="POST">-->
-    <!--                        <input type="hidden" name="messageID" th:value="${message.getId()}" />-->
-    <!--                        <input type="hidden" name="chatID" th:value="${chatId}" />-->
-    <!--                        <button class="btn bg-primary btn-primary font-sans text-sm w-20 h-9 p-0" type="submit">Report</button>-->
-    <!--                    </form>-->
-    <!--                </li>-->
-    <!--            </ul>-->
-
-    <!--            <form id="messageForm" name="messageForm" nameForm="messageForm">-->
-    <!--                <input id="chat" class="hidden" th:value="${chatId}"/>-->
-    <!--                <input id="sender" class="hidden" th:value="${senderId}"/>-->
-    <!--                <input id="receiver" class="hidden" th:value="${receiverId}"/>-->
-    <!--                <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control"/>-->
-    <!--                <input type="file" id="file" name="file"/>-->
-    <!--                <button type="submit" class="primary">Send</button>-->
-    <!--            </form>-->
-
-    <!--        </div>-->
-    <!--    </div>-->
-
-    <!--    <script src="/js/main.js"></script>-->
-
-
-
     <div class="container flex flex-wrap pb-28 mb-72">
         <div class="w-11/12 ml-16 shadow-lg rounded-lg h-[60rem]  overflow-y-scroll">
             <!-- header -->
@@ -67,7 +27,6 @@
                     </div>
                 </div>
 
-
                 <div class="container flex flex-wrap w-2/3">
                         <p th:if="${reportStatus != null}" th:text="${reportStatus}"></p>
 
@@ -79,19 +38,37 @@
                                     Connecting...
                                 </div>
 
-
             <ul id="messageArea">
-                <li th:each="message : ${messages}" class="flex items-center">
-                    <div class="flex flex-col items-start">
+                <li th:each="message : ${messages}" class="flex">
+                    <div class="flex flex-col w-full">
                         <th:block th:if="${message.fileName != null and message.file != null}">
                             <img th:if="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}" th:src="${message.file}" th:alt="${message.fileName}" />
                             <a th:unless="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}" th:href="@{/downloadFile/{messageId}(messageId=${message.id})}" th:download="${message.fileName}" th:text="'Download ' + ${message.fileName}"></a>
                         </th:block>
-                        <p th:text="${message.getContent()}"></p>
+                        <!--Messages sent by user-->
+                        <div th:if="${message.getSender().getId() == globalUserId}"
+                             class="p-2 px-4 m-2 ml-96 bg-neutral-100 rounded-lg text-right w-1/2 flex flex-row-reverse">
+                            <p th:text="${message.getContent()}"></p>
+                        </div>
+
+                        <!--Messages received by user-->
+                        <div th:if="${message.getSender().getId() != globalUserId}"
+                             class="p-2 px-2 m-2 bg-neutral-100 rounded-lg w-1/2 flex flex-row">
+                            <i class="fa-solid fa-ellipsis-vertical fa-sm p-3 px-4" style="color: #c0c0c0;"
+                               data-popover-target="popover-click" data-popover-trigger="click" type="button"></i>
+                            <div data-popover id="popover-click" role="tooltip"
+                                 class="absolute z-10 invisible inline-block w-18 text-sm text-black-variant transition-opacity
+                                     duration-300 bg-primary-variant border border-light rounded-lg opacity-0">
+                                <div class="px-3 py-2 bg-primary-variant border-light rounded-t-lg" data-modal-target="popup-modal" data-modal-toggle="popup-modal">
+                                    <h3 class="font-semibold text-black-variant">Report</h3>
+                                </div>
+                                <div data-popper-arrow></div>
+                            </div>
+                            <p th:text="${message.getContent()}"></p>
+                        </div>
                         <form th:if="${message.getSender().getId() != authenticatedUserID}" th:action="@{/chat/report}" method="POST">
                             <input type="hidden" name="messageID" th:value="${message.getId()}" />
                             <input type="hidden" name="chatID" th:value="${chatId}" />
-                            <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" class="absolute top-0 right-0 btn bg-primary btn-primary font-sans  w-28 h-8 p-0 " type="button" >Report</button>
                             <div id="popup-modal" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full">
                                 <div class="relative w-full h-full max-w-md md:h-auto">
                                     <div class="relative bg-white rounded-lg">
@@ -114,7 +91,7 @@
                                 </div>
                             </div>
                         </form>
-                    
+
                 </li>
 
             </ul>
@@ -122,37 +99,25 @@
                             </div>
                         </div>
 
-                        <div class= "absolute bottom-0 left-0 mt-10">
+                        <div class="relative ml-2 mt-10">
                             <form  id="messageForm" name="messageForm" nameForm="messageForm">
                                 <input id="chat" class="hidden" th:value="${chatId}"/>
                                 <input id="sender" class="hidden" th:value="${senderId}"/>
                                 <input id="receiver" class="hidden" th:value="${receiverId}"/>
 
-                                <input  type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control w-96 mt-10"/>
-                                <input type="file" id="file" name="file"/>
+                                <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control w-96 mt-10 rounded-lg"/>
+                                <input type="file" id="file" name="file" class="rounded-lg"/>
                                 <button type="submit" class="btn bg-primary btn-primary font-sans w-28 h-8 p-0 ml-14">Send</button>
 
                             </form>
                         </div>
                     </div>
-
-
                 </div>
-
-
-
-
                 </div>
-
                         <script src="/js/main.js"></script>
          </div>
-
-
-
         </div>
     </div>
-
-
 
 </div>
 </html>
