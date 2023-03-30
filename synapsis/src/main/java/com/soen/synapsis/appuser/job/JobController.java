@@ -383,6 +383,11 @@ public class JobController {
         }
     }
 
+    /**
+     * Allows users to view all saved jobs.
+     * @param model An object carrying data attributes passed to the view.
+     * @return View containing saved jobs. If the requester is not authenticated, redirects to home page.
+     */
     @GetMapping("/savedjobs")
     public String getSavedJobs(Model model) {
         if (!authService.isUserAuthenticated()) {
