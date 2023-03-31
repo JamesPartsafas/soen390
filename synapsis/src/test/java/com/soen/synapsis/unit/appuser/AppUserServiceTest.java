@@ -1,6 +1,7 @@
 package com.soen.synapsis.unit.appuser;
 
 import com.soen.synapsis.appuser.*;
+import com.soen.synapsis.appuser.profile.CoverLetterRepository;
 import com.soen.synapsis.appuser.profile.ProfilePictureRepository;
 import com.soen.synapsis.appuser.profile.ResumeRepository;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfileRepository;
@@ -33,13 +34,15 @@ public class AppUserServiceTest {
     private ProfilePictureRepository profilePictureRepository;
     @Mock
     private ResumeRepository resumeRepository;
+    @Mock
+    private CoverLetterRepository coverLetterRepository;
     private AutoCloseable autoCloseable;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
         underTest = new AppUserService(appUserRepository, appUserProfileRepository,
-                companyProfileRepository, profilePictureRepository, resumeRepository);
+                companyProfileRepository, profilePictureRepository, resumeRepository, coverLetterRepository);
     }
 
     @AfterEach
@@ -292,5 +295,15 @@ public class AppUserServiceTest {
         returnValue = underTest.deleteSavedJob(1L, appUser);
         assertEquals("redirect:/savedjobs", returnValue);
         verify(appUserRepository, times(2)).save(appUser);
+    }
+
+    @Test
+    void emptyCoverLetterUploadReturns() throws IOException {
+        MultipartFile file = mock(MultipartFile.class);
+        when(file.getBytes()).thenReturn(new byte[]{});
+
+        underTest.uploadDefaultCoverLetter(file, mock(AppUser.class));
+
+        verify(file).getBytes();
     }
 }

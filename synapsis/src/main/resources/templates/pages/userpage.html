@@ -11,63 +11,63 @@
 
                 <div class="p-5 ">
                     <h5 class="text-left text-2xl font-bold tracking-tight text-gray-900"
-                        th:text="${name}"></h5>
+                        th:text="${currentAppUser.name}"></h5>
 
-                    <p th:if="${role.toString() == 'RECRUITER'}">&#10004;</p>
+                    <p th:if="${currentAppUser.role.toString() == 'RECRUITER'}">&#10004;</p>
 
-                    <p th:text="${description}"></p>
+                    <p th:text="${profile.description}"></p>
 
                     <p th:text="${profilePicture}" id="base64Image" hidden></p>
 
                     <table>
                         <tr>
                             <th>
-                                <p class="font-normal text-gray-700" th:text="${work}"></p>
+                                <p class="font-normal text-gray-700" th:text="${profile.work}"></p>
                             </th>
                             <th>
                                 <p class="ml-16 font-normal text-gray-700"
-                                   th:text="${education}"></p>
+                                   th:text="${profile.education}"></p>
                             </th>
                         </tr>
                         <tr>
                             <th></th>
                             <th>
-                                <p class="font-normal ml-16 text-gray-700" th:text="${phone}"></p>
+                                <p class="font-normal ml-16 text-gray-700" th:text="${profile.phone}"></p>
                             </th>
                         </tr>
                     </table>
                 </div>
 
                 <form th:if="${!isConnectedWith and !isPendingConnectionWhenSentConnection and !isPendingConnectionWhenReceivingConnection and !showControls}" th:action="@{/connect}" method="post">
-                    <input type="hidden" name="id" th:value="${id}"/>
+                    <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Connect</button>
                 </form>
 
                 <button th:if="${isPendingConnectionWhenSentConnection}" class="btn bg-black btn-black font-sans text-sm w-25 h-9 p-0" disabled>Pending</button>
 
                 <form th:action="@{/connection/accept}" method="post">
-                    <input type="hidden" name="id" th:value="${id}" />
+                    <input type="hidden" name="id" th:value="${currentAppUser.id}" />
                     <button th:if="${isPendingConnectionWhenReceivingConnection}" class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Accept</button>
                 </form>
 
                 <form th:if="${isConnectedWith}" th:action="@{/disconnect}" method="post">
-                    <input type="hidden" name="id" th:value="${id}"/>
+                    <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Disconnect
                     </button>
                 </form>
 
                 <form th:action="@{/chat/create}" method="post">
-                    <input type="hidden" name="id" th:value="${id}"/>
+                    <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Chat</button>
-                    <input type="hidden" name="id" th:value="${id}"/>
+                    <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
                 </form>
 
-                <form th:if="${role.toString() == 'CANDIDATE' and myRole.toString() == 'COMPANY'}" th:action="@{/company/markCandidateToRecruiter}" method="post">
-                    <input type="hidden" name="appUserId" th:value="${id}" />
+                <form th:if="${currentAppUser.role.toString() == 'CANDIDATE' and myRole.toString() == 'COMPANY'}" th:action="@{/company/markCandidateToRecruiter}" method="post">
+                    <input type="hidden" name="appUserId" th:value="${currentAppUser.id}" />
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Mark</button>
                 </form>
-                <form th:if="${role.toString() == 'RECRUITER' and myRole.toString() == 'COMPANY' and companyId == myId}" th:action="@{/company/unmarkRecruiterToCandidate}" method="post">
-                    <input type="hidden" name="appUserId" th:value="${id}" />
+                <form th:if="${currentAppUser.role.toString() == 'RECRUITER' and myRole.toString() == 'COMPANY' and companyId == myId}" th:action="@{/company/unmarkRecruiterToCandidate}" method="post">
+                    <input type="hidden" name="appUserId" th:value="${currentAppUser.id}" />
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Unmark</button>
                 </form>
             </div>
@@ -99,7 +99,7 @@
                 <tr>
                     <td>
                         <div class="max-h-96 overflow-y-auto">
-                            <p class="font-normal ml-3 py-3 px-4 mr-2 mb-2 resize-y text-gray-700" th:text="${description}"></p>
+                            <p class="font-normal ml-3 py-3 px-4 mr-2 mb-2 resize-y text-gray-700" th:text="${profile.description}"></p>
                         </div>
                     </td>
                 </tr>
@@ -116,7 +116,7 @@
                             </th>
                         </tr>
                         <td>
-                            <p class="font-normal ml-10 text-gray-700" th:text="${volunteering}"></p>
+                            <p class="font-normal ml-10 text-gray-700" th:text="${profile.volunteering}"></p>
                         </td>
                     </table>
                 </div>
@@ -130,7 +130,7 @@
                             </th>
                         </tr>
                         <td>
-                            <p class="font-normal ml-10 text-gray-700" th:text="${course}"></p>
+                            <p class="font-normal ml-10 text-gray-700" th:text="${profile.course}"></p>
                         </td>
                     </table>
                 </div>
@@ -145,7 +145,7 @@
                             </th>
                         </tr>
                         <td>
-                            <p class="font-normal ml-10 text-gray-700" th:text="${project}"></p>
+                            <p class="font-normal ml-10 text-gray-700" th:text="${profile.project}"></p>
                         </td>
                     </table>
                 </div>
@@ -160,7 +160,7 @@
                             </th>
                         </tr>
                         <td>
-                            <p class="font-normal ml-10 text-gray-700" th:text="${award}"></p>
+                            <p class="font-normal ml-10 text-gray-700" th:text="${profile.award}"></p>
                         </td>
                     </table>
                 </div>
@@ -175,7 +175,7 @@
                             </th>
                         </tr>
                         <td>
-                            <p class="font-normal ml-10 text-gray-700" th:text="${skill}"></p>
+                            <p class="font-normal ml-10 text-gray-700" th:text="${profile.skill}"></p>
                         </td>
                     </table>
                 </div>
@@ -190,29 +190,12 @@
                             </th>
                         </tr>
                         <td>
-                            <p class="font-normal ml-10 text-gray-700" th:text="${language}"></p>
+                            <p class="font-normal ml-10 text-gray-700" th:text="${profile.language}"></p>
                         </td>
                     </table>
                 </div>
             </div>
         </div>
-
-        <!-- In case the authenticated user is a recruiter then they can have the option of creating a job -->
-        <div th:if="${showControls}">
-        <div th:if="${role.toString() =='RECRUITER'}" class="w-1/2 mt-8 ml-80 ">
-            <div class="flex max-w-md  bg-neutral-100 h-[11rem]  border-gray-200 rounded-lg shadow">
-                <a th:href="@{/createjob}">
-                    <p class="text-xl font-normal mt-6 ml-72  text-gray-900">
-                        Create a job
-                        <a th:href="@{/createjob}">
-                            <i class="fa-regular fa-square-plus"></i>
-                        </a>
-                </a>
-                </p>
-            </div>
-        </div>
-    </div>
-
     </div>
 </div>
 </html>

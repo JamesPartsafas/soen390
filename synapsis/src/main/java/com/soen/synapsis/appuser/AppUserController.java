@@ -2,6 +2,7 @@ package com.soen.synapsis.appuser;
 
 import com.soen.synapsis.appuser.connection.ConnectionService;
 import com.soen.synapsis.appuser.job.Job;
+import com.soen.synapsis.appuser.job.JobRequest;
 import com.soen.synapsis.appuser.job.JobService;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
@@ -80,39 +81,32 @@ public class AppUserController {
             return "redirect:/";
         }
 
-        model.addAttribute("role", appUser.getRole());
-        boolean isConnectedWith = connectionService.isConnectedWith(authService.getAuthenticatedUser().getId(), uid);
-        boolean isPendingConnectionWhenSentConnection = connectionService.isPendingConnectionWith(authService.getAuthenticatedUser().getId(), uid); // You sent a connection request and are waiting on the person
-        boolean isPendingConnectionWhenReceivingConnection = connectionService.isPendingConnectionWith(uid, authService.getAuthenticatedUser().getId()); // Another person sent a connection request to you, and is waiting for you
+        AppUser authedUser = authService.getAuthenticatedUser();
 
-        model.addAttribute("id", appUser.getId());
-        model.addAttribute("name", appUser.getName());
-        model.addAttribute("email", appUser.getEmail());
+        boolean isConnectedWith = connectionService.isConnectedWith(authedUser.getId(), uid);
+        boolean isPendingConnectionWhenSentConnection = connectionService.isPendingConnectionWith(authedUser.getId(), uid); // You sent a connection request and are waiting on the person
+        boolean isPendingConnectionWhenReceivingConnection = connectionService.isPendingConnectionWith(uid, authedUser.getId()); // Another person sent a connection request to you, and is waiting for you
+
+        model.addAttribute("currentAppUser", appUser);
         model.addAttribute("profilePicture", appUser.getProfilePicture() != null ? appUser.getProfilePicture().getImage() : "");
         model.addAttribute("isConnectedWith", isConnectedWith);
         model.addAttribute("isPendingConnectionWhenSentConnection", isPendingConnectionWhenSentConnection);
         model.addAttribute("isPendingConnectionWhenReceivingConnection", isPendingConnectionWhenReceivingConnection);
-        model.addAttribute("role", appUser.getRole());
-        model.addAttribute("myRole", authService.getAuthenticatedUser().getRole());
-        model.addAttribute("myId", authService.getAuthenticatedUser().getId());
-        model.addAttribute("verificationStatus", appUser.getVerificationStatus());
+        model.addAttribute("myRole", authedUser.getRole());
+        model.addAttribute("myId", authedUser.getId());
         if(appUser.getRole() ==  Role.RECRUITER) {
             model.addAttribute("companyId", appUser.getCompany().getId());
         }
 
-        model.addAttribute("showControls", authService.getAuthenticatedUser().getId() == uid);
+        model.addAttribute("showControls", authedUser.getId() == uid);
 
         if (appUser.getRole() == Role.COMPANY) {
             CompanyProfile companyProfile = appUser.getCompanyProfile();
             if (companyProfile == null)
                 companyProfile = new CompanyProfile();
 
-            model.addAttribute("description", companyProfile.getDescription());
-            model.addAttribute("website", companyProfile.getWebsite());
-            model.addAttribute("industry", companyProfile.getIndustry());
-            model.addAttribute("companySize", companyProfile.getCompanySize());
-            model.addAttribute("location", companyProfile.getLocation());
-            model.addAttribute("speciality", companyProfile.getSpeciality());
+            model.addAttribute("companyProfile", companyProfile);
+
             return "pages/companypage";
         }
 
@@ -120,16 +114,7 @@ public class AppUserController {
         if (profile == null)
             profile = new AppUserProfile();
 
-        model.addAttribute("description", profile.getDescription());
-        model.addAttribute("education", profile.getEducation());
-        model.addAttribute("skill", profile.getSkill());
-        model.addAttribute("work", profile.getWork());
-        model.addAttribute("course", profile.getCourse());
-        model.addAttribute("phone", profile.getPhone());
-        model.addAttribute("volunteering", profile.getVolunteering());
-        model.addAttribute("project", profile.getProject());
-        model.addAttribute("award", profile.getAward());
-        model.addAttribute("language", profile.getLanguage());
+        model.addAttribute("profile", profile);
 
         return "pages/userpage";
     }
@@ -251,6 +236,11 @@ public class AppUserController {
         return "pages/updateuserpage";
     }
 
+    /**
+     * Allows users to save a job.
+     * @param jobId The id of job being saved.
+     * @return View containing saved jobs. If the requester is not authenticated, redirects to home page.
+     */
     @PostMapping("/savejob")
     public String saveJob(@RequestParam("jobId") Long jobId) {
         if (!authService.isUserAuthenticated()) {
@@ -260,6 +250,11 @@ public class AppUserController {
         return appUserService.saveJob(jobId, appUser);
     }
 
+    /**
+     * Allows users to unsave a job.
+     * @param jobId The id of job being unsaved.
+     * @return View containing saved jobs. If the requester is not authenticated, redirects to home page.
+     */
     @PostMapping("/deletesavedjob")
     public String deleteSavedJob(@RequestParam("jobId") Long jobId) {
         if (!authService.isUserAuthenticated()) {

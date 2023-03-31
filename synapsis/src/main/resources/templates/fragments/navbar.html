@@ -198,16 +198,24 @@
                             Messages
                         </li>
                     </a>
-                    <button data-dropdown-toggle="notificationsDropdown" data-dropdown-trigger="click">
-                        <li class="flex flex-col items-center">
-                            <i id="notificationIcon" class="fa-solid fa-bell fa-2x h-10"></i>
-                            Notifications
+
+                    <a >
+                        <li>
+                            <div class="text-center relative group">
+                                <div class="flex flex-col items-center cursor-pointer text-md  border-b-0
+                                group-hover:border-grey-light">
+                                    <i id="notificationIcon" class="fa-solid fa-bell fa-2x h-10"></i>
+                                    Notifications
+                                </div>
+                                <div class="absolute border border-t-0 w-52 bg-neutral-100 rounded-lg invisible group-hover:visible">
+                                    <div id="notification_output" class="text-left">Nothing to show!</div>
+                                </div>
+                            </div>
                         </li>
-                        <div id="notificationsDropdown"
-                             class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-52">
-                            <div id="notification_output">Nothing to show!</div>
-                        </div>
-                    </button>
+                    </a>
+
+
+
                     <a href="/user">
                     </a>
                     <a href="/settings">
