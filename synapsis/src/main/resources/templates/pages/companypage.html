@@ -45,24 +45,24 @@
                     </table>
                 </div>
 
-                <form th:if="${!isConnectedWith and !isPendingConnectionWhenSentConnection and !isPendingConnectionWhenReceivingConnection and !showControls}" th:action="@{/connect}" method="post">
+                <form th:if="${myRole.toString() != 'ADMIN' and !isConnectedWith and !isPendingConnectionWhenSentConnection and !isPendingConnectionWhenReceivingConnection and !showControls}" th:action="@{/connect}" method="post">
                     <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Connect</button>
                 </form>
 
-                <button th:if="${isPendingConnectionWhenSentConnection}" class="btn bg-black btn-black font-sans text-sm w-25 h-9 p-0" disabled>Pending</button>
+                <button th:if="${myRole.toString() != 'ADMIN' and isPendingConnectionWhenSentConnection}" class="btn bg-black btn-black font-sans text-sm w-25 h-9 p-0" disabled>Pending</button>
 
-                <form th:action="@{/connection/accept}" method="post">
+                <form th:if="${myRole.toString() != 'ADMIN'}" th:action="@{/connection/accept}" method="post">
                     <input type="hidden" name="id" th:value="${currentAppUser.id}" />
                     <button th:if="${isPendingConnectionWhenReceivingConnection}" class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Accept</button>
                 </form>
 
-                <form th:if="${isConnectedWith}" th:action="@{/disconnect}" method="post">
+                <form th:if="${myRole.toString() != 'ADMIN' and isConnectedWith}" th:action="@{/disconnect}" method="post">
                     <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Disconnect
                     </button>
                 </form>
-                <form th:action="@{/chat/create}" method="post">
+                <form th:if="${myRole.toString() != 'ADMIN'}" th:action="@{/chat/create}" method="post">
                     <input type="hidden" name="id" th:value="${currentAppUser.id}" />
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Chat</button>
                 </form>
