@@ -47,7 +47,7 @@
                         </th:block>
                         <!--Messages sent by user-->
                         <div th:if="${message.getSender().getId() == globalUserId}"
-                             class="p-2 px-4 m-2 ml-96 bg-neutral-100 rounded-lg text-right w-1/2 flex flex-row-reverse">
+                             class="p-2 px-4 m-2 ml-96 bg-primary-variant rounded-lg text-right w-1/2 flex flex-row-reverse">
                             <p th:text="${message.getContent()}"></p>
                         </div>
 
