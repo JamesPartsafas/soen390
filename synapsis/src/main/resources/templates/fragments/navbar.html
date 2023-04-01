@@ -5,17 +5,17 @@
 <div th:fragment="navbar" class="h-32">
     <!--Not logged in navbar-->
     <nav sec:authorize="!isAuthenticated()" class="bg-white px-4 lg:px-2 py-6 fixed w-full z-20 top-0 left-0">
-        <div class="container flex flex-wrap items-center justify-between mx-auto">
+        <div class="hidden lg:container lg:flex lg:items-center lg:justify-between lg:mx-auto">
             <a href="/" class="flex items-center">
                 <img src="/assets/synapsis_black.svg" class="h-12 lg:h-16 mt-3 mr-3 " alt="Synapsis Logo">
             </a>
-            <div class="flex md:order-2">
+            <div class="flex md:order-2 m-2">
                 <a href="/login" class="btn btn-primary text-xl">
                     Sign In
                 </a>
             </div>
             <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
-                <ul class="flex flex-col p-4 mt-4 md:flex-row md:space-x-24 md:mt-0 text-3xl font-light text-black">
+                <ul class="flex flex-col p-4 mt-4 md:flex-row md:space-x-16 md:mt-0 text-3xl font-light text-black">
                     <li>
                         <a href="#"
                            aria-current="page">Home</a>
@@ -35,6 +35,57 @@
                 </ul>
             </div>
         </div>
+
+
+        <!--Unauthorized navbar for medium width and below-->
+        <div class="container flex flex-wrap items-center justify-between mx-auto lg:hidden">
+            <a href="/" class="flex items-center">
+                <img src="/assets/synapsis_black.svg" class="h-12 mt-3 mr-3 " alt="Synapsis Logo">
+            </a>
+            <button id="mobileButton" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg">
+                <i class="fa-solid fa-bars fa-2x"></i>
+            </button>
+            <div class="hidden w-full" id="hamburger">
+                <ul class="flex flex-col mt-4 rounded-md bg-neutral-100 text-black">
+                    <li>
+                        <a href="#"  aria-current="page" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                        Home
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="#"  class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                           About
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="#"   class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                           Services
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="#"   class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                       Contact
+                        </a>
+
+                    </li>
+                    <li>
+                        <div>
+                            <a href="/login" class="btn btn-primary text-sm  p-3 ml-2">
+                                Sign In
+                            </a>
+                        </div>
+                    </li>
+
+
+
+                </ul>
+            </div>
+        </div>
+        <div class="invisible w-0 h-0" th:text="${globalUserId}" id="userId"></div>
+        <script src="/js/navbar.js"></script>
     </nav>
 
 
@@ -42,12 +93,12 @@
     <!-- Logged in navbar for COMPANY-->
     <nav sec:authorize="hasAuthority('COMPANY')"
         class="bg-white px-4 lg:px-2 py-2 fixed w-full z-20 top-0 left-0">
-        <div class="container flex flex-wrap items-center justify-between mx-auto">
+        <div class="hidden lg:container lg:flex lg:flex-wrap lg:items-center lg:justify-between lg:mx-auto">
             <a href="/" class="flex items-center">
                 <img src="/assets/synapsis_black.svg" class="h-12 lg:h-16 mt-3 mr-3 " alt="Synapsis Logo">
             </a>
             <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
-                <ul class="flex flex-col justify-between p-4 mt-4 md:flex-row md:space-x-6 md:mt-0 text-lg font-light text-black w-[1000px]">
+                <ul class="flex flex-col justify-between p-4 mt-4 md:flex-row md:space-x-20 md:mt-0 text-lg font-light text-black">
                     <a href="/user" aria-current="page">
                         <li class="flex flex-col items-center">
                             <i class="fa-solid fa-user fa-2x h-10"></i>
@@ -76,8 +127,6 @@
                             <div id="notification_output">Nothing to show!</div>
                         </div>
                     </button>
-                    <a href="/user">
-                    </a>
                     <a href="/settings">
                         <li>
                             <div class="text-center relative group">
@@ -100,30 +149,100 @@
                 </ul>
             </div>
         </div>
+
+
+        <!--Company navbar for medium width and below-->
+        <div class="container flex flex-wrap items-center justify-between mx-auto lg:hidden">
+            <a href="/" class="flex items-center">
+                <img src="/assets/synapsis_black.svg" class="h-12 mt-3 mr-3 " alt="Synapsis Logo">
+            </a>
+            <button id="mobileButton" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg">
+                <i class="fa-solid fa-bars fa-2x"></i>
+            </button>
+            <div class="hidden w-full" id="hamburger">
+                <ul class="flex flex-col mt-4 rounded-md bg-neutral-100 text-black">
+                    <li>
+                        <a href="/user" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-solid fa-user mr-2"></i>
+                            Profiles
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/network" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-solid fa-users mr-2"></i>
+                            Network
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/chats" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-regular fa-comment-dots mr-2"></i>
+                            Messages
+                        </a>
+                    </li>
+                    <li>
+                        <button id="notificationCompany" data-dropdown-toggle="notificationsDropdown" data-dropdown-trigger="click" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <div class="relative group">
+                                <div>
+                                    <i id="notificationIcon" class="fa-solid fa-bell mr-2"></i>
+                                    Notifications
+                                </div>
+
+                                <div id="notificationsDropdownCompany"
+                                     class="hidden z-10 absolute border border-t-0 w-56 bg-white rounded-lg">
+                                    <div id="notification_output">Nothing to show!</div>
+                                </div>
+                            </div>
+                        </button>
+                    </li>
+                    <li>
+                        <a href="/settings" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <div class="relative group">
+                                <div class="cursor-pointer text-md  border-b-0
+                                    group-hover:border-grey-light">
+                                    <i class="fa-solid fa-gear mr-2"></i>
+                                    Settings
+                                </div>
+                                <div class="absolute border border-t-0 w-32 bg-white rounded-lg invisible group-hover:visible">
+                                    <div><i class="fa-solid fa-gear mr-3"></i>Settings</div>
+                                    <div><i class="fa-solid fa-globe mr-3"></i>Language</div>
+                                    <hr class="border-t border-grey-light text-center">
+                                    <form th:action="@{/logout}" method="post" class="text-center">
+                                        <input type="submit" value="Log out"/>
+                                    </form>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
         <div class="invisible w-0 h-0" th:text="${globalUserId}" id="userId"></div>
         <script src="/js/notification.js"></script>
+        <script src="/js/navbar.js"></script>
     </nav>
-
-
-
-
 
 
 
     <!-- Logged in navbar for Admin-->
     <nav sec:authorize="hasAuthority('ADMIN')"
          class="bg-white px-4 lg:px-2 py-2 fixed w-full z-20 top-0 left-0">
-        <div class="container flex flex-wrap items-center justify-between mx-auto">
+        <div class="sm:hidden lg:container lg:flex lg:flex-wrap lg:items-center lg:justify-between lg:mx-auto">
             <a href="/" class="flex items-center">
                 <img src="/assets/synapsis_black.svg" class="h-12 lg:h-16 mt-3 mr-3 " alt="Synapsis Logo">
             </a>
             <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
-                <ul class="flex flex-col justify-between p-4 mt-4 md:flex-row md:space-x-6 md:mt-0 text-lg font-light text-black w-[500px]">
+                <ul class="flex flex-col justify-between p-4 mt-4 md:flex-row md:space-x-6 md:mt-0 text-lg font-light text-black w-[600px]">
 
                     <a href="/admincreationpage">
                         <li class="flex flex-col items-center">
                             <i class="fa-solid fa-user fa-2x h-10"></i>
                             Create Admin
+                        </li>
+                    </a>
+                    <a href="/network">
+                        <li class="flex flex-col items-center">
+                            <i class="fa-solid fa-users fa-2x h-10"></i>
+                            Network
                         </li>
                     </a>
                     <a href="/chats">
@@ -152,15 +271,61 @@
                 </ul>
             </div>
         </div>
+
+<!--Admin navbar for medium width and below-->
+        <div class="container flex flex-wrap items-center justify-between mx-auto lg:hidden">
+            <a href="/" class="flex items-center">
+                <img src="/assets/synapsis_black.svg" class="h-12 lg:h-16 mt-3 mr-3 " alt="Synapsis Logo">
+            </a>
+            <button id="mobileButton" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg">
+                <i class="fa-solid fa-bars fa-2x"></i>
+            </button>
+            <div class="hidden w-full" id="hamburger">
+                <ul class="flex flex-col mt-4 rounded-md bg-light text-black">
+                    <li>
+                        <a href="/admincreationpage" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-solid fa-user mr-2"></i>
+                            Create Admin
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/network" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-solid fa-users"></i>
+                            Network
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/chats" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-regular fa-comment-dots mr-2"></i>
+                            Reported Messages
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/settings" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <div class="relative group">
+                                <div class="cursor-pointer text-md  border-b-0
+                                    group-hover:border-grey-light">
+                                    <i class="fa-solid fa-gear mr-2"></i>
+                                    Settings
+                                </div>
+                                <div class="absolute border border-t-0 w-32 bg-neutral-100 rounded-lg invisible group-hover:visible">
+                                    <hr class="border-t border-grey-light text-center">
+                                    <form th:action="@{/logout}" method="post" class="text-center">
+                                        <input type="submit" value="Log out"/>
+                                    </form>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
         <div class="invisible w-0 h-0" th:text="${#authentication.getPrincipal().getId()}" id="userId"></div>
         <script src="/js/notification.js"></script>
+        <script src="/js/navbar.js"></script>
+
     </nav>
-
-
-
-
-
-
 
 
 
@@ -168,12 +333,12 @@
     <!-- Logged in navbar for Candidate,Recruiter-->
     <nav  sec:authorize="hasAnyAuthority('RECRUITER', 'CANDIDATE')"
          class="bg-white px-4 lg:px-2 py-2 fixed w-full z-20 top-0 left-0">
-        <div class="container flex flex-wrap items-center justify-between mx-auto">
+        <div class="hidden lg:container lg:flex lg:flex-wrap lg:items-center lg:justify-between lg:mx-auto">
             <a href="/" class="flex items-center">
                 <img src="/assets/synapsis_black.svg" class="h-12 lg:h-16 mt-3 mr-3 " alt="Synapsis Logo">
             </a>
             <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
-                <ul class="flex flex-col justify-between p-4 mt-4 md:flex-row md:space-x-6 md:mt-0 text-lg font-light text-black w-[1000px]">
+                <ul class="flex flex-col justify-between p-4 mt-4 md:flex-row md:space-x-14 md:mt-0 text-lg font-light text-black">
                     <a href="/user" aria-current="page">
                         <li class="flex flex-col items-center">
                             <i class="fa-solid fa-user fa-2x h-10"></i>
@@ -199,7 +364,7 @@
                         </li>
                     </a>
 
-                    <a >
+                    <a>
                         <li>
                             <div class="text-center relative group">
                                 <div class="flex flex-col items-center cursor-pointer text-md  border-b-0
@@ -212,11 +377,6 @@
                                 </div>
                             </div>
                         </li>
-                    </a>
-
-
-
-                    <a href="/user">
                     </a>
                     <a href="/settings">
                         <li>
@@ -240,7 +400,82 @@
                 </ul>
             </div>
         </div>
+
+
+
+        <!--Candidate and Recruiter navbar for medium width and below-->
+        <div class="container flex flex-wrap items-center justify-between mx-auto lg:hidden">
+            <a href="/" class="flex items-center">
+                <img src="/assets/synapsis_black.svg" class="h-12 mt-3 mr-3 " alt="Synapsis Logo">
+            </a>
+            <button id="mobileButton" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg">
+                <i class="fa-solid fa-bars fa-2x"></i>
+            </button>
+            <div class="hidden w-full" id="hamburger">
+                <ul class="flex flex-col mt-4 rounded-md bg-neutral-100 text-black">
+                    <li>
+                        <a href="/user" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-solid fa-user mr-2"></i>
+                            Profiles
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/network" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-solid fa-users mr-2"></i>
+                            Network
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/jobs" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-solid fa-briefcase mr-2"></i>
+                            jobs
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/chats" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-regular fa-comment-dots mr-2"></i>
+                            Messages
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <div class="relative group">
+                                <div class="cursor-pointer text-md   border-b-0
+                                group-hover:border-grey-light">
+                                    <i id="notificationIcon" class="fa-solid fa-bell mr-2"></i>
+                                    Notifications
+                                </div>
+                                <div class="absolute border border-t-0 w-52 bg-neutral-100 rounded-lg invisible group-hover:visible">
+                                    <div id="notification_output" class="text-center">Nothing to show!</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/settings" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <div class="relative group">
+                                <div class="cursor-pointer text-md  border-b-0
+                                    group-hover:border-grey-light">
+                                    <i class="fa-solid fa-gear mr-2"></i>
+                                    Settings
+                                </div>
+                                <div class="absolute border border-t-0 w-32 bg-neutral-100  rounded-lg invisible group-hover:visible">
+                                    <div><i class="fa-solid fa-gear mr-3"></i>Settings</div>
+                                    <div><i class="fa-solid fa-globe mr-3"></i>Language</div>
+                                    <hr class="border-t border-grey-light text-center">
+                                    <form th:action="@{/logout}" method="post" class="text-center">
+                                        <input type="submit" value="Log out"/>
+                                    </form>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
         <div class="invisible w-0 h-0" th:text="${globalUserId}" id="userId"></div>
         <script src="/js/notification.js"></script>
+        <script src="/js/navbar.js"></script>
     </nav>
 </div>

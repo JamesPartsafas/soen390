@@ -54,7 +54,7 @@ public class ChatController {
      */
     @PostMapping("/chat/create")
     public String createChat(@RequestParam("id") Long id) {
-        if (!authService.isUserAuthenticated()) {
+        if (!authService.isUserAuthenticated() || authService.doesUserHaveRole(Role.ADMIN)) {
             return "redirect:/";
         }
 

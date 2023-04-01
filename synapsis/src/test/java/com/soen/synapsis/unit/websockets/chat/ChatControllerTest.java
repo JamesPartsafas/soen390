@@ -58,6 +58,13 @@ class ChatControllerTest {
     }
 
     @Test
+    void createChatRedirectToHomePageWhenUserIsAdmin() {
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(authService.doesUserHaveRole(Role.ADMIN)).thenReturn(true);
+        assertEquals("redirect:/", underTest.createChat(1L));
+    }
+
+    @Test
     void createChatCallsChatServiceCreateChatWhenUserIsAuthenticated() {
         AppUser appUser = new AppUser(1L, "Joe Man", "1234", "joeman@mail.com", Role.CANDIDATE);
         when(authService.isUserAuthenticated()).thenReturn(true);
