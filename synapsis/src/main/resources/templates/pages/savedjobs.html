@@ -32,12 +32,6 @@
 
 
           <div class="flex mt-auto justify-evenly">
-              <form th:action="@{/deletesavedjob}" method="post">
-                <input type="hidden" name="jobId" th:value="${job.get().getID()}" />
-                <button class="text-white bg-primary mx-auto p-4 rounded-2xl
-                  hover:bg-opacity-60 transition hover:-translate-y-0.5 duration-150" type="submit"><i class="fa-solid fa-bookmark"></i></button>
-              </form>
-
                <div th:if="${jobsSubmitted.contains(job.get())}">
                  <button class="inline-block px-4 py-4 text-white bg-primary-variant rounded-2xl" disabled>Submitted</button>
                </div>
@@ -45,6 +39,12 @@
                <div th:unless="${jobsSubmitted.contains(job.get())}">
                  <a th:href="@{/jobapplication/{id}(id=${job.get().getID()})}" class="inline-block px-4 py-4 text-white bg-primary rounded-2xl">Apply</a>
                </div>
+
+              <form th:action="@{/deletesavedjob}" method="post">
+                <input type="hidden" name="jobId" th:value="${job.get().getID()}" />
+                <button class="text-white bg-primary mx-auto p-4 rounded-2xl
+                    hover:bg-opacity-60 transition hover:-translate-y-0.5 duration-150" type="submit"><i class="fa-solid fa-bookmark"></i></button>
+              </form>
           </div>
 
         </div>
