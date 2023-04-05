@@ -5,8 +5,9 @@
 
   <div class="w-1/2 mx-auto">
     <div class="mx-auto">
-      <a th:href="@{/jobs}" class="btn btn-primary bg-primary text-base mx-auto rounded-2xl font-thin transition hover:-translate-y-0.5 duration-150 hover:bg-opacity-60">Back</a>
       <p class="text-2xl font-serif font-black-variant font-thin mb-4 text-center">Saved Jobs</p>
+      <a th:href="@{/jobs}" class="btn btn-primary bg-primary text-base mb-2 mx-auto rounded-2xl font-thin transition hover:-translate-y-0.5 duration-150 hover:bg-opacity-60">Back to Jobs Page</a>
+
 
       <div th:if="${jobs.size() == 0}">
         <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
