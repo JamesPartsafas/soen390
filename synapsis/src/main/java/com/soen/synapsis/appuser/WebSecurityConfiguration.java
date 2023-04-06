@@ -58,6 +58,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         httpSecurity.authorizeRequests()
                 .antMatchers("/privateuser").hasAuthority(Role.CANDIDATE.toString())
                 .antMatchers("/").permitAll()
+                .antMatchers("/aboutUs").permitAll()
                 .antMatchers("/admin").hasAuthority(Role.ADMIN.toString())
                 .antMatchers("/admincreationpage").hasAuthority(Role.ADMIN.toString())
                 .antMatchers("/deletejob").hasAuthority(Role.RECRUITER.toString())
