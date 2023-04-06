@@ -53,7 +53,7 @@ UpdateCompanyProfileControllerTest {
     void UpdateCompanyInfo() {
         UpdateCompanyProfileRequest request = new UpdateCompanyProfileRequest("description", "www.google.come", "technology", "10000", "USA", "Social");
 
-        underTest.updateAppUserProfile(request, mock(MultipartFile.class), mock(BindingResult.class), mock(Model.class));
+        underTest.updateAppUserProfile(request, mock(MultipartFile.class), mock(MultipartFile.class), mock(BindingResult.class), mock(Model.class));
 
         updateCompanyProfileService.updateProfile(request, new AppUser(1L, "google",
                 "12345678", "google@mail.com", Role.COMPANY));
@@ -67,7 +67,7 @@ UpdateCompanyProfileControllerTest {
         BindingResult bindingResult = mock(BindingResult.class);
         when(bindingResult.hasErrors()).thenReturn(true);
 
-        underTest.updateAppUserProfile(request, mock(MultipartFile.class), bindingResult, model);
+        underTest.updateAppUserProfile(request, mock(MultipartFile.class), mock(MultipartFile.class), bindingResult, model);
 
         updateCompanyProfileService.updateProfile(request, new AppUser(1L, "google",
                 "12345678", "google@mail.com", Role.COMPANY));

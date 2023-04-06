@@ -1,20 +1,15 @@
 package com.soen.synapsis.appuser;
 
 import com.soen.synapsis.appuser.connection.ConnectionService;
-import com.soen.synapsis.appuser.job.Job;
-import com.soen.synapsis.appuser.job.JobRequest;
-import com.soen.synapsis.appuser.job.JobService;
+import com.soen.synapsis.appuser.profile.ProfilePicture;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
 import com.soen.synapsis.websockets.chat.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +41,7 @@ public class AppUserController {
 
     /**
      * Allows user to access their profile page without specifying their id.
+     *
      * @return The authenticated user's profile page. If they are not authenticated, redirects to home page.
      */
     @GetMapping("/user")
@@ -61,7 +57,8 @@ public class AppUserController {
 
     /**
      * Retrieves a user's profile page, both for standard and company users.
-     * @param uid the user's page to retrieve.
+     *
+     * @param uid   the user's page to retrieve.
      * @param model Allows for data to be passed to view.
      * @return View to profile page if the requester is authenticated, else redirects to home page.
      */
@@ -86,15 +83,27 @@ public class AppUserController {
         boolean isConnectedWith = connectionService.isConnectedWith(authedUser.getId(), uid);
         boolean isPendingConnectionWhenSentConnection = connectionService.isPendingConnectionWith(authedUser.getId(), uid); // You sent a connection request and are waiting on the person
         boolean isPendingConnectionWhenReceivingConnection = connectionService.isPendingConnectionWith(uid, authedUser.getId()); // Another person sent a connection request to you, and is waiting for you
+        int numberOfConnections = connectionService.getNumberOfConnections(uid);
+
 
         model.addAttribute("currentAppUser", appUser);
-        model.addAttribute("profilePicture", appUser.getProfilePicture() != null ? appUser.getProfilePicture().getImage() : "");
+        ProfilePicture profilePicture = appUser.getProfilePicture();
+
+        if (profilePicture == null) {
+            model.addAttribute("profilePicture", "");
+            model.addAttribute("coverPicture", "");
+        } else {
+            model.addAttribute("profilePicture", profilePicture.getImage());
+            model.addAttribute("coverPicture", profilePicture.getCoverImage());
+        }
+
         model.addAttribute("isConnectedWith", isConnectedWith);
         model.addAttribute("isPendingConnectionWhenSentConnection", isPendingConnectionWhenSentConnection);
         model.addAttribute("isPendingConnectionWhenReceivingConnection", isPendingConnectionWhenReceivingConnection);
+        model.addAttribute("numberOfConnections", numberOfConnections);
         model.addAttribute("myRole", authedUser.getRole());
         model.addAttribute("myId", authedUser.getId());
-        if(appUser.getRole() ==  Role.RECRUITER) {
+        if (appUser.getRole() == Role.RECRUITER) {
             model.addAttribute("companyId", appUser.getCompany().getId());
         }
 
@@ -121,7 +130,8 @@ public class AppUserController {
 
     /**
      * Allows user to view search results for other users.
-     * @param name Name to search for
+     *
+     * @param name  Name to search for
      * @param model Allows data to be passed to view
      * @return Returns search results if the user is authenticated, else redirects to home page.
      */
@@ -138,6 +148,7 @@ public class AppUserController {
 
     /**
      * Sample page for verifying if user is authenticated.
+     *
      * @return View containing private user page.
      */
     @GetMapping("/privateuser")
@@ -148,6 +159,7 @@ public class AppUserController {
 
     /**
      * Sample page for verifying if user is authenticated as admin.
+     *
      * @return View containing admin page
      */
     @GetMapping("/admin")
@@ -158,24 +170,25 @@ public class AppUserController {
 
     /**
      * Allows company to mark a CANDIDATE user to a RECRUITER for their company.
+     *
      * @param id The id of the user to mark as a recruiter
      * @return View containing user profile. If the requester is not authenticated, redirects to home page.
      */
     @PostMapping("/company/markCandidateToRecruiter")
     public String markCandidateToRecruiter(@RequestParam("appUserId") Long id) {
         try {
-            if(!authService.doesUserHaveRole(Role.COMPANY)) {
+            if (!authService.doesUserHaveRole(Role.COMPANY)) {
                 throw new IllegalStateException("You must be a company to mark candidates as recruiters.");
             }
             Optional<AppUser> optionalAppUser = appUserService.getAppUser(id);
 
-            if(optionalAppUser.isEmpty()) {
+            if (optionalAppUser.isEmpty()) {
                 return "redirect:/";
             }
 
             AppUser appUser = optionalAppUser.get();
 
-            if(appUser.getRole() != Role.CANDIDATE) {
+            if (appUser.getRole() != Role.CANDIDATE) {
                 throw new IllegalStateException("The user must be a candidate to be marked as a recruiter.");
             }
 
@@ -183,14 +196,14 @@ public class AppUserController {
             String userProfileURL = "redirect:/user/" + id;
 
             return userProfileURL;
-        }
-        catch (IllegalStateException e) {
+        } catch (IllegalStateException e) {
             return "redirect:/";
         }
     }
 
     /**
      * Allows companies to unmark a recruiter belonging to them back to CANDIDATE role.
+     *
      * @param id The id of the recruiter to unmark
      * @return View containing profile page of unmarked user.
      * If the requester is not authenticated, redirect to home page.
@@ -213,7 +226,7 @@ public class AppUserController {
                 throw new IllegalStateException("The user must be a recruiter to be unmarked as a candidate.");
             }
 
-            if(appUser.getCompany().getId() != authService.getAuthenticatedUser().getId()) {
+            if (appUser.getCompany().getId() != authService.getAuthenticatedUser().getId()) {
                 throw new IllegalStateException("The recruiter is not part of your company.");
             }
 
@@ -221,14 +234,14 @@ public class AppUserController {
             String userProfileURL = "redirect:/user/" + id;
 
             return userProfileURL;
-        }
-        catch (IllegalStateException e) {
+        } catch (IllegalStateException e) {
             return "redirect:/";
         }
     }
 
     /**
      * Allows user to access the update user page.
+     *
      * @return View containing the update user page.
      */
     @GetMapping("/updateuserpage")
@@ -238,6 +251,7 @@ public class AppUserController {
 
     /**
      * Allows users to save a job.
+     *
      * @param jobId The id of job being saved.
      * @return View containing saved jobs. If the requester is not authenticated, redirects to home page.
      */
@@ -252,6 +266,7 @@ public class AppUserController {
 
     /**
      * Allows users to unsave a job.
+     *
      * @param jobId The id of job being unsaved.
      * @return View containing saved jobs. If the requester is not authenticated, redirects to home page.
      */
@@ -266,24 +281,25 @@ public class AppUserController {
 
     /**
      * Allows administrator to mark a COMPANY user as verified.
+     *
      * @param id The id of the company user to be marked as verified.
      * @return View containing user profile. If the requester is not authenticated, redirects to home page.
      */
     @PostMapping("/admin/verifyCompany")
     public String markCompanyAsVerified(@RequestParam("companyUserId") Long id) {
         try {
-            if(!authService.doesUserHaveRole(Role.ADMIN)) {
+            if (!authService.doesUserHaveRole(Role.ADMIN)) {
                 throw new IllegalStateException("You must be an admin to mark a company as verified.");
             }
             Optional<AppUser> optionalAppUser = appUserService.getAppUser(id);
 
-            if(optionalAppUser.isEmpty()) {
+            if (optionalAppUser.isEmpty()) {
                 return "redirect:/";
             }
 
             AppUser appUser = optionalAppUser.get();
 
-            if(appUser.getRole() != Role.COMPANY) {
+            if (appUser.getRole() != Role.COMPANY) {
                 throw new IllegalStateException("The user must be a company to be marked as a verified company.");
             }
 
@@ -291,32 +307,32 @@ public class AppUserController {
             String userProfileURL = "redirect:/user/" + id;
 
             return userProfileURL;
-        }
-        catch (IllegalStateException e) {
+        } catch (IllegalStateException e) {
             return "redirect:/";
         }
     }
 
     /**
      * Allows administrator to mark a COMPANY user as non-verified.
+     *
      * @param id The id of the company user to be mark as non-verified.
      * @return View containing user profile. If the requester is not authenticated, redirects to home page.
      */
     @PostMapping("/admin/unverifyCompany")
     public String markCompanyAsNonVerified(@RequestParam("companyUserId") Long id) {
         try {
-            if(!authService.doesUserHaveRole(Role.ADMIN)) {
+            if (!authService.doesUserHaveRole(Role.ADMIN)) {
                 throw new IllegalStateException("You must be an admin to unmark a company as non-verified.");
             }
             Optional<AppUser> optionalAppUser = appUserService.getAppUser(id);
 
-            if(optionalAppUser.isEmpty()) {
+            if (optionalAppUser.isEmpty()) {
                 return "redirect:/";
             }
 
             AppUser appUser = optionalAppUser.get();
 
-            if(appUser.getRole() != Role.COMPANY) {
+            if (appUser.getRole() != Role.COMPANY) {
                 throw new IllegalStateException("The user must be a verified company to be marked as a non-verified company.");
             }
 
@@ -324,8 +340,7 @@ public class AppUserController {
             String userProfileURL = "redirect:/user/" + id;
 
             return userProfileURL;
-        }
-        catch (IllegalStateException e) {
+        } catch (IllegalStateException e) {
             return "redirect:/";
         }
     }
@@ -333,6 +348,7 @@ public class AppUserController {
     /**
      * Bans a user if the admin has determined they have sent a message
      * that is not allowed
+     *
      * @param senderId The ID of the user to be banned
      * @return Chats page, so admin can continue monitoring chat reports
      */

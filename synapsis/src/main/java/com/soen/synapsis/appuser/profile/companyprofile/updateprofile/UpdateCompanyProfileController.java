@@ -4,7 +4,6 @@ import com.soen.synapsis.appuser.AppUser;
 import com.soen.synapsis.appuser.AppUserService;
 import com.soen.synapsis.appuser.AuthService;
 import com.soen.synapsis.appuser.Role;
-import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +33,7 @@ public class UpdateCompanyProfileController {
 
     /**
      * Retrieve the updated company user profile page.
+     *
      * @param model the object carrying data attributes passed to the view.
      * @return the company user profile page.
      */
@@ -55,14 +55,18 @@ public class UpdateCompanyProfileController {
 
     /**
      * Updating the company profile and uploading the profile picture of a company user.
-     * @param request an object carrying the request of a company user to update their profile.
-     * @param file the file image for the profile picture of a company user.
-     * @param bindingResult the binding result of all controller fields and controller method parameters.
-     * @param model the object carrying data attributes passed to the view.
+     *
+     * @param request        an object carrying the request of a company user to update their profile.
+     * @param profilePicture the file image for the profile picture of a company user.
+     * @param coverPicture   the file image for the cover picture of a company user.
+     * @param bindingResult  the binding result of all controller fields and controller method parameters.
+     * @param model          the object carrying data attributes passed to the view.
      * @return the company user profile page.
      */
     @PostMapping("/company/update")
-    public String updateAppUserProfile(UpdateCompanyProfileRequest request, @RequestParam("image") MultipartFile file,
+    public String updateAppUserProfile(UpdateCompanyProfileRequest request,
+                                       @RequestParam("image") MultipartFile profilePicture,
+                                       @RequestParam("coverImage") MultipartFile coverPicture,
                                        BindingResult bindingResult, Model model) {
         if (!authService.doesUserHaveRole(Role.COMPANY)) {
             return "redirect:/";
@@ -73,8 +77,8 @@ public class UpdateCompanyProfileController {
             }
 
             AppUser appUser = authService.getAuthenticatedUser();
-
-            appUserService.uploadProfilePicture(file, appUser);
+            appUserService.uploadProfilePicture(profilePicture, appUser);
+            appUserService.uploadCoverPicture(coverPicture, appUser);
 
             return updateCompanyProfileService.updateProfile(request, authService.getAuthenticatedUser());
         } catch (Exception e) {

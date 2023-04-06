@@ -43,7 +43,7 @@ public interface ConnectionRepository extends JpaRepository<Connection, Connecti
      * Retrieve all the pending connections between two users.
      *
      * @param requesterID the id of the requester user.
-     * @param receiverID the id of the receiver user.
+     * @param receiverID  the id of the receiver user.
      * @return a list of connections where pending is true.
      */
     @Query(value = "SELECT * FROM Connection c WHERE c.requester_id = :requesterID AND c.receiver_id = :receiverID AND c.pending = true", nativeQuery = true)
@@ -53,9 +53,18 @@ public interface ConnectionRepository extends JpaRepository<Connection, Connecti
      * Retrieve all the accepted connections between two users.
      *
      * @param requesterID the id of the requester user.
-     * @param receiverID the id of the receiver user.
+     * @param receiverID  the id of the receiver user.
      * @return a list of connections where pending is false.
      */
     @Query(value = "SELECT * FROM Connection c WHERE c.requester_id = :requesterID AND c.receiver_id = :receiverID AND c.pending = false", nativeQuery = true)
     Optional<Connection> findAcceptedConnectionsByRequesterIDAndReceiverID(@Param("requesterID") Long requesterID, @Param("receiverID") Long receiverID);
+
+    /**
+     * Find number of connections user has.
+     *
+     * @param userId the id of the user.
+     * @return number of connections.
+     */
+    @Query(value = "SELECT COUNT(c) FROM Connection c WHERE (c.requester_id = :userId OR c.receiver_id = :userId) AND c.pending = false", nativeQuery = true)
+    int findNumberOfConnections(@Param("userId") Long userId);
 }

@@ -14,19 +14,22 @@
         <div class="flex max-w-xl bg-neutral-100 border-gray-200 ml-28 rounded-lg shadow">
             <div class="p-5">
                 <label>Change Profile Picture</label>
-                <input type="file" name="image" accept="image/png, image/jpeg" />
+                <input type="file" name="image" accept="image/png, image/jpeg"/>
+                <br>
+                <label>Change Cover Picture</label>
+                <input type="file" name="coverImage" accept="image/png, image/jpeg"/>
                 <br>
 
                 <label>Upload Default Resume</label>
-                <input type="file" name="defaultResume" accept=".pdf,.docx" />
+                <input type="file" name="defaultResume" accept=".pdf,.docx"/>
                 <br>
                 <label>Upload Default Cover Letter</label>
-                <input type="file" name="defaultCoverLetter" accept=".pdf,.docx" />
+                <input type="file" name="defaultCoverLetter" accept=".pdf,.docx"/>
                 <br>
                 <label th:if="${default_resume != null}">Current Default Resume</label><br>
-                <p th:if="${default_resume != null}" th:text ="${default_resume}"></p>
+                <p th:if="${default_resume != null}" th:text="${default_resume}"></p>
                 <label th:if="${default_cover_letter != null}">Current Default Cover Letter</label><br>
-                <p th:if="${default_cover_letter != null}" th:text ="${default_cover_letter}"></p>
+                <p th:if="${default_cover_letter != null}" th:text="${default_cover_letter}"></p>
                 <br>
                 <label>Description</label><br>
                 <textarea id="description" name="description"
@@ -50,7 +53,8 @@
                        class="mb-2 text-left font-normal tracking-tight text-gray-900 "/>
                 <br>
                 <label>Phone</label><br>
-                <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" th:value="${profile.phone}"
+                <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                       th:value="${profile.phone}"
                        class="mb-2 text-left font-normal tracking-tight text-gray-900 "/>
                 <br><span class="help-block">Format: 123-456-7890</span><br>
                 <br>
