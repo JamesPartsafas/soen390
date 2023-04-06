@@ -1,5 +1,6 @@
 <!--    <nav class="flex-auto bg-white px-4 lg:px-2 py-6 fixed w-full z-20 items-center">-->
-<html xmlns:th="http://thymeleaf.org"   xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
 
 <div th:fragment="navbar" class="h-32">
@@ -42,32 +43,34 @@
             <a href="/" class="flex items-center">
                 <img src="/assets/synapsis_black.svg" class="h-12 mt-3 mr-3 " alt="Synapsis Logo">
             </a>
-            <button id="mobileButton" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg">
+            <button id="mobileButton" type="button"
+                    class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg">
                 <i class="fa-solid fa-bars fa-2x"></i>
             </button>
             <div class="hidden w-full" id="hamburger">
                 <ul class="flex flex-col mt-4 rounded-md bg-neutral-100 text-black">
                     <li>
-                        <a href="#"  aria-current="page" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
-                        Home
+                        <a href="#" aria-current="page"
+                           class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            Home
                         </a>
 
                     </li>
                     <li>
-                        <a href="#"  class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
-                           About
+                        <a href="#" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            About
                         </a>
 
                     </li>
                     <li>
-                        <a href="#"   class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
-                           Services
+                        <a href="#" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            Services
                         </a>
 
                     </li>
                     <li>
-                        <a href="#"   class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
-                       Contact
+                        <a href="#" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            Contact
                         </a>
 
                     </li>
@@ -80,7 +83,6 @@
                     </li>
 
 
-
                 </ul>
             </div>
         </div>
@@ -89,16 +91,15 @@
     </nav>
 
 
-
     <!-- Logged in navbar for COMPANY-->
     <nav sec:authorize="hasAuthority('COMPANY')"
-        class="bg-white px-4 lg:px-2 py-2 fixed w-full z-20 top-0 left-0">
+         class="bg-white px-4 lg:px-2 py-2 fixed w-full z-20 top-0 left-0">
         <div class="hidden lg:container lg:flex lg:flex-wrap lg:items-center lg:justify-between lg:mx-auto">
             <a href="/" class="flex items-center">
                 <img src="/assets/synapsis_black.svg" class="h-12 lg:h-16 mt-3 mr-3 " alt="Synapsis Logo">
             </a>
             <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
-                <ul class="flex flex-col justify-between p-4 mt-4 md:flex-row md:space-x-20 md:mt-0 text-lg font-light text-black">
+                <ul class="flex flex-col justify-between p-4 mt-4 md:flex-row md:space-x-20 xl:space-x-24 md:mt-0 text-lg font-light text-black">
                     <a href="/user" aria-current="page">
                         <li class="flex flex-col items-center">
                             <i class="fa-solid fa-user fa-2x h-10"></i>
@@ -156,7 +157,8 @@
             <a href="/" class="flex items-center">
                 <img src="/assets/synapsis_black.svg" class="h-12 mt-3 mr-3 " alt="Synapsis Logo">
             </a>
-            <button id="mobileButton" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg">
+            <button id="mobileButton" type="button"
+                    class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg">
                 <i class="fa-solid fa-bars fa-2x"></i>
             </button>
             <div class="hidden w-full" id="hamburger">
@@ -180,7 +182,9 @@
                         </a>
                     </li>
                     <li>
-                        <button id="notificationCompany" data-dropdown-toggle="notificationsDropdown" data-dropdown-trigger="click" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                        <button id="notificationCompany" data-dropdown-toggle="notificationsDropdown"
+                                data-dropdown-trigger="click"
+                                class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
                             <div class="relative group">
                                 <div>
                                     <i id="notificationIcon" class="fa-solid fa-bell mr-2"></i>
@@ -222,7 +226,6 @@
     </nav>
 
 
-
     <!-- Logged in navbar for Admin-->
     <nav sec:authorize="hasAuthority('ADMIN')"
          class="bg-white px-4 lg:px-2 py-2 fixed w-full z-20 top-0 left-0">
@@ -231,7 +234,7 @@
                 <img src="/assets/synapsis_black.svg" class="h-12 lg:h-16 mt-3 mr-3 " alt="Synapsis Logo">
             </a>
             <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
-                <ul class="flex flex-col justify-between p-4 mt-4 md:flex-row md:space-x-6 md:mt-0 text-lg font-light text-black w-[600px]">
+                <ul class="flex flex-col justify-between p-4 mt-4 md:flex-row md:space-x-20 xl:space-x-24 md:mt-0 text-lg font-light text-black">
 
                     <a href="/admincreationpage">
                         <li class="flex flex-col items-center">
@@ -248,7 +251,7 @@
                     <a href="/chats">
                         <li class="flex flex-col items-center">
                             <i class="fa-regular fa-comment-dots fa-2x h-10"></i>
-                           Reported Messages
+                            Reported Messages
                         </li>
                     </a>
                     <a href="/settings">
@@ -272,18 +275,20 @@
             </div>
         </div>
 
-<!--Admin navbar for medium width and below-->
+        <!--Admin navbar for medium width and below-->
         <div class="container flex flex-wrap items-center justify-between mx-auto lg:hidden">
             <a href="/" class="flex items-center">
                 <img src="/assets/synapsis_black.svg" class="h-12 lg:h-16 mt-3 mr-3 " alt="Synapsis Logo">
             </a>
-            <button id="mobileButton" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg">
+            <button id="mobileButton" type="button"
+                    class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg">
                 <i class="fa-solid fa-bars fa-2x"></i>
             </button>
             <div class="hidden w-full" id="hamburger">
                 <ul class="flex flex-col mt-4 rounded-md bg-light text-black">
                     <li>
-                        <a href="/admincreationpage" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                        <a href="/admincreationpage"
+                           class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
                             <i class="fa-solid fa-user mr-2"></i>
                             Create Admin
                         </a>
@@ -328,17 +333,15 @@
     </nav>
 
 
-
-
     <!-- Logged in navbar for Candidate,Recruiter-->
-    <nav  sec:authorize="hasAnyAuthority('RECRUITER', 'CANDIDATE')"
+    <nav sec:authorize="hasAnyAuthority('RECRUITER', 'CANDIDATE')"
          class="bg-white px-4 lg:px-2 py-2 fixed w-full z-20 top-0 left-0">
         <div class="hidden lg:container lg:flex lg:flex-wrap lg:items-center lg:justify-between lg:mx-auto">
             <a href="/" class="flex items-center">
                 <img src="/assets/synapsis_black.svg" class="h-12 lg:h-16 mt-3 mr-3 " alt="Synapsis Logo">
             </a>
             <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
-                <ul class="flex flex-col justify-between p-4 mt-4 md:flex-row md:space-x-14 md:mt-0 text-lg font-light text-black">
+                <ul class="flex flex-col justify-between p-4 mt-4 md:flex-row md:space-x-14 xl:space-x-20 md:mt-0 text-lg font-light text-black">
                     <a href="/user" aria-current="page">
                         <li class="flex flex-col items-center">
                             <i class="fa-solid fa-user fa-2x h-10"></i>
@@ -402,13 +405,13 @@
         </div>
 
 
-
         <!--Candidate and Recruiter navbar for medium width and below-->
         <div class="container flex flex-wrap items-center justify-between mx-auto lg:hidden">
             <a href="/" class="flex items-center">
                 <img src="/assets/synapsis_black.svg" class="h-12 mt-3 mr-3 " alt="Synapsis Logo">
             </a>
-            <button id="mobileButton" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg">
+            <button id="mobileButton" type="button"
+                    class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg">
                 <i class="fa-solid fa-bars fa-2x"></i>
             </button>
             <div class="hidden w-full" id="hamburger">
