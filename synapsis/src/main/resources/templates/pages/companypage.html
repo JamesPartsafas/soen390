@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="absolute lg:top-2/3 md:top-1/2 bottom-8 lg:right-12 right-4 mt-4">
-                    <form th:if="${myRole.toString() != 'ADMIN' and !isConnectedWith and !isPendingConnectionWhenSentConnection and !isPendingConnectionWhenReceivingConnection and !showControls}"
+                    <form th:if="${myRole.toString() != 'ADMIN' and !isConnectedWith and !isPendingConnectionWhenSentConnection and !isPendingConnectionWhenReceivingConnection and !isAuthedUserProfile}"
                           th:action="@{/connect}" method="post">
                         <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
                         <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">Connect
@@ -61,7 +61,8 @@
                             Disconnect
                         </button>
                     </form>
-                    <form th:if="${myRole.toString() != 'ADMIN'}" th:action="@{/chat/create}" method="post">
+                    <form th:if="${myRole.toString() != 'ADMIN' and !isAuthedUserProfile}" th:action="@{/chat/create}"
+                          method="post">
                         <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
                         <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">Chat
                         </button>
@@ -102,7 +103,7 @@
             </div>
         </div>
 
-        <div th:if="${showControls}"
+        <div th:if="${isAuthedUserProfile}"
              class="max-lg:hidden flex-auto max-w-sm h-[8rem] bg-neutral-100 rounded-lg shadow mr-32">
             <div class="pr-10 pb-5 pl-10 pt-5 ">
                 <a th:href="@{/company/update}" class="text-left xl:text-xl text:lg font-normal  text-gray-900">

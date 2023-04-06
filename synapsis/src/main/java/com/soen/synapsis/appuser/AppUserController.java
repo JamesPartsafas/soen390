@@ -107,7 +107,7 @@ public class AppUserController {
             model.addAttribute("companyId", appUser.getCompany().getId());
         }
 
-        model.addAttribute("showControls", authedUser.getId() == uid);
+        model.addAttribute("isAuthedUserProfile", authedUser.getId() == uid);
 
         if (appUser.getRole() == Role.COMPANY) {
             CompanyProfile companyProfile = appUser.getCompanyProfile();
