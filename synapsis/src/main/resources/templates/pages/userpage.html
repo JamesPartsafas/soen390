@@ -38,42 +38,51 @@
                     </table>
                 </div>
 
-                <form th:if="${myRole.toString() != 'ADMIN' and !isConnectedWith and !isPendingConnectionWhenSentConnection and !isPendingConnectionWhenReceivingConnection and !showControls}" th:action="@{/connect}" method="post">
+                <form th:if="${myRole.toString() != 'ADMIN' and !isConnectedWith and !isPendingConnectionWhenSentConnection and !isPendingConnectionWhenReceivingConnection and !isAuthedUserProfile}"
+                      th:action="@{/connect}" method="post">
                     <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Connect</button>
                 </form>
 
-                <button th:if="${myRole.toString() != 'ADMIN' and isPendingConnectionWhenSentConnection}" class="btn bg-black btn-black font-sans text-sm w-25 h-9 p-0" disabled>Pending</button>
+                <button th:if="${myRole.toString() != 'ADMIN' and isPendingConnectionWhenSentConnection}"
+                        class="btn bg-black btn-black font-sans text-sm w-25 h-9 p-0" disabled>Pending
+                </button>
 
                 <form th:if="${myRole.toString() != 'ADMIN'}" th:action="@{/connection/accept}" method="post">
-                    <input type="hidden" name="id" th:value="${currentAppUser.id}" />
-                    <button th:if="${isPendingConnectionWhenReceivingConnection}" class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Accept</button>
+                    <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
+                    <button th:if="${isPendingConnectionWhenReceivingConnection}"
+                            class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Accept
+                    </button>
                 </form>
 
-                <form th:if="${myRole.toString() != 'ADMIN' and isConnectedWith}" th:action="@{/disconnect}" method="post">
+                <form th:if="${myRole.toString() != 'ADMIN' and isConnectedWith}" th:action="@{/disconnect}"
+                      method="post">
                     <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Disconnect
                     </button>
                 </form>
 
-                <form th:if="${myRole.toString() != 'ADMIN'}" th:action="@{/chat/create}" method="post">
+                <form th:if="${myRole.toString() != 'ADMIN' and !isAuthedUserProfile}" th:action="@{/chat/create}"
+                      method="post">
                     <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Chat</button>
                     <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
                 </form>
 
-                <form th:if="${currentAppUser.role.toString() == 'CANDIDATE' and myRole.toString() == 'COMPANY'}" th:action="@{/company/markCandidateToRecruiter}" method="post">
-                    <input type="hidden" name="appUserId" th:value="${currentAppUser.id}" />
+                <form th:if="${currentAppUser.role.toString() == 'CANDIDATE' and myRole.toString() == 'COMPANY'}"
+                      th:action="@{/company/markCandidateToRecruiter}" method="post">
+                    <input type="hidden" name="appUserId" th:value="${currentAppUser.id}"/>
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Mark</button>
                 </form>
-                <form th:if="${currentAppUser.role.toString() == 'RECRUITER' and myRole.toString() == 'COMPANY' and companyId == myId}" th:action="@{/company/unmarkRecruiterToCandidate}" method="post">
-                    <input type="hidden" name="appUserId" th:value="${currentAppUser.id}" />
+                <form th:if="${currentAppUser.role.toString() == 'RECRUITER' and myRole.toString() == 'COMPANY' and companyId == myId}"
+                      th:action="@{/company/unmarkRecruiterToCandidate}" method="post">
+                    <input type="hidden" name="appUserId" th:value="${currentAppUser.id}"/>
                     <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Unmark</button>
                 </form>
             </div>
         </div>
 
-        <div th:if="${showControls}"
+        <div th:if="${isAuthedUserProfile}"
              class="flex max-w-lg h-[8rem] bg-neutral-100 mr-60 absolute top-32 right-80 border-gray-200 rounded-lg shadow">
             <div class="pr-10 pb-10 pl-10 pt-5 ">
                 <a th:href="@{/user/update}" class=" text-left text-xl  font-normal  text-gray-900">
@@ -87,25 +96,26 @@
     </div>
 
     <div class="flex">
-    <div class="w-1/2">
-    <div class="pl-32 mb-5 mt-8">
-        <div class="flex max-w-xl bg-neutral-100 border-gray-200 rounded-lg shadow">
-            <table>
-                <tr>
-                    <th>
-                        <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">About us</p>
-                    </th>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="max-h-96 overflow-y-auto">
-                            <p class="font-normal ml-3 py-3 px-4 mr-2 mb-2 resize-y text-gray-700" th:text="${profile.description}"></p>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
+        <div class="w-1/2">
+            <div class="pl-32 mb-5 mt-8">
+                <div class="flex max-w-xl bg-neutral-100 border-gray-200 rounded-lg shadow">
+                    <table>
+                        <tr>
+                            <th>
+                                <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">About us</p>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="max-h-96 overflow-y-auto">
+                                    <p class="font-normal ml-3 py-3 px-4 mr-2 mb-2 resize-y text-gray-700"
+                                       th:text="${profile.description}"></p>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
 
             <div class="pl-32 mb-5">
                 <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
