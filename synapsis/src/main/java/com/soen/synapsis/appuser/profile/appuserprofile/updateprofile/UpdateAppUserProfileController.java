@@ -70,6 +70,7 @@ public class UpdateAppUserProfileController {
      *
      * @param request        an object carrying the request of an app user to update their profile.
      * @param profilePicture the file image for the profile picture of an app user.
+     * @param coverPicture   the file image for the profile picture of an app user.
      * @param bindingResult  the binding result of all controller fields and controller method parameters.
      * @param model          the object carrying data attributes passed to the view.
      * @return the app user profile page.
@@ -78,7 +79,8 @@ public class UpdateAppUserProfileController {
     public String updateAppUserProfile(UpdateAppUserProfileRequest request,
                                        @RequestParam("image") MultipartFile profilePicture,
                                        @RequestParam("coverImage") MultipartFile coverPicture,
-                                       @RequestParam("defaultResume") MultipartFile defaultResume, @RequestParam("defaultCoverLetter") MultipartFile defaultCoverLetter,
+                                       @RequestParam("defaultResume") MultipartFile defaultResume,
+                                       @RequestParam("defaultCoverLetter") MultipartFile defaultCoverLetter,
                                        BindingResult bindingResult, Model model) {
         if (!authService.doesUserHaveRole(Role.CANDIDATE, Role.RECRUITER)) {
             return "redirect:/";
