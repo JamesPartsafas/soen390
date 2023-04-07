@@ -263,3 +263,11 @@ input:checked + .slider:before {
     -ms-transform: translateX(26px);
     transform: translateX(26px);
 }
+
+.dot {
+    height: 10px;
+    width: 10px;
+    background-color: var(--color-primary);
+    border-radius: 50%;
+    display: inline-block;
+}

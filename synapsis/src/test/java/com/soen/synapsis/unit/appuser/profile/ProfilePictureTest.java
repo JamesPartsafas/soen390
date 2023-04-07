@@ -21,7 +21,7 @@ class ProfilePictureTest {
         id = 1L;
         appUser = new AppUser(1L, "Joe Man", "1234", "joecompany@mail.com", Role.COMPANY);
         image = "data";
-        underTest = new ProfilePicture(id, appUser, image);
+        underTest = new ProfilePicture(id, appUser, image, image);
     }
 
     @Test
