@@ -39,6 +39,7 @@ public class UpdateAppUserProfileController {
 
     /**
      * Retrieve the updated app user profile page.
+     *
      * @param model the object carrying data attributes passed to the view.
      * @return the app user profile page.
      */
@@ -66,14 +67,20 @@ public class UpdateAppUserProfileController {
 
     /**
      * Updating the profile and uploading the profile picture of an app user.
-     * @param request an object carrying the request of an app user to update their profile.
-     * @param file the file image for the profile picture of an app user.
-     * @param bindingResult the binding result of all controller fields and controller method parameters.
-     * @param model the object carrying data attributes passed to the view.
+     *
+     * @param request        an object carrying the request of an app user to update their profile.
+     * @param profilePicture the file image for the profile picture of an app user.
+     * @param coverPicture   the file image for the profile picture of an app user.
+     * @param bindingResult  the binding result of all controller fields and controller method parameters.
+     * @param model          the object carrying data attributes passed to the view.
      * @return the app user profile page.
      */
     @PostMapping("/user/update")
-    public String updateAppUserProfile(UpdateAppUserProfileRequest request, @RequestParam("image") MultipartFile file, @RequestParam("defaultResume") MultipartFile defaultResume, @RequestParam("defaultCoverLetter") MultipartFile defaultCoverLetter,
+    public String updateAppUserProfile(UpdateAppUserProfileRequest request,
+                                       @RequestParam("image") MultipartFile profilePicture,
+                                       @RequestParam("coverImage") MultipartFile coverPicture,
+                                       @RequestParam("defaultResume") MultipartFile defaultResume,
+                                       @RequestParam("defaultCoverLetter") MultipartFile defaultCoverLetter,
                                        BindingResult bindingResult, Model model) {
         if (!authService.doesUserHaveRole(Role.CANDIDATE, Role.RECRUITER)) {
             return "redirect:/";
@@ -84,8 +91,9 @@ public class UpdateAppUserProfileController {
             }
 
             AppUser appUser = authService.getAuthenticatedUser();
+            appUserService.uploadProfilePicture(profilePicture, appUser);
+            appUserService.uploadCoverPicture(coverPicture, appUser);
 
-            appUserService.uploadProfilePicture(file, appUser);
             appUserService.uploadDefaultResume(defaultResume, appUser);
             appUserService.uploadDefaultCoverLetter(defaultCoverLetter, appUser);
 

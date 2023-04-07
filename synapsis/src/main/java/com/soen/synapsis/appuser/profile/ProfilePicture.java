@@ -17,8 +17,11 @@ public class ProfilePicture {
     @JoinColumn(name = "app_user_id")
     private AppUser appUser;
 
-    @Column(nullable = true, columnDefinition="TEXT")
+    @Column(nullable = true, columnDefinition = "TEXT")
     private String image;
+
+    @Column(nullable = true, columnDefinition = "TEXT")
+    private String coverImage;
 
     /**
      * Empty constructor.
@@ -28,24 +31,30 @@ public class ProfilePicture {
 
     /**
      * Create a new profile picture given the id, app user object and image.
-     * @param id the app user's id.
-     * @param appUser the object representing the app user.
-     * @param image the encoded image for the profile picture.
+     *
+     * @param id         the app user's id.
+     * @param appUser    the object representing the app user.
+     * @param image      the encoded image for the profile picture.
+     * @param coverImage
      */
-    public ProfilePicture(Long id, AppUser appUser, String image) {
+    public ProfilePicture(Long id, AppUser appUser, String image, String coverImage) {
         this.id = id;
         this.appUser = appUser;
         this.image = image;
+        coverImage = coverImage;
     }
 
     /**
      * Create a new profile picture given the app user object and image.
-     * @param appUser the object representing the app user.
-     * @param image the encoded image for the profile picture.
+     *
+     * @param appUser    the object representing the app user.
+     * @param image      the encoded image for the profile picture.
+     * @param coverImage
      */
-    public ProfilePicture(AppUser appUser, String image) {
+    public ProfilePicture(AppUser appUser, String image, String coverImage) {
         this.appUser = appUser;
         this.image = image;
+        coverImage = coverImage;
     }
 
     public Long getId() {
@@ -72,6 +81,14 @@ public class ProfilePicture {
         this.image = image;
     }
 
+    public String getCoverImage() {
+        return coverImage;
+    }
+
+    public void setCoverImage(String cover_image) {
+        this.coverImage = cover_image;
+    }
+
     @Override
     public String toString() {
         return "ProfilePicture{" +
@@ -80,4 +97,6 @@ public class ProfilePicture {
                 ", image='" + image + '\'' +
                 '}';
     }
+
+
 }

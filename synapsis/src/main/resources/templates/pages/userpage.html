@@ -2,208 +2,192 @@
 <html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
 <div layout:fragment="content">
-    <div>
-        <div class="pl-32 pr-5 pb-3">
-            <div class="flex max-w-xl bg-neutral-100 h-[10rem] border-gray-200 rounded-lg shadow">
-                <div class="img" id="profilePictureHolder">
-                    <img class="mt-3.5 rounded-full w-28 h-32" src="../../assets/default_user.svg" alt="Default"/>
+    <div class="flex justify-center xl:mr-32 lg:mr-16 mr-8 ml-8 mb-3 mt-8 gap-32">
+        <div class="flex-auto max-w-2xl">
+            <div class="rounded-lg bg-neutral-100 shadow relative h-80 lg:h-[450px]">
+                <div class="lg:border-8 border-4 border-neutral-300 rounded-full lg:w-48 lg:h-48 w-24 h-24 absolute top-1/4 left-12 bg-white"
+                >
+                    <img class="h-full w-full rounded-full" src="../../assets/default_user.svg" alt="Default"
+                         id="profilePictureHolder"/>
+                </div>
+                <div class="w-full h-1/2 rounded-lg">
+                    <img class="h-full w-full rounded-t-lg" src="../../assets/example_cover_photo.jpg" alt="Default"
+                         id="coverPictureHolder"/>
                 </div>
 
-                <div class="p-5 ">
-                    <h5 class="text-left text-2xl font-bold tracking-tight text-gray-900"
-                        th:text="${currentAppUser.name}"></h5>
+                <div class="absolute lg:top-2/3 top-1/2 lg:left-12 left-4 mt-4">
+                    <div>
+                        <h5 class="text-left text-3xl font-bold tracking-tight text-gray-900"
+                            th:text="${currentAppUser.name}"></h5>
 
-                    <p th:if="${currentAppUser.role.toString() == 'RECRUITER'}">&#10004;</p>
+                        <p th:if="${currentAppUser.role.toString() == 'RECRUITER'}">&#10004;</p>
 
-                    <p th:text="${profile.description}"></p>
+                        <p class="font-sans mt-2" th:text="${profile.description}"></p>
 
-                    <p th:text="${profilePicture}" id="base64Image" hidden></p>
+                        <p class="font-sans text-primary-variant mt-2"
+                           th:text="${numberOfConnections} + ' connections'"></p>
 
-                    <table>
-                        <tr>
-                            <th>
-                                <p class="font-normal text-gray-700" th:text="${profile.work}"></p>
-                            </th>
-                            <th>
-                                <p class="ml-16 font-normal text-gray-700"
-                                   th:text="${profile.education}"></p>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th></th>
-                            <th>
-                                <p class="font-normal ml-16 text-gray-700" th:text="${profile.phone}"></p>
-                            </th>
-                        </tr>
-                    </table>
+                        <p th:text="${profilePicture}" id="base64Image" hidden></p>
+                        <p th:text="${coverPicture}" id="base64CoverImage" hidden></p>
+                    </div>
                 </div>
 
-                <form th:if="${myRole.toString() != 'ADMIN' and !isConnectedWith and !isPendingConnectionWhenSentConnection and !isPendingConnectionWhenReceivingConnection and !isAuthedUserProfile}"
-                      th:action="@{/connect}" method="post">
-                    <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
-                    <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Connect</button>
-                </form>
+                <div class="absolute lg:top-2/3 top-1/2 lg:right-12 right-4 mt-4">
+                    <form th:if="${myRole.toString() != 'ADMIN' and !isConnectedWith and !isPendingConnectionWhenSentConnection and !isPendingConnectionWhenReceivingConnection and !isAuthedUserProfile}"
+                          th:action="@{/connect}" method="post">
+                        <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
+                        <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">Connect
+                        </button>
+                    </form>
 
-                <button th:if="${myRole.toString() != 'ADMIN' and isPendingConnectionWhenSentConnection}"
-                        class="btn bg-black btn-black font-sans text-sm w-25 h-9 p-0" disabled>Pending
-                </button>
-
-                <form th:if="${myRole.toString() != 'ADMIN'}" th:action="@{/connection/accept}" method="post">
-                    <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
-                    <button th:if="${isPendingConnectionWhenReceivingConnection}"
-                            class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Accept
+                    <button th:if="${myRole.toString() != 'ADMIN' and isPendingConnectionWhenSentConnection}"
+                            class="btn bg-black btn-black font-sans text-sm w-25 h-9 p-0 mb-4" disabled>Pending
                     </button>
-                </form>
 
-                <form th:if="${myRole.toString() != 'ADMIN' and isConnectedWith}" th:action="@{/disconnect}"
-                      method="post">
-                    <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
-                    <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Disconnect
-                    </button>
-                </form>
+                    <form th:if="${myRole.toString() != 'ADMIN'}" th:action="@{/connection/accept}" method="post">
+                        <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
+                        <button th:if="${isPendingConnectionWhenReceivingConnection}"
+                                class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">Accept
+                        </button>
+                    </form>
 
-                <form th:if="${myRole.toString() != 'ADMIN' and !isAuthedUserProfile}" th:action="@{/chat/create}"
-                      method="post">
-                    <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
-                    <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Chat</button>
-                    <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
-                </form>
+                    <form th:if="${myRole.toString() != 'ADMIN' and isConnectedWith}" th:action="@{/disconnect}"
+                          method="post">
+                        <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
+                        <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">
+                            Disconnect
+                        </button>
+                    </form>
 
-                <form th:if="${currentAppUser.role.toString() == 'CANDIDATE' and myRole.toString() == 'COMPANY'}"
-                      th:action="@{/company/markCandidateToRecruiter}" method="post">
-                    <input type="hidden" name="appUserId" th:value="${currentAppUser.id}"/>
-                    <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Mark</button>
-                </form>
-                <form th:if="${currentAppUser.role.toString() == 'RECRUITER' and myRole.toString() == 'COMPANY' and companyId == myId}"
-                      th:action="@{/company/unmarkRecruiterToCandidate}" method="post">
-                    <input type="hidden" name="appUserId" th:value="${currentAppUser.id}"/>
-                    <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">Unmark</button>
-                </form>
+                    <form th:if="${myRole.toString() != 'ADMIN' and !isAuthedUserProfile}" th:action="@{/chat/create}"
+                          method="post">
+                        <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
+                        <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">Chat
+                        </button>
+                        <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
+                    </form>
+
+                    <form th:if="${currentAppUser.role.toString() == 'CANDIDATE' and myRole.toString() == 'COMPANY'}"
+                          th:action="@{/company/markCandidateToRecruiter}" method="post">
+                        <input type="hidden" name="appUserId" th:value="${currentAppUser.id}"/>
+                        <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">Mark
+                        </button>
+                    </form>
+                    <form th:if="${currentAppUser.role.toString() == 'RECRUITER' and myRole.toString() == 'COMPANY' and companyId == myId}"
+                          th:action="@{/company/unmarkRecruiterToCandidate}" method="post">
+                        <input type="hidden" name="appUserId" th:value="${currentAppUser.id}"/>
+                        <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">Unmark
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="mt-16 max-w-2xl bg-neutral-100 border-gray-200 rounded-lg shadow">
+                <table>
+                    <tr>
+                        <th>
+                            <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">About</p>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="max-h-96 overflow-y-auto">
+                                <p class="font-normal ml-3 py-3 px-4 mr-2 mb-2 resize-y text-gray-700"
+                                   th:text="${profile.description}"></p>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="mt-8 max-w-2xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
+                <table>
+                    <tr>
+                        <th>
+                            <p class="text-left text-2xl ml-8 font-bold text-gray-900">Volunteering</p>
+                        </th>
+                    </tr>
+                    <td>
+                        <p class="font-normal ml-10 text-gray-700" th:text="${profile.volunteering}"></p>
+                    </td>
+                </table>
+            </div>
+
+            <div class="mt-8 max-w-2xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
+                <table>
+                    <tr>
+                        <th>
+                            <p class="text-left text-2xl ml-8 font-bold text-gray-900">Courses</p>
+                        </th>
+                    </tr>
+                    <td>
+                        <p class="font-normal ml-10 text-gray-700" th:text="${profile.course}"></p>
+                    </td>
+                </table>
+            </div>
+
+            <div class="mt-8 max-w-2xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
+                <table>
+                    <tr>
+                        <th>
+                            <p class="text-left text-2xl ml-8 font-bold text-gray-900">Projects</p>
+                        </th>
+                    </tr>
+                    <td>
+                        <p class="font-normal ml-10 text-gray-700" th:text="${profile.project}"></p>
+                    </td>
+                </table>
+            </div>
+
+            <div class="mt-8 max-w-2xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
+                <table>
+                    <tr>
+                        <th>
+                            <p class="text-left text-2xl ml-8 font-bold text-gray-900">Awards</p>
+                        </th>
+                    </tr>
+                    <td>
+                        <p class="font-normal ml-10 text-gray-700" th:text="${profile.award}"></p>
+                    </td>
+                </table>
+            </div>
+
+            <div class="mt-8 max-w-2xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
+                <table>
+                    <tr>
+                        <th>
+                            <p class="text-left text-2xl ml-8 font-bold text-gray-900">Skills</p>
+                        </th>
+                    </tr>
+                    <td>
+                        <p class="font-normal ml-10 text-gray-700" th:text="${profile.skill}"></p>
+                    </td>
+                </table>
+            </div>
+
+            <div class="mt-8 max-w-2xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
+                <table>
+                    <tr>
+                        <th>
+                            <p class="text-left text-2xl ml-8 font-bold text-gray-900">Languages</p>
+                        </th>
+                    </tr>
+                    <td>
+                        <p class="font-normal ml-10 text-gray-700" th:text="${profile.language}"></p>
+                    </td>
+                </table>
             </div>
         </div>
 
         <div th:if="${isAuthedUserProfile}"
-             class="flex max-w-lg h-[8rem] bg-neutral-100 mr-60 absolute top-32 right-80 border-gray-200 rounded-lg shadow">
-            <div class="pr-10 pb-10 pl-10 pt-5 ">
-                <a th:href="@{/user/update}" class=" text-left text-xl  font-normal  text-gray-900">
+             class="max-lg:hidden flex-auto max-w-sm h-[8rem] bg-neutral-100 rounded-lg shadow mr-32">
+            <div class="pr-10 pb-5 pl-10 pt-5 ">
+                <a th:href="@{/user/update}" class="text-left xl:text-xl text:lg font-normal  text-gray-900">
                     Edit Public Profile
                 </a>
-                <br>
-                <a th:href="@{/passwordupdate}" class="mb-3 text-left text-xl font normal text-gray-900"> Reset
+                <hr class="mt-4 mb-4">
+                <a th:href="@{/passwordupdate}" class=" text-left xl:text-xl text:lg font normal text-gray-900"> Reset
                     Password</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="flex">
-        <div class="w-1/2">
-            <div class="pl-32 mb-5 mt-8">
-                <div class="flex max-w-xl bg-neutral-100 border-gray-200 rounded-lg shadow">
-                    <table>
-                        <tr>
-                            <th>
-                                <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">About us</p>
-                            </th>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="max-h-96 overflow-y-auto">
-                                    <p class="font-normal ml-3 py-3 px-4 mr-2 mb-2 resize-y text-gray-700"
-                                       th:text="${profile.description}"></p>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-
-            <div class="pl-32 mb-5">
-                <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
-                    <table>
-                        <tr>
-                            <th>
-                                <p class="text-left text-2xl ml-8 font-bold text-gray-900">Volunteering</p>
-                            </th>
-                        </tr>
-                        <td>
-                            <p class="font-normal ml-10 text-gray-700" th:text="${profile.volunteering}"></p>
-                        </td>
-                    </table>
-                </div>
-            </div>
-            <div class="pl-32 mb-5 ">
-                <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
-                    <table>
-                        <tr>
-                            <th>
-                                <p class="text-left text-2xl ml-8 font-bold text-gray-900">Course(s)</p>
-                            </th>
-                        </tr>
-                        <td>
-                            <p class="font-normal ml-10 text-gray-700" th:text="${profile.course}"></p>
-                        </td>
-                    </table>
-                </div>
-            </div>
-
-            <div class="pl-32 mb-5 ">
-                <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
-                    <table>
-                        <tr>
-                            <th>
-                                <p class="text-left text-2xl ml-8 font-bold text-gray-900">Project(s)</p>
-                            </th>
-                        </tr>
-                        <td>
-                            <p class="font-normal ml-10 text-gray-700" th:text="${profile.project}"></p>
-                        </td>
-                    </table>
-                </div>
-            </div>
-
-            <div class="pl-32 mb-5 ">
-                <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
-                    <table>
-                        <tr>
-                            <th>
-                                <p class="text-left text-2xl ml-8 font-bold text-gray-900">Award(s)</p>
-                            </th>
-                        </tr>
-                        <td>
-                            <p class="font-normal ml-10 text-gray-700" th:text="${profile.award}"></p>
-                        </td>
-                    </table>
-                </div>
-            </div>
-
-            <div class="pl-32  mb-5 ">
-                <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
-                    <table>
-                        <tr>
-                            <th>
-                                <p class="text-left text-2xl ml-8 font-bold text-gray-900">Skill(s)</p>
-                            </th>
-                        </tr>
-                        <td>
-                            <p class="font-normal ml-10 text-gray-700" th:text="${profile.skill}"></p>
-                        </td>
-                    </table>
-                </div>
-            </div>
-
-            <div class="pl-32 mb-44 ">
-                <div class="flex max-w-xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
-                    <table>
-                        <tr>
-                            <th>
-                                <p class="text-left text-2xl ml-8 font-bold text-gray-900">Language(s)</p>
-                            </th>
-                        </tr>
-                        <td>
-                            <p class="font-normal ml-10 text-gray-700" th:text="${profile.language}"></p>
-                        </td>
-                    </table>
-                </div>
             </div>
         </div>
     </div>

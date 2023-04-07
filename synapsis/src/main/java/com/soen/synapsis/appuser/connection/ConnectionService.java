@@ -78,7 +78,7 @@ public class ConnectionService {
      * Reject a connection request from another user.
      *
      * @param user the logged-in user.
-     * @param id the user that you are rejecting the request.
+     * @param id   the user that you are rejecting the request.
      * @return the network page.
      */
     public String rejectConnection(AppUser user, Long id) {
@@ -104,7 +104,7 @@ public class ConnectionService {
      * Accept a connection request from another user.
      *
      * @param user the logged-in user.
-     * @param id the user that you are accepting the request.
+     * @param id   the user that you are accepting the request.
      * @return the network page.
      */
     public String acceptConnection(AppUser user, Long id) {
@@ -140,7 +140,7 @@ public class ConnectionService {
      * Create a connection request with another user.
      *
      * @param requesterId the logged-in user.
-     * @param receiverId the user that you are sending a request to.
+     * @param receiverId  the user that you are sending a request to.
      */
     public void connect(Long requesterId, Long receiverId) {
         AppUser requester = appUserRepository.getReferenceById(requesterId);
@@ -174,7 +174,7 @@ public class ConnectionService {
      * Disconnect with another user.
      *
      * @param requesterId the logged-in user.
-     * @param receiverId the user that you are disconnecting with.
+     * @param receiverId  the user that you are disconnecting with.
      */
     public void disconnect(Long requesterId, Long receiverId) {
         ConnectionKey connectionKey1 = new ConnectionKey(requesterId, receiverId);
@@ -189,7 +189,7 @@ public class ConnectionService {
      * Check if two users are connected.
      *
      * @param requesterId the first appuser
-     * @param receiverId the second appuser
+     * @param receiverId  the second appuser
      * @return true if the two users are connected; otherwise false
      */
     public boolean isConnectedWith(Long requesterId, Long receiverId) {
@@ -207,7 +207,7 @@ public class ConnectionService {
      * Check if there's a pending connection request between two users.
      *
      * @param requesterId the first appuser.
-     * @param receiverId the second appuser.
+     * @param receiverId  the second appuser.
      * @return true if there is a pending connection between the two users; otherwise false
      */
     public boolean isPendingConnectionWith(Long requesterId, Long receiverId) {
@@ -218,5 +218,15 @@ public class ConnectionService {
         return true;
     }
 
+    /**
+     * Get the number of connections that user has.
+     *
+     * @param userId theappuser.
+     * @return number of connections user has.
+     */
+    public int getNumberOfConnections(Long userId) {
+        int numberOfConnections = connectionRepository.findNumberOfConnections(userId);
+        return numberOfConnections;
+    }
 }
 

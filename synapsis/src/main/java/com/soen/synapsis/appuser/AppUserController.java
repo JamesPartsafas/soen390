@@ -1,6 +1,7 @@
 package com.soen.synapsis.appuser;
 
 import com.soen.synapsis.appuser.connection.ConnectionService;
+import com.soen.synapsis.appuser.profile.ProfilePicture;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfile;
 import com.soen.synapsis.websockets.chat.ChatService;
@@ -82,12 +83,24 @@ public class AppUserController {
         boolean isConnectedWith = connectionService.isConnectedWith(authedUser.getId(), uid);
         boolean isPendingConnectionWhenSentConnection = connectionService.isPendingConnectionWith(authedUser.getId(), uid); // You sent a connection request and are waiting on the person
         boolean isPendingConnectionWhenReceivingConnection = connectionService.isPendingConnectionWith(uid, authedUser.getId()); // Another person sent a connection request to you, and is waiting for you
+        int numberOfConnections = connectionService.getNumberOfConnections(uid);
+
 
         model.addAttribute("currentAppUser", appUser);
-        model.addAttribute("profilePicture", appUser.getProfilePicture() != null ? appUser.getProfilePicture().getImage() : "");
+        ProfilePicture profilePicture = appUser.getProfilePicture();
+
+        if (profilePicture == null) {
+            model.addAttribute("profilePicture", "");
+            model.addAttribute("coverPicture", "");
+        } else {
+            model.addAttribute("profilePicture", profilePicture.getImage());
+            model.addAttribute("coverPicture", profilePicture.getCoverImage());
+        }
+
         model.addAttribute("isConnectedWith", isConnectedWith);
         model.addAttribute("isPendingConnectionWhenSentConnection", isPendingConnectionWhenSentConnection);
         model.addAttribute("isPendingConnectionWhenReceivingConnection", isPendingConnectionWhenReceivingConnection);
+        model.addAttribute("numberOfConnections", numberOfConnections);
         model.addAttribute("myRole", authedUser.getRole());
         model.addAttribute("myId", authedUser.getId());
         if (appUser.getRole() == Role.RECRUITER) {
