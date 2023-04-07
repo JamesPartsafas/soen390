@@ -13,7 +13,10 @@
         <div class="flex max-w-xl bg-neutral-100 border-gray-200 ml-28 rounded-lg shadow">
             <div class="p-5">
                 <label>Change Profile Picture</label>
-                <input type="file" name="image" accept="image/png, image/jpeg" />
+                <input type="file" name="image" accept="image/png, image/jpeg"/>
+                <br>
+                <label>Change Cover Picture</label>
+                <input type="file" name="coverImage" accept="image/png, image/jpeg"/>
                 <br>
 
                 <label>Description</label><br>
@@ -35,7 +38,8 @@
 
                 <br>
                 <label>Company Size</label><br>
-                <input type="text" required  oninvalid="this.setCustomValidity(this.value.trim() == '' ? 'Please fill out this field' : 'Please enter a valid number')"
+                <input type="text" required
+                       oninvalid="this.setCustomValidity(this.value.trim() == '' ? 'Please fill out this field' : 'Please enter a valid number')"
                        onchange="try{if(!/^\d+$/.test(this.value.trim())) throw 'Please enter a valid number'; setCustomValidity('')}catch(e){setCustomValidity(e)}"
                        oninput="setCustomValidity('')"
                        id="companySize" name="companySize" th:value="${profile.companySize}"
