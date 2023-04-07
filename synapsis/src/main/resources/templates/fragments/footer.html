@@ -1,4 +1,8 @@
 <div th:fragment="footer" class="h-64">
+    <form sec:authorize="isAuthenticated()"class="mt-4 text-center">
+        <label for="back" class="p-4 text-black-variant bg-light rounded-lg cursor-pointer hover:font-bold">Back to previous page</label>
+        <input type="button" id="back" onclick="history.back()">
+    </form>
     <div class="w-full bg-black-variant relative bottom-0 left-0">
         <div class="container flex flex-row justify-between mt-8">
             <div class="flex-none mt-4 w-3/6">
