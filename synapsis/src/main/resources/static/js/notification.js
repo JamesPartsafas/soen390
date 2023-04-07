@@ -4,7 +4,8 @@ let recipientId = document.querySelector('#userId').innerHTML;
 function connectNotification() {
     const notificationSocket = new SockJS('/ws');
     notificationStompClient = Stomp.over(notificationSocket);
-    notificationStompClient.debug = () => {};
+    notificationStompClient.debug = () => {
+    };
     notificationStompClient.connect({}, onNotificationSocketConnected, onError);
 }
 
@@ -73,7 +74,7 @@ function updateNotifications() {
 
 function showNotificationPresent() {
     if (document.querySelector('#unseen')) {
-        document.querySelector('#notificationIcon').style.color = "red";
+        document.querySelector('#notificationPresent').style.visibility = "visible";
     }
 }
 
