@@ -242,6 +242,7 @@ public class JobController {
             model.addAttribute("is_external", job.getIsExternal());
             model.addAttribute("external_link", job.getExternalLink());
             model.addAttribute("need_portfolio", job.getNeedPortfolio());
+            model.addAttribute("savedJobs", authService.getAuthenticatedUser().getSavedJobs());
 
             return "pages/jobapplicationexternal";
         } else {

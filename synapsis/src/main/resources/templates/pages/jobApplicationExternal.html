@@ -12,11 +12,24 @@
                 <p th:text="${address}" class="inline text-2xl font-serif font-thin mb-4"></p>
             </div>
 
-            <div class="m-4 transition hover:-translate-y-0.5 duration-150">
-                <!--Only CANDIDATES can save jobs-->
-                <a th:if="${role.toString()=='CANDIDATE'}" class="p-4 bg-light text-black text-base-variant mx-auto rounded-2xl font-bold
-                 hover:bg-opacity-60">Save</a>
+            <div class="flex m-4">
+                <div th:if="${!savedJobs.contains(jobId)}">
+                    <form th:action="@{/savejob}" method="post">
+                        <input type="hidden" name="jobId" th:value="${jobId}" />
+                        <button class="p-4 bg-light text-black text-base-variant mx-auto rounded-2xl font-bold
+                 hover:bg-opacity-60" type="submit"><i class="fa-regular fa-bookmark"></i></button>
+                    </form>
+                </div>
+
+                <div th:if="${savedJobs.contains(jobId)}">
+                    <form th:action="@{/deletesavedjob}" method="post">
+                        <input type="hidden" name="jobId" th:value="${jobId}" />
+                        <button class="p-4 bg-light text-black text-base-variant mx-auto rounded-2xl font-bold
+                 hover:bg-opacity-60" type="submit"><i class="fa-solid fa-bookmark"></i></button>
+                    </form>
+                </div>
             </div>
+
         </div>
 
         <div class="flex flex-col md:flex-row justify-between m-4 bg-light rounded-md p-4 space-x-0 md:space-x-4">
