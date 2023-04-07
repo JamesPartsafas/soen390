@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
  * A controller class to work the index.
@@ -74,6 +77,17 @@ public class IndexController {
     @GetMapping(value= "/accessDenied")
     public String getAccessDeniedPage(Model model) {
         return indexService.getAccessDeniedPage();
+    }
+
+    @GetMapping("/aboutUs")
+    public String getAboutUsPage() {
+
+        return "pages/aboutUs";
+    }
+    @GetMapping("/ourServices")
+    public String getServicesPage() {
+
+        return "pages/ourServices";
     }
 
 }
