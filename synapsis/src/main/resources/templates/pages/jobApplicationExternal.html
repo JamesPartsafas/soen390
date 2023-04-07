@@ -12,10 +12,28 @@
                 <p th:text="${address}" class="inline text-2xl font-serif font-thin mb-4"></p>
             </div>
 
-            <div class="m-4 transition hover:-translate-y-0.5 duration-150">
+<!--            <div class="m-4 transition hover:-translate-y-0.5 duration-150">-->
                 <!--Only CANDIDATES can save jobs-->
-                <a th:if="${role.toString()=='CANDIDATE'}" class="p-4 bg-light text-black text-base-variant mx-auto rounded-2xl font-bold
-                 hover:bg-opacity-60">Save</a>
+<!--                <a th:if="${role.toString()=='CANDIDATE'}" class="p-4 bg-light text-black text-base-variant mx-auto rounded-2xl font-bold-->
+<!--                 hover:bg-opacity-60">Save</a>-->
+            <div class="flex m-4">
+                <div th:if="${!savedJobs.contains(jobId) and role.toString()=='CANDIDATE'}">
+                    <form th:action="@{/savejob}" method="post">
+                        <input type="hidden" name="jobId" th:value="${jobId}" />
+                        <button class="p-4 bg-light text-black text-base-variant mx-auto rounded-2xl font-bold transition hover:-translate-y-0.5
+                        duration-150 hover:bg-opacity-60" type="submit"><i class="fa-regular fa-bookmark"></i></button>
+                    </form>
+                </div>
+
+                <div th:if="${savedJobs.contains(jobId) and role.toString()=='CANDIDATE'}">
+                    <form th:action="@{/deletesavedjob}" method="post">
+                        <input type="hidden" name="jobId" th:value="${jobId}" />
+                        <button class="p-4 bg-light text-black text-base-variant mx-auto rounded-2xl font-bold transition
+                        hover:-translate-y-0.5 duration-150 hover:bg-opacity-60" type="submit"><i class="fa-solid fa-bookmark"></i></button>
+                    </form>
+                </div>
+
+                <a th:href="@{/jobs}" class="btn btn-primary bg-primary text-base ml-2 mx-auto rounded-2xl font-thin transition hover:-translate-y-0.5 duration-150 hover:bg-opacity-60">Back</a>
             </div>
         </div>
 
