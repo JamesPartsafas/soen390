@@ -1,34 +1,24 @@
 <html xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
-<ul th:fragment="notification_list" id="notification_output">
-    <li th:if="${notificationList.empty}">
+<ul th:fragment="notification_list" id="notification_output" class="p-2">
+    <li th:if="${notificationList.empty}" class="p-2">
         <td>Nothing to show!</td>
     </li>
-    <li th:each="notification : ${notificationList}">
+    <li th:each="notification, iStat : ${notificationList}" class="">
         <a th:onclick="'sendSeen(' + ${notification.id} + ')'" th:href="${notification.url}"
-           class="flex justify-between items-start">
-            <div th:if="${notification.getType().toString() == 'MESSAGE'}">
-                <div class=" w-1 h-1 float-left mr-2 ml-1 ">
-                <i class="fa-sharp fa-solid fa-message "></i></div>
-                <div th:text="${notification.text}" class="flex-none  ml-3 pl-3 text-left text-sm">
-                </div>
+           class="flex justify-around items-center w-52">
+            <div th:if="${notification.getType().toString() == 'MESSAGE'}" class="">
+                <i class="fa-solid fa-message"></i></div>
+            <div th:if="${notification.getType().toString() =='CONNECTION'}" class="">
+                <i class="fa-solid fa-user-group"></i></div>
             </div>
-            <div th:if="${notification.getType().toString() =='CONNECTION'}">
-                <div class=" w-1 h-1 float-left mr-2 ml-1 ">
-                    <i class="fa-solid fa-user-group"></i></div>
-                <div th:text="${notification.text}" class="flex-none  ml-4 pl-3 text-left text-sm">
-                </div>
+            <div th:if="${notification.getType().toString() =='JOB'}" class="">
+                <i class="fa-solid fa-briefcase"></i></div>
             </div>
-            <div th:if="${notification.getType().toString() =='JOB'}">
-                <div class=" w-1 h-1 float-left mr-2 ml-1 ">
-                    <i class="fa-solid fa-briefcase"></i></div>
-                <div th:text="${notification.text}" class="flex-none  ml-4 pl-3 text-left text-sm">
-                </div>
-            </div>
-            <div id="unseen" th:if="${!notification.seen}"
-                 class="flex-none w-2 h-2 bg-red-400 rounded-full mr-2 pr-2"></div>
+            <div id="unseen" th:if="${!notification.seen}" th:text="${notification.text}" class="flex-none w-36 text-sm font-bold truncate"></div>
+            <div th:if="${notification.seen}" th:text="${notification.text}" class="flex-none w-36 text-sm truncate"></div>
         </a>
-        <hr class="mt-2 mb-2">
+        <hr th:if="${iStat.count != (iStat.size)}" class="mt-2 mb-2">
     </li>
 </ul>
 </html>
