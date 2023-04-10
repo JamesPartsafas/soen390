@@ -118,19 +118,24 @@
                             Messages
                         </li>
                     </a>
-                    <button data-dropdown-toggle="notificationsDropdown" data-dropdown-trigger="click">
-                        <li class="flex flex-col items-center">
-                            <i id="notificationIcon" class="fa-solid fa-bell fa-2x h-10">
-                                <div class="dot absolute bottom-0 right-0" style="visibility: hidden"
-                                     id="notificationPresent"></div>
-                            </i>
-                            Notifications
+                    <div>
+                        <li>
+                            <div class="text-center relative group">
+                                <div class="flex flex-col items-center cursor-pointer text-md  border-b-0
+                                group-hover:border-grey-light">
+                                    <i id="notificationIcon" class="fa-solid fa-bell fa-2x h-10 relative">
+                                        <div class="dot absolute bottom-0 right-0" style="visibility: hidden"
+                                             id="notificationPresent"></div>
+                                    </i>
+                                    Notifications
+
+                                </div>
+                                <div class="absolute border border-t-0 w-52 bg-neutral-100 rounded-lg invisible group-hover:visible">
+                                    <div id="notification_output" class="text-left">Nothing to show!</div>
+                                </div>
+                            </div>
                         </li>
-                        <div id="notificationsDropdown"
-                             class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-52">
-                            <div id="notification_output">Nothing to show!</div>
-                        </div>
-                    </button>
+                    </div>
                     <div>
                         <li>
                             <div class="text-center relative group">
@@ -161,10 +166,28 @@
             <a href="/" class="flex items-center">
                 <img src="/assets/synapsis_black.svg" class="h-12 mt-3 mr-3 " alt="Synapsis Logo">
             </a>
-            <button id="mobileButton" type="button"
-                    class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg">
-                <i class="fa-solid fa-bars fa-2x"></i>
-            </button>
+
+            <div class="inline-block flex items-center">
+                <div class="inline-block items-center p-2 text-gray-500 rounded">
+                    <div class="relative group">
+                        <div class="cursor-pointer text-md   border-b-0
+                                group-hover:border-grey-light">
+                            <i id="notificationIcon" class="fa-solid fa-bell fa-xl">
+                                <div class="dot absolute bottom-0 right-0" style="visibility: hidden"
+                                     id="mobileNotificationPresent"></div>
+                            </i>
+                        </div>
+                        <div class="absolute right-0 border border-t-0 w-52 bg-neutral-100 rounded-lg invisible group-hover:visible group-active:visible">
+                            <div id="mobile_notification_output" class="text-center ml-2">Nothing to show!</div>
+                        </div>
+                    </div>
+                </div>
+                <button id="mobileButton" type="button"
+                        class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg">
+                    <i class="fa-solid fa-bars fa-2x"></i>
+                </button>
+            </div>
+
             <div class="hidden w-full" id="hamburger">
                 <ul class="flex flex-col mt-4 rounded-md bg-neutral-100 text-black">
                     <li>
@@ -184,26 +207,6 @@
                             <i class="fa-regular fa-comment-dots mr-2"></i>
                             Messages
                         </a>
-                    </li>
-                    <li>
-                        <button id="notificationCompany" data-dropdown-toggle="notificationsDropdown"
-                                data-dropdown-trigger="click"
-                                class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
-                            <div class="relative group">
-                                <div>
-                                    <i id="notificationIcon" class="fa-solid fa-bell mr-2">
-                                        <div class="dot absolute bottom-0 right-0" style="visibility: hidden"
-                                             id="notificationPresent"></div>
-                                    </i>
-                                    Notifications
-                                </div>
-
-                                <div id="notificationsDropdownCompany"
-                                     class="hidden z-10 absolute border border-t-0 w-56 bg-white rounded-lg">
-                                    <div id="notification_output">Nothing to show!</div>
-                                </div>
-                            </div>
-                        </button>
                     </li>
                     <li>
                         <div
@@ -379,7 +382,7 @@
                         </li>
                     </a>
 
-                    <a>
+                    <div>
                         <li>
                             <div class="text-center relative group">
                                 <div class="flex flex-col items-center cursor-pointer text-md  border-b-0
@@ -396,7 +399,7 @@
                                 </div>
                             </div>
                         </li>
-                    </a>
+                    </div>
                     <div>
                         <li>
                             <div class="text-center relative group">
@@ -427,10 +430,28 @@
             <a href="/" class="flex items-center">
                 <img src="/assets/synapsis_black.svg" class="h-12 mt-3 mr-3 " alt="Synapsis Logo">
             </a>
-            <button id="mobileButton" type="button"
-                    class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg">
-                <i class="fa-solid fa-bars fa-2x"></i>
-            </button>
+
+            <div class="inline-block flex items-center">
+                <div class="inline-block items-center p-2 text-gray-500 rounded">
+                    <div class="relative group">
+                        <div class="cursor-pointer text-md   border-b-0
+                                group-hover:border-grey-light">
+                            <i id="notificationIcon" class="fa-solid fa-bell fa-xl">
+                                <div class="dot absolute bottom-0 right-0" style="visibility: hidden"
+                                     id="mobileNotificationPresent"></div>
+                            </i>
+                        </div>
+                        <div class="absolute right-0 border border-t-0 w-52 bg-neutral-100 rounded-lg invisible group-hover:visible group-active:visible">
+                            <div id="mobile_notification_output" class="text-center ml-2">Nothing to show!</div>
+                        </div>
+                    </div>
+                </div>
+                <button id="mobileButton" type="button"
+                        class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg">
+                    <i class="fa-solid fa-bars fa-2x"></i>
+                </button>
+            </div>
+
             <div class="hidden w-full" id="hamburger">
                 <ul class="flex flex-col mt-4 rounded-md bg-neutral-100 text-black">
                     <li>
@@ -455,24 +476,6 @@
                         <a href="/chats" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
                             <i class="fa-regular fa-comment-dots mr-2"></i>
                             Messages
-                        </a>
-                    </li>
-
-                    <li>
-                        <a class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
-                            <div class="relative group">
-                                <div class="cursor-pointer text-md   border-b-0
-                                group-hover:border-grey-light">
-                                    <i id="notificationIcon" class="fa-solid fa-bell mr-2">
-                                        <div class="dot absolute bottom-0 right-0" style="visibility: hidden"
-                                             id="notificationPresent"></div>
-                                    </i>
-                                    Notifications
-                                </div>
-                                <div class="absolute border border-t-0 w-52 bg-neutral-100 rounded-lg invisible group-hover:visible">
-                                    <div id="notification_output" class="text-center">Nothing to show!</div>
-                                </div>
-                            </div>
                         </a>
                     </li>
                     <li>
