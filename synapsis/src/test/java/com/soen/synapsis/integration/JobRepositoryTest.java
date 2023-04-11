@@ -26,11 +26,13 @@ class JobRepositoryTest {
     private JobApplicationRepository jobApplicationRepository;
     @Autowired
     private AppUserRepository appUserRepository;
+    private AppUser user1;
+    private AppUser user2;
 
     @BeforeEach
     void setUp() {
-        AppUser user1 = new AppUser(1L, "Joe Man1", "1234", "joecandidate1@mail.com", Role.RECRUITER);
-        AppUser user2 = new AppUser(2L, "Joe Man2", "1234", "joecandidate2@mail.com", Role.CANDIDATE);
+        user1 = new AppUser(1L, "Joe Man1", "1234", "joecandidate1@mail.com", Role.RECRUITER);
+        user2 = new AppUser(2L, "Joe Man2", "1234", "joecandidate2@mail.com", Role.CANDIDATE);
         appUserRepository.saveAll(Arrays.asList(user1, user2));
 
         Job job1 = new Job(1L, user1, "Software Developer", "Macrosoft", "123 Test Street", "description", JobType.FULLTIME, 1, 1, false, "", true, true, true);
@@ -62,6 +64,11 @@ class JobRepositoryTest {
         List<Job> result = underTest.findAllJobsAlreadySubmittedByUserID(ID);
 
         assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void itShouldFindAllMyJobsByCreator() {
+        assertEquals(3, underTest.findJobsByCreatorEquals(user1).size());
     }
 
     @Test
