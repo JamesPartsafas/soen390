@@ -70,6 +70,12 @@ class JobServiceTest {
     }
 
     @Test
+    void getMyCreatedJobsReturnsAllMyJobs() {
+        underTest.getMyCreatedJobs(creator);
+        verify(jobRepository, times(1)).findJobsByCreatorEquals(creator);
+    }
+
+    @Test
     void getAllJobsBySearchTermReturnsJobs() {
         String searchTerm = "developer";
         underTest.getAllJobsBySearch(searchTerm);

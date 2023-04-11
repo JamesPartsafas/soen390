@@ -349,5 +349,22 @@ class JobControllerTest {
         assertEquals(jobService, this.jobService);
         assertEquals(authService, this.authService);
     }
+
+    @Test
+    void getMyJobsReturnsAllMyJobs() {
+        when(authService.doesUserHaveRole(Role.RECRUITER)).thenReturn(true);
+
+        assertEquals("pages/myJobs", underTest.getMyJobs(Mockito.mock(Model.class)));
+    }
+
+    @Test
+    void getMyJobsRedirectsToHomePageWhenUserIsNotRecruiter() {
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(authService.getAuthenticatedUser()).thenReturn(Mockito.mock(AppUser.class));
+        when(authService.getAuthenticatedUser().getRole()).thenReturn(Role.CANDIDATE);
+
+        assertEquals("redirect:/", underTest.getMyJobs(Mockito.mock(Model.class)));
+    }
+
 }
 
