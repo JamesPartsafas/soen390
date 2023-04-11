@@ -1,6 +1,8 @@
-<div th:fragment="footer" class="h-auto">
-    <form sec:authorize="isAuthenticated()"class="mt-4 text-center">
-        <label for="back" class="p-4 text-black-variant bg-light rounded-lg cursor-pointer hover:font-bold">Back to previous page</label>
+<div th:fragment="footer" class="h-64">
+    <form sec:authorize="isAuthenticated()"class="mt-8 text-center">
+        <label for="back" class="p-3 text-black-variant text-sm bg-light rounded-lg cursor-pointer hover:text-primary transition ease-in-out duration-300">
+            Back to previous page
+        </label>
         <input type="button" id="back" onclick="history.back()">
     </form>
     <div class="w-full bg-black-variant relative bottom-0 left-0">

@@ -2,8 +2,8 @@
 <html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
 <div layout:fragment="content">
-    <div class="flex justify-center xl:mr-32 lg:mr-16 mr-8 ml-8 mb-3 mt-8 gap-32">
-        <div class="flex-auto max-w-2xl">
+    <div class="flex justify-center mx-16 mb-3 mt-8 gap-16">
+        <div class="flex-auto w-11/12 md:w-10/12 lg:w-10/12">
             <div class="rounded-lg bg-neutral-100 shadow relative h-80 lg:h-[450px]">
                 <div class="lg:border-8 border-4 border-neutral-300 rounded-full lg:w-48 lg:h-48 w-24 h-24 absolute top-1/4 left-12 bg-white"
                 >
@@ -82,7 +82,7 @@
                 </div>
             </div>
 
-            <div class="mt-16 max-w-2xl bg-neutral-100 border-gray-200 rounded-lg shadow">
+            <div class="mt-16 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
                 <table>
                     <tr>
                         <th>
@@ -92,7 +92,7 @@
                     <tr>
                         <td>
                             <div class="max-h-96 overflow-y-auto">
-                                <p class="font-normal ml-3 py-3 px-4 mr-2 mb-2 resize-y text-gray-700"
+                                <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
                                    th:text="${profile.description}"></p>
                             </div>
                         </td>
@@ -100,93 +100,99 @@
                 </table>
             </div>
 
-            <div class="mt-8 max-w-2xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
+            <div class="mt-8 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
                 <table>
                     <tr>
                         <th>
-                            <p class="text-left text-2xl ml-8 font-bold text-gray-900">Volunteering</p>
+                            <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">Volunteering</p>
                         </th>
                     </tr>
                     <td>
-                        <p class="font-normal ml-10 text-gray-700" th:text="${profile.volunteering}"></p>
+                        <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
+                           th:text="${profile.volunteering}"></p>
                     </td>
                 </table>
             </div>
 
-            <div class="mt-8 max-w-2xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
+            <div class="mt-8 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
                 <table>
                     <tr>
                         <th>
-                            <p class="text-left text-2xl ml-8 font-bold text-gray-900">Courses</p>
+                            <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">Courses</p>
                         </th>
                     </tr>
                     <td>
-                        <p class="font-normal ml-10 text-gray-700" th:text="${profile.course}"></p>
+                        <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
+                           th:text="${profile.course}"></p>
                     </td>
                 </table>
             </div>
 
-            <div class="mt-8 max-w-2xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
+            <div class="mt-8 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
                 <table>
                     <tr>
                         <th>
-                            <p class="text-left text-2xl ml-8 font-bold text-gray-900">Projects</p>
+                            <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">Projects</p>
                         </th>
                     </tr>
                     <td>
-                        <p class="font-normal ml-10 text-gray-700" th:text="${profile.project}"></p>
+                        <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
+                           th:text="${profile.project}"></p>
                     </td>
                 </table>
             </div>
 
-            <div class="mt-8 max-w-2xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
+            <div class="mt-8 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
                 <table>
                     <tr>
                         <th>
-                            <p class="text-left text-2xl ml-8 font-bold text-gray-900">Awards</p>
+                            <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">Awards</p>
                         </th>
                     </tr>
                     <td>
-                        <p class="font-normal ml-10 text-gray-700" th:text="${profile.award}"></p>
+                        <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
+                           th:text="${profile.award}"></p>
                     </td>
                 </table>
             </div>
 
-            <div class="mt-8 max-w-2xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
+            <div class="mt-8 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
                 <table>
                     <tr>
                         <th>
-                            <p class="text-left text-2xl ml-8 font-bold text-gray-900">Skills</p>
+                            <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">Skills</p>
                         </th>
                     </tr>
                     <td>
-                        <p class="font-normal ml-10 text-gray-700" th:text="${profile.skill}"></p>
+                        <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
+                           th:text="${profile.skill}"></p>
                     </td>
                 </table>
             </div>
 
-            <div class="mt-8 max-w-2xl bg-neutral-100 h-[5rem] border-gray-200 rounded-lg shadow">
+            <div class="mt-8 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
                 <table>
                     <tr>
                         <th>
-                            <p class="text-left text-2xl ml-8 font-bold text-gray-900">Languages</p>
+                            <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">Languages</p>
                         </th>
                     </tr>
                     <td>
-                        <p class="font-normal ml-10 text-gray-700" th:text="${profile.language}"></p>
+                        <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
+                           th:text="${profile.language}"></p>
                     </td>
                 </table>
             </div>
         </div>
 
         <div th:if="${isAuthedUserProfile}"
-             class="max-lg:hidden flex-auto max-w-sm h-[8rem] bg-neutral-100 rounded-lg shadow mr-32">
-            <div class="pr-10 pb-5 pl-10 pt-5 ">
-                <a th:href="@{/user/update}" class="text-left xl:text-xl text:lg font-normal  text-gray-900">
-                    Edit Public Profile
+             class="hidden lg:flex lg:flex-auto lg:w-56 lg:h-32 bg-neutral-100 rounded-lg shadow">
+            <div class="py-5 px-7">
+                <a th:href="@{/user/update}" class="text-left lg:text-lg text-base text-gray-900">
+                    Edit Profile
                 </a>
                 <hr class="mt-4 mb-4">
-                <a th:href="@{/passwordupdate}" class=" text-left xl:text-xl text:lg font normal text-gray-900"> Reset
+                <a th:href="@{/passwordupdate}" class=" text-left lg:text-lg text-base text-gray-900"> Reset
                     Password</a>
             </div>
         </div>
