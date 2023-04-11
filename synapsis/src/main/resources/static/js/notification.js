@@ -65,16 +65,16 @@ function onNotificationReceived(payload) {
 function updateNotifications() {
     $.get('/updateNotifications/' + recipientId).done(function (fragment) {
         $("#notification_output").replaceWith(fragment);
+        $("#mobile_notification_output").replaceWith(fragment);
     });
 
     setTimeout(showNotificationPresent, 200)
-
-
 }
 
 function showNotificationPresent() {
     if (document.querySelector('#unseen')) {
         document.querySelector('#notificationPresent').style.visibility = "visible";
+        document.querySelector('#mobileNotificationPresent').style.visibility = "visible";
     }
 }
 

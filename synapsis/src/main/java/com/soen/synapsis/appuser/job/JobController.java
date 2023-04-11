@@ -68,8 +68,7 @@ public class JobController {
             model.addAttribute("jobTypeFilter", jobFilter.getJobType());
             model.addAttribute("showInternalJobsFilter", jobFilter.isShowInternalJobs());
             model.addAttribute("showExternalJobsFilter", jobFilter.isShowExternalJobs());
-        }
-        else if (isFilteringJobs) {
+        } else if (isFilteringJobs) {
             jobs = jobService.getAllJobsByFilter(jobType, showInternalJobs, showExternalJobs);
 
             jobFilter = jobService.saveJobFilter(authService.getAuthenticatedUser(), jobType, showInternalJobs, showExternalJobs, null);
@@ -244,11 +243,11 @@ public class JobController {
             model.addAttribute("need_portfolio", job.getNeedPortfolio());
             model.addAttribute("savedJobs", authService.getAuthenticatedUser().getSavedJobs());
 
-            return "pages/jobapplicationexternal";
+            return "pages/jobApplicationExternal";
         } else {
             model.addAttribute("email", applicant.getEmail());
 
-            return "pages/jobapplicationform";
+            return "pages/jobApplicationForm";
         }
     }
 
@@ -292,7 +291,7 @@ public class JobController {
      */
     @GetMapping("/applicationsuccess")
     public String returnJobApplicationSuccess() {
-        return "pages/applicationsuccess";
+        return "pages/applicationSuccess";
     }
 
     /**
@@ -347,7 +346,7 @@ public class JobController {
         model.addAttribute("need_cover", job.getNeedCover());
         model.addAttribute("need_portfolio", job.getNeedPortfolio());
 
-        return "pages/editjob";
+        return "pages/editJob";
     }
 
     /**
@@ -386,6 +385,7 @@ public class JobController {
 
     /**
      * Allows users to view all saved jobs.
+     *
      * @param model An object carrying data attributes passed to the view.
      * @return View containing saved jobs. If the requester is not authenticated, redirects to home page.
      */
@@ -411,4 +411,26 @@ public class JobController {
 
         return "pages/savedjobs";
     }
+
+    /**
+     * Allows recruiters to see all of their own created jobs.
+     *
+     * @param model An object carrying data attributes passed to the view.
+     * @return View containing their own created jobs. If the requester is not authenticated and is not a recruiter, then redirects to home page.
+     */
+    @GetMapping("/myjobs")
+    public String getMyJobs(Model model) {
+        if (!authService.doesUserHaveRole(Role.RECRUITER)) {
+            return "redirect:/";
+        }
+
+        AppUser appUser = authService.getAuthenticatedUser();
+
+        List<Job> myJobs = jobService.getMyCreatedJobs(appUser);
+
+        model.addAttribute("jobs", myJobs);
+
+        return "pages/myJobs";
+    }
+
 }

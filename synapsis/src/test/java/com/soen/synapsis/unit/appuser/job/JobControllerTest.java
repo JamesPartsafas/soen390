@@ -242,7 +242,7 @@ class JobControllerTest {
         when(jobService.getJob(any(Long.class))).thenReturn(Optional.of(job3));
         when(authService.getAuthenticatedUser()).thenReturn(candidate);
 
-        assertEquals("pages/jobapplicationform", underTest.getJobApplication(1L, Mockito.mock(Model.class)));
+        assertEquals("pages/jobApplicationForm", underTest.getJobApplication(1L, Mockito.mock(Model.class)));
     }
 
     @Test
@@ -251,7 +251,7 @@ class JobControllerTest {
         when(jobService.getJob(any(Long.class))).thenReturn(Optional.of(job1));
         when(authService.getAuthenticatedUser()).thenReturn(candidate);
 
-        assertEquals("pages/jobapplicationexternal", underTest.getJobApplication(1L, Mockito.mock(Model.class)));
+        assertEquals("pages/jobApplicationExternal", underTest.getJobApplication(1L, Mockito.mock(Model.class)));
     }
 
     @Test
@@ -276,7 +276,7 @@ class JobControllerTest {
 
     @Test
     void returnJobApplicationSuccessReturnsApplicationSuccess() {
-        assertEquals("pages/applicationsuccess", underTest.returnJobApplicationSuccess());
+        assertEquals("pages/applicationSuccess", underTest.returnJobApplicationSuccess());
     }
 
 
@@ -307,7 +307,7 @@ class JobControllerTest {
         when(authService.getAuthenticatedUser()).thenReturn(creator);
         when(jobService.getJob(any(Long.class))).thenReturn(Optional.of(job1));
         String returnedPage = underTest.editJob(job1.getID(), mock(Model.class));
-        assertEquals("pages/editjob", returnedPage);
+        assertEquals("pages/editJob", returnedPage);
     }
 
     @Test
@@ -349,5 +349,22 @@ class JobControllerTest {
         assertEquals(jobService, this.jobService);
         assertEquals(authService, this.authService);
     }
+
+    @Test
+    void getMyJobsReturnsAllMyJobs() {
+        when(authService.doesUserHaveRole(Role.RECRUITER)).thenReturn(true);
+
+        assertEquals("pages/myJobs", underTest.getMyJobs(Mockito.mock(Model.class)));
+    }
+
+    @Test
+    void getMyJobsRedirectsToHomePageWhenUserIsNotRecruiter() {
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(authService.getAuthenticatedUser()).thenReturn(Mockito.mock(AppUser.class));
+        when(authService.getAuthenticatedUser().getRole()).thenReturn(Role.CANDIDATE);
+
+        assertEquals("redirect:/", underTest.getMyJobs(Mockito.mock(Model.class)));
+    }
+
 }
 

@@ -56,6 +56,14 @@ public class JobService {
     }
 
     /**
+     * Retrieve all jobs created by the recruiter.
+     *
+     * @param recruiter the recruiter to search for
+     * @return a list of jobs
+     */
+    public List<Job> getMyCreatedJobs(AppUser recruiter) {return jobRepository.findJobsByCreatorEquals(recruiter); }
+
+    /**
      * Retrieve all the jobs submitted by a user.
      *
      * @param user the appuser.
