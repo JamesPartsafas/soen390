@@ -326,6 +326,7 @@ public class AppUserService {
         if(appUser.getRecruiter() != null) {
             for (AppUser recruiter : appUser.getRecruiter()) {
                 recruiter.setVerificationStatus(false);
+                appUserRepository.save(recruiter);
             }
         }
         appUserRepository.save(appUser);
