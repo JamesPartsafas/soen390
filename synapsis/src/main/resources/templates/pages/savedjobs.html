@@ -36,7 +36,7 @@
                </div>
 
                <div th:unless="${jobsSubmitted.contains(job.get())}" class="transition hover:-translate-y-0.5 duration-150">
-                 <a th:href="@{/jobapplication/{id}(id=${job.get().getID()})}" class="inline-block px-4 py-4 text-white bg-primary rounded-2xl hover:bg-opacity-60 hover:text-whitegit ">Apply</a>
+                 <a th:href="@{/jobapplication/{id}(id=${job.get().getID()})}" class="inline-block px-4 py-4 text-white bg-primary rounded-2xl hover:bg-opacity-60 hover:text-white">Apply</a>
                </div>
 
               <form th:action="@{/deletesavedjob}" method="post">
