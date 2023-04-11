@@ -103,6 +103,7 @@ public class AppUserController {
         model.addAttribute("numberOfConnections", numberOfConnections);
         model.addAttribute("myRole", authedUser.getRole());
         model.addAttribute("myId", authedUser.getId());
+        model.addAttribute("myVerificationStatus",authedUser.getVerificationStatus());
         if (appUser.getRole() == Role.RECRUITER) {
             model.addAttribute("companyId", appUser.getCompany().getId());
         }
@@ -180,6 +181,13 @@ public class AppUserController {
             if (!authService.doesUserHaveRole(Role.COMPANY)) {
                 throw new IllegalStateException("You must be a company to mark candidates as recruiters.");
             }
+
+            AppUser loggedInUser = authService.getAuthenticatedUser();
+
+            if (loggedInUser.getVerificationStatus() == false) {
+                throw new IllegalStateException("You must be a verified company to mark candidates as recruiters.");
+            }
+
             Optional<AppUser> optionalAppUser = appUserService.getAppUser(id);
 
             if (optionalAppUser.isEmpty()) {
@@ -214,6 +222,13 @@ public class AppUserController {
             if (!authService.doesUserHaveRole(Role.COMPANY)) {
                 throw new IllegalStateException("You must be a company to unmark recruiters as candidates.");
             }
+
+            AppUser loggedInUser = authService.getAuthenticatedUser();
+
+            if (loggedInUser.getVerificationStatus() == false) {
+                throw new IllegalStateException("You must be a verified company to unmark recruiters as candidates.");
+            }
+
             Optional<AppUser> optionalAppUser = appUserService.getAppUser(id);
 
             if (optionalAppUser.isEmpty()) {

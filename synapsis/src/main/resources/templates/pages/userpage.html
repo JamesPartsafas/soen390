@@ -20,7 +20,7 @@
                         <h5 class="text-left text-3xl font-bold tracking-tight text-gray-900"
                             th:text="${currentAppUser.name}"></h5>
 
-                        <p th:if="${currentAppUser.role.toString() == 'RECRUITER'}">&#10004;</p>
+                        <p th:if="${currentAppUser.role.toString() == 'RECRUITER' and currentAppUser.verificationStatus == true}">&#10004;</p>
 
                         <p class="font-sans mt-2" th:text="${profile.description}"></p>
 
@@ -67,13 +67,13 @@
                         <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
                     </form>
 
-                    <form th:if="${currentAppUser.role.toString() == 'CANDIDATE' and myRole.toString() == 'COMPANY'}"
+                    <form th:if="${currentAppUser.role.toString() == 'CANDIDATE' and myRole.toString() == 'COMPANY' and myVerificationStatus == true and currentAppUser.verificationStatus == false}"
                           th:action="@{/company/markCandidateToRecruiter}" method="post">
                         <input type="hidden" name="appUserId" th:value="${currentAppUser.id}"/>
                         <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">Mark
                         </button>
                     </form>
-                    <form th:if="${currentAppUser.role.toString() == 'RECRUITER' and myRole.toString() == 'COMPANY' and companyId == myId}"
+                    <form th:if="${currentAppUser.role.toString() == 'RECRUITER' and myRole.toString() == 'COMPANY' and companyId == myId and myVerificationStatus == true and currentAppUser.verificationStatus == true}"
                           th:action="@{/company/unmarkRecruiterToCandidate}" method="post">
                         <input type="hidden" name="appUserId" th:value="${currentAppUser.id}"/>
                         <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">Unmark

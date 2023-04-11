@@ -166,7 +166,7 @@ public class AppUserService {
 
         appUser.setRole(Role.RECRUITER);
         appUser.setCompany(companyUser);
-
+        appUser.setVerificationStatus(true);
         companyUser.addRecruiter(appUser);
 
         appUserRepository.save(appUser);
@@ -219,7 +219,7 @@ public class AppUserService {
     public void unmarkRecruiterToCandidate(AppUser appUser, AppUser companyUser) {
         appUser.setCompany(null);
         appUser.setRole(Role.CANDIDATE);
-
+        appUser.setVerificationStatus(false);
         companyUser.removeRecruiter(appUser);
 
         appUserRepository.save(appUser);
@@ -322,6 +322,12 @@ public class AppUserService {
     public void markCompanyAsNonVerified(AppUser appUser) {
 
         appUser.setVerificationStatus(false);
+
+        if(appUser.getRecruiter() != null) {
+            for (AppUser recruiter : appUser.getRecruiter()) {
+                recruiter.setVerificationStatus(false);
+            }
+        }
         appUserRepository.save(appUser);
 
     }
