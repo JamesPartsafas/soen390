@@ -1,5 +1,6 @@
 package com.soen.synapsis.appuser.job;
 
+import com.soen.synapsis.appuser.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,6 +19,15 @@ public interface JobRepository extends JpaRepository<Job, Long>{
      */
     @Query(value = "SELECT j FROM Job j JOIN JobApplication ja ON j.id = ja.job.id WHERE ja.applicant.id = :userID")
     List<Job> findAllJobsAlreadySubmittedByUserID(@Param("userID") Long userID);
+
+
+    /**
+     * Retrieve all jobs created by a recruiter.
+     *
+     * @param recruiter the recruiter to search for.
+     * @return a list of jobs created by the recruiter.
+     */
+    List<Job> findJobsByCreatorEquals(@Param("recruiterID") AppUser recruiter);
 
     /**
      * Retrieve all jobs given a search query.

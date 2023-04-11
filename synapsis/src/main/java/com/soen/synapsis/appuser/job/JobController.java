@@ -411,4 +411,26 @@ public class JobController {
 
         return "pages/savedjobs";
     }
+
+    /**
+     * Allows recruiters to see all of their own created jobs.
+     *
+     * @param model An object carrying data attributes passed to the view.
+     * @return View containing their own created jobs. If the requester is not authenticated and is not a recruiter, then redirects to home page.
+     */
+    @GetMapping("/myjobs")
+    public String getMyJobs(Model model) {
+        if (!authService.doesUserHaveRole(Role.RECRUITER)) {
+            return "redirect:/";
+        }
+
+        AppUser appUser = authService.getAuthenticatedUser();
+
+        List<Job> myJobs = jobService.getMyCreatedJobs(appUser);
+
+        model.addAttribute("jobs", myJobs);
+
+        return "pages/myJobs";
+    }
+
 }
