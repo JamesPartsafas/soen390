@@ -90,4 +90,10 @@ public class IndexController {
         return "pages/ourServices";
     }
 
+    @GetMapping("/contactUs")
+    public String getContactUsPage() {
+
+        return "pages/contactUs";
+    }
+
 }
