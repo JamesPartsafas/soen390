@@ -31,7 +31,7 @@ public class JobApplicationRequestTest {
     private String links;
     @BeforeEach
     void setUp() {
-        job = new Job(new AppUser(10L, "joe", "1234", "joecreator@mail.com", Role.RECRUITER, AuthProvider.LOCAL), "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true, true);
+        job = new Job(new AppUser(10L, "joe", "1234", "joecreator@mail.com", Role.RECRUITER, AuthProvider.LOCAL), "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true);
         applicant = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
         dateApplied = new Timestamp(System.currentTimeMillis());
         status = JobApplicationStatus.SUBMITTED;
@@ -55,7 +55,7 @@ public class JobApplicationRequestTest {
 
     @Test
     void setJob() {
-        Job newJob = new Job(new AppUser(5L, "joe", "1234", "joecreator@mail.com", Role.RECRUITER, AuthProvider.LOCAL), "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true, true);
+        Job newJob = new Job(new AppUser(5L, "joe", "1234", "joecreator@mail.com", Role.RECRUITER, AuthProvider.LOCAL), "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true);
         underTest.setJob(newJob);
         assertEquals(newJob, underTest.getJob());
     }

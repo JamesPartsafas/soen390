@@ -1,6 +1,7 @@
 package com.soen.synapsis.appuser.job;
 
 import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AppUserService;
 import com.soen.synapsis.appuser.AuthService;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.profile.CoverLetter;
@@ -28,16 +29,19 @@ public class JobController {
 
     private final JobService jobService;
     private final AuthService authService;
+    //private final AppUserService appUserService;
 
     @Autowired
-    public JobController(JobService jobService) {
+    public JobController(JobService jobService/*, AppUserService appUserService*/) {
         this.jobService = jobService;
         this.authService = new AuthService();
+        //this.appUserService = appUserService;
     }
 
-    public JobController(JobService jobService, AuthService authService) {
+    public JobController(JobService jobService, AuthService authService/*, AppUserService appUserService*/) {
         this.jobService = jobService;
         this.authService = authService;
+        //this.appUserService = appUserService;
     }
 
     /**
@@ -126,7 +130,6 @@ public class JobController {
         model.addAttribute("external_link", job.getExternalLink());
         model.addAttribute("need_resume", job.getNeedResume());
         model.addAttribute("need_cover", job.getNeedCover());
-        model.addAttribute("need_portfolio", job.getNeedPortfolio());
         model.addAttribute("savedJobs", authService.getAuthenticatedUser().getSavedJobs());
 
         AppUser candidate = authService.getAuthenticatedUser();
@@ -240,7 +243,6 @@ public class JobController {
             model.addAttribute("num_applicants", job.getNumApplicants());
             model.addAttribute("is_external", job.getIsExternal());
             model.addAttribute("external_link", job.getExternalLink());
-            model.addAttribute("need_portfolio", job.getNeedPortfolio());
             model.addAttribute("savedJobs", authService.getAuthenticatedUser().getSavedJobs());
 
             return "pages/jobApplicationExternal";
@@ -344,7 +346,7 @@ public class JobController {
         model.addAttribute("external_link", job.getExternalLink());
         model.addAttribute("need_resume", job.getNeedResume());
         model.addAttribute("need_cover", job.getNeedCover());
-        model.addAttribute("need_portfolio", job.getNeedPortfolio());
+
 
         return "pages/editJob";
     }
@@ -401,7 +403,14 @@ public class JobController {
 
         List<Optional<Job>> jobs = new ArrayList<Optional<Job>>();
         for (Long jid : savedJobs) {
-            jobs.add(jobService.getJob(jid));
+            Optional<Job> job = jobService.getJob(jid);
+            /*if (job == null) {
+                appUserService.deleteSavedJob(jid, appUser);
+            }
+            else {
+                jobs.add(job);
+            }*/
+            jobs.add(job);
         }
 
         List<Job> jobsSubmitted = jobService.getAllJobsAlreadySubmittedByUser(appUser);
