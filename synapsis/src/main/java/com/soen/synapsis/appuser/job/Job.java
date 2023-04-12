@@ -71,7 +71,6 @@ public class Job {
      * @param externalLink the link of the external website.
      * @param needResume true if the job application requires a resume; otherwise false.
      * @param needCover true if the job application requires a cover letter; otherwise false.
-     * @param needPortfolio true if the job application requires a portfolio; otherwise false.
      */
     public Job(Long id, AppUser creator, String position, String company, String address, String description, JobType type, int numAvailable, int numApplicants, boolean isExternal, String externalLink, boolean needResume, boolean needCover) {
         this.id = id;

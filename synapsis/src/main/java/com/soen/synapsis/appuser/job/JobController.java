@@ -1,6 +1,7 @@
 package com.soen.synapsis.appuser.job;
 
 import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AppUserService;
 import com.soen.synapsis.appuser.AuthService;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.profile.CoverLetter;
@@ -28,16 +29,19 @@ public class JobController {
 
     private final JobService jobService;
     private final AuthService authService;
+    private final AppUserService appUserService;
 
     @Autowired
-    public JobController(JobService jobService) {
+    public JobController(JobService jobService, AppUserService appUserService) {
         this.jobService = jobService;
         this.authService = new AuthService();
+        this.appUserService = appUserService;
     }
 
-    public JobController(JobService jobService, AuthService authService) {
+    public JobController(JobService jobService, AuthService authService, AppUserService appUserService) {
         this.jobService = jobService;
         this.authService = authService;
+        this.appUserService = appUserService;
     }
 
     /**
@@ -399,7 +403,13 @@ public class JobController {
 
         List<Optional<Job>> jobs = new ArrayList<Optional<Job>>();
         for (Long jid : savedJobs) {
-            jobs.add(jobService.getJob(jid));
+            Optional<Job> job = jobService.getJob(jid);
+            if (job == null) {
+                appUserService.deleteSavedJob(jid, appUser);
+            }
+            else {
+                jobs.add(job);
+            }
         }
 
         List<Job> jobsSubmitted = jobService.getAllJobsAlreadySubmittedByUser(appUser);
