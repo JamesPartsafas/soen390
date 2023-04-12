@@ -126,7 +126,6 @@ public class JobController {
         model.addAttribute("external_link", job.getExternalLink());
         model.addAttribute("need_resume", job.getNeedResume());
         model.addAttribute("need_cover", job.getNeedCover());
-        model.addAttribute("need_portfolio", job.getNeedPortfolio());
         model.addAttribute("savedJobs", authService.getAuthenticatedUser().getSavedJobs());
 
         AppUser candidate = authService.getAuthenticatedUser();
@@ -240,7 +239,6 @@ public class JobController {
             model.addAttribute("num_applicants", job.getNumApplicants());
             model.addAttribute("is_external", job.getIsExternal());
             model.addAttribute("external_link", job.getExternalLink());
-            model.addAttribute("need_portfolio", job.getNeedPortfolio());
             model.addAttribute("savedJobs", authService.getAuthenticatedUser().getSavedJobs());
 
             return "pages/jobApplicationExternal";
@@ -344,7 +342,7 @@ public class JobController {
         model.addAttribute("external_link", job.getExternalLink());
         model.addAttribute("need_resume", job.getNeedResume());
         model.addAttribute("need_cover", job.getNeedCover());
-        model.addAttribute("need_portfolio", job.getNeedPortfolio());
+
 
         return "pages/editJob";
     }

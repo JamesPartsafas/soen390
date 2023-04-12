@@ -51,9 +51,6 @@ public class Job {
     @Column(name = "need_cover", nullable = false)
     private boolean needCover;
 
-    @Column(name = "need_portfolio", nullable = false)
-    private boolean needPortfolio;
-
     /**
      * Empty constructor.
      */
@@ -76,7 +73,7 @@ public class Job {
      * @param needCover true if the job application requires a cover letter; otherwise false.
      * @param needPortfolio true if the job application requires a portfolio; otherwise false.
      */
-    public Job(Long id, AppUser creator, String position, String company, String address, String description, JobType type, int numAvailable, int numApplicants, boolean isExternal, String externalLink, boolean needResume, boolean needCover, boolean needPortfolio) {
+    public Job(Long id, AppUser creator, String position, String company, String address, String description, JobType type, int numAvailable, int numApplicants, boolean isExternal, String externalLink, boolean needResume, boolean needCover) {
         this.id = id;
         this.creator = creator;
         this.position = position;
@@ -90,7 +87,6 @@ public class Job {
         this.externalLink = externalLink;
         this.needResume = needResume;
         this.needCover = needCover;
-        this.needPortfolio = needPortfolio;
     }
 
     /**
@@ -107,9 +103,8 @@ public class Job {
      * @param externalLink the link of the external website.
      * @param needResume true if the job application requires a resume; otherwise false.
      * @param needCover true if the job application requires a cover letter; otherwise false.
-     * @param needPortfolio true if the job application requires a portfolio; otherwise false.
      */
-    public Job(AppUser creator, String position, String company, String address, String description, JobType type, int numAvailable, boolean isExternal, String externalLink, boolean needResume, boolean needCover, boolean needPortfolio) {
+    public Job(AppUser creator, String position, String company, String address, String description, JobType type, int numAvailable, boolean isExternal, String externalLink, boolean needResume, boolean needCover) {
         this.creator = creator;
         this.position = position;
         this.company = company;
@@ -122,7 +117,6 @@ public class Job {
         this.externalLink = externalLink;
         this.needResume = needResume;
         this.needCover = needCover;
-        this.needPortfolio = needPortfolio;
     }
 
     public Long getID() {
@@ -235,13 +229,5 @@ public class Job {
 
     public void setNeedCover(boolean needCover) {
         this.needCover = needCover;
-    }
-
-    public boolean getNeedPortfolio() {
-        return needPortfolio;
-    }
-
-    public void setNeedPortfolio(boolean needPortfolio) {
-        this.needPortfolio = needPortfolio;
     }
 }

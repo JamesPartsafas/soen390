@@ -24,7 +24,6 @@ class JobRequestTest {
     private String externalLink;
     private boolean needResume;
     private boolean needCover;
-    private boolean needPortfolio;
 
     @BeforeEach
     void setUp() {
@@ -39,8 +38,7 @@ class JobRequestTest {
         externalLink = "";
         needResume = true;
         needCover = true;
-        needPortfolio = true;
-        underTest = new JobRequest(position, company, address, description, type, numAvailable, isExternal, externalLink, needResume, needCover, needPortfolio);
+        underTest = new JobRequest(position, company, address, description, type, numAvailable, isExternal, externalLink, needResume, needCover);
         underTest.setCreator(creator);
     }
 
@@ -176,15 +174,4 @@ class JobRequestTest {
         assertEquals(newNeedCover, underTest.getNeedCover());
     }
 
-    @Test
-    void getNeedPortfolio() {
-        assertEquals(needCover, underTest.getNeedCover());
-    }
-
-    @Test
-    void setNeedPortfolio() {
-        boolean newNeedPortfolio = false;
-        underTest.setNeedPortfolio(newNeedPortfolio);
-        assertEquals(newNeedPortfolio, underTest.getNeedPortfolio());
-    }
 }

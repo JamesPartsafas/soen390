@@ -135,7 +135,7 @@ class JobServiceTest {
 
     @Test
     void createValidJob() throws Exception {
-        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "https://google.com", true, true, true);
+        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "https://google.com", true, true);
         request.setCreator(creator);
 
         String returnValue = underTest.createJob(request);
@@ -145,14 +145,14 @@ class JobServiceTest {
 
     @Test
     void createJobWithInvalidExternalLinkURLThrowsException() {
-        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
+        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true);
 
         assertThrows(Exception.class, () -> underTest.createJob(request));
     }
 
     @Test
     void nonRecruiterCreateJobThrows() {
-        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
+        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true);
         request.setCreator(candidate);
 
         Exception exception = assertThrows(IllegalStateException.class, () -> underTest.createJob(request), "This user is not a recruiter.");
@@ -168,7 +168,7 @@ class JobServiceTest {
 
     @Test
     void UserAlreadySubmittedApplication() {
-        Job job = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true, true);
+        Job job = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true);
 
         List<Job> jobsSubmitted = new ArrayList<>();
         jobsSubmitted.add(job);
@@ -184,7 +184,7 @@ class JobServiceTest {
         Long jobId = 1L;
         Job job = new Job(jobId, creator, "position",
                 "company", "address", "description", JobType.FULLTIME, 5,
-                5, false, null, true, true, false);
+                5, false, null, true, true);
         JobApplicationRequest request = new JobApplicationRequest(job, candidate, Timestamp.from(Instant.now()),
                 JobApplicationStatus.SUBMITTED, candidate.getEmail(), "Joe", "User", "123-456-1234",
                 "1234 street", "Montreal", "Canada", true, null);
@@ -215,7 +215,7 @@ class JobServiceTest {
     void editJob() throws Exception {
         Long id = 1L;
 
-        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true, true);
+        JobRequest request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true);
         request.setCreator(creator);
 
         String returnValue = underTest.editJob(Mockito.mock(Optional.class), request);
@@ -225,13 +225,13 @@ class JobServiceTest {
 
     @Test
     void createJobApplicationWithEmptyResumeThatIsMandatory() {
-        Job job = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true, true);
+        Job job = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true);
         assertThrows(NullPointerException.class, () -> underTest.createJobApplication(mock(JobApplicationRequest.class), candidate, job.getID(), null, null));
     }
 
     @Test
     void createJobApplicationWithEmptyCoverLetterThatIsMandatory() {
-        Job job = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true, true);
+        Job job = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true);
         assertThrows(NullPointerException.class, () -> underTest.createJobApplication(mock(JobApplicationRequest.class), candidate, job.getID(), mock(MultipartFile.class), null));
     }
 

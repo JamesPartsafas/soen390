@@ -26,7 +26,6 @@ class JobTest {
     private String externalLink;
     private boolean needResume;
     private boolean needCover;
-    private boolean needPortfolio;
 
     @BeforeEach
     void setUp() {
@@ -43,8 +42,7 @@ class JobTest {
         externalLink = "";
         needResume = true;
         needCover = true;
-        needPortfolio = true;
-        undertest = new Job(creator, position, company, address, description, type, numAvailable, isExternal, externalLink, needResume, needCover, needPortfolio);
+        undertest = new Job(creator, position, company, address, description, type, numAvailable, isExternal, externalLink, needResume, needCover);
         undertest.setID(id);
     }
 
@@ -195,18 +193,6 @@ class JobTest {
         boolean newNeedCover = false;
         undertest.setNeedCover(newNeedCover);
         assertEquals(newNeedCover, undertest.getNeedCover());
-    }
-
-    @Test
-    void getNeedPortfolio() {
-        assertEquals(needCover, undertest.getNeedCover());
-    }
-
-    @Test
-    void setNeedPortfolio() {
-        boolean newNeedPortfolio = false;
-        undertest.setNeedPortfolio(newNeedPortfolio);
-        assertEquals(newNeedPortfolio, undertest.getNeedPortfolio());
     }
 
     @Test

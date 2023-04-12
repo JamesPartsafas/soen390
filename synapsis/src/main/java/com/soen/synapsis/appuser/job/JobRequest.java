@@ -18,7 +18,6 @@ public class JobRequest {
     private String externalLink;
     private boolean needResume;
     private boolean needCover;
-    private boolean needPortfolio;
 
     /**
      * Empty constructor.
@@ -38,9 +37,8 @@ public class JobRequest {
      * @param externalLink the link of the external website.
      * @param needResume true if the job application requires a resume; otherwise false.
      * @param needCover true if the job application requires a cover letter; otherwise false.
-     * @param needPortfolio true if the job application requires a portfolio; otherwise false.
      */
-    public JobRequest(String position, String company, String address, String description, JobType type, int numAvailable, boolean isExternal, String externalLink, boolean needResume, boolean needCover, boolean needPortfolio) {
+    public JobRequest(String position, String company, String address, String description, JobType type, int numAvailable, boolean isExternal, String externalLink, boolean needResume, boolean needCover) {
         this.position = position;
         this.company = company;
         this.address = address;
@@ -51,7 +49,6 @@ public class JobRequest {
         this.externalLink = externalLink;
         this.needResume = needResume;
         this.needCover = needCover;
-        this.needPortfolio = needPortfolio;
     }
 
     public AppUser getCreator() {
@@ -140,13 +137,5 @@ public class JobRequest {
 
     public void setNeedCover(boolean needCover) {
         this.needCover = needCover;
-    }
-
-    public boolean getNeedPortfolio() {
-        return needPortfolio;
-    }
-
-    public void setNeedPortfolio(boolean needPortfolio) {
-        this.needPortfolio = needPortfolio;
     }
 }

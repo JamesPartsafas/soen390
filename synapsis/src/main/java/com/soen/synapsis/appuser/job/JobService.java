@@ -110,10 +110,9 @@ public class JobService {
         String externalLink = request.getExternalLink();
         boolean needResume = request.getNeedResume();
         boolean needCover = request.getNeedCover();
-        boolean needPortfolio = request.getNeedPortfolio();
 
 
-        Job job = new Job(creator, position, company, address, description, type, numAvailable, isExternal, externalLink, needResume, needCover, needPortfolio);
+        Job job = new Job(creator, position, company, address, description, type, numAvailable, isExternal, externalLink, needResume, needCover);
         jobRepository.save(job);
 
         Executor executor = Executors.newSingleThreadExecutor();
@@ -248,7 +247,6 @@ public class JobService {
         job.setType(request.getType());
         job.setNeedResume(request.getNeedResume());
         job.setNeedCover(request.getNeedCover());
-        job.setNeedPortfolio(request.getNeedPortfolio());
 
         jobRepository.save(job);
 
