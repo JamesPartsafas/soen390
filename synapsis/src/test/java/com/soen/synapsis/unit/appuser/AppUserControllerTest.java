@@ -118,7 +118,7 @@ class AppUserControllerTest {
     }
     @Test
     void isCompanyForMarkingIsCandidateToRecruiter() {
-        AppUser companyUser = new AppUser(1L, "Joe Company", "1234", "joecompany@mail.com", Role.COMPANY);
+        AppUser companyUser = new AppUser(1L, "Joe Company", "1234", "joecompany@mail.com", Role.COMPANY,true);
         AppUser candidateUser = new AppUser(2L, "Joe Candidate", "1234", "joecandidate@mail.com", Role.CANDIDATE);
         when(authService.getAuthenticatedUser()).thenReturn(companyUser);
         when(authService.doesUserHaveRole(Role.COMPANY)).thenReturn(true);
@@ -152,7 +152,7 @@ class AppUserControllerTest {
 
     @Test
     void isCompanyForUnmarkingIsRecruiterToCandidate() {
-        AppUser companyUser = new AppUser(1L, "Joe Company", "1234", "joecompany@mail.com", Role.COMPANY);
+        AppUser companyUser = new AppUser(1L, "Joe Company", "1234", "joecompany@mail.com", Role.COMPANY, true);
         AppUser recruiterUser = new AppUser(2L, "Joe Recruiter", "1234", "joerecruiter@mail.com", Role.RECRUITER, companyUser);
         when(authService.getAuthenticatedUser()).thenReturn(companyUser);
         when(authService.doesUserHaveRole(Role.COMPANY)).thenReturn(true);

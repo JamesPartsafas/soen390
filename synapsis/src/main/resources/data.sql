@@ -12,7 +12,7 @@ VALUES ('Joe Admin', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7Dj
 
 INSERT INTO app_user (name, password, email, role, auth_provider, verification_status)
 VALUES ('Joe Company', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'joecompany@mail.com', 'COMPANY',
-        'LOCAL', false);
+        'LOCAL', true);
 
 INSERT INTO app_user (name, password, email, role, auth_provider, verification_status)
 VALUES ('Joe Google', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'joegoogle@mail.com', 'CANDIDATE',
@@ -20,15 +20,15 @@ VALUES ('Joe Google', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7D
 
 INSERT INTO app_user (name, password, email, role, auth_provider, company_id, verification_status)
 VALUES ('Joe Recruiter', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'joerecruiter@mail.com',
-        'RECRUITER', 'LOCAL', 3, false);
+        'RECRUITER', 'LOCAL', 3, true);
 
 INSERT INTO app_user (name, password, email, role, auth_provider, company_id, verification_status)
 VALUES ('Joe Recruiter2', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'joerecruiter2@mail.com',
-        'RECRUITER', 'LOCAL', 5, false);
+        'RECRUITER', 'LOCAL', 5, true);
 
 INSERT INTO app_user (name, password, email, role, auth_provider, verification_status)
 VALUES ('Tony Recruiter', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'tonyrecruiter@mail.com',
-        'RECRUITER', 'LOCAL', false);
+        'RECRUITER', 'LOCAL', true);
 
 INSERT INTO connection (receiver_id, requester_id, pending)
 VALUES (3, 1, false);

@@ -8,6 +8,7 @@ import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfileRepository
 import com.soen.synapsis.appuser.profile.companyprofile.CompanyProfileRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
