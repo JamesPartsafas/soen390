@@ -115,14 +115,10 @@ public class JobController {
 
         Job job = optionalJob.get();
 
-        boolean auth = true;
-        if (authService.getAuthenticatedUser().getCompany() == null || optionalJob.get().getCreator().getCompany() == null || authService.getAuthenticatedUser().getRole() != Role.RECRUITER)
-            auth = false;
-
-        model.addAttribute("authorization", (auth && authService.getAuthenticatedUser().getCompany().getId() == optionalJob.get().getCreator().getCompany().getId() && authService.getAuthenticatedUser().getRole() == Role.RECRUITER));
+        model.addAttribute("authorization", isAuthorized(optionalJob));
         model.addAttribute("role", authService.getAuthenticatedUser().getRole());
         model.addAttribute("creator", job.getCreator().getName());
-        model.addAttribute("company", job.getCompany());
+        model.addAttribute("company", job.getCompany().getName());
         model.addAttribute("address", job.getAddress());
         model.addAttribute("position", job.getPosition());
         model.addAttribute("type", job.getType());
@@ -179,6 +175,7 @@ public class JobController {
 
             AppUser creator = authService.getAuthenticatedUser();
             request.setCreator(creator);
+            request.setCompany(creator.getCompany());
             String response = jobService.createJob(request);
 
             return response;
@@ -341,7 +338,7 @@ public class JobController {
         model.addAttribute("jobRequest", new JobRequest());
         model.addAttribute("jobId", jobId);
         model.addAttribute("creator", job.getCreator().getName());
-        model.addAttribute("company", job.getCompany());
+        model.addAttribute("company", job.getCompany().getName());
         model.addAttribute("address", job.getAddress());
         model.addAttribute("position", job.getPosition());
         model.addAttribute("type", job.getType());
@@ -384,6 +381,7 @@ public class JobController {
 
             AppUser creator = authService.getAuthenticatedUser();
             request.setCreator(creator);
+            request.setCompany(creator.getCompany());
             String response = jobService.editJob(optionalJob, request);
 
             return response;
@@ -448,6 +446,13 @@ public class JobController {
         model.addAttribute("jobs", myJobs);
 
         return "pages/myJobs";
+    }
+
+    public boolean isAuthorized(Optional<Job> optionalJob) {
+        boolean auth = true;
+        if (optionalJob.isEmpty() || authService.getAuthenticatedUser().getRole() != Role.RECRUITER || authService.getAuthenticatedUser().getCompany() == null || optionalJob.get().getCompany() == null || authService.getAuthenticatedUser().getCompany().getId() != optionalJob.get().getCompany().getId())
+            auth = false;
+        return auth;
     }
 
 }
