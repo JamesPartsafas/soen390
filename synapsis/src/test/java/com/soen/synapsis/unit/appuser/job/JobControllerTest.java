@@ -1,9 +1,6 @@
 package com.soen.synapsis.unit.appuser.job;
 
-import com.soen.synapsis.appuser.AppUser;
-import com.soen.synapsis.appuser.AuthProvider;
-import com.soen.synapsis.appuser.AuthService;
-import com.soen.synapsis.appuser.Role;
+import com.soen.synapsis.appuser.*;
 import com.soen.synapsis.appuser.job.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +25,8 @@ class JobControllerTest {
     @Mock
     private JobService jobService;
     @Mock
+    private AppUserService appUserService;
+    @Mock
     private AuthService authService;
     private AutoCloseable autoCloseable;
     private JobController underTest;
@@ -44,7 +43,7 @@ class JobControllerTest {
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new JobController(jobService, authService);
+        underTest = new JobController(jobService, authService, appUserService);
         searchTerm = null;
 
         creator = new AppUser(1L, "joecreator", "1234", "joecreatorunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
@@ -345,7 +344,7 @@ class JobControllerTest {
 
     @Test
     void jobController() {
-        underTest = new JobController(jobService);
+        underTest = new JobController(jobService, appUserService);
         assertEquals(jobService, this.jobService);
         assertEquals(authService, this.authService);
     }
