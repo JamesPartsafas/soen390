@@ -29,19 +29,19 @@ public class JobController {
 
     private final JobService jobService;
     private final AuthService authService;
-    private final AppUserService appUserService;
+    //private final AppUserService appUserService;
 
     @Autowired
-    public JobController(JobService jobService, AppUserService appUserService) {
+    public JobController(JobService jobService/*, AppUserService appUserService*/) {
         this.jobService = jobService;
         this.authService = new AuthService();
-        this.appUserService = appUserService;
+        //this.appUserService = appUserService;
     }
 
-    public JobController(JobService jobService, AuthService authService, AppUserService appUserService) {
+    public JobController(JobService jobService, AuthService authService/*, AppUserService appUserService*/) {
         this.jobService = jobService;
         this.authService = authService;
-        this.appUserService = appUserService;
+        //this.appUserService = appUserService;
     }
 
     /**
@@ -404,12 +404,13 @@ public class JobController {
         List<Optional<Job>> jobs = new ArrayList<Optional<Job>>();
         for (Long jid : savedJobs) {
             Optional<Job> job = jobService.getJob(jid);
-            if (job == null) {
+            /*if (job == null) {
                 appUserService.deleteSavedJob(jid, appUser);
             }
             else {
                 jobs.add(job);
-            }
+            }*/
+            jobs.add(job);
         }
 
         List<Job> jobsSubmitted = jobService.getAllJobsAlreadySubmittedByUser(appUser);
