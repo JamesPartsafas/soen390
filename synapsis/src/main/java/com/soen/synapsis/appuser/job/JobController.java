@@ -115,7 +115,11 @@ public class JobController {
 
         Job job = optionalJob.get();
 
-        model.addAttribute("authorization", authService.getAuthenticatedUser().getId() == optionalJob.get().getCreator().getId());
+        boolean auth = true;
+        if (authService.getAuthenticatedUser().getCompany() == null || optionalJob.get().getCreator().getCompany() == null || authService.getAuthenticatedUser().getRole() != Role.RECRUITER)
+            auth = false;
+
+        model.addAttribute("authorization", (auth && authService.getAuthenticatedUser().getCompany().getId() == optionalJob.get().getCreator().getCompany().getId() && authService.getAuthenticatedUser().getRole() == Role.RECRUITER));
         model.addAttribute("role", authService.getAuthenticatedUser().getRole());
         model.addAttribute("creator", job.getCreator().getName());
         model.addAttribute("company", job.getCompany());
@@ -305,8 +309,9 @@ public class JobController {
     @PostMapping("/deletejob")
     public String deleteJob(@RequestParam("jobId") Long jobId) {
         Optional<Job> optionalJob = jobService.getJob(jobId);
-
-        if (optionalJob.isEmpty() || authService.getAuthenticatedUser().getId() != optionalJob.get().getCreator().getId())
+        if (optionalJob.isEmpty() || authService.getAuthenticatedUser().getRole() != Role.RECRUITER || authService.getAuthenticatedUser().getCompany() == null || optionalJob.get().getCreator().getCompany() == null)
+            return "redirect:/job/" + jobId;
+        if (authService.getAuthenticatedUser().getCompany().getId() != optionalJob.get().getCreator().getCompany().getId())
             return "redirect:/";
 
         return jobService.deleteJob(jobId);
@@ -327,7 +332,9 @@ public class JobController {
         Optional<Job> optionalJob = jobService.getJob(jobId);
         if (optionalJob.isEmpty())
             return "redirect:/";
-        if (authService.getAuthenticatedUser().getId() != optionalJob.get().getCreator().getId())
+        if (authService.getAuthenticatedUser().getCompany() == null || optionalJob.get().getCreator().getCompany() == null || authService.getAuthenticatedUser().getRole() != Role.RECRUITER)
+            return "redirect:/job/" + jobId;
+        if (authService.getAuthenticatedUser().getCompany().getId() != optionalJob.get().getCreator().getCompany().getId())
             return "redirect:/job/" + jobId;
 
         Job job = optionalJob.get();
@@ -370,7 +377,9 @@ public class JobController {
             Optional<Job> optionalJob = jobService.getJob(jobId);
             if (optionalJob.isEmpty())
                 return "redirect:/";
-            if (authService.getAuthenticatedUser().getId() != optionalJob.get().getCreator().getId())
+            if (authService.getAuthenticatedUser().getCompany() == null || optionalJob.get().getCreator().getCompany() == null || authService.getAuthenticatedUser().getRole() != Role.RECRUITER)
+                return "redirect:/job/" + jobId;
+            if (authService.getAuthenticatedUser().getCompany().getId() != optionalJob.get().getCreator().getCompany().getId())
                 return "redirect:/job/" + jobId;
 
             AppUser creator = authService.getAuthenticatedUser();

@@ -32,6 +32,7 @@ class JobControllerTest {
     private JobController underTest;
     private List<Job> allJobs;
     private AppUser creator;
+    private AppUser company;
     private AppUser candidate;
     private Job job1;
     private Job job2;
@@ -46,8 +47,10 @@ class JobControllerTest {
         underTest = new JobController(jobService, authService, appUserService);
         searchTerm = null;
 
+        company = new AppUser(1L, "joecompany", "1234", "joecompanyunittest@mail.com", Role.COMPANY, AuthProvider.LOCAL);
         creator = new AppUser(1L, "joecreator", "1234", "joecreatorunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
-        candidate = new AppUser(2L, "joecandidate", "1234", "joecandidateunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
+        creator.setCompany(company);
+        candidate = new AppUser(2L, "joecandidate", "1234", "joecandidateunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
 
         job1 = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true);
         job2 = new Job(creator, "Mechanical Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true);
@@ -282,9 +285,10 @@ class JobControllerTest {
     @Test
     void deleteJobRedirects() {
         when(authService.getAuthenticatedUser()).thenReturn(creator);
+        when(authService.getAuthenticatedUser().getCompany()).thenReturn(company);
         String returnedPage = underTest.deleteJob(1L);
 
-        assertEquals("redirect:/", returnedPage);
+        assertEquals("redirect:/job/1", returnedPage);
     }
 
     @Test
