@@ -35,9 +35,9 @@ class JobRepositoryTest {
         user2 = new AppUser(2L, "Joe Man2", "1234", "joecandidate2@mail.com", Role.CANDIDATE);
         appUserRepository.saveAll(Arrays.asList(user1, user2));
 
-        Job job1 = new Job(1L, user1, "Software Developer", "Macrosoft", "123 Test Street", "description", JobType.FULLTIME, 1, 1, false, "", true, true, true);
-        Job job2 = new Job(2L, user1, "QA Tester", "Macrosoft", "123 Test Street", "description", JobType.FULLTIME, 1, 1, false, "", true, true, true);
-        Job job3 = new Job(3L, user1, "VBA Tester", "Macrosoft", "123 Test Street", "description", JobType.FULLTIME, 1, 1, true, "https://google.com", true, true, true);
+        Job job1 = new Job(1L, user1, "Software Developer", "Macrosoft", "123 Test Street", "description", JobType.FULLTIME, 1, 1, false, "", true, true);
+        Job job2 = new Job(2L, user1, "QA Tester", "Macrosoft", "123 Test Street", "description", JobType.FULLTIME, 1, 1, false, "", true, true);
+        Job job3 = new Job(3L, user1, "VBA Tester", "Macrosoft", "123 Test Street", "description", JobType.FULLTIME, 1, 1, true, "https://google.com", true, true);
         underTest.saveAll(Arrays.asList(job1, job2, job3));
 
         JobApplication jobApplication1 = new JobApplication(1L, job1, user2, new Timestamp(System.currentTimeMillis()), JobApplicationStatus.IN_REVIEW, user2.getEmail(), "Joe", "User", "5144444444", "123 Test Street", "Montreal", "Canada", "", "", true, "");
