@@ -96,7 +96,7 @@ public class NotificationControllerTest {
     @Test
     void updateNotificationsSuccessful() {
         List<NotificationDTO> notificationDTOList = new ArrayList<NotificationDTO>();
-        notificationDTOList.add(new NotificationDTO(1L, appUser.getId(), NotificationType.CONNECTION, "text", "url", false));
+        notificationDTOList.add(new NotificationDTO(1L, appUser.getId(), NotificationType.REQUEST_CON, "text", "url", false));
         when(notificationService.getNotificationsByUserId(appUser.getId())).thenReturn(notificationDTOList);
 
         assertEquals("fragments/notifications :: notification_list", underTest.updateNotifications(appUser.getId().toString(), Mockito.mock(Model.class)));

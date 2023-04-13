@@ -110,7 +110,7 @@ public class NotificationTest {
 
     @Test
     void setType() {
-        NotificationType newNotificationType = NotificationType.CONNECTION;
+        NotificationType newNotificationType = NotificationType.REQUEST_CON;
         underTest.setType(newNotificationType);
         assertEquals(newNotificationType, underTest.getType());
     }
