@@ -18,9 +18,9 @@
 
         <div th:if="${jobs.size() > 0}" th:each="job: ${jobs}" class="flex flex-col inline-block rounded-2xl shadow w-56 min-h-min bg-white mt-4 mr-4 pb-4">
 
-          <img class="w-56 h-40">
+          <img class="w-56 h-40" src="../../assets/company_default.jpg">
           <div class="font-sans text-base font-light mt-2 ml-4" th:text="${job.position}"></div>
-          <div class="font-sans text-base font-light mt-2 ml-4" th:text="${job.company}"></div>
+          <div class="font-sans text-base font-light mt-2 ml-4" th:text="${job.company.getName()}"></div>
 
           <div class="grow bg-light mx-auto w-11/12 rounded-2xl text-xs mt-2 mb-4">
             <div class="font-sans font-light p-2" th:text="${job.description}"></div>
