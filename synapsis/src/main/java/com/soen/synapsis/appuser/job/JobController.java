@@ -411,7 +411,7 @@ public class JobController {
         List<Optional<Job>> jobs = new ArrayList<Optional<Job>>();
         for (Long jid : savedJobs) {
             Optional<Job> job = jobService.getJob(jid);
-            if (job == null) {
+            if (job.isEmpty()) {
                 appUserService.deleteSavedJob(jid, appUser);
             }
             else {
