@@ -428,6 +428,27 @@ public class JobController {
     }
 
     /**
+     * Allows users to suggested jobs.
+     *
+     * @param model An object carrying data attributes passed to the view.
+     * @return View containing suggested jobs. If the requester is not authenticated, redirects to home page.
+     */
+    @GetMapping("/suggestedjobs")
+    public String getSuggestedJobs(Model model) {
+        if (!authService.isUserAuthenticated()) {
+            return "redirect:/";
+        }
+
+        AppUser appUser = authService.getAuthenticatedUser();
+
+        List<Job> jobs = jobService.getSuggestedJobs(appUser);
+
+        model.addAttribute("jobs", jobs);
+
+        return "pages/suggestedjobs";
+    }
+
+    /**
      * Allows recruiters to see all of their own created jobs.
      *
      * @param model An object carrying data attributes passed to the view.

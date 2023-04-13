@@ -302,6 +302,22 @@ public class JobService {
     }
 
     /**
+     * Get suggested jobs for a specified user
+     * @param appUser The user for whom jobs should be searched
+     * @return A list of suggested jobs
+     */
+    public List<Job> getSuggestedJobs(AppUser appUser) {
+        Optional<JobFilter> optionalJobFilter = jobFilterRepository.findJobFilterByAppUser(appUser);
+
+        if (optionalJobFilter.isEmpty())
+            return new ArrayList<Job>();
+
+        JobFilter jobFilter = optionalJobFilter.get();
+
+        return getAllJobsByFilter(jobFilter.getJobType(), jobFilter.isShowInternalJobs(), jobFilter.isShowExternalJobs());
+    }
+
+    /**
      * Retrieve all jobs given the filter preferences and the search term.
      *
      * @param jobType          the type of job (fulltime, parttime, contract, etc).
