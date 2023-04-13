@@ -40,6 +40,7 @@ class JobRequestTest {
         needCover = true;
         underTest = new JobRequest(position, address, description, type, numAvailable, isExternal, externalLink, needResume, needCover);
         underTest.setCreator(creator);
+        underTest.setCompany(company);
     }
 
     @Test

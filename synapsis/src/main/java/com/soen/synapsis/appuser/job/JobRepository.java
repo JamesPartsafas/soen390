@@ -35,7 +35,7 @@ public interface JobRepository extends JpaRepository<Job, Long>{
      * @param search the search query.
      * @return a list of jobs that meet the search criteria.
      */
-    @Query(value = "SELECT j FROM Job j WHERE LOWER(j.company) LIKE %:search% OR LOWER(j.position) LIKE %:search%")
+    @Query(value = "SELECT j FROM Job j WHERE LOWER(j.company.name) LIKE %:search% OR LOWER(j.position) LIKE %:search%")
     List<Job> findJobsBySearch(@Param("search") String search);
 
     /**
@@ -63,7 +63,7 @@ public interface JobRepository extends JpaRepository<Job, Long>{
      * @param search the search query.
      * @return a list of internal jobs that meet the job type preference and search query.
      */
-    @Query(value = "SELECT j FROM Job j WHERE j.type = :jobType AND j.isExternal = false AND (LOWER(j.company) LIKE %:search% OR LOWER(j.position) LIKE %:search%)")
+    @Query(value = "SELECT j FROM Job j WHERE j.type = :jobType AND j.isExternal = false AND (LOWER(j.company.name) LIKE %:search% OR LOWER(j.position) LIKE %:search%)")
     List<Job> findInternalJobsByJobTypeAndSearchTerm(@Param("jobType") JobType jobType, @Param("search") String search);
 
     /**
@@ -73,7 +73,7 @@ public interface JobRepository extends JpaRepository<Job, Long>{
      * @param search the search query.
      * @return a list of external jobs that meet the job type preference and search query.
      */
-    @Query(value = "SELECT j FROM Job j WHERE j.type = :jobType AND j.isExternal = true AND (LOWER(j.company) LIKE %:search% OR LOWER(j.position) LIKE %:search%)")
+    @Query(value = "SELECT j FROM Job j WHERE j.type = :jobType AND j.isExternal = true AND (LOWER(j.company.name) LIKE %:search% OR LOWER(j.position) LIKE %:search%)")
     List<Job> findExternalJobsByJobTypeAndSearchTerm(@Param("jobType") JobType jobType, @Param("search") String search);
 
     /**
@@ -82,7 +82,7 @@ public interface JobRepository extends JpaRepository<Job, Long>{
      * @param search the search query.
      * @return a list of internal jobs that meet the search query.
      */
-    @Query(value = "SELECT j FROM Job j WHERE j.isExternal = false AND (LOWER(j.company) LIKE %:search% OR LOWER(j.position) LIKE %:search%)")
+    @Query(value = "SELECT j FROM Job j WHERE j.isExternal = false AND (LOWER(j.company.name) LIKE %:search% OR LOWER(j.position) LIKE %:search%)")
     List<Job> findInternalJobsBySearchTerm(@Param("search") String search);
 
     /**
@@ -91,7 +91,7 @@ public interface JobRepository extends JpaRepository<Job, Long>{
      * @param search the search query.
      * @return a list of external jobs that meet the search query.
      */
-    @Query(value = "SELECT j FROM Job j WHERE j.isExternal = true AND (LOWER(j.company) LIKE %:search% OR LOWER(j.position) LIKE %:search%)")
+    @Query(value = "SELECT j FROM Job j WHERE j.isExternal = true AND (LOWER(j.company.name) LIKE %:search% OR LOWER(j.position) LIKE %:search%)")
     List<Job> findExternalJobsBySearchTerm(@Param("search") String search);
 
     /**
