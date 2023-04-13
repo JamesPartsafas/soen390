@@ -21,8 +21,9 @@ public class Job {
     @Column(nullable = false)
     private String position;
 
-    @Column(nullable = false)
-    private String company;
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private AppUser company;
 
     @Column(nullable = false)
     private String address;
@@ -72,7 +73,7 @@ public class Job {
      * @param needResume true if the job application requires a resume; otherwise false.
      * @param needCover true if the job application requires a cover letter; otherwise false.
      */
-    public Job(Long id, AppUser creator, String position, String company, String address, String description, JobType type, int numAvailable, int numApplicants, boolean isExternal, String externalLink, boolean needResume, boolean needCover) {
+    public Job(Long id, AppUser creator, String position, AppUser Company, String address, String description, JobType type, int numAvailable, int numApplicants, boolean isExternal, String externalLink, boolean needResume, boolean needCover) {
         this.id = id;
         this.creator = creator;
         this.position = position;
@@ -103,7 +104,7 @@ public class Job {
      * @param needResume true if the job application requires a resume; otherwise false.
      * @param needCover true if the job application requires a cover letter; otherwise false.
      */
-    public Job(AppUser creator, String position, String company, String address, String description, JobType type, int numAvailable, boolean isExternal, String externalLink, boolean needResume, boolean needCover) {
+    public Job(AppUser creator, String position, AppUser company, String address, String description, JobType type, int numAvailable, boolean isExternal, String externalLink, boolean needResume, boolean needCover) {
         this.creator = creator;
         this.position = position;
         this.company = company;
@@ -138,11 +139,11 @@ public class Job {
         this.position = position;
     }
 
-    public String getCompany() {
+    public AppUser getCompany() {
         return company;
     }
 
-    public void setCompany(String company) {
+    public void setCompany(AppUser company) {
         this.company = company;
     }
 
