@@ -283,4 +283,27 @@ class JobServiceTest {
         AppUser appUser= new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
         assertEquals(null, underTest.getCoverLetterByAppUser(appUser));
     }
+
+    @Test
+    void getSuggestedJobsWithNoFilterReturnsEmptyList() {
+        AppUser appUser = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
+        when(jobFilterRepository.findJobFilterByAppUser(appUser)).thenReturn(Optional.empty());
+
+        List<Job> jobs = underTest.getSuggestedJobs(appUser);
+
+        assertEquals(0, jobs.size());
+    }
+
+    @Test
+    void getSuggestedJobsWithFilterReturnsJobs() {
+        AppUser appUser = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
+
+        JobType jobType = JobType.FULLTIME;
+        when(jobFilterRepository.findJobFilterByAppUser(appUser))
+                .thenReturn(Optional.of(new JobFilter(appUser, jobType, true, false, null)));
+
+        underTest.getSuggestedJobs(appUser);
+
+        verify(jobRepository).findInternalJobsByJobType(jobType);
+    }
 }

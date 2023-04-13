@@ -91,6 +91,21 @@ class JobControllerTest {
     }
 
     @Test
+    void viewSuggestedJobs() {
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(authService.getAuthenticatedUser()).thenReturn(candidate);
+        String returnValue = underTest.getSuggestedJobs(mock(Model.class));
+        assertEquals("pages/suggestedjobs", returnValue);
+    }
+
+    @Test
+    void viewSuggestedJobsWhenUnauthenticatedRedirects() {
+        when(authService.isUserAuthenticated()).thenReturn(false);
+        String returnValue = underTest.getSuggestedJobs(mock(Model.class));
+        assertEquals("redirect:/", returnValue);
+    }
+
+    @Test
     void viewJobPostingBySearchTermReturnsAllJobs() {
         when(authService.isUserAuthenticated()).thenReturn(true);
         when(authService.getAuthenticatedUser()).thenReturn(candidate);
