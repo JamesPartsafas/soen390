@@ -1,15 +1,15 @@
 password=document.getElementById('password');
 confirm_password=document.getElementById('confirmPassword');
-let button = document.querySelector("button")
+let submitButton = document.getElementById("submit");
 function check_password(){
 
     if(!(password.value.localeCompare(confirm_password.value)==0)){
         document.getElementById("mismatch_password").style.display="inline";
-        button.disabled = true;
+        submitButton.disabled = true;
         return false;
     }
     else{
-        button.disabled=false;
+        submitButton.disabled=false;
         document.getElementById("mismatch_password").style.display="none";
         return true;
     }
