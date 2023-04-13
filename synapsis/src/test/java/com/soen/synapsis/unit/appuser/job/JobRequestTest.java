@@ -15,7 +15,7 @@ class JobRequestTest {
     private JobRequest underTest;
     private AppUser creator;
     private String position;
-    private String company;
+    private AppUser company;
     private String address;
     private String description;
     private JobType type;
@@ -29,7 +29,7 @@ class JobRequestTest {
     void setUp() {
         creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
         position = "Software Engineer";
-        company = "Synapsis";
+        company = new AppUser(1L, "joecompany", "1234", "joecompanyunittest@mail.com", Role.COMPANY, AuthProvider.LOCAL);;
         address = "1 Synapsis Street, Montreal, QC, Canada";
         description = "Sample Description";
         type = JobType.FULLTIME;
@@ -38,8 +38,9 @@ class JobRequestTest {
         externalLink = "";
         needResume = true;
         needCover = true;
-        underTest = new JobRequest(position, company, address, description, type, numAvailable, isExternal, externalLink, needResume, needCover);
+        underTest = new JobRequest(position, address, description, type, numAvailable, isExternal, externalLink, needResume, needCover);
         underTest.setCreator(creator);
+        underTest.setCompany(company);
     }
 
     @Test
@@ -73,7 +74,7 @@ class JobRequestTest {
 
     @Test
     void setCompany() {
-        String newCompany = "Amaznot";
+        AppUser newCompany = new AppUser(1L, "joecompany", "1234", "joecompanyunittest@mail.com", Role.COMPANY, AuthProvider.LOCAL);
         underTest.setCompany(newCompany);
         assertEquals(newCompany, underTest.getCompany());
     }

@@ -20,7 +20,7 @@
 
           <img class="w-56 h-40">
           <div class="font-sans text-base font-light mt-2 ml-4" th:text="${job.get().position}"></div>
-          <div class="font-sans text-base font-light mt-2 ml-4" th:text="${job.get().company}"></div>
+          <div class="font-sans text-base font-light mt-2 ml-4" th:text="${job.get().company.getName()}"></div>
 
           <div class="grow bg-light mx-auto w-11/12 rounded-2xl text-xs mt-2 mb-4">
             <div class="font-sans font-light p-2" th:text="${job.get().description}"></div>

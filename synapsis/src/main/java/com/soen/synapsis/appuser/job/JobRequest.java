@@ -9,8 +9,8 @@ public class JobRequest {
 
     private AppUser creator;
     private String position;
-    private String company;
     private String address;
+    private AppUser company;
     private String description;
     private JobType type;
     private int numAvailable;
@@ -28,7 +28,6 @@ public class JobRequest {
      * Create a new job request given the inputs data.
      *
      * @param position the name of the position.
-     * @param company the name of the company.
      * @param address the address of the workplace.
      * @param description the description of the job.
      * @param type fulltime, partime, contract, temporary, volunteer, internship, or other.
@@ -38,9 +37,8 @@ public class JobRequest {
      * @param needResume true if the job application requires a resume; otherwise false.
      * @param needCover true if the job application requires a cover letter; otherwise false.
      */
-    public JobRequest(String position, String company, String address, String description, JobType type, int numAvailable, boolean isExternal, String externalLink, boolean needResume, boolean needCover) {
+    public JobRequest(String position, String address, String description, JobType type, int numAvailable, boolean isExternal, String externalLink, boolean needResume, boolean needCover) {
         this.position = position;
-        this.company = company;
         this.address = address;
         this.description = description;
         this.type = type;
@@ -67,11 +65,11 @@ public class JobRequest {
         this.position = position;
     }
 
-    public String getCompany() {
+    public AppUser getCompany() {
         return company;
     }
 
-    public void setCompany(String company) {
+    public void setCompany(AppUser company) {
         this.company = company;
     }
 

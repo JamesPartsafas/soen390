@@ -101,7 +101,7 @@ public class JobService {
 
         AppUser creator = request.getCreator();
         String position = request.getPosition();
-        String company = request.getCompany();
+        AppUser company = request.getCompany();
         String address = request.getAddress();
         String description = request.getDescription();
         JobType type = request.getType();

@@ -23,7 +23,7 @@
                 <span id="mismatch_password" class ="text-primary hidden">The passwords provided do not match!</span>
                 <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-red-500"></div>
 
-                <button type="submit" class="btn btn-primary mt-3 bg-primary mx-auto text-base">Submit
+                <button type="submit" id="submit" class="btn btn-primary mt-3 bg-primary mx-auto text-base">Submit
                 </button>
             </div>
         </div>
