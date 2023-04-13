@@ -31,6 +31,8 @@
                         <p th:if="${reportStatus != null}" th:text="${reportStatus}"></p>
 
                     <div id="chat-page" class=" relative flex-none w-full">
+                        <p id="chatUser" th:text="${chatUser}"
+                           class="font-bold hidden"></p>
                         <div class= "relative">
 
                             <div class="chat-container overflow-y-auto">

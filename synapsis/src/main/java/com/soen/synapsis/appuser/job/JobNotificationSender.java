@@ -47,7 +47,7 @@ public class JobNotificationSender implements Runnable {
                     0L,
                     appUser.getId(),
                     NotificationType.JOB,
-                    "You have a new job suggestion!",
+                    job.getCompany().getName(),
                     "/job/" + job.getID(),
                     false
             );
