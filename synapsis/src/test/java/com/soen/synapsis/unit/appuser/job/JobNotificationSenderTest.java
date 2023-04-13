@@ -1,6 +1,8 @@
 package com.soen.synapsis.unit.appuser.job;
 
 import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AuthProvider;
+import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.job.*;
 import com.soen.synapsis.websockets.notification.NotificationDTO;
 import com.soen.synapsis.websockets.notification.NotificationService;
@@ -46,8 +48,8 @@ public class JobNotificationSenderTest {
         when(job.getIsExternal()).thenReturn(true);
         when(job.getType()).thenReturn(JobType.FULLTIME);
         when(job.getPosition()).thenReturn("");
-        when(job.getCompany()).thenReturn("");
-        when(jobFilterRepository.findAllExternalJobFiltersMatchingJobTypeAndSearchTerm(JobType.FULLTIME, job.getPosition(), job.getCompany())).thenReturn(jobFilterList);
+        when(job.getCompany()).thenReturn(new AppUser(1L, "joecompany", "1234", "joecompanyunittest@mail.com", Role.COMPANY, AuthProvider.LOCAL));
+        when(jobFilterRepository.findAllExternalJobFiltersMatchingJobTypeAndSearchTerm(JobType.FULLTIME, job.getPosition(), "joecompany")).thenReturn(jobFilterList);
 
         underTest.run();
 
@@ -61,8 +63,8 @@ public class JobNotificationSenderTest {
         when(job.getIsExternal()).thenReturn(false);
         when(job.getType()).thenReturn(JobType.FULLTIME);
         when(job.getPosition()).thenReturn("");
-        when(job.getCompany()).thenReturn("");
-        when(jobFilterRepository.findAllInternalJobFiltersMatchingJobTypeAndSearchTerm(JobType.FULLTIME, job.getPosition(), job.getCompany())).thenReturn(jobFilterList);
+        when(job.getCompany()).thenReturn(new AppUser(1L, "joecompany", "1234", "joecompanyunittest@mail.com", Role.COMPANY, AuthProvider.LOCAL));
+        when(jobFilterRepository.findAllInternalJobFiltersMatchingJobTypeAndSearchTerm(JobType.FULLTIME, job.getPosition(), job.getCompany().getName())).thenReturn(jobFilterList);
 
         underTest.run();
 

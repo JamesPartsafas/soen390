@@ -1,6 +1,7 @@
 package com.soen.synapsis.unit.appuser.job;
 
 import com.soen.synapsis.appuser.AppUser;
+import com.soen.synapsis.appuser.AuthProvider;
 import com.soen.synapsis.appuser.Role;
 import com.soen.synapsis.appuser.job.Job;
 import com.soen.synapsis.appuser.job.JobApplication;
@@ -41,7 +42,7 @@ public class JobApplicationTest {
         AppUser companyUser = new AppUser(2L, "Joe Company", "1234", "joecompany@mail.com", Role.COMPANY);
 
         id = 1L;
-        job = new Job(companyUser, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, false, "", true, true);
+        job = new Job(companyUser, "Software Engineer", new AppUser(1L, "joecompany", "1234", "joecompanyunittest@mail.com", Role.COMPANY, AuthProvider.LOCAL), "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, false, "", true, true);
         applicant = applicantUser;
         dateApplied = new Timestamp(System.currentTimeMillis());;
         status = JobApplicationStatus.SUBMITTED;
@@ -76,7 +77,7 @@ public class JobApplicationTest {
     @Test
     void setJob() {
         AppUser newCompanyUser = new AppUser(3L, "Joe NewCompany", "1234", "joenewcompany@mail.com", Role.COMPANY);
-        Job newJob = new Job(newCompanyUser, "Mechanical Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, false, "", true, true);
+        Job newJob = new Job(newCompanyUser, "Mechanical Engineer", new AppUser(1L, "joecompany", "1234", "joecompanyunittest@mail.com", Role.COMPANY, AuthProvider.LOCAL), "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, false, "", true, true);
 
         underTest.setJob(newJob);
         assertEquals(newJob, underTest.getJob());
