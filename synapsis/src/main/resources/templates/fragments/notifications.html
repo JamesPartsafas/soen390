@@ -1,9 +1,17 @@
 <html xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
 <ul th:fragment="notification_list" id="notification_output" class="p-2">
-    <li th:if="${notificationList.empty}" class="p-2">
-        <td>Nothing to show!</td>
+    <div class="langEN">
+        <li th:if="${notificationList.empty}" class="p-2">
+        <td >Nothing to show!</td>
     </li>
+    </div>
+    <!-- localized version of same message-->
+    <div class="langFR">
+        <li th:if="${notificationList.empty}" class="p-2">
+            <td >Rien à montrer!</td>
+        </li>
+    </div>
     <li th:each="notification, iStat : ${notificationList}" class="">
         <a th:onclick="'sendSeen(' + ${notification.id} + ')'" th:href="${notification.url}"
            class="flex justify-around items-center w-52">

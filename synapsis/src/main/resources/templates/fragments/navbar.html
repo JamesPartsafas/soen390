@@ -10,28 +10,41 @@
             <a href="/" class="flex items-center">
                 <img src="/assets/synapsis_black.svg" class="h-12 lg:h-16 mt-3 mr-3 " alt="Synapsis Logo">
             </a>
-            <div class="flex md:order-2 m-2">
+            <div class="langEN flex md:order-2 m-2">
                 <a href="/login" class="btn btn-primary text-xl">
                     Sign In
+                </a>
+            </div>
+            <div class="langFR flex md:order-2 m-2">
+                <a href="/login" class="btn btn-primary text-xl">
+                  Se Connecter
                 </a>
             </div>
             <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
                 <ul class="flex flex-col p-4 mt-4 md:flex-row md:space-x-16 md:mt-0 text-3xl font-light text-black">
                     <li>
-                        <a href="#"
+                        <a href="/" class="langEN"
                            aria-current="page">Home</a>
+                        <a href="/" class="langFR"
+                           aria-current="page">Accueil</a>
                     </li>
                     <li>
-                        <a href="/aboutUs"
+                        <a href="/aboutUs" class="langEN"
                         >About</a>
+                        <a href="/aboutUs" class="langFR"
+                        > À propos</a>
                     </li>
                     <li>
-                        <a href="/ourServices"
+                        <a href="/ourServices" class="langEN"
+                        >Services</a>
+                        <a href="/ourServices" class="langFR"
                         >Services</a>
                     </li>
                     <li>
-                        <a href="/contactUs"
+                        <a href="/contactUs" class="langEN"
                         >Contact</a>
+                        <a href="/contactUs" class="langFR"
+                        >Nous joindre</a>
                     </li>
                 </ul>
             </div>
@@ -50,34 +63,50 @@
             <div class="hidden w-full" id="hamburger">
                 <ul class="flex flex-col mt-4 rounded-md bg-neutral-100 text-black">
                     <li>
-                        <a href="#" aria-current="page"
-                           class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                        <a href="/" aria-current="page"
+                           class="langEN block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
                             Home
                         </a>
-
-                    </li>
-                    <li>
-                        <a href="/aboutUs" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
-                            About
+                        <a href="/" aria-current="page"
+                           class="langFR block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            Accueil
                         </a>
 
                     </li>
                     <li>
-                        <a href="#" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                        <a href="/aboutUs" class="langEN block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            About
+                        </a>
+                        <a href="/aboutUs" class="langFR block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            À propos
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="/ourServices" class="langEN block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            Services
+                        </a>
+                        <a href="/ourServices" class="langFR block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
                             Services
                         </a>
 
                     </li>
                     <li>
-                        <a href="#" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                        <a href="/contactUs" class="langEN block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
                             Contact
+                        </a>
+                        <a href="/contactUs" class="langFR block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            Nous joindre
                         </a>
 
                     </li>
                     <li>
                         <div>
-                            <a href="/login" class="btn btn-primary text-sm  p-3 ml-2">
+                            <a href="/login" class="langEN btn btn-primary text-sm  p-3 ml-2">
                                 Sign In
+                            </a>
+                            <a href="/login" class="langFR btn btn-primary text-sm  p-3 ml-2">
+                                Se Connecter
                             </a>
                         </div>
                     </li>
@@ -100,27 +129,47 @@
             </a>
             <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
                 <ul class="flex flex-col justify-between p-4 mt-4 md:flex-row md:space-x-20 xl:space-x-24 md:mt-0 text-lg font-light text-black">
-                    <a href="/user" aria-current="page">
+                    <a href="/user" aria-current="page" class="langEN">
                         <li class="flex flex-col items-center">
                             <i class="fa-solid fa-user fa-2x h-10"></i>
                             Profile
                         </li>
                     </a>
-                    <a href="/network">
+                    <a  href="/user" aria-current="page" class="langFR">
                         <li class="flex flex-col items-center">
+                            <i class="fa-solid fa-user fa-2x h-10"></i>
+                            Profil
+                        </li>
+                    </a>
+
+                    <a href="/network" class="langEN">
+                        <li class=" flex flex-col items-center">
                             <i class="fa-solid fa-users fa-2x h-10"></i>
                             Network
                         </li>
                     </a>
-                    <a href="/chats">
+                    <a href="/network" class="langFR">
+                        <li class="flex flex-col items-center">
+                            <i class="fa-solid fa-users fa-2x h-10"></i>
+                            Réseau
+                        </li>
+                    </a>
+                    <a href="/chats" class="langEN">
                         <li class="flex flex-col items-center">
                             <i class="fa-regular fa-comment-dots fa-2x h-10"></i>
                             Messages
                         </li>
                     </a>
+                    <a href="/chats" class="langFR">
+                        <li class=" flex flex-col items-center">
+                            <i class="fa-regular fa-comment-dots fa-2x h-10"></i>
+                            Messages
+                        </li>
+                    </a>
+
                     <div>
                         <li>
-                            <div class="text-center relative group">
+                            <div class="langEN text-center relative group">
                                 <div class="flex flex-col items-center cursor-pointer text-md  border-b-0
                                 group-hover:border-grey-light">
                                     <i id="notificationIcon" class="fa-solid fa-bell fa-2x h-10 relative">
@@ -134,11 +183,25 @@
                                     <div id="notification_output" class="text-left">Nothing to show!</div>
                                 </div>
                             </div>
+                            <div class="langFR text-center relative group">
+                                <div class="flex flex-col items-center cursor-pointer text-md  border-b-0
+                                group-hover:border-grey-light">
+                                    <i id="notificationIcon" class="fa-solid fa-bell fa-2x h-10 relative">
+                                        <div class="dot absolute bottom-0 right-0" style="visibility: hidden"
+                                             id="notificationPresent"></div>
+                                    </i>
+                                    Avis
+
+                                </div>
+                                <div class="absolute border border-t-0 w-52 bg-neutral-100 rounded-lg invisible group-hover:visible">
+                                    <div id="notification_output" class="text-left">Rien à montrer!</div>
+                                </div>
+                            </div>
                         </li>
                     </div>
                     <div>
                         <li>
-                            <div class="text-center relative group">
+                            <div class="langEN text-center relative group">
                                 <i class="fa-solid fa-gear fa-2x h-10"></i>
                                 <div class="flex flex-col items-center cursor-pointer text-md  border-b-0
                                 group-hover:border-grey-light">
@@ -154,6 +217,23 @@
                                     </form>
                                 </div>
                             </div>
+                            <div class="langFR text-center relative group">
+                                <i class="fa-solid fa-gear fa-2x h-10"></i>
+                                <div class="flex flex-col items-center cursor-pointer text-md  border-b-0
+                                group-hover:border-grey-light">
+                                    Paramètres
+                                </div>
+                                <div class="absolute border border-t-0 w-40 bg-neutral-100 rounded-lg invisible group-hover:visible">
+                                    <a href="/settings" class="text-center"><i class="fa-solid fa-gear mr-3"></i>Paramètres</a>
+                                    <a class="text-center"><i class="fa-solid fa-globe mr-3"></i>Langue</a>
+                                    <hr class="border-t border-grey-light text-center">
+                                    <form th:action="@{/logout}" method="post"
+                                          class="text-center cursor-pointer hover:text-primary">
+                                        <input class="cursor-pointer" type="submit" value="Se déconnecter"/>
+                                    </form>
+                                </div>
+                            </div>
+
                         </li>
                     </div>
                 </ul>
@@ -167,7 +247,7 @@
                 <img src="/assets/synapsis_black.svg" class="h-12 mt-3 mr-3 " alt="Synapsis Logo">
             </a>
 
-            <div class="inline-block flex items-center">
+            <div class="langEN inline-block flex items-center">
                 <div class="inline-block items-center p-2 text-gray-500 rounded">
                     <div class="relative group">
                         <div class="cursor-pointer text-md   border-b-0
@@ -188,29 +268,61 @@
                 </button>
             </div>
 
+            <div class="langFR inline-block flex items-center">
+                <div class="inline-block items-center p-2 text-gray-500 rounded">
+                    <div class="relative group">
+                        <div class="cursor-pointer text-md   border-b-0
+                                group-hover:border-grey-light">
+                            <i id="notificationIcon" class="fa-solid fa-bell fa-xl">
+                                <div class="dot absolute bottom-0 right-0" style="visibility: hidden"
+                                     id="mobileNotificationPresent"></div>
+                            </i>
+                        </div>
+                        <div class="absolute right-0 border border-t-0 w-52 bg-neutral-100 rounded-lg invisible group-hover:visible group-active:visible">
+                            <div id="mobile_notification_output" class="text-center ml-2">Rien à montrer!</div>
+                        </div>
+                    </div>
+                </div>
+                <button id="mobileButton" type="button"
+                        class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg">
+                    <i class="fa-solid fa-bars fa-2x"></i>
+                </button>
+            </div>
+
             <div class="hidden w-full" id="hamburger">
                 <ul class="flex flex-col mt-4 rounded-md bg-neutral-100 text-black">
                     <li>
-                        <a href="/user" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                        <a href="/user" class="langEN block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
                             <i class="fa-solid fa-user mr-2"></i>
                             Profile
                         </a>
-                    </li>
-                    <li>
-                        <a href="/network" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
-                            <i class="fa-solid fa-users mr-2"></i>
-                            Network
+                        <a href="/user" class="langFR block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-solid fa-user mr-2"></i>
+                            Profil
                         </a>
                     </li>
                     <li>
-                        <a href="/chats" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                        <a href="/network" class="langEN block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-solid fa-users mr-2"></i>
+                            Network
+                        </a>
+                        <a href="/network" class="langFR block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-solid fa-users mr-2"></i>
+                            Réseau
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/chats" class="langEN block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-regular fa-comment-dots mr-2"></i>
+                            Messages
+                        </a>
+                        <a href="/chats" class="langFR block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
                             <i class="fa-regular fa-comment-dots mr-2"></i>
                             Messages
                         </a>
                     </li>
                     <li>
-                        <div
-                                class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                        <div class="langEN block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
                             <div class="relative group">
                                 <div class="cursor-pointer text-md  border-b-0
                                     group-hover:border-grey-light">
@@ -224,6 +336,25 @@
                                     <form th:action="@{/logout}" method="post"
                                           class="text-center cursor-pointer hover:text-primary">
                                         <input class="cursor-pointer" type="submit" value="Log out"/>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="langFR block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <div class="relative group">
+                                <div class="cursor-pointer text-md  border-b-0
+                                    group-hover:border-grey-light">
+                                    <i class="fa-solid fa-gear mr-2"></i>
+                                    Paramètres
+                                </div>
+                                <div class="absolute border border-t-0 w-32 bg-neutral-100 rounded-lg invisible group-hover:visible">
+                                    <a href="/settings" class="text-center"><i class="fa-solid fa-gear mr-3"></i> Paramètres</a>
+                                    <a class="text-center"><i class="fa-solid fa-globe mr-3"></i>langue</a>
+                                    <hr class="border-t border-grey-light text-center">
+                                    <form th:action="@{/logout}" method="post"
+                                          class="text-center cursor-pointer hover:text-primary">
+                                        <input class="cursor-pointer" type="submit" value="Se déconnecter"/>
                                     </form>
                                 </div>
                             </div>
@@ -248,27 +379,47 @@
             <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
                 <ul class="flex flex-col justify-between p-4 mt-4 md:flex-row md:space-x-20 xl:space-x-24 md:mt-0 text-lg font-light text-black">
 
-                    <a href="/admincreationpage">
+                    <a href="/admincreationpage" class="langEN">
                         <li class="flex flex-col items-center">
                             <i class="fa-solid fa-user fa-2x h-10"></i>
                             Create Admin
                         </li>
                     </a>
-                    <a href="/network">
+
+                    <a href="/admincreationpage" class="langFR">
+                    <li class="flex flex-col items-center">
+                        <i class="fa-solid fa-user fa-2x h-10"></i>
+                        Créer un Administrateur
+                    </li>
+                    </a>
+
+                    <a href="/network" class="langEN">
                         <li class="flex flex-col items-center">
                             <i class="fa-solid fa-users fa-2x h-10"></i>
                             Network
                         </li>
                     </a>
-                    <a href="/chats">
+                    <a href="/network" class="langFR">
+                        <li class="flex flex-col items-center">
+                            <i class="fa-solid fa-users fa-2x h-10"></i>
+                            Réseau
+                        </li>
+                    </a>
+                    <a href="/chats" class="langEN">
                         <li class="flex flex-col items-center">
                             <i class="fa-regular fa-comment-dots fa-2x h-10"></i>
                             Reported Messages
                         </li>
                     </a>
+                    <a href="/chats" class="langFR">
+                        <li class="flex flex-col items-center">
+                            <i class="fa-regular fa-comment-dots fa-2x h-10"></i>
+                            Messages signalés
+                        </li>
+                    </a>
                     <div>
                         <li>
-                            <div class="text-center relative group">
+                            <div class="langEN text-center relative group">
                                 <i class="fa-solid fa-gear fa-2x h-10"></i>
                                 <div class="flex flex-col items-center cursor-pointer text-md  border-b-0
                                 group-hover:border-grey-light">
@@ -279,6 +430,20 @@
                                     <form th:action="@{/logout}" method="post"
                                           class="text-center cursor-pointer hover:text-primary">
                                         <input class="cursor-pointer" type="submit" value="Log out"/>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="langFR text-center relative group">
+                                <i class="fa-solid fa-gear fa-2x h-10"></i>
+                                <div class="flex flex-col items-center cursor-pointer text-md  border-b-0
+                                group-hover:border-grey-light">
+                                    Paramètres
+                                </div>
+                                <div class="absolute border border-t-0 w-36 bg-neutral-100 rounded-lg invisible group-hover:visible">
+                                    <hr class="border-t border-grey-light text-center">
+                                    <form th:action="@{/logout}" method="post"
+                                          class="text-center cursor-pointer hover:text-primary">
+                                        <input class="cursor-pointer" type="submit" value="Se déconnecter"/>
                                     </form>
                                 </div>
                             </div>
@@ -301,26 +466,38 @@
                 <ul class="flex flex-col mt-4 rounded-md bg-light text-black">
                     <li>
                         <a href="/admincreationpage"
-                           class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                           class="langEN block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
                             <i class="fa-solid fa-user mr-2"></i>
                             Create Admin
                         </a>
+                        <a href="/admincreationpage"
+                           class="langFR block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-solid fa-user mr-2"></i>
+                            Créer un Administrateur
+                        </a>
                     </li>
                     <li>
-                        <a href="/network" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                        <a href="/network" class="langEN block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
                             <i class="fa-solid fa-users"></i>
                             Network
                         </a>
-                    </li>
-                    <li>
-                        <a href="/chats" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
-                            <i class="fa-regular fa-comment-dots mr-2"></i>
-                            Reported Messages
+                        <a href="/network" class="langFR block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-solid fa-users"></i>
+                            Réseau
                         </a>
                     </li>
                     <li>
-                        <div
-                                class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                        <a href="/chats" class="langEN block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-regular fa-comment-dots mr-2"></i>
+                            Reported Messages
+                        </a>
+                        <a href="/chats" class="langFR block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-regular fa-comment-dots mr-2"></i>
+                            Messages signalés
+                        </a>
+                    </li>
+                    <li class="langEN">
+                        <div class=" block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
                             <div class="relative group">
                                 <div class="cursor-pointer text-md  border-b-0
                                     group-hover:border-grey-light">
@@ -336,6 +513,25 @@
                                 </div>
                             </div>
                         </div>
+                    </li>
+                    <li class="langFR">
+                        <div class="LangFR block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <div class="relative group">
+                                <div class="cursor-pointer text-md  border-b-0
+                                    group-hover:border-grey-light">
+                                    <i class="fa-solid fa-gear mr-2"></i>
+                                    Paramètres
+                                </div>
+                                <div class="absolute border border-t-0 w-32 bg-neutral-100 rounded-lg invisible group-hover:visible">
+                                    <hr class="border-t border-grey-light text-center">
+                                    <form th:action="@{/logout}" method="post"
+                                          class="text-center cursor-pointer hover:text-primary">
+                                        <input class="cursor-pointer" type="submit" value="Se déconnecter"/>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
                     </li>
                 </ul>
             </div>
@@ -357,32 +553,62 @@
             </a>
             <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
                 <ul class="flex flex-col justify-between p-4 mt-4 md:flex-row md:space-x-14 xl:space-x-20 md:mt-0 text-lg font-light text-black">
-                    <a href="/user" aria-current="page">
+                    <a href="/user" aria-current="page" class="langEN">
                         <li class="flex flex-col items-center">
                             <i class="fa-solid fa-user fa-2x h-10"></i>
                             Profile
                         </li>
                     </a>
-                    <a href="/network">
+                    <a href="/user" aria-current="page" class="langFR">
+                        <li class="flex flex-col items-center">
+                            <i class="fa-solid fa-user fa-2x h-10"></i>
+                            Profil
+                        </li>
+                    </a>
+                    <a href="/network" class="langEN">
                         <li class="flex flex-col items-center">
                             <i class="fa-solid fa-users fa-2x h-10"></i>
                             Network
                         </li>
+
                     </a>
-                    <a href="/jobs">
+                    <a href="/network" class="langFR">
+                        <li class="flex flex-col items-center">
+                            <i class="fa-solid fa-users fa-2x h-10"></i>
+                            Réseau
+                        </li>
+
+                    </a>
+                    <a href="/jobs" class="langEN">
                         <li class="flex flex-col items-center">
                             <i class="fa-solid fa-briefcase fa-2x h-10"></i>
                             Jobs
                         </li>
+
                     </a>
-                    <a href="/chats">
+                    <a href="/jobs" class="langFR">
+                        <li class="flex flex-col items-center">
+                            <i class="fa-solid fa-briefcase fa-2x h-10"></i>
+                            Emplois
+                        </li>
+
+                    </a>
+                    <a href="/chats" class="langEN">
                         <li class="flex flex-col items-center">
                             <i class="fa-regular fa-comment-dots fa-2x h-10"></i>
                             Messages
                         </li>
+
+                    </a>
+                    <a href="/chats" class="langFR">
+                        <li class="flex flex-col items-center">
+                            <i class="fa-regular fa-comment-dots fa-2x h-10"></i>
+                            Messages
+                        </li>
+
                     </a>
 
-                    <div>
+                    <div class="langEN">
                         <li>
                             <div class="text-center relative group">
                                 <div class="flex flex-col items-center cursor-pointer text-md  border-b-0
@@ -400,7 +626,28 @@
                             </div>
                         </li>
                     </div>
-                    <div>
+
+                    <div class="langFR">
+                        <li>
+                            <div class="text-center relative group">
+                                <div class="flex flex-col items-center cursor-pointer text-md  border-b-0
+                                group-hover:border-grey-light">
+                                    <i id="notificationIcon" class="fa-solid fa-bell fa-2x h-10 relative">
+                                        <div class="dot absolute bottom-0 right-0" style="visibility: hidden"
+                                             id="notificationPresent"></div>
+                                    </i>
+                                    Avis
+
+                                </div>
+                                <div class="absolute border border-t-0 w-52 bg-neutral-100 rounded-lg invisible group-hover:visible">
+                                    <div id="notification_output" class="text-left">Rien à montrer!</div>
+                                </div>
+                            </div>
+                        </li>
+                    </div>
+
+
+                    <div class="langEN">
                         <li>
                             <div class="text-center relative group">
                                 <i class="fa-solid fa-gear fa-2x h-10"></i>
@@ -420,6 +667,27 @@
                             </div>
                         </li>
                     </div>
+
+                    <div  class="langFR">
+                        <li>
+                            <div class="text-center relative group">
+                                <i class="fa-solid fa-gear fa-2x h-10"></i>
+                                <div class="flex flex-col items-center cursor-pointer text-md  border-b-0
+                                group-hover:border-grey-light">
+                                    Paramètres
+                                </div>
+                                <div class="absolute border border-t-0 w-40 bg-neutral-100 rounded-lg invisible group-hover:visible">
+                                    <a href="/settings" class="text-center"><i class="fa-solid fa-gear mr-3"></i>Paramètres</a>
+                                    <a class="text-center"><i class="fa-solid fa-globe mr-3"></i>Langue</a>
+                                    <hr class="border-t border-grey-light text-center">
+                                    <form th:action="@{/logout}" method="post"
+                                          class="text-center cursor-pointer hover:text-primary">
+                                        <input class="cursor-pointer" type="submit" value="Se déconnecter"/>
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+                    </div>
                 </ul>
             </div>
         </div>
@@ -431,14 +699,16 @@
                 <img src="/assets/synapsis_black.svg" class="h-12 mt-3 mr-3 " alt="Synapsis Logo">
             </a>
 
-            <div class="inline-block flex items-center">
+            <div class="langEN inline-block flex items-center">
                 <div class="inline-block items-center p-2 text-gray-500 rounded">
                     <div class="relative group">
                         <div class="cursor-pointer text-md   border-b-0
                                 group-hover:border-grey-light">
                             <i id="notificationIcon" class="fa-solid fa-bell fa-xl">
                                 <div class="dot absolute bottom-0 right-0" style="visibility: hidden"
-                                     id="mobileNotificationPresent"></div>
+                                     id="mobileNotificationPresent">
+
+                                </div>
                             </i>
                         </div>
                         <div class="absolute right-0 border border-t-0 w-52 bg-neutral-100 rounded-lg invisible group-hover:visible group-active:visible">
@@ -452,33 +722,78 @@
                 </button>
             </div>
 
+            <div class="langFR inline-block flex items-center">
+                <div class="inline-block items-center p-2 text-gray-500 rounded">
+                    <div class="relative group">
+                        <div class="cursor-pointer text-md   border-b-0
+                                group-hover:border-grey-light">
+                            <i id="notificationIcon" class="fa-solid fa-bell fa-xl">
+                                <div class="dot absolute bottom-0 right-0" style="visibility: hidden"
+                                     id="mobileNotificationPresent"></div>
+                            </i>
+                        </div>
+                        <div class="absolute right-0 border border-t-0 w-52 bg-neutral-100 rounded-lg invisible group-hover:visible group-active:visible">
+                            <div id="mobile_notification_output" class="text-center ml-2">Rien à montrer!</div>
+                        </div>
+                    </div>
+                </div>
+                <button id="mobileButton" type="button"
+                        class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg">
+                    <i class="fa-solid fa-bars fa-2x"></i>
+                </button>
+            </div>
+
             <div class="hidden w-full" id="hamburger">
                 <ul class="flex flex-col mt-4 rounded-md bg-neutral-100 text-black">
-                    <li>
+                    <li class="langEN">
                         <a href="/user" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
                             <i class="fa-solid fa-user mr-2"></i>
                             Profile
                         </a>
                     </li>
-                    <li>
-                        <a href="/network" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                    <li class="langFR">
+                        <a href="/user" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-solid fa-user mr-2"></i>
+                            Profil
+                        </a>
+                    </li>
+                    <li class="langEN">
+                        <a href="/network" class=" block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
                             <i class="fa-solid fa-users mr-2"></i>
                             Network
                         </a>
                     </li>
-                    <li>
+                    <li class="langFR">
+                        <a href="/network" class=" block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-solid fa-users mr-2"></i>
+                            Réseau
+                        </a>
+                    </li>
+                    <li class="langEN">
                         <a href="/jobs" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
                             <i class="fa-solid fa-briefcase mr-2"></i>
                             jobs
                         </a>
                     </li>
-                    <li>
+                    <Li class="langFR">
+                        <a href="/jobs" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-solid fa-briefcase mr-2"></i>
+                            Emplois
+                        </a>
+                    </Li>
+                    <li class="langEN">
                         <a href="/chats" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
                             <i class="fa-regular fa-comment-dots mr-2"></i>
                             Messages
                         </a>
                     </li>
-                    <li>
+                    </li>
+                    <li class="langFR">
+                        <a href="/chats" class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <i class="fa-regular fa-comment-dots mr-2"></i>
+                            Messages
+                        </a>
+                    <li class="langEN">
                         <div class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
                             <div class="relative group">
                                 <div class="cursor-pointer text-md  border-b-0
@@ -498,9 +813,30 @@
                             </div>
                         </div>
                     </li>
+                    <li class="langFR">
+                        <div class="block py-2 pl-3 pr-4 text-black-variant rounded hover:text-primary">
+                            <div class="relative group">
+                                <div class="cursor-pointer text-md  border-b-0
+                                                            group-hover:border-grey-light">
+                                    <i class="fa-solid fa-gear mr-2"></i>
+                                    Paramètres
+                                </div>
+                                <div class="absolute border border-t-0 w-48 bg-neutral-100 rounded-lg invisible group-hover:visible">
+                                    <a href="/settings" class="text-center"><i class="fa-solid fa-gear mr-3"></i>Paramètres</a>
+                                    <a class="text-center"><i class="fa-solid fa-globe mr-3"></i>Langue</a>
+                                    <hr class="border-t border-grey-light text-center">
+                                    <form th:action="@{/logout}" method="post"
+                                          class="text-center cursor-pointer hover:text-primary">
+                                        <input class="cursor-pointer" type="submit" value="Se déconnecter"/>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
+
         <div class="invisible w-0 h-0" th:text="${globalUserId}" id="userId"></div>
         <script src="/js/notification.js"></script>
         <script src="/js/navbar.js"></script>
