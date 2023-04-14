@@ -77,7 +77,7 @@ class JobRepositoryTest {
     void itShouldFindAllJobsBySearch() {
         String searchTerm = "Joe Company";
 
-        assertEquals(2, underTest.findJobsBySearch(searchTerm.toLowerCase()).size());
+        assertEquals(5, underTest.findJobsBySearch(searchTerm.toLowerCase()).size());
     }
 
     @Test
