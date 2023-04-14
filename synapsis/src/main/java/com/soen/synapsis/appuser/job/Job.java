@@ -73,7 +73,7 @@ public class Job {
      * @param needResume true if the job application requires a resume; otherwise false.
      * @param needCover true if the job application requires a cover letter; otherwise false.
      */
-    public Job(Long id, AppUser creator, String position, AppUser Company, String address, String description, JobType type, int numAvailable, int numApplicants, boolean isExternal, String externalLink, boolean needResume, boolean needCover) {
+    public Job(Long id, AppUser creator, String position, AppUser company, String address, String description, JobType type, int numAvailable, int numApplicants, boolean isExternal, String externalLink, boolean needResume, boolean needCover) {
         this.id = id;
         this.creator = creator;
         this.position = position;
