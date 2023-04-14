@@ -16,7 +16,7 @@ class JobTest {
     private Job undertest;
     private AppUser creator;
     private String position;
-    private String company;
+    private AppUser company;
     private String address;
     private String description;
     private JobType type;
@@ -32,7 +32,7 @@ class JobTest {
         id = 15L;
         creator = new AppUser(10L, "joe", "1234", "joeunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
         position = "Software Engineer";
-        company = "Synapsis";
+        company = new AppUser(1L, "joecompany", "1234", "joecompanyunittest@mail.com", Role.COMPANY, AuthProvider.LOCAL);
         address = "1 Synapsis Street, Montreal, QC, Canada";
         description = "Sample Description";
         type = JobType.FULLTIME;
@@ -82,7 +82,7 @@ class JobTest {
 
     @Test
     void setCompany() {
-        String newCompany = "Amaznot";
+        AppUser newCompany = new AppUser(2L, "joecompany2", "1234", "joecompanyunittest@mail.com", Role.COMPANY, AuthProvider.LOCAL);
         undertest.setCompany(newCompany);
         assertEquals(newCompany, undertest.getCompany());
     }

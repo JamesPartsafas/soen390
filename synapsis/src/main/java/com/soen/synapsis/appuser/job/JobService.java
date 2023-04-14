@@ -101,7 +101,7 @@ public class JobService {
 
         AppUser creator = request.getCreator();
         String position = request.getPosition();
-        String company = request.getCompany();
+        AppUser company = request.getCompany();
         String address = request.getAddress();
         String description = request.getDescription();
         JobType type = request.getType();
@@ -299,6 +299,22 @@ public class JobService {
         }
 
         return jobs;
+    }
+
+    /**
+     * Get suggested jobs for a specified user
+     * @param appUser The user for whom jobs should be searched
+     * @return A list of suggested jobs
+     */
+    public List<Job> getSuggestedJobs(AppUser appUser) {
+        Optional<JobFilter> optionalJobFilter = jobFilterRepository.findJobFilterByAppUser(appUser);
+
+        if (optionalJobFilter.isEmpty())
+            return new ArrayList<Job>();
+
+        JobFilter jobFilter = optionalJobFilter.get();
+
+        return getAllJobsByFilter(jobFilter.getJobType(), jobFilter.isShowInternalJobs(), jobFilter.isShowExternalJobs());
     }
 
     /**

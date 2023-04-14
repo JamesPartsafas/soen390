@@ -36,9 +36,9 @@ public class JobNotificationSender implements Runnable {
     public void sendJobNotifications(Job job) {
         List<JobFilter> jobFilters;
         if (job.getIsExternal()) {
-            jobFilters = jobFilterRepository.findAllExternalJobFiltersMatchingJobTypeAndSearchTerm(job.getType(), job.getPosition().toLowerCase(), job.getCompany().toLowerCase());
+            jobFilters = jobFilterRepository.findAllExternalJobFiltersMatchingJobTypeAndSearchTerm(job.getType(), job.getPosition().toLowerCase(), job.getCompany().getName().toLowerCase());
         } else {
-            jobFilters = jobFilterRepository.findAllInternalJobFiltersMatchingJobTypeAndSearchTerm(job.getType(), job.getPosition().toLowerCase(), job.getCompany().toLowerCase());
+            jobFilters = jobFilterRepository.findAllInternalJobFiltersMatchingJobTypeAndSearchTerm(job.getType(), job.getPosition().toLowerCase(), job.getCompany().getName().toLowerCase());
         }
 
         for (JobFilter jobFilter : jobFilters) {
@@ -47,7 +47,7 @@ public class JobNotificationSender implements Runnable {
                     0L,
                     appUser.getId(),
                     NotificationType.JOB,
-                    "You have a new job suggestion!",
+                    job.getCompany().getName(),
                     "/job/" + job.getID(),
                     false
             );

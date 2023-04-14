@@ -3,28 +3,99 @@
 <ul th:fragment="notification_list" id="notification_output" class="p-2">
     <div class="langEN">
         <li th:if="${notificationList.empty}" class="p-2">
-        <td >Nothing to show!</td>
-    </li>
+            <td>Nothing to show!</td>
+        </li>
     </div>
     <!-- localized version of same message-->
     <div class="langFR">
         <li th:if="${notificationList.empty}" class="p-2">
-            <td >Rien à montrer!</td>
+            <td>Rien à montrer!</td>
         </li>
     </div>
     <li th:each="notification, iStat : ${notificationList}" class="">
         <a th:onclick="'sendSeen(' + ${notification.id} + ')'" th:href="${notification.url}"
-           class="flex justify-around items-center w-52">
-            <div th:if="${notification.getType().toString() == 'MESSAGE'}" class="">
-                <i class="fa-solid fa-message"></i></div>
-            <div th:if="${notification.getType().toString() =='CONNECTION'}" class="">
-                <i class="fa-solid fa-user-group"></i></div>
+           class="w-52">
+            <div th:if="${notification.getType().toString() == 'MESSAGE'}" class="flex justify-around items-center">
+                <i class="fa-solid fa-message"></i>
+                <div class="langEN">
+                    <div id="unseen" th:if="${!notification.seen}"
+                         th:text="'You have a message from ' + ${notification.text}"
+                         class="w-36 text-sm font-bold line-clamp-3"></div>
+                    <div th:if="${notification.seen}" th:text="'You have a message from ' + ${notification.text}"
+                         class="w-36 text-sm line-clamp-3"></div>
+                </div>
+
+                <div class="langFR">
+                    <div id="unseen" th:if="${!notification.seen}"
+                         th:text="'Vous avez un message de ' + ${notification.text}"
+                         class="w-36 text-sm font-bold line-clamp-3"></div>
+                    <div th:if="${notification.seen}" th:text="'Vous avez un message de ' + ${notification.text}"
+                         class="w-36 text-sm line-clamp-3"></div>
+                </div>
             </div>
-            <div th:if="${notification.getType().toString() =='JOB'}" class="">
-                <i class="fa-solid fa-briefcase"></i></div>
+
+            <div th:if="${notification.getType().toString() =='REQUEST_CON'}" class="flex justify-around items-center">
+                <i class="fa-solid fa-user-group"></i>
+                <div class="langEN">
+                    <div id="unseen" th:if="${!notification.seen}"
+                         th:text="'You have a connection request from ' + ${notification.text}"
+                         class="w-36 text-sm font-bold line-clamp-3"></div>
+                    <div th:if="${notification.seen}"
+                         th:text="'You have a connection request from ' + ${notification.text}"
+                         class="w-36 text-sm line-clamp-3"></div>
+                </div>
+
+                <div class="langFR">
+                    <div id="unseen" th:if="${!notification.seen}"
+                         th:text="'Vous avez un demande de connexion de ' + ${notification.text}"
+                         class="w-36 text-sm font-bold line-clamp-3"></div>
+                    <div th:if="${notification.seen}"
+                         th:text="'Vous avez un demande de connexion de ' + ${notification.text}"
+                         class="w-36 text-sm line-clamp-3"></div>
+                </div>
             </div>
-            <div id="unseen" th:if="${!notification.seen}" th:text="${notification.text}" class="flex-none w-36 text-sm font-bold truncate"></div>
-            <div th:if="${notification.seen}" th:text="${notification.text}" class="flex-none w-36 text-sm truncate"></div>
+
+            <div th:if="${notification.getType().toString() =='ACCEPT_CON'}" class="flex justify-around items-center">
+                <i class="fa-solid fa-user-group"></i>
+                <div class="langEN">
+                    <div id="unseen" th:if="${!notification.seen}"
+                         th:text="'You have accepted a connection with ' + ${notification.text}"
+                         class="w-36 text-sm font-bold line-clamp-3"></div>
+                    <div th:if="${notification.seen}"
+                         th:text="'You have accepted a connection with ' + ${notification.text}"
+                         class="w-36 text-sm line-clamp-3"></div>
+                </div>
+                <div class="langFR">
+                    <div id="unseen" th:if="${!notification.seen}"
+                         th:text="'Vous avez accepté un connexion avec ' + ${notification.text}"
+                         class="w-36 text-sm font-bold line-clamp-3"></div>
+                    <div th:if="${notification.seen}"
+                         th:text="'Vous avez accepté un connexion avec ' + ${notification.text}"
+                         class="w-36 text-sm line-clamp-3"></div>
+                </div>
+            </div>
+
+            <div th:if="${notification.getType().toString() =='JOB'}" class="flex justify-around items-center">
+                <i class="fa-solid fa-briefcase"></i>
+                <div class="langEN">
+                    <div id="unseen" th:if="${!notification.seen}"
+                         th:text="'You have a new job suggestion at ' + ${notification.text}"
+                         class="w-36 text-sm font-bold line-clamp-3"></div>
+                    <div th:if="${notification.seen}"
+                         th:text="'You have a new job suggestion at ' + ${notification.text}"
+                         class="w-36 text-sm line-clamp-3"></div>
+                </div>
+
+                <div class="langFR">
+                    <div id="unseen" th:if="${!notification.seen}"
+                         th:text="'Vous avez une nouvelle suggestion d\'emploi à ' + ${notification.text}"
+                         class="w-36 text-sm font-bold line-clamp-3"></div>
+                    <div th:if="${notification.seen}"
+                         th:text="'Vous avez une nouvelle suggestion d\'emploi à ' + ${notification.text}"
+                         class="w-36 text-sm line-clamp-3"></div>
+                </div>
+            </div>
+
         </a>
         <hr th:if="${iStat.count != (iStat.size)}" class="mt-2 mb-2">
     </li>

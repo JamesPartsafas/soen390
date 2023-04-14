@@ -1,5 +1,6 @@
 password=document.getElementById('password');
 confirm_password=document.getElementById('confirmPassword');
+
 passwordf=document.getElementById('passwordf');
 confirm_passwordf=document.getElementById('confirmPasswordf');
 let submitButton = document.getElementById("submit");

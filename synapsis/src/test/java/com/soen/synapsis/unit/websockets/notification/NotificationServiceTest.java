@@ -50,7 +50,7 @@ public class NotificationServiceTest {
     void saveNotificationSuccessful() {
         AppUser appUser = new AppUser(1L, "name", "12345678", "name@mail.com", Role.CANDIDATE);
         appUser.setSettings(new Settings(1L, appUser, true, true, true));
-        NotificationDTO notificationDTO = new NotificationDTO(1L, 1L, NotificationType.CONNECTION, "text", "url", false);
+        NotificationDTO notificationDTO = new NotificationDTO(1L, 1L, NotificationType.REQUEST_CON, "text", "url", false);
 
         underTest.saveNotification(notificationDTO, appUser);
         verify(notificationRepository).save(ArgumentMatchers.any(Notification.class));
@@ -61,7 +61,7 @@ public class NotificationServiceTest {
     void saveNotificationEmailSentWhenUserHasSetting() {
         AppUser appUser = new AppUser(1L, "name", "12345678", "name@mail.com", Role.CANDIDATE);
         appUser.setSettings(new Settings(1L, appUser, true, true, true));
-        NotificationDTO notification = new NotificationDTO(1L, 1L, NotificationType.CONNECTION, "text", "url", false);
+        NotificationDTO notification = new NotificationDTO(1L, 1L, NotificationType.REQUEST_CON, "text", "url", false);
 
         underTest.saveNotification(notification, appUser);
 
@@ -76,7 +76,7 @@ public class NotificationServiceTest {
     void saveNotificationEmailNotSentWhenUserDoesNotHaveSetting() {
         AppUser appUser = new AppUser(1L, "name", "12345678", "name@mail.com", Role.CANDIDATE);
         appUser.setSettings(new Settings(1L, appUser, true, true, false));
-        NotificationDTO notification = new NotificationDTO(1L, 1L, NotificationType.CONNECTION, "text", "url", false);
+        NotificationDTO notification = new NotificationDTO(1L, 1L, NotificationType.REQUEST_CON, "text", "url", false);
 
         underTest.saveNotification(notification, appUser);
 
@@ -89,7 +89,7 @@ public class NotificationServiceTest {
 
     @Test
     void saveNotificationFailsWhenRecipientUserIsInvalid() {
-        NotificationDTO notification = new NotificationDTO(1L, 1L, NotificationType.CONNECTION, "text", "url", false);
+        NotificationDTO notification = new NotificationDTO(1L, 1L, NotificationType.REQUEST_CON, "text", "url", false);
         when(appUserService.getAppUser(1L)).thenReturn(Optional.empty());
 
         Exception thrown = assertThrows(Exception.class, () -> {
@@ -101,10 +101,10 @@ public class NotificationServiceTest {
 
     @Test
     void updateSeenSuccessful() {
-        NotificationDTO notificationDTO = new NotificationDTO(1L, 1L, NotificationType.CONNECTION, "text", "url", false);
+        NotificationDTO notificationDTO = new NotificationDTO(1L, 1L, NotificationType.REQUEST_CON, "text", "url", false);
         AppUser appUser = new AppUser(1L, "name", "12345678", "name@mail.com", Role.CANDIDATE);
         Timestamp timestamp = new Timestamp(1);
-        Notification notification = new Notification(1L, appUser, NotificationType.CONNECTION, "text", "url", false, timestamp);
+        Notification notification = new Notification(1L, appUser, NotificationType.REQUEST_CON, "text", "url", false, timestamp);
         when(notificationRepository.getNotificationById(notificationDTO.getId())).thenReturn(notification);
 
         underTest.updateSeen(notificationDTO, true);

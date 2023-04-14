@@ -32,6 +32,7 @@ class JobControllerTest {
     private JobController underTest;
     private List<Job> allJobs;
     private AppUser creator;
+    private AppUser company;
     private AppUser candidate;
     private Job job1;
     private Job job2;
@@ -46,12 +47,14 @@ class JobControllerTest {
         underTest = new JobController(jobService, authService, appUserService);
         searchTerm = null;
 
+        company = new AppUser(1L, "joecompany", "1234", "joecompanyunittest@mail.com", Role.COMPANY, AuthProvider.LOCAL);
         creator = new AppUser(1L, "joecreator", "1234", "joecreatorunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
-        candidate = new AppUser(2L, "joecandidate", "1234", "joecandidateunittest@mail.com", Role.RECRUITER, AuthProvider.LOCAL);
+        creator.setCompany(company);
+        candidate = new AppUser(2L, "joecandidate", "1234", "joecandidateunittest@mail.com", Role.CANDIDATE, AuthProvider.LOCAL);
 
-        job1 = new Job(creator, "Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true);
-        job2 = new Job(creator, "Mechanical Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true);
-        job3 = new Job(creator, "Mechanical Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, false, "", true, true);
+        job1 = new Job(creator, "Software Engineer", company, "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true);
+        job2 = new Job(creator, "Mechanical Engineer", company, "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, true, "", true, true);
+        job3 = new Job(creator, "Mechanical Engineer", company, "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 5, false, "", true, true);
 
         job1.setID(1L);
 
@@ -60,7 +63,7 @@ class JobControllerTest {
         allJobs.add(job1);
         allJobs.add(job2);
 
-        request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true);
+        request = new JobRequest("Software Engineer", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true);
 
         jobFilter = new JobFilter(candidate, JobType.FULLTIME, true, true, "");
         candidate.addSavedJob(1L);
@@ -88,6 +91,21 @@ class JobControllerTest {
         when(authService.getAuthenticatedUser()).thenReturn(candidate);
         String returnValue = underTest.getSavedJobs(mock(Model.class));
         assertEquals("pages/savedjobs", returnValue);
+    }
+
+    @Test
+    void viewSuggestedJobs() {
+        when(authService.isUserAuthenticated()).thenReturn(true);
+        when(authService.getAuthenticatedUser()).thenReturn(candidate);
+        String returnValue = underTest.getSuggestedJobs(mock(Model.class));
+        assertEquals("pages/suggestedjobs", returnValue);
+    }
+
+    @Test
+    void viewSuggestedJobsWhenUnauthenticatedRedirects() {
+        when(authService.isUserAuthenticated()).thenReturn(false);
+        String returnValue = underTest.getSuggestedJobs(mock(Model.class));
+        assertEquals("redirect:/", returnValue);
     }
 
     @Test
@@ -191,7 +209,7 @@ class JobControllerTest {
 
     @Test
     void sendValidCreateJobInfo() throws Exception {
-        request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true);
+        request = new JobRequest("Software Engineer", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true);
         request.setCreator(creator);
         when(authService.getAuthenticatedUser()).thenReturn(creator);
 
@@ -201,7 +219,7 @@ class JobControllerTest {
 
     @Test
     void createJobWithBindingErrors() {
-        request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true);
+        request = new JobRequest("Software Engineer", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true);
         request.setCreator(creator);
         Model model = mock(Model.class);
         when(authService.getAuthenticatedUser()).thenReturn(creator);
@@ -282,9 +300,10 @@ class JobControllerTest {
     @Test
     void deleteJobRedirects() {
         when(authService.getAuthenticatedUser()).thenReturn(creator);
+        when(authService.getAuthenticatedUser().getCompany()).thenReturn(company);
         String returnedPage = underTest.deleteJob(1L);
 
-        assertEquals("redirect:/", returnedPage);
+        assertEquals("redirect:/job/1", returnedPage);
     }
 
     @Test
@@ -301,7 +320,7 @@ class JobControllerTest {
 
     @Test
     void editJobGet() {
-        request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true);
+        request = new JobRequest("Software Engineer", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true);
         request.setCreator(creator);
         when(authService.getAuthenticatedUser()).thenReturn(creator);
         when(jobService.getJob(any(Long.class))).thenReturn(Optional.of(job1));
@@ -311,7 +330,7 @@ class JobControllerTest {
 
     @Test
     void editJob() {
-        request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true);
+        request = new JobRequest("Software Engineer", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true);
         request.setCreator(creator);
         when(authService.getAuthenticatedUser()).thenReturn(creator);
         String returnedPage = underTest.editJob(1L, request, mock(BindingResult.class), mock(Model.class));
@@ -320,7 +339,7 @@ class JobControllerTest {
 
     @Test
     void editJobRedirectsNoAuth() {
-        request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true);
+        request = new JobRequest("Software Engineer", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true);
         request.setCreator(creator);
         when(authService.getAuthenticatedUser()).thenReturn(creator);
         String returnedPage = underTest.editJob(job1.getID(), request, mock(BindingResult.class), mock(Model.class));
@@ -329,7 +348,7 @@ class JobControllerTest {
 
     @Test
     void editJobWithBindingErrors() {
-        request = new JobRequest("Software Engineer", "Synapsis", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true);
+        request = new JobRequest("Software Engineer", "1 Synapsis Street, Montreal, QC, Canada", "Sample Description", JobType.FULLTIME, 1, true, "", true, true);
         request.setCreator(creator);
         Model model = mock(Model.class);
         when(authService.getAuthenticatedUser()).thenReturn(creator);

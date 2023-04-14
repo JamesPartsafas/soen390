@@ -8,6 +8,7 @@ const csrfToken = document.querySelector('meta[name="_csrf"]').content;
 let chatId = document.querySelector('#chat').value.trim();
 let senderId = document.querySelector('#sender').value.trim();
 let receiverId = document.querySelector('#receiver').value.trim();
+let chatUser = document.getElementById("chatUser").innerText;
 
 let stompClient = null;
 
@@ -93,7 +94,8 @@ async function sendMessage(event) {
             stompClient.send(`/app/chat/${chatId}`, {}, chatMessageStr);
             fileInput.value = '';
 
-            sendNotification("You have a message.", `/chat/${chatId}`, receiverId, 'MESSAGE');
+            sendNotification(chatUser, `/chat/${chatId}`, receiverId, 'MESSAGE');
+
             showMessage(chatMessage);
         } catch (e) {
             onError(e);
@@ -206,6 +208,7 @@ function showMessage(message) {
         messageArea.innerHTML += createMessageElement(message);
     }
 }
+
 /**
  * Generates an HTML element to display a message.
  * @param message The message object to be displayed.
@@ -267,7 +270,7 @@ function createMessageElement(message) {
  * @returns {string}  An HTML string containing an image tag or download link for the file, or an empty string if no file is present in the message.
  */
 function generateFileContainerElement(message) {
-    if (!message.fileName || !message.file){
+    if (!message.fileName || !message.file) {
         return '';
     }
 

@@ -76,6 +76,32 @@ function showNotificationPresent() {
         document.querySelector('#notificationPresent').style.visibility = "visible";
         document.querySelector('#mobileNotificationPresent').style.visibility = "visible";
     }
+
+    let currentLang = localStorage.getItem('localLang');
+
+    if (currentLang == 'langFR') {
+        changeNotificationsLang('langEN')
+    } else {
+        changeNotificationsLang('langFR')
+    }
+}
+
+function changeNotificationsLang(currentLang) {
+    let notifications = document.getElementById("notification_output");
+    const elements = notifications.getElementsByClassName(currentLang);
+    let visibleElements;
+    if (currentLang == 'langEN') {
+        visibleElements = notifications.getElementsByClassName('langFR');
+    } else if (currentLang == 'langFR') {
+        visibleElements = notifications.getElementsByClassName('langEN');
+    }
+    for (const elem of elements) {
+        elem.style.display = 'none';
+    }
+    for (const visibleElem of visibleElements) {
+        visibleElem.style.display = 'block';
+    }
+
 }
 
 function callOnlyOnce(fn, context) {
