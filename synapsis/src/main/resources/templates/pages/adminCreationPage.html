@@ -4,6 +4,7 @@
 
 <div layout:fragment="content">
 
+    <div class="langEN">
     <form th:action= "@{/admincreation}" th:object="${registrationRequest}" method="post">
         <div class="container flex items-center justify-center mb-8 w-full">
             <div class="relative flex flex-col p-6 border space-y-8 rounded-sm border shadow-xl w-4/5 lg:w-2/3 m-8 e">
@@ -23,11 +24,41 @@
                 <span id="mismatch_password" class ="text-primary hidden">The passwords provided do not match!</span>
                 <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-red-500"></div>
 
-                <button type="submit" class="btn btn-primary mt-3 bg-primary mx-auto text-base">Submit
+                <button type="submit" id="submit" class="btn btn-primary mt-3 bg-primary mx-auto text-base">Submit
                 </button>
             </div>
         </div>
     </form>
+</div>
+
+
+
+    <div class="langFR">
+        <form th:action= "@{/admincreation}" th:object="${registrationRequest}" method="post">
+            <div class="container flex items-center justify-center mb-8 w-full">
+                <div class="relative flex flex-col p-6 border space-y-8 rounded-sm border shadow-xl w-4/5 lg:w-2/3 m-8 e">
+
+                    <p class="font-thin text-3xl font-serif text-black-variant text-center">Créer un administrateur</p>
+                    <p th:text="${error}" class="font-light text-red-500"></p>
+                    <input type="text" name = "name" th:field="*{name}" placeholder="Entrez le nom"
+                           class="font-thin font-serif border border-grey mt-4 pl-3 h-14 content-center rounded-md hover:bg-light"/>
+                    <input type="text" name = "email" th:field="*{email}" placeholder="Entrez adresse courriel"
+                           class="font-thin font-serif border border-grey mt-4 pl-3 h-14 content-center rounded-md hover:bg-light" required/>
+                    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-red-500"></div>
+                    <input type="password" name ="password"  id="passwordf" th:field="*{password}" placeholder="Entrer le mot de passe"
+                           class="font-thin font-serif border border-grey mt-4 pl-3 h-14 content-center rounded-md hover:bg-light"
+                           required/>
+                    <input type="password" name ="confirmPassword" id="confirmPasswordf" placeholder="Confirmer le nouveau mot de passe"
+                           class="font-thin font-serif border border-grey mt-4 pl-3 h-14 content-center rounded-md hover:bg-gray-300" th:onmouseout="check_passwordf()" required/>
+                    <span id="mismatch_passwordf" class ="text-primary hidden">Les mots de passe fournis ne correspondent pas!</span>
+                    <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-red-500"></div>
+
+                    <button type="submit" id="submitf" class="btn btn-primary mt-3 bg-primary mx-auto text-base">Soumettre
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
 
     <script type="text/javascript" th:src="@{/js/changePassword.js}"></script>
 
