@@ -26,10 +26,6 @@ INSERT INTO app_user (name, password, email, role, auth_provider, company_id, ve
 VALUES ('Joe Recruiter2', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'joerecruiter2@mail.com',
         'RECRUITER', 'LOCAL', 3, true);
 
-INSERT INTO app_user (name, password, email, role, auth_provider, verification_status)
-VALUES ('Tony Recruiter', '$2a$12$ShsRhBqy8y9ep/oxB5ury.7cxmcGjt.BQA4i6dhp/RUva/hS7DjHm', 'tonyrecruiter@mail.com',
-        'RECRUITER', 'LOCAL', true);
-
 INSERT INTO connection (receiver_id, requester_id, pending)
 VALUES (3, 1, false);
 
