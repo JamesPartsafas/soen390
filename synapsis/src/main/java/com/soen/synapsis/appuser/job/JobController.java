@@ -245,6 +245,7 @@ public class JobController {
             model.addAttribute("is_external", job.getIsExternal());
             model.addAttribute("external_link", job.getExternalLink());
             model.addAttribute("savedJobs", authService.getAuthenticatedUser().getSavedJobs());
+            model.addAttribute("company", job.getCompany().getName());
 
             return "pages/jobApplicationExternal";
         } else {
