@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout xmlns:sec=http://www.w3.org/1999/xhtml"
+      layout:decorate="_layout">
+<div layout:fragment="content">
 <head>
     <meta charset="UTF-8">
     <title>Synapsis</title>
@@ -29,7 +31,7 @@
     </script>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
-<div>
+<div class="langEN mb-32">
     <form th:action="@{/login}" method="post">
         <p th:if="${param.error}" th:utext="${session[SPRING_SECURITY_LAST_EXCEPTION]}"
            class="bg-primary-variant shadow-lg border border-primary rounded-md text-center m-4 p-4"></p>
@@ -76,42 +78,63 @@
         </div>
 
     </form>
+</div>
 
-    <div class="container flex-row justify-center items-center mt-48 hidden lg:flex">
-        <div class="flex-none mr-4">
-            <img src="/assets/synapsis_red.svg" class="h-3 w-14 inline" alt="Synapsis Logo">
-            <div class="inline font-light text-grey text-xs">
-                &#169; 2023
+
+
+
+<div class="langFR mb-32">
+    <form th:action="@{/login}" method="post">
+        <p th:if="${param.error}" th:utext="${session[SPRING_SECURITY_LAST_EXCEPTION]}"
+           class="bg-primary-variant shadow-lg border border-primary rounded-md text-center m-4 p-4"></p>
+        <p th:if="${param.logout}" class="bg-light shadow-lg border border-grey rounded-md text-center m-4 p-4">Vous vous êtes déconnecté avec succès.</p>
+        <div class="flex flex-row justify-center content-center mt-24 w-full">
+            <div class="hidden md:flex lg:flex w-9/10 md:w-1/2 lg:w-2/3 mr-4 justify-center max-w-4xl">
+                <img src="../../assets/hero1.png" alt="Hero Image">
+            </div>
+            <div class="flex flex-row flex-wrap justify-center content-center mt-8 w-80 border rounded-sm">
+                <div class="mt-6">
+                    <img src="../../assets/synapsis_red.svg" class="inline h-10 w-48" alt="Synapsis Logo">
+                </div>
+                <input id="email" name="email" type="email" placeholder="Adresse courriel"
+                       class="font-thin font-serif mt-4 pl-3 h-14 w-3/4 content-center border rounded-md"
+                       required/>
+                <input id="passwordf" name="password" type="password" placeholder="Mot de passe"
+                       class="font-thin font-serif pl-3 mt-3 h-14 w-3/4 content-center border rounded-md"
+                       required/>
+
+                <button type="submit" class="btn btn-primary mt-3 bg-primary text-base justify-self-end">Connexion
+                </button>
+
+                <hr class="mt-3 text-black">
+
+                <a th:href="@{/oauth2/authorization/google}" class="mt-5 h-14 bg-white rounded-md drop-shadow-md">
+                    <div class="mt-4">
+                        <img class="ml-3 mb-1 w-5 h-5 inline" src="/assets/google-logo.png">
+                        <div class="mx-3 text-center text-black text-xl font-serif font-normal inline">Connectez-vous avec Google
+                        </div>
+                    </div>
+                </a>
+
+                <div class="mt-5 mb-2 text-black font-serif font-normal text-base">
+                    Vous n'avez pas de compte? <a th:href="@{/register}" class="text-primary">Cliquez ici</a>
+                </div>
+                <div class="mb-4 text-black font-serif font-normal text-base">
+                    Vous avez oublié votre mot de passe ?<a th:href="@{/passwordreset}" class="text-primary">Cliquez ici</a>
+                </div>
+                <a th:href="@{/}" class="btn btn-primary bg-primary text-base mb-2 mx-auto font-thin
+                ">Retour à la page d'accueil</a>
             </div>
         </div>
 
-        <div class="flex-none font-light text-grey text-xs mr-4">
-            <a href="#">Companies</a>
-        </div>
-        <div class="flex-none font-light text-grey text-xs mr-4">
-            <a href="#">Accessibility</a>
-        </div>
-        <div class="flex-none font-light text-grey text-xs mr-4">
-            <a href="#">User Agreement</a>
-        </div>
-        <div class="flex-none font-light text-grey text-xs mr-4">
-            <a href="#">Privacy Policy</a>
-        </div>
-        <div class="flex-none font-light text-grey text-xs mr-4">
-            <a href="#">Cookie Policy</a>
-        </div>
-        <div class="flex-none font-light text-grey text-xs mr-4">
-            <a href="#">Copyright Policy</a>
-        </div>
-        <div class="flex-none font-light text-grey text-xs mr-4">
-            <a href="#">Brand Policy</a>
-        </div>
-        <div class="flex-none font-light text-grey text-xs mr-4">
-            <a href="#">Community Guidelines</a>
-        </div>
-        <div class="flex-none font-light text-grey text-xs mr-4">
-            <a href="#">English</a>
-        </div>
-    </div>
+    </form>
+</div>
+
+
+
+
+
+
+
 </div>
 </html>
