@@ -1,42 +1,50 @@
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
-<div layout:fragment="content">
+<div layout:fragment="content" class="flex justify-center">
     <p th:text="${error}"></p>
-    <form th:action="@{/company/update}"
-          th:object="${updateCompanyProfileRequest}"
-          method="post"
-          enctype="multipart/form-data"
-    >
-        <!-- The page that will be displayed in case company account user wants to edit their profile -->
+    <div class="flex w-4/5 lg:w-1/2 p-5 bg-neutral-100 border-gray-200 rounded-lg shadow">
+        <form th:action="@{/company/update}"
+              th:object="${updateCompanyProfileRequest}"
+              method="post"
+              enctype="multipart/form-data"
+              class="w-full"
+        >
+            <!-- The page that will be displayed in case company account user wants to edit their profile -->
 
-        <div class="flex max-w-xl bg-neutral-100 border-gray-200 ml-28 rounded-lg shadow">
-            <div class="p-5">
-                <label>Change Profile Picture</label>
-                <input type="file" name="image" accept="image/png, image/jpeg"/>
-                <br>
-                <label>Change Cover Picture</label>
-                <input type="file" name="coverImage" accept="image/png, image/jpeg"/>
-                <br>
+            <div class="grid grid-cols-2 py-1">
+                <div><label>Change Profile Picture</label></div>
+                <div><input type="file" name="image" accept="image/png, image/jpeg"/></div>
+            </div>
 
+            <div class="grid grid-cols-2 py-1">
+                <div><label>Change Cover Picture</label></div>
+                <div><input type="file" name="coverImage" accept="image/png, image/jpeg"/></div>
+            </div>
+
+            <div>
                 <label>Description</label><br>
                 <textarea id="description" name="description"
                           class="w-full py-3 px-4 mb-3 h-32 resize-y font-normal tracking-tight text-gray-900  resize-y"
                           th:text="${profile.description}"></textarea>
-                <br>
+            </div>
+
+            <div>
                 <label>Website</label><br>
                 <input type="text" id="website" name="website" th:value="${profile.website}"
                        class="mb-2 text-left font-normal tracking-tight text-gray-900 "/>
+            </div>
 
-                <br>
+            <div>
                 <label>Industry</label><br>
                 <input type="text" id="industry" name="industry" th:value="${profile.industry}"
                        oninvalid="this.setCustomValidity('Enter a Valid Industry')"
                        onchange="try{setCustomValidity('')}catch(e){}"
                        oninput="setCustomValidity(' ')"
                        class="mb-2 text-left font-normal tracking-tight text-gray-900 " required/>
+            </div>
 
-                <br>
+            <div>
                 <label>Company Size</label><br>
                 <input type="text" required
                        oninvalid="this.setCustomValidity(this.value.trim() == '' ? 'Please fill out this field' : 'Please enter a valid number')"
@@ -44,24 +52,29 @@
                        oninput="setCustomValidity('')"
                        id="companySize" name="companySize" th:value="${profile.companySize}"
                        class="mb-2 text-left font-normal tracking-tight text-gray-900  "/>
-                <br>
+            </div>
+
+            <div>
                 <label>Location</label><br>
                 <select type="text" id="location" name="country" th:value="${profile.location}"
                         class="country mb-2 text-left font-normal tracking-tight text-gray-900">
                     <option value="" disabled selected>Select a country</option>
                 </select>
-                <br>
+            </div>
+
+            <div>
                 <label>Speciality</label><br>
                 <input type="text" id="speciality" name="speciality" th:value="${profile.speciality}"
                        oninvalid="this.setCustomValidity('Enter a Valid Speciality')"
                        onchange="try{setCustomValidity('')}catch(e){}"
                        oninput="setCustomValidity(' ')"
                        class="mb-2 text-left font-normal tracking-tight text-gray-900 " required/>
-                <br>
-                <button class=" btn bg-red-500 text-white rounded-full " type="submit">Save</button>
             </div>
-        </div>
-    </form>
-    <script src="/js/countries.js"></script>
+            <div class="flex justify-center">
+                <button class="py-2 px-4 bg-red-500 text-white rounded-full" type="submit">Save</button>
+            </div>
+        </form>
+        <script src="/js/countries.js"></script>
+    </div>
 </div>
 </html>
