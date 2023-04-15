@@ -4,10 +4,10 @@
 
 <div th:fragment="navbar" class="h-32">
     <!--Not logged in navbar-->
-    <nav sec:authorize="!isAuthenticated()" class="bg-white px-4 lg:px-2 py-6 fixed w-[95vw] z-20 top-0 left-0">
+    <nav sec:authorize="!isAuthenticated()" class="bg-white px-6 lg:px-4 py-6 fixed w-[95vw] z-20">
         <div class="hidden lg:container lg:flex lg:items-center lg:justify-between lg:mx-auto">
             <a href="/" class="flex items-center">
-                <img src="/assets/synapsis_black.svg" class="h-12 lg:h-16 mt-3 mr-3 " alt="Synapsis Logo">
+                <img src="/assets/synapsis_black.svg" class="h-12 lg:h-16 mt-3 mr-3" alt="Synapsis Logo">
             </a>
             <div class="langEN flex md:order-2 m-2">
                 <a href="/login" class="btn btn-primary text-xl">
@@ -121,7 +121,7 @@
 
     <!-- Logged in navbar for COMPANY-->
     <nav sec:authorize="hasAuthority('COMPANY')"
-         class="bg-white px-4 lg:px-2 py-2 fixed w-[95vw] z-20 top-0 left-0">
+         class="bg-white px-6 lg:px-4 py-2 fixed w-[95vw] z-20">
         <div class="hidden lg:container lg:flex lg:flex-wrap lg:items-center lg:justify-between lg:mx-auto">
             <a href="/" class="flex items-center">
                 <img src="/assets/synapsis_black.svg" class="h-12 lg:h-16 mt-3 mr-3 " alt="Synapsis Logo">
@@ -337,7 +337,7 @@
 
     <!-- Logged in navbar for Admin-->
     <nav sec:authorize="hasAuthority('ADMIN')"
-         class="bg-white px-4 lg:px-2 py-2 fixed w-[95vw] z-20 top-0 left-0">
+         class="bg-white px-6 lg:px-4 py-2 fixed w-[95vw] z-20">
         <div class="sm:hidden lg:container lg:flex lg:flex-wrap lg:items-center lg:justify-between lg:mx-auto">
             <a href="/" class="flex items-center">
                 <img src="/assets/synapsis_black.svg" class="h-12 lg:h-16 mt-3 mr-3 " alt="Synapsis Logo">
@@ -512,7 +512,7 @@
 
     <!-- Logged in navbar for Candidate,Recruiter-->
     <nav sec:authorize="hasAnyAuthority('RECRUITER', 'CANDIDATE')"
-         class="bg-white px-4 lg:px-2 py-2 fixed w-[95vw] z-20 top-0 left-0">
+         class="bg-white px-6 lg:px-4 py-2 fixed w-[95vw] z-20">
         <div class="hidden lg:container lg:flex lg:flex-wrap lg:items-center lg:justify-between lg:mx-auto">
             <a href="/" class="flex items-center">
                 <img src="/assets/synapsis_black.svg" class="h-12 lg:h-16 mt-3 mr-3 " alt="Synapsis Logo">
