@@ -3,7 +3,7 @@
       layout:decorate="_layout">
 <div layout:fragment="content">
 
-
+     <div class="langEN">
     <div class="container flex flex-wrap flex-col border p-8 mx-auto  mt-10 shadow-sm w-2/3 lg:w-2/3 mb-20 rounded-sm">
         <h2 class="text-center text-6xl">Our Services</h2> <br>
         <hr class="border-t border-grey-light">
@@ -144,5 +144,154 @@
             </div>
         </div>
     </div>
+     </div>
+
+
+    <div class="langFR">
+        <div class="container flex flex-wrap flex-col border p-8 mx-auto  mt-10 shadow-sm w-2/3 lg:w-2/3 mb-20 rounded-sm">
+            <h2 class="text-center text-6xl">Nos services</h2> <br>
+            <hr class="border-t border-grey-light">
+            <br>
+            <div class="w-full bg-white border border-gray-200 rounded-lg shadow ">
+                <div class="sm:hidden">
+                    <label for="tabs" class="sr-only">Select tab</label>
+                    <select id="tabs"
+                            class="bg-gray-50 border-0 border-b border-gray-200 text-gray-900 text-sm rounded-t-lg focus:ring-red-600 focus:border-red-600 block w-full p-2.5 ">
+                        <option>La mise en réseau</option>
+                        <option>Messagerie</option>
+                        <option>Emplois</option>
+                    </select>
+                </div>
+                <!--Bullet points under each section-->
+                <ul class="hidden text-sm font-medium text-center text-gray-500 divide-x divide-gray-200 rounded-lg sm:flex "
+                    id="fullWidthTab" data-tabs-toggle="#fullWidthTabContent" role="tablist">
+                    <li class="w-full">
+                        <button id="networking-tabf" data-tabs-target="#networkingf" type="button" role="tab"
+                                aria-controls="networkingf" aria-selected="true"
+                                class="inline-block w-full p-4 rounded-tl-lg bg-gray-50 hover:bg-gray-100 focus:outline-none ">
+                            La mise en réseau
+                        </button>
+                    </li>
+                    <li class="w-full">
+                        <button id="messaging-tabf" data-tabs-target="#messagingf" type="button" role="tab"
+                                aria-controls="messagingf" aria-selected="false"
+                                class="inline-block w-full p-4 bg-gray-50 hover:bg-gray-100 focus:outline-none ">
+                            Messagerie
+                        </button>
+                    </li>
+                    <li class="w-full">
+                        <button id="jobs-tabf" data-tabs-target="#jobsf" type="button" role="tab" aria-controls="jobsf"
+                                aria-selected="false"
+                                class="inline-block w-full p-4 rounded-tr-lg bg-gray-50 hover:bg-gray-100 focus:outline-none ">
+                            Emplois
+                        </button>
+                    </li>
+                </ul>
+                <div id="fullWidthTabContent" class="border-t border-gray-200 ">
+                    <div class="hidden p-4 bg-white rounded-lg md:p-8 " id="networkingf" role="tabpanel"
+                         aria-labelledby="networking-tabf">
+                        <ul role="list" class="space-y-4 text-gray-500 ">
+                            <li class="flex space-x-2">
+                                <svg class="flex-shrink-0 w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                          clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="leading-tight">Rechercher des millions d'utilisateurs</span>
+                            </li>
+                            <li class="flex space-x-2">
+                                <svg class="flex-shrink-0 w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                          clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="leading-tight">Consultez de nombreuses pages d'entreprises pour lesquelles vous souhaitez travailler</span>
+                            </li>
+                            <li class="flex space-x-2">
+                                <svg class="flex-shrink-0 w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                          clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="leading-tight">Connectez-vous avec les utilisateurs, y compris les recruteurs et les entreprises</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="hidden p-4 bg-white rounded-lg md:p-8 " id="messagingf" role="tabpanel"
+                         aria-labelledby="messaging-tabf">
+                        <ul role="list" class="space-y-4 text-gray-500 ">
+                            <li class="flex space-x-2">
+                                <svg class="flex-shrink-0 w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                          clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="leading-tight">Envoyer des messages aux autres utilisateurs, y compris l'envoi de fichiers et d'images</span>
+                            </li>
+                            <li class="flex space-x-2">
+                                <svg class="flex-shrink-0 w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                          clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="leading-tight">Signalez tout type de harcèlement et soyez dans un environnement sécurisé tout en profitant de l'expérience</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="hidden p-4 bg-white rounded-lg md:p-8 " id="jobsf" role="tabpanel"
+                         aria-labelledby="jobs-tabf">
+                        <ul role="list" class="space-y-4 text-gray-500 ">
+                            <li class="flex space-x-2">
+                                <svg class="flex-shrink-0 w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                          clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="leading-tight">Rechercher et postuler à des emplois internes (via Synapsis) et externes </span>
+                            </li>
+                            <li class="flex space-x-2">
+                                <svg class="flex-shrink-0 w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                          clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="leading-tight">Filtrer les travaux et les enregistrer</span>
+                            </li>
+                            <li class="flex space-x-2">
+                                <svg class="flex-shrink-0 w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                          clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="leading-tight">Publier des offres d'emploi et faire de la publicité </span>
+                            </li>
+                            <li class="flex space-x-2">
+                                <svg class="flex-shrink-0 w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                          clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="leading-tight">Avoir accès aux alertes et suggestions d'emploi </span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
 </div>
 </html>
