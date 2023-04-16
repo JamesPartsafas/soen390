@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
-<div layout:fragment="content" >
+<div layout:fragment="content" class="flex justify-center">
     <p th:text="${error}"></p>
 
-
-
-    <div class="langEN">
-    <div class="flex justify-center  w-4/5 lg:w-1/2 p-5 bg-neutral-100 border-gray-200 rounded-lg shadow">
+    <div class="langEN flex w-4/5 lg:w-1/2 p-5 bg-neutral-100 border-gray-200 rounded-lg shadow">
         <form th:action="@{/company/update}"
               th:object="${updateCompanyProfileRequest}"
               method="post"
@@ -36,7 +33,7 @@
 <!--            <div class="langEN">-->
                 <label>Website</label><br>
                 <input type="text" id="website" name="website" th:value="${profile.website}"
-                       class="mb-2 text-left font-normal tracking-tight text-gray-900 "/>
+                       class="w-full mb-2 text-left font-normal tracking-tight text-gray-900 "/>
 <!--            </div>-->
 <!--            <div class="langFR">-->
 <!--                <label >Site Web</label><br>-->
@@ -50,7 +47,7 @@
                        oninvalid="this.setCustomValidity('Enter a Valid Industry')"
                        onchange="try{setCustomValidity('')}catch(e){}"
                        oninput="setCustomValidity(' ')"
-                       class="mb-2 text-left font-normal tracking-tight text-gray-900 " required/>
+                       class="w-full mb-2 text-left font-normal tracking-tight text-gray-900 " required/>
             </div>
 
             <div>
@@ -60,13 +57,13 @@
                        onchange="try{if(!/^\d+$/.test(this.value.trim())) throw 'Please enter a valid number'; setCustomValidity('')}catch(e){setCustomValidity(e)}"
                        oninput="setCustomValidity('')"
                        id="companySize" name="companySize" th:value="${profile.companySize}"
-                       class="mb-2 text-left font-normal tracking-tight text-gray-900  "/>
+                       class="w-full mb-2 text-left font-normal tracking-tight text-gray-900  "/>
             </div>
 
 <!--            <div class="langEN">-->
                 <label>Location</label><br>
                 <select type="text" id="location" name="country" th:value="${profile.location}"
-                        class="country mb-2 text-left font-normal tracking-tight text-gray-900">
+                        class="country w-full mb-2 text-left font-normal tracking-tight text-gray-900">
                     <option value="" disabled selected>Select a country</option>
                 </select>
 <!--            </div>-->
@@ -84,21 +81,15 @@
                        oninvalid="this.setCustomValidity('Enter a Valid Speciality')"
                        onchange="try{setCustomValidity('')}catch(e){}"
                        oninput="setCustomValidity(' ')"
-                       class="mb-2 text-left font-normal tracking-tight text-gray-900 " required/>
+                       class="w-full mb-2 text-left font-normal tracking-tight text-gray-900 " required/>
             </div>
             <div class="flex justify-center">
                 <button class="py-2 px-4 bg-red-500 text-white rounded-full" type="submit">Save</button>
             </div>
         </form>
-        <script src="/js/countries.js"></script>
-    </div>
     </div>
 
-
-
-
-    <div class="langFR">
-        <div class="flex justify-center w-4/5 lg:w-1/2 p-5 bg-neutral-100 border-gray-200 rounded-lg shadow">
+        <div class="langFR flex justify-center w-4/5 lg:w-1/2 p-5 bg-neutral-100 border-gray-200 rounded-lg shadow">
             <form th:action="@{/company/update}"
                   th:object="${updateCompanyProfileRequest}"
                   method="post"
@@ -127,7 +118,7 @@
                 <div>
                     <label>Le Site Web</label><br>
                     <input type="text" id="website" name="website" th:value="${profile.website}"
-                           class="mb-2 text-left font-normal tracking-tight text-gray-900 "/>
+                           class="w-full mb-2 text-left font-normal tracking-tight text-gray-900 "/>
                 </div>
 
                 <div>
@@ -136,7 +127,7 @@
                            oninvalid="this.setCustomValidity('Enter a Valid Industry')"
                            onchange="try{setCustomValidity('')}catch(e){}"
                            oninput="setCustomValidity(' ')"
-                           class="mb-2 text-left font-normal tracking-tight text-gray-900 " required/>
+                           class="w-full mb-2 text-left font-normal tracking-tight text-gray-900 " required/>
                 </div>
 
                 <div>
@@ -146,13 +137,13 @@
                            onchange="try{if(!/^\d+$/.test(this.value.trim())) throw 'Please enter a valid number'; setCustomValidity('')}catch(e){setCustomValidity(e)}"
                            oninput="setCustomValidity('')"
                            id="companySize" name="companySize" th:value="${profile.companySize}"
-                           class="mb-2 text-left font-normal tracking-tight text-gray-900  "/>
+                           class="w-full mb-2 text-left font-normal tracking-tight text-gray-900  "/>
                 </div>
 
                 <div>
                     <label>l'Emplacement</label><br>
                     <select type="text" id="location" name="country" th:value="${profile.location}"
-                            class="country mb-2 text-left font-normal tracking-tight text-gray-900">
+                            class="country w-full mb-2 text-left font-normal tracking-tight text-gray-900">
                         <option value="" disabled selected>Choisissez un pays</option>
                     </select>
                 </div>
@@ -163,16 +154,15 @@
                            oninvalid="this.setCustomValidity('Enter a Valid Speciality')"
                            onchange="try{setCustomValidity('')}catch(e){}"
                            oninput="setCustomValidity(' ')"
-                           class="mb-2 text-left font-normal tracking-tight text-gray-900 " required/>
+                           class="w-full mb-2 text-left font-normal tracking-tight text-gray-900 " required/>
                 </div>
                 <div class="flex justify-center">
                     <button class="py-2 px-4 bg-red-500 text-white rounded-full" type="submit">Sauvegarder</button>
                 </div>
             </form>
-            <script src="/js/countries.js"></script>
-        </div>
+
     </div>
 
-
+    <script src="/js/countries.js"></script>
 </div>
 </html>
