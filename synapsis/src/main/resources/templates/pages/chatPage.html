@@ -3,12 +3,12 @@
       layout:decorate="_layout">
     <div layout:fragment="content">
         <!-- It will be displayed if the user has no chat messages -->
+        <div class="langEN">
         <div th:if="${chats.size() == 0}">
             <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
                 <span class="font-medium"></span> You don't have any chat messages
             </div>
         </div>
-
 
         <!-- This will be displayed if they already have some chat messages -->
         <div class="flex flex-col flex-wrap pb-28 mb-28 w-4/5 lg:w-9/10 justify-center">
@@ -37,6 +37,46 @@
                     <!-- This image will be displayed before any chat starts with specific user -->
                     <div class="flex-none justify-center w-3/5">
                         <img class="h-auto max-w-full" src="/assets/messaging.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <div class="langFR">
+            <div th:if="${chats.size() == 0}">
+                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+                    <span class="font-medium"></span> Vous n'avez aucun message
+                </div>
+            </div>
+            <!-- This will be displayed if they already have some chat messages -->
+            <div class="flex flex-col flex-wrap pb-28 mb-28 w-4/5 lg:w-9/10 justify-center">
+                <div class="w-11/12 ml-16 shadow-lg rounded-lg h-[25rem]">
+                    <!-- header -->
+                    <div class="px-5 py-5 flex justify-between items-center bg-white border-b-2">
+                        <div class="font-semibold text-2xl">
+                            Vos Connexions
+                        </div>
+                    </div>
+                    <!-- end header -->
+
+                    <div class="flex flex-row bg-white">
+                        <div class="flex-none w-1/3 border-r-2">
+                            <div th:if="${chats.size() != 0}" th:each="chat: ${chats}"
+                                 class="w-4/5 h-14 lg:h-20 mt-3 ml-7 bg-neutral-100 border-gray-200 rounded-lg shadow">
+                                <a th:href="@{/chat/{id}(id=${chat.id})}" class="flex ml-7 mt-5 pt-6">
+                                    <img class="w-6 mr-2 rounded-t-2xl" src="/assets/default_user.svg">
+                                    <div>
+                                        <p th:text="${chat.creator.id == globalUserId ? chat.participant.name : chat.creator.name}"
+                                           class="text-base lg:text-lg font-bold"></p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- This image will be displayed before any chat starts with specific user -->
+                        <div class="flex-none justify-center w-3/5">
+                            <img class="h-auto max-w-full" src="/assets/messaging.png">
+                        </div>
                     </div>
                 </div>
             </div>
