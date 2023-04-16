@@ -217,7 +217,7 @@ function showMessage(message) {
 function createMessageElement(message) {
     return `
         <li>
-            <div class="p-2 px-4 m-2 ml-96 bg-primary-variant rounded-lg text-right w-1/2 flex flex-row-reverse">
+            <div class="p-2 px-4 m-2 ml-32 md:ml-56 lg:ml-84 xl:ml-96 bg-primary-variant rounded-lg text-right w-1/2 flex flex-row-reverse text-sm md:text-base">
                 ${message.content}
                 ${generateFileContainerElement(message)}
             </div>
@@ -249,13 +249,6 @@ function createMessageElement(message) {
                 </div>
             </div>
         </form>`
-
-        // `<form action="${window.location.origin + '/chat/report'}" method="POST">
-        //             <input type="hidden" name="_csrf" value="${csrfToken}"/>
-        //             <input type="hidden" name="messageID" value="${message.id}" />
-        //             <input type="hidden" name="chatID" value="${chatId}" />
-        //             <button class="btn bg-primary btn-primary font-sans text-sm w-20 h-9 p-0" type="submit">Report</button>
-        //         </form>`
         : ''}
         </li>
     `;

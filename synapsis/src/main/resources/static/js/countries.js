@@ -257,5 +257,5 @@ const countryList = [
 countryList.forEach( function(obj) {
     let temp_country = new Option(obj, obj);
     $(temp_country).html(obj);
-    $("select.country").append(temp_country);
+    $("select.location").append(temp_country);
 });
