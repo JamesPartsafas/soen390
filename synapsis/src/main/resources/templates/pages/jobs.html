@@ -2,6 +2,7 @@
 <html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
 <div layout:fragment="content">
+    <div class="langEN">
     <div class="flex mx-auto justify-center mt-10 space-x-12">
         <!--Job Filters-->
         <div class="max-lg:hidden border rounded-md self-start p-4 w-1/6">
@@ -208,7 +209,245 @@
                 </a>
             </div>
         </div>
+    </div>
+    </div>
 
+
+
+    <div class="langFR">
+        <div class="flex mx-auto justify-center mt-10 space-x-12">
+            <!--Job Filters-->
+            <div class="max-lg:hidden border rounded-md self-start p-4 w-1/6">
+                <div th:if="${role.toString() =='RECRUITER'}">
+                    <div class="flex justify-center mt-5">
+                        <a th:href="@{/createjob}"
+                           class="btn btn-primary bg-primary text-base mx-auto rounded-2xl font-thin transition hover:-translate-y-0.5 duration-150 hover:bg-opacity-60">Créer un emploi
+                            <i class="fa-regular fa-square-plus"></i>
+                        </a>
+                    </div>
+                    <div class="flex justify-center">
+                        <a th:href="@{/myjobs}" class="text-lg text-center text-black-variant mt-5">Mes emplois créés
+                            <i class="fa-solid fa-bookmark"></i>
+                        </a>
+                    </div>
+                    <br>
+                    <hr class="border-t border-grey-light">
+                </div>
+                <div class="flex justify-center mt-1">
+                    <a th:href="@{/savedjobs}" class="text-lg text-center text-black-variant mb-4 mt-5">Emplois enregistrés
+                        <i class="fa-solid fa-bookmark"></i>
+                    </a>
+                </div>
+                <div class="flex justify-center mt-1">
+                    <a th:href="@{/suggestedjobs}" class="text-lg text-center text-black-variant mb-4 mt-5">Emplois suggérés</a>
+                </div>
+                <hr class="border-t border-grey-light">
+                <h1 class="text-3xl text-center text-black-variant mb-4 mt-5">Filtre d'emplois</h1>
+                <hr class="border-t border-grey-light">
+                <form th:action="@{/jobs}" method="get">
+                    <label class="font-thin text-grey font-serif">Type d'emploi</label>
+                    <fieldset class="font-serif text-grey">
+                        <div>
+                            <input type="radio" name="jobType" th:id="FULLTIME" th:value="FULLTIME" th:checked="${jobTypeFilter == T(com.soen.synapsis.appuser.job.JobType).FULLTIME}" required>
+                            <label th:for="FULLTIME" th:text="'Temps Plein'" class="font-serif"></label><br>
+                        </div>
+                        <div>
+                            <input type="radio" name="jobType" th:id="PARTTIME" th:value="PARTTIME" th:checked="${jobTypeFilter == T(com.soen.synapsis.appuser.job.JobType).PARTTIME}" required>
+                            <label th:for="PARTTIME" th:text="'Temps Partiel'" class="font-serif"></label><br>
+                        </div>
+                        <div>
+                            <input type="radio" name="jobType" th:id="CONTRACT" th:value="CONTRACT" th:checked="${jobTypeFilter == T(com.soen.synapsis.appuser.job.JobType).CONTRACT}" required>
+                            <label th:for="CONTRACT" th:text="'Contrat'" class="font-serif"></label><br>
+                        </div>
+                        <div>
+                            <input type="radio" name="jobType" th:id="TEMPORARY" th:value="TEMPORARY" th:checked="${jobTypeFilter == T(com.soen.synapsis.appuser.job.JobType).TEMPORARY}" required>
+                            <label th:for="TEMPORARY" th:text="'Temporaire'" class="font-serif"></label><br>
+                        </div>
+                        <div>
+                            <input type="radio" name="jobType" th:id="VOLUNTEER" th:value="VOLUNTEER" th:checked="${jobTypeFilter == T(com.soen.synapsis.appuser.job.JobType).VOLUNTEER}" required>
+                            <label th:for="VOLUNTEER" th:text="'Bénévole'" class="font-serif"></label><br>
+                        </div>
+                        <div>
+                            <input type="radio" name="jobType" th:id="INTERNSHIP" th:value="INTERNSHIP" th:checked="${jobTypeFilter == T(com.soen.synapsis.appuser.job.JobType).INTERNSHIP}" required>
+                            <label th:for="INTERNSHIP" th:text="'Stage'" class="font-serif"></label><br>
+                        </div>
+                        <div>
+                            <input type="radio" name="jobType" th:id="OTHER" th:value="OTHER" th:checked="${jobTypeFilter == T(com.soen.synapsis.appuser.job.JobType).OTHER}" required>
+                            <label th:for="OTHER" th:text="'Autre'" class="font-serif"></label><br>
+                        </div>
+                        <div>
+                            <input type="radio" name="jobType" th:id="ANY" th:value="ANY" th:checked="${jobTypeFilter == T(com.soen.synapsis.appuser.job.JobType).ANY}" required>
+                            <label th:for="ANY" th:text="'Tout'" class="font-serif"></label><br>
+                        </div>
+                    </fieldset>
+                    <br>
+
+                    <label class="font-thin text-grey font-serif">Afficher les emplois internes</label><br>
+                    <input type="radio" id="internal-yes" name="showInternalJobs" value="true"
+                           th:checked="${showInternalJobsFilter != null and showInternalJobsFilter}" required>
+                    <label for="internal-yes" class="text-grey font-serif">Oui</label><br>
+                    <input type="radio" id="internal-no" name="showInternalJobs" value="false"
+                           th:checked="${showInternalJobsFilter != null and !showInternalJobsFilter}">
+                    <label for="internal-no" class="text-grey font-serif">Non</label><br><br>
+
+                    <label class="font-thin text-grey font-serif">Afficher les emplois externes</label><br>
+                    <input type="radio" id="external-yes" name="showExternalJobs" value="true"
+                           th:checked="${showExternalJobsFilter != null and showExternalJobsFilter}" required>
+                    <label for="external-yes" class="text-grey font-serif">Oui</label><br>
+                    <input type="radio" id="external-no" name="showExternalJobs" value="false"
+                           th:checked="${showExternalJobsFilter != null and !showExternalJobsFilter}">
+                    <label for="external-no" class="text-grey font-serif">Non</label><br><br>
+
+                    <input type="hidden" name="isFilteringJobs" value="true">
+                    <input type="hidden" name="searchTerm" th:value="${searchTerm}">
+                    <div class="flex justify-center">
+                        <button type="submit"
+                                class="btn btn-primary bg-primary text-base mx-auto rounded-2xl font-thin transition hover:-translate-y-0.5 duration-150 hover:bg-opacity-60">
+                            filtrer les emplois
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+
+            <!--Displaying all jobs-->
+            <div class="grid grid-cols-1 xl:grid-cols-3 lg:gap-3 lg:grid-cols-2 w-1/2">
+
+                <form th:action="@{/jobs}" class="h-full xl:col-span-3 lg:col-span-2 col-span-1" method="get">
+                    <div class="flex h-14 space-x-1">
+                        <button type="submit" class="w-10 h-full border rounded-md"><i
+                                class="fa-solid fa-magnifying-glass"></i></button>
+                        <input th:value="${searchTerm}"
+                               class="border rounded-md w-full h-full pl-4 font-sans text-xl font-light"
+                               placeholder="Recherche un emploi" name="searchTerm">
+                    </div>
+                </form>
+                <!--Dropdown for mobile-->
+                <div class="lg:hidden border rounded-md self-start col-span-1 h-full px-2 mt-2">
+                    <button id="filterButton" type="button"
+                            class="text-sm text-gray-400 w-full rounded-lg text-left mt-2">
+                        Choisissez un filtre...
+                        <i id="filterIcon" class="fa-solid fa-chevron-down fa-xl float-right mt-2"></i>
+                    </button>
+                    <div class="hidden w-full" id="filterMenu">
+                        <div th:if="${role.toString() =='RECRUITER'}">
+                            <div class="flex justify-center mt-5">
+                                <a th:href="@{/createjob}"
+                                   class="btn btn-primary bg-primary text-base mx-auto rounded-2xl font-thin transition hover:-translate-y-0.5 duration-150 hover:bg-opacity-60">Créer
+                                    un emploi
+                                    <i class="fa-regular fa-square-plus"></i>
+                                </a>
+                            </div>
+                            <br>
+                            <hr class="border-t border-grey-light">
+                        </div>
+                        <div class="flex justify-center mt-1">
+                            <a th:href="@{/savedjobs}" class="text-lg text-center text-black-variant mb-4 mt-5">Emplois enregistrés
+                                <i class="fa-solid fa-bookmark"></i>
+                            </a>
+                        </div>
+                        <div class="flex justify-center mt-1">
+                            <a th:href="@{/suggestedjobs}" class="text-lg text-center text-black-variant mb-4 mt-5">Emplois suggérés</a>
+                        </div>
+                        <hr class="border-t border-grey-light">
+                        <h1 class="text-3xl text-center text-black-variant mb-4 mt-5">Filtres d'emploi</h1>
+                        <hr class="border-t border-grey-light">
+                        <form th:action="@{/jobs}" method="get">
+                            <label class="font-thin text-grey font-serif">Type d'emploi</label>
+                            <fieldset class="font-serif text-grey">
+                                <div th:each="jobType : ${jobTypes}">
+                                    <input type="radio" name="jobType" th:id="${jobType}" th:value="${jobType}"
+                                           th:checked="${jobType == jobTypeFilter}" required>
+                                    <label th:for="${jobType}" th:text="${jobType}" class="font-serif"></label><br>
+                                </div>
+                            </fieldset>
+                            <br>
+
+                            <label class="font-thin text-grey font-serif">Afficher les emplois internes</label><br>
+                            <input type="radio" id="internal-yes" name="showInternalJobs" value="true"
+                                   th:checked="${showInternalJobsFilter != null and showInternalJobsFilter}" required>
+                            <label for="internal-yes" class="text-grey font-serif">Oui</label><br>
+                            <input type="radio" id="internal-no" name="showInternalJobs" value="false"
+                                   th:checked="${showInternalJobsFilter != null and !showInternalJobsFilter}">
+                            <label for="internal-no" class="text-grey font-serif">Non</label><br><br>
+
+                            <label class="font-thin text-grey font-serif">Afficher les emplois externes</label><br>
+                            <input type="radio" id="external-yes" name="showExternalJobs" value="true"
+                                   th:checked="${showExternalJobsFilter != null and showExternalJobsFilter}" required>
+                            <label for="external-yes" class="text-grey font-serif">Oui</label><br>
+                            <input type="radio" id="external-no" name="showExternalJobs" value="false"
+                                   th:checked="${showExternalJobsFilter != null and !showExternalJobsFilter}">
+                            <label for="external-no" class="text-grey font-serif">Non</label><br><br>
+
+                            <input type="hidden" name="isFilteringJobs" value="true">
+                            <input type="hidden" name="searchTerm" th:value="${searchTerm}">
+                            <div class="flex justify-center">
+                                <button type="submit"
+                                        class="btn btn-primary bg-primary text-base mx-auto rounded-2xl font-thin transition hover:-translate-y-0.5 duration-150 hover:bg-opacity-60">
+                                    Filtrer les emplois
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div th:if="${jobs.size() == 0}" class="h-14 xl:col-span-3 lg:col-span-2 col-span-1 mb-4">
+                    <div class="p-4 mb-4 mt-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+                        Aucun résultat trouvé.
+                    </div>
+                </div>
+
+                <div th:if="${jobs.size() > 0}" th:each="job: ${jobs}"
+                     class="flex flex-col inline-block rounded-2xl shadow w-56 min-h-min bg-white mt-4 mr-4 pb-4">
+                    <a th:href="@{/job/{id}(id=${job.getID()})}" class="hover:text-black">
+                        <img class="w-56 h-40" src="../../assets/company_default.jpg">
+                        <div class="font-sans text-base font-light mt-2 ml-4" th:text="${job.position}"></div>
+                        <div class="font-sans text-base font-light mt-2 ml-4" th:text="${job.company.getName()}"></div>
+
+                        <div class="grow bg-light mx-auto w-11/12 rounded-2xl text-xs mt-2 mb-4">
+                            <div class="font-sans font-light p-2" th:text="${job.description}"></div>
+                            <a th:href="@{/job/{id}(id=${job.getID()})}" class="inline-block px-2 py-2 underline">Plus
+                                détails</a>
+                            <p class="px-2" th:if="${job.isExternal}">***APPLIQUER PAR LE SITE WEB***</p>
+                        </div>
+
+                        <div class="flex justify-evenly mt-auto">
+
+                            <div th:if="${jobsSubmitted.contains(job)}">
+                                <button class="inline-block px-4 py-4 text-white bg-primary-variant rounded-2xl" disabled>
+                                    Soumise
+                                </button>
+                            </div>
+
+                            <div th:unless="${jobsSubmitted.contains(job)}"
+                                 class="hover:bg-opacity-60 transition hover:-translate-y-0.5 duration-150">
+                                <a th:href="@{/jobapplication/{id}(id=${job.getID()})}"
+                                   class="inline-block px-4 py-4 text-white hover:text-white hover:bg-opacity-60 bg-primary rounded-2xl">Appliquer</a>
+                            </div>
+
+                            <div th:if="${!savedJobs.contains(job.getID())}">
+                                <form th:action="@{/savejob}" method="post">
+                                    <input type="hidden" name="jobId" th:value="${job.getID()}"/>
+                                    <button class="text-white bg-primary p-4 rounded-2xl
+              hover:bg-opacity-60 transition hover:-translate-y-0.5 duration-150" type="submit"><i
+                                            class="fa-regular fa-bookmark"></i></button>
+                                </form>
+                            </div>
+
+                            <div th:if="${savedJobs.contains(job.getID())}">
+                                <form th:action="@{/deletesavedjob}" method="post">
+                                    <input type="hidden" name="jobId" th:value="${job.getID()}"/>
+                                    <button class="text-white bg-primary p-4 rounded-2xl
+              hover:bg-opacity-60 transition hover:-translate-y-0.5 duration-150" type="submit"><i
+                                            class="fa-solid fa-bookmark"></i></button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="/js/jobs.js"></script>
 </div>

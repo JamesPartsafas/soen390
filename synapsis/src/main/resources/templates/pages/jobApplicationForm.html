@@ -5,6 +5,7 @@
 
     <p th:if="${error}" th:text="${error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"></p>
 
+    <div class="langEN">
     <form th:action="@{/jobapplication}" method="post" enctype="multipart/form-data">
 
         <div class="flex flex-col border p-8 mx-auto mt-10 shadow-xl w-4/5 lg:w-2/3 mb-20 rounded-sm">
@@ -97,6 +98,104 @@
 
         </div>
     </form>
+    </div>
+
+
+    <div class="langFR">
+        <form th:action="@{/jobapplication}" method="post" enctype="multipart/form-data">
+
+            <div class="flex flex-col border p-8 mx-auto mt-10 shadow-xl w-4/5 lg:w-2/3 mb-20 rounded-sm">
+
+                <div class="mb-2">
+                    <img src="../../assets/synapsis_logo.svg" class="object-contain h-12 w-12" alt="Synapsis Logo">
+                </div>
+
+                <p class="font-bold text-lg md:text-xl lg:text-3xl text-black-variant text-center">Application pour [[${company.name}]] - [[${position}]]</p>
+                <p class="font-thin text-grey text-center mb-4">Veuillez remplir le formulaire ci-dessous pour postuler à ce poste.</p>
+
+                <input type="hidden" name="jobId" th:value="${jobId}">
+
+                <input th:value="${email}" name="email" type="email" placeholder="Adresse courriel" class="font-thin font-serif border border-grey pl-3 justify-around rounded-md hover:bg-light h-14" required />
+
+                <div class="flex flex-col space-y-4 mt-4 md:flex-row md:justify-between md:h-14 md:space-x-4 md:space-y-0">
+                    <input name="firstName" type="text" placeholder="Prénom" class="font-thin font-serif border border-grey pl-3 rounded-md hover:bg-light md:w-1/2 w-full h-14" required />
+                    <input name="lastName" type="text" placeholder="Nom de famille" class="font-thin font-serif border border-grey pl-3 justify-around rounded-md hover:bg-light md:w-1/2 w-full h-14" required />
+                </div>
+
+                <div class="flex flex-col space-y-4 mt-4 md:flex-row md:justify-between md:h-14 md:space-x-4 md:space-y-0">
+                    <input name="phone" type="tel" placeholder="Numéro de téléphone, par ex. 123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="font-thin font-serif border border-grey md:w-1/2 w-full h-14 pl-3 rounded-md hover:bg-light" required/>
+                    <input name="address" type="text" placeholder="Adresse" class="font-thin font-serif border border-grey pl-3 rounded-md hover:bg-light md:w-1/2 w-full h-14" required />
+                </div>
+
+                <div class="flex flex-col space-y-4 mt-4 md:flex-row md:justify-between md:h-14 md:space-x-4 md:space-y-0">
+                    <input name="city" type="text" placeholder="Ville" class="font-thin font-serif border border-grey pl-3 rounded-md hover:bg-light md:w-1/2 w-full h-14" required />
+                    <select name="country" class="country font-thin font-serif border border-grey pl-3 rounded-md hover:bg-light md:w-1/2 w-full h-14" required>
+                        <option value="" disabled selected>Choisissez un pays</option>
+                    </select>
+                </div>
+
+                <div class="mt-4">
+                    <p class="font-thin font-serif text-grey" th:if="${default_resume} != null"> Résumé actuel par défaut</p>
+                    <p class="font-thin font-serif text-black" th:if="${default_resume} != null" th:text="${default_resume}"></p>
+                </div>
+
+                <div class="mt-4">
+                    <p class="font-thin font-serif text-grey" th:if="${default_cover_letter} != null"> Lettre de motivation actuelle par défaut</p>
+                    <p class="font-thin font-serif text-black" th:if="${default_cover_letter} != null" th:text="${default_cover_letter}"></p>
+                </div>
+
+                <!-- Upload Resume -->
+                <div th:if="${need_resume} == true and ${default_resume} == null" class="mt-4">
+                    <p class="font-thin font-serif text-grey">Télécharger Résumé *</p>
+                    <input name="resume" class="w-full text-sm file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx" required/>
+                </div>
+                <div th:if="${need_resume} == true and ${default_resume} != null" class="mt-4">
+                    <p class="font-thin font-serif text-grey">Remplacer Résumé</p>
+                    <input name="resume" class="w-full text-sm file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx"/>
+                </div>
+                <div th:if="${need_resume} == false and ${default_resume} == null" class="mt-4">
+                    <p class="font-thin font-serif text-grey">Télécharger Résumé</p>
+                    <input name="resume" class="w-full text-sm file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx"/>
+                </div>
+                <div th:if="${need_resume} == false and ${default_resume} != null" class="mt-4">
+                    <p class="font-thin font-serif text-grey">Remplacer Résumé</p>
+                    <input name="resume" class="w-full text-sm file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx"/>
+                </div>
+
+                <!-- Upload Cover Letter -->
+                <div th:if="${need_cover} == true and ${default_cover_letter} == null" class="mt-4">
+                    <p class="font-thin font-serif text-grey">Télécharger la lettre de motivation *</p>
+                    <input name="coverLetter" class="w-full text-sm file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx" required/>
+                </div>
+                <div th:if="${need_cover} == true and ${default_cover_letter} != null" class="mt-4">
+                    <p class="font-thin font-serif text-grey">Remplacer la lettre de motivation</p>
+                    <input name="coverLetter" class="w-full text-sm file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx"/>
+                </div>
+                <div th:if="${need_cover} == false and ${default_cover_letter} == null" class="mt-4">
+                    <p class="font-thin font-serif text-grey">Télécharger la lettre de motivation</p>
+                    <input name="coverLetter" class="w-full text-sm file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx"/>
+                </div>
+                <div th:if="${need_cover} == false and ${default_cover_letter} != null" class="mt-4">
+                    <p class="font-thin font-serif text-grey">Remplacer la lettre de motivation</p>
+                    <input name="coverLetter" class="w-full text-sm file:h-14 file:text-black-variant file:bg-light file:border-0 file:[border-inline-end-width:1px] file:border-solid file:border-grey text-grey border border-grey rounded-md bg-light focus:outline-none" type="file" accept=".pdf,.docx"/>
+                </div>
+
+                <div class="border border-grey p-3 mt-4 rounded-md hover:bg-light text-black-variant text-sm md:text-base lg:text-base">
+                    <p>Êtes-vous légalement autorisé à travailler au Canada? *</p>
+                    <input type="radio" id="yes" name="legallyAllowedToWork" value="true" required>
+                    <label for="yes">Oui</label><br>
+                    <input type="radio" id="no" name="legallyAllowedToWork" value="false" required>
+                    <label for="no">Non</label><br>
+                </div>
+
+                <input name="links" type="text" placeholder="Lien vers un site Web, un blog ou un portfolio" class="font-thin font-serif border border-grey my-4 pl-3 rounded-md hover:bg-light h-14" />
+
+                <button type="submit" class="btn btn-primary mt-3 bg-primary text-base mx-auto p-4 rounded-2xl font-thin transition hover:-translate-y-0.5 duration-150 hover:bg-opacity-60">Appliquer</button>
+
+            </div>
+        </form>
+    </div>
+
     <script src="/js/countries.js"></script>
 </div>
 </html>
