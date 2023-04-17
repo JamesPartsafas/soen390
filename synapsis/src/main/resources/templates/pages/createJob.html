@@ -2,6 +2,7 @@
 <html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="_layout">
 <div layout:fragment="content">
 
+  <div class="langEN">
   <form th:action="@{/createjob}" method="post">
 
     <p th:if="${error}" th:text="${error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"></p>
@@ -76,6 +77,91 @@
     </div>
 
   </form>
+    </div>
+
+
+
+
+
+
+
+  <div class="langFR">
+    <form th:action="@{/createjob}" method="post">
+
+      <p th:if="${error}" th:text="${error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"></p>
+
+      <div class="flex flex-col border p-8  mx-auto mt-10 shadow-xl w-1/2 mb-20 rounded-xl">
+
+        <div class="mb-4">
+          <img src="../../assets/synapsis_logo.svg" class="object-contain h-12 w-12" alt="Synapsis Logo">
+        </div>
+
+        <p class="font-thin text-3xl m-2 text-center text-black-variant">Créer un emploi</p>
+        <input id="position" name="position" placeholder="Poste"
+               class="font-thin font-serif border border-grey mt-4 pl-3 h-14 content-center rounded-md hover:bg-light"
+               required
+               th:value="${request != null and request.position != null} ? ${request.position} : ''"/>
+        <input id="address" name="address" placeholder="Adresse"
+               class="font-thin font-serif border border-grey mt-4 pl-3 h-14 content-center rounded-md hover:bg-light"
+               required
+               th:value="${request != null and request.address != null} ? ${request.address} : ''"/>
+        <textarea rows="5" id="description" name="description" placeholder="Description"
+                  class="font-thin font-serif border border-grey mt-4 p-3 mb-4 content-center rounded-md hover:bg-light"
+                  required
+                  th:text="${request != null and request.description != null} ? ${request.description} : ''"></textarea>
+
+        <label for="type" class="font-thin text-grey font-serif">Type d'emploi</label>
+        <select id="type" name="type" class="mt-2 bg-white border text-sm h-14 border-grey
+      text-grey rounded-md focus:border-blue-500 p-3 hover:bg-light" required>
+          <option value="FULLTIME">Temps plein</option>
+          <option value="PARTTIME">Temps partiel</option>
+          <option value="CONTRACT">Contrat</option>
+          <option value="TEMPORARY">Temporaire</option>
+          <option value="VOLUNTEER">Bénévole</option>
+          <option value="INTERNSHIP">Stage</option>
+          <option value="OTHER">Autre</option>
+        </select>
+
+        <input id="numAvailable" name="numAvailable" type="number" min="1" placeholder="Postes disponibles"
+               class="font-thin font-serif border border-grey mt-4 pl-3 h-14 mb-4
+             content-center rounded-md hover:bg-light" required
+               th:value="${request != null and request.numAvailable != null} ? ${request.numAvailable} : ''"/>
+
+        <div class="border border-grey p-3 rounded-md hover:bg-light">
+          <p class="text-grey font-serif">Indiquez quels documents sont obligatoires pour cette application</p>
+          <fieldset class="font-serif text-grey">
+            <input type="checkbox" name="needResume" id="needResume" checked>
+            <label for="needResume">Résumé</label><br>
+            <input type="checkbox" name= "needCover" id="needCover">
+            <label for="needCover">Lettre de motivation</label><br>
+          </fieldset>
+        </div>
+
+        <div class="border border-grey p-3 mt-4 rounded-md hover:bg-light">
+          <fieldset required>
+            <legend class="font-thin font-serif text-grey">Cette offre d'emploi est-elle affiché ailleurs? </legend>
+            <div>
+              <input th:value="${true}" type="radio" name="isExternal" id="external" required onclick="EnableLinkBox()"/>
+              <label for="external" class="font-thin font-serif text-grey">Oui (plateforme tierce)</label>
+              <br/>
+
+              <input th:value="${false}" type="radio" name="isExternal" id="internal" onclick="EnableLinkBox()"/>
+              <label for="internal" class="font-thin font-serif text-grey">Non (sur Synapsis)</label>
+            </div>
+
+            <input id="externalLink" name="externalLink" placeholder="Si oui, entrez le lien vers le site web tiers" class="font-thin font-serif
+                 border border-grey mt-4 pl-3 h-14 content-center rounded-md hover:bg-light w-full" disabled />
+          </fieldset>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3 bg-primary text-base mx-auto p-4 rounded-2xl font-thin
+        transition hover:-translate-y-0.5 duration-150 hover:bg-opacity-60">Créer
+        </button>
+      </div>
+
+    </form>
+    </div>
+
 
   <script type="text/javascript" th:src="@{/js/createJob.js}"></script>
 
