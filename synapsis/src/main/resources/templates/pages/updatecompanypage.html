@@ -30,9 +30,12 @@
                           th:text="${profile.description}"></textarea>
             </div>
 
+            <div>
                 <label>Website</label><br>
                 <input type="text" id="website" name="website" th:value="${profile.website}"
                        class="w-full mb-2 text-left font-normal tracking-tight text-gray-900 "/>
+            </div>
+
             <div>
                 <label>Industry</label><br>
                 <input type="text" id="industry" name="industry" th:value="${profile.industry}"
@@ -52,12 +55,14 @@
                        class="w-full mb-2 text-left font-normal tracking-tight text-gray-900  "/>
             </div>
 
-<!--            <div class="langEN">-->
+            <div>
                 <label>Location</label><br>
-                <select type="text" id="location" name="country" th:value="${profile.location}"
-                        class="country w-full mb-2 text-left font-normal tracking-tight text-gray-900">
+                <select type="text" id="location" name="location" th:value="${profile.location}"
+                        class="location w-full mb-2 text-left font-normal tracking-tight text-gray-900">
                     <option value="" disabled selected>Select a country</option>
                 </select>
+            </div>
+
             <div>
                 <label>Speciality</label><br>
                 <input type="text" id="speciality" name="speciality" th:value="${profile.speciality}"
@@ -125,8 +130,8 @@
 
                 <div>
                     <label>l'Emplacement</label><br>
-                    <select type="text" id="location" name="country" th:value="${profile.location}"
-                            class="country w-full mb-2 text-left font-normal tracking-tight text-gray-900">
+                    <select type="text" id="location" name="location" th:value="${profile.location}"
+                            class="location w-full mb-2 text-left font-normal tracking-tight text-gray-900">
                         <option value="" disabled selected>Choisissez un pays</option>
                     </select>
                 </div>
@@ -145,7 +150,6 @@
             </form>
 
     </div>
-
     <script src="/js/countries.js"></script>
 </div>
 </html>
