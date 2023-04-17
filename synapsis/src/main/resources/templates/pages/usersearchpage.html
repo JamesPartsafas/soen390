@@ -2,6 +2,7 @@
 <html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
 <div layout:fragment="content">
+    <div class="langEN">
     <div th:if="${users.size() == 0}">
         <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
             <!-- If there are no users that satisfy the search criteria then nothing will be returned-->
@@ -27,5 +28,37 @@
             </table>
         </div>
     </div>
+</div>
+
+
+    <div class="langFR">
+        <div th:if="${users.size() == 0}">
+            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+                <!-- If there are no users that satisfy the search criteria then nothing will be returned-->
+                <span class="font-medium"></span> Aucun utilisateur n'existe avec ce nom !
+            </div>
+        </div>
+        <div th:if="${users.size() > 0}" th:each="user: ${users}"
+             class="max-w-lg h-full my-5 py-5 ml-10 bg-neutral-100 border-gray-200 rounded-lg shadow">
+            <div class="flex">
+                <img class="flex-none w-14 h-14 ml-5 mt-2 rounded-full w-16 h-20" src="../../assets/default_user.svg"
+                     alt="Default"/>
+                <table>
+                    <tr>
+                        <td>
+                            <p class="text-xl pl-2 mt-2 ml-5 flex-initial w-64 font-bold" th:text="${user.name}"></p>
+                        </td>
+                        <td>
+                            <a th:href="@{/user/{id}(id=${user.getId()})}"
+                               class="flex-initial object-right text-center btn bg-red-500 text-white rounded-full">Voir
+                                Profil</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 </html>

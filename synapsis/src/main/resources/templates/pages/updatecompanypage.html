@@ -3,7 +3,8 @@
       layout:decorate="_layout">
 <div layout:fragment="content" class="flex justify-center">
     <p th:text="${error}"></p>
-    <div class="flex w-4/5 lg:w-1/2 p-5 bg-neutral-100 border-gray-200 rounded-lg shadow">
+
+    <div class="langEN flex w-4/5 lg:w-1/2 p-5 bg-neutral-100 border-gray-200 rounded-lg shadow">
         <form th:action="@{/company/update}"
               th:object="${updateCompanyProfileRequest}"
               method="post"
@@ -29,19 +30,16 @@
                           th:text="${profile.description}"></textarea>
             </div>
 
-            <div>
                 <label>Website</label><br>
                 <input type="text" id="website" name="website" th:value="${profile.website}"
-                       class="mb-2 text-left font-normal tracking-tight text-gray-900 "/>
-            </div>
-
+                       class="w-full mb-2 text-left font-normal tracking-tight text-gray-900 "/>
             <div>
                 <label>Industry</label><br>
                 <input type="text" id="industry" name="industry" th:value="${profile.industry}"
                        oninvalid="this.setCustomValidity('Enter a Valid Industry')"
                        onchange="try{setCustomValidity('')}catch(e){}"
                        oninput="setCustomValidity(' ')"
-                       class="mb-2 text-left font-normal tracking-tight text-gray-900 " required/>
+                       class="w-full mb-2 text-left font-normal tracking-tight text-gray-900 " required/>
             </div>
 
             <div>
@@ -51,30 +49,103 @@
                        onchange="try{if(!/^\d+$/.test(this.value.trim())) throw 'Please enter a valid number'; setCustomValidity('')}catch(e){setCustomValidity(e)}"
                        oninput="setCustomValidity('')"
                        id="companySize" name="companySize" th:value="${profile.companySize}"
-                       class="mb-2 text-left font-normal tracking-tight text-gray-900  "/>
+                       class="w-full mb-2 text-left font-normal tracking-tight text-gray-900  "/>
             </div>
 
-            <div>
+<!--            <div class="langEN">-->
                 <label>Location</label><br>
-                <select type="text" id="location" name="location" th:value="${profile.location}"
-                        class="location mb-2 text-left font-normal tracking-tight text-gray-900">
+                <select type="text" id="location" name="country" th:value="${profile.location}"
+                        class="country w-full mb-2 text-left font-normal tracking-tight text-gray-900">
                     <option value="" disabled selected>Select a country</option>
                 </select>
-            </div>
-
             <div>
                 <label>Speciality</label><br>
                 <input type="text" id="speciality" name="speciality" th:value="${profile.speciality}"
                        oninvalid="this.setCustomValidity('Enter a Valid Speciality')"
                        onchange="try{setCustomValidity('')}catch(e){}"
                        oninput="setCustomValidity(' ')"
-                       class="mb-2 text-left font-normal tracking-tight text-gray-900 " required/>
+                       class="w-full mb-2 text-left font-normal tracking-tight text-gray-900 " required/>
             </div>
             <div class="flex justify-center">
                 <button class="py-2 px-4 bg-red-500 text-white rounded-full" type="submit">Save</button>
             </div>
         </form>
-        <script src="/js/countries.js"></script>
     </div>
+
+        <div class="langFR flex justify-center w-4/5 lg:w-1/2 p-5 bg-neutral-100 border-gray-200 rounded-lg shadow">
+            <form th:action="@{/company/update}"
+                  th:object="${updateCompanyProfileRequest}"
+                  method="post"
+                  enctype="multipart/form-data"
+                  class="w-full"
+            >
+                <!-- The page that will be displayed in case company account user wants to edit their profile -->
+
+                <div class="grid grid-cols-2 py-1">
+                    <div><label>Modifier la photo de profil</label></div>
+                    <div><input type="file" name="image" accept="image/png, image/jpeg"/></div>
+                </div>
+
+                <div class="grid grid-cols-2 py-1">
+                    <div><label>Changer l'image de fond</label></div>
+                    <div><input type="file" name="coverImage" accept="image/png, image/jpeg"/></div>
+                </div>
+
+                <div>
+                    <label>Description</label><br>
+                    <textarea id="description" name="description"
+                              class="w-full py-3 px-4 mb-3 h-32 resize-y font-normal tracking-tight text-gray-900  resize-y"
+                              th:text="${profile.description}"></textarea>
+                </div>
+
+                <div>
+                    <label>Le Site Web</label><br>
+                    <input type="text" id="website" name="website" th:value="${profile.website}"
+                           class="w-full mb-2 text-left font-normal tracking-tight text-gray-900 "/>
+                </div>
+
+                <div>
+                    <label>Industrie</label><br>
+                    <input type="text" id="industry" name="industry" th:value="${profile.industry}"
+                           oninvalid="this.setCustomValidity('Enter a Valid Industry')"
+                           onchange="try{setCustomValidity('')}catch(e){}"
+                           oninput="setCustomValidity(' ')"
+                           class="w-full mb-2 text-left font-normal tracking-tight text-gray-900 " required/>
+                </div>
+
+                <div>
+                    <label>Taille de l'entreprise</label><br>
+                    <input type="text" required
+                           oninvalid="this.setCustomValidity(this.value.trim() == '' ? 'Please fill out this field' : 'Please enter a valid number')"
+                           onchange="try{if(!/^\d+$/.test(this.value.trim())) throw 'Please enter a valid number'; setCustomValidity('')}catch(e){setCustomValidity(e)}"
+                           oninput="setCustomValidity('')"
+                           id="companySize" name="companySize" th:value="${profile.companySize}"
+                           class="w-full mb-2 text-left font-normal tracking-tight text-gray-900  "/>
+                </div>
+
+                <div>
+                    <label>l'Emplacement</label><br>
+                    <select type="text" id="location" name="country" th:value="${profile.location}"
+                            class="country w-full mb-2 text-left font-normal tracking-tight text-gray-900">
+                        <option value="" disabled selected>Choisissez un pays</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Spécialité</label><br>
+                    <input type="text" id="speciality" name="speciality" th:value="${profile.speciality}"
+                           oninvalid="this.setCustomValidity('Enter a Valid Speciality')"
+                           onchange="try{setCustomValidity('')}catch(e){}"
+                           oninput="setCustomValidity(' ')"
+                           class="w-full mb-2 text-left font-normal tracking-tight text-gray-900 " required/>
+                </div>
+                <div class="flex justify-center">
+                    <button class="py-2 px-4 bg-red-500 text-white rounded-full" type="submit">Sauvegarder</button>
+                </div>
+            </form>
+
+    </div>
+
+    <script src="/js/countries.js"></script>
 </div>
 </html>

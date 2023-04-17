@@ -2,6 +2,8 @@
 <html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
 <div layout:fragment="content">
+
+    <div class="langEN">
     <div class="flex justify-center mx-16 mb-3 mt-8 gap-16">
         <div class="flex-auto w-11/12 md:w-10/12 lg:w-10/12">
             <div class="rounded-lg bg-neutral-100 shadow relative h-80 lg:h-[450px]">
@@ -23,7 +25,7 @@
                         <p th:if="${currentAppUser.role.toString() == 'RECRUITER' and currentAppUser.verificationStatus == true}">&#10004;</p>
 
                         <p class="font-sans mt-2" th:text="${profile.description}"></p>
-
+                        <p class="font-sans mt-2" th:text="${profile.phone}"></p>
                         <p class="font-sans text-primary-variant mt-2"
                            th:text="${numberOfConnections} + ' connections'"></p>
 
@@ -82,24 +84,33 @@
                 </div>
             </div>
 
-            <div class="mt-16 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
+            <div class="mt-8 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
                 <table>
                     <tr>
                         <th>
-                            <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">About</p>
+                            <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">Education</p>
                         </th>
                     </tr>
-                    <tr>
-                        <td>
-                            <div class="max-h-96 overflow-y-auto">
-                                <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
-                                   th:text="${profile.description}"></p>
-                            </div>
-                        </td>
-                    </tr>
+                    <td>
+                        <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
+                           th:text="${profile.education}"></p>
+                    </td>
                 </table>
             </div>
 
+            <div class="mt-8 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
+                <table>
+                    <tr>
+                        <th>
+                            <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">Work</p>
+                        </th>
+                    </tr>
+                    <td>
+                        <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
+                           th:text="${profile.work}"></p>
+                    </td>
+                </table>
+            </div>
             <div class="mt-8 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
                 <table>
                     <tr>
@@ -194,6 +205,218 @@
                 <hr class="mt-4 mb-4">
                 <a th:href="@{/passwordupdate}" class=" text-left lg:text-lg text-base text-gray-900"> Reset
                     Password</a>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+
+    <div class="langFR">
+        <div class="flex justify-center mx-16 mb-3 mt-8 gap-16">
+            <div class="flex-auto w-11/12 md:w-10/12 lg:w-10/12">
+                <div class="rounded-lg bg-neutral-100 shadow relative h-80 lg:h-[450px]">
+                    <div class="lg:border-8 border-4 border-neutral-300 rounded-full lg:w-48 lg:h-48 w-24 h-24 absolute top-1/4 left-12 bg-white"
+                    >
+                        <img class="h-full w-full rounded-full" src="../../assets/default_user.svg" alt="Default"
+                             id="profilePictureHolder"/>
+                    </div>
+                    <div class="w-full h-1/2 rounded-lg">
+                        <img class="h-full w-full rounded-t-lg" src="../../assets/example_cover_photo.jpg" alt="Default"
+                             id="coverPictureHolder"/>
+                    </div>
+
+                    <div class="absolute lg:top-2/3 top-1/2 lg:left-12 left-4 mt-4">
+                        <div>
+                            <h5 class="text-left text-3xl font-bold tracking-tight text-gray-900"
+                                th:text="${currentAppUser.name}"></h5>
+
+                            <p th:if="${currentAppUser.role.toString() == 'RECRUITER' and currentAppUser.verificationStatus == true}">&#10004;</p>
+
+                            <p class="font-sans mt-2" th:text="${profile.description}"></p>
+                            <p class="font-sans mt-2" th:text="${profile.phone}"></p>
+
+                            <p class="font-sans text-primary-variant mt-2"
+                               th:text="${numberOfConnections} + ' connexions'"></p>
+
+                            <p th:text="${profilePicture}" id="base64Image" hidden></p>
+                            <p th:text="${coverPicture}" id="base64CoverImage" hidden></p>
+                        </div>
+                    </div>
+
+                    <div class="absolute lg:top-2/3 top-1/2 lg:right-12 right-4 mt-4">
+                        <form th:if="${myRole.toString() != 'ADMIN' and !isConnectedWith and !isPendingConnectionWhenSentConnection and !isPendingConnectionWhenReceivingConnection and !isAuthedUserProfile}"
+                              th:action="@{/connect}" method="post">
+                            <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
+                            <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">Connecter
+                            </button>
+                        </form>
+
+                        <button th:if="${myRole.toString() != 'ADMIN' and isPendingConnectionWhenSentConnection}"
+                                class="btn bg-black btn-black font-sans text-sm w-25 h-9 p-0 mb-4" disabled>En attente
+                        </button>
+
+                        <form th:if="${myRole.toString() != 'ADMIN'}" th:action="@{/connection/accept}" method="post">
+                            <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
+                            <button th:if="${isPendingConnectionWhenReceivingConnection}"
+                                    class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">Accepter
+                            </button>
+                        </form>
+
+                        <form th:if="${myRole.toString() != 'ADMIN' and isConnectedWith}" th:action="@{/disconnect}"
+                              method="post">
+                            <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
+                            <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">
+                                Déconnecter
+                            </button>
+                        </form>
+
+                        <form th:if="${myRole.toString() != 'ADMIN' and !isAuthedUserProfile}" th:action="@{/chat/create}"
+                              method="post">
+                            <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
+                            <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">discuter
+                            </button>
+                            <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
+                        </form>
+
+                        <form th:if="${currentAppUser.role.toString() == 'CANDIDATE' and myRole.toString() == 'COMPANY' and myVerificationStatus == true and currentAppUser.verificationStatus == false}"
+                              th:action="@{/company/markCandidateToRecruiter}" method="post">
+                            <input type="hidden" name="appUserId" th:value="${currentAppUser.id}"/>
+                            <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">Marquer
+                            </button>
+                        </form>
+                        <form th:if="${currentAppUser.role.toString() == 'RECRUITER' and myRole.toString() == 'COMPANY' and companyId == myId and myVerificationStatus == true and currentAppUser.verificationStatus == true}"
+                              th:action="@{/company/unmarkRecruiterToCandidate}" method="post">
+                            <input type="hidden" name="appUserId" th:value="${currentAppUser.id}"/>
+                            <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">décocher
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="mt-8 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
+                    <table>
+                        <tr>
+                            <th>
+                                <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">Éducation</p>
+                            </th>
+                        </tr>
+                        <td>
+                            <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
+                               th:text="${profile.education}"></p>
+                        </td>
+                    </table>
+                </div>
+
+                <div class="mt-8 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
+                    <table>
+                        <tr>
+                            <th>
+                                <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">Travail</p>
+                            </th>
+                        </tr>
+                        <td>
+                            <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
+                               th:text="${profile.work}"></p>
+                        </td>
+                    </table>
+                </div>
+                <div class="mt-8 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
+                    <table>
+                        <tr>
+                            <th>
+                                <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">Bénévolat</p>
+                            </th>
+                        </tr>
+                        <td>
+                            <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
+                               th:text="${profile.volunteering}"></p>
+                        </td>
+                    </table>
+                </div>
+
+                <div class="mt-8 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
+                    <table>
+                        <tr>
+                            <th>
+                                <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">Cours</p>
+                            </th>
+                        </tr>
+                        <td>
+                            <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
+                               th:text="${profile.course}"></p>
+                        </td>
+                    </table>
+                </div>
+
+                <div class="mt-8 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
+                    <table>
+                        <tr>
+                            <th>
+                                <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">Projet(s)</p>
+                            </th>
+                        </tr>
+                        <td>
+                            <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
+                               th:text="${profile.project}"></p>
+                        </td>
+                    </table>
+                </div>
+
+                <div class="mt-8 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
+                    <table>
+                        <tr>
+                            <th>
+                                <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">Prix</p>
+                            </th>
+                        </tr>
+                        <td>
+                            <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
+                               th:text="${profile.award}"></p>
+                        </td>
+                    </table>
+                </div>
+
+                <div class="mt-8 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
+                    <table>
+                        <tr>
+                            <th>
+                                <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">Compétences</p>
+                            </th>
+                        </tr>
+                        <td>
+                            <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
+                               th:text="${profile.skill}"></p>
+                        </td>
+                    </table>
+                </div>
+
+                <div class="mt-8 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
+                    <table>
+                        <tr>
+                            <th>
+                                <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">Langue(s)</p>
+                            </th>
+                        </tr>
+                        <td>
+                            <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
+                               th:text="${profile.language}"></p>
+                        </td>
+                    </table>
+                </div>
+            </div>
+
+            <div th:if="${isAuthedUserProfile}"
+                 class="hidden lg:flex lg:flex-auto lg:w-56 lg:h-32 bg-neutral-100 rounded-lg shadow">
+                <div class="py-5 px-7">
+                    <a th:href="@{/user/update}" class="text-left lg:text-lg text-base text-gray-900">
+                        Modifier le profil
+                    </a>
+                    <hr class="mt-4 mb-4">
+                    <a th:href="@{/passwordupdate}" class=" text-left lg:text-lg text-base text-gray-900"> Réinitialiser
+                        le mot de passe</a>
+                </div>
             </div>
         </div>
     </div>

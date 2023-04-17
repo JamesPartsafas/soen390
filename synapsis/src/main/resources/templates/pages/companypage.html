@@ -2,115 +2,246 @@
 <html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
 <div layout:fragment="content">
-    <div class="flex justify-center mx-16 mb-3 mt-8 gap-16">
-        <div class="flex-auto  w-11/12 md:w-10/12 lg:w-10/12">
-            <div class="rounded-lg bg-neutral-100 shadow relative h-[450px] lg:h-[550px]">
-                <div class="lg:border-8 border-4 border-neutral-300 rounded-full lg:w-48 lg:h-48 w-24 h-24 absolute top-1/4 left-12 bg-white">
-                    <img class="h-full w-full rounded-full" src="../../assets/company_default.jpg" alt="Default"
-                         id="profilePictureHolder"/>
-                </div>
-                <div class="w-full h-1/2 rounded-lg">
-                    <img class="h-full w-full rounded-t-lg" src="../../assets/example_cover_photo.jpg" alt="Default"
-                         id="coverPictureHolder"/>
-                </div>
 
-                <div class="absolute lg:top-2/3 top-1/2 lg:left-12 left-4 mt-4">
-                    <div>
-                        <h5 class="text-left text-3xl font-bold tracking-tight text-gray-900"
-                            th:text="${currentAppUser.name}"></h5>
 
-                        <p th:if="${currentAppUser.role.toString() == 'COMPANY' and currentAppUser.verificationStatus == true}">
-                            &#10004;</p>
-                        <p class="font-sans mt-2"
-                           th:text="${companyProfile.speciality} + '  &#183;  ' + ${companyProfile.location} + '  &#183;  ' + ${companyProfile.companySize} + ' employees'"></p>
+    <div class="langEN">
+        <div class="flex justify-center mx-16 mb-3 mt-8 gap-16">
+            <div class="flex-auto  w-11/12 md:w-10/12 lg:w-10/12">
+                <div class="rounded-lg bg-neutral-100 shadow relative h-[450px] lg:h-[550px]">
+                    <div class="lg:border-8 border-4 border-neutral-300 rounded-full lg:w-48 lg:h-48 w-24 h-24 absolute top-1/4 left-12 bg-white">
+                        <img class="h-full w-full rounded-full" src="../../assets/company_default.jpg" alt="Default"
+                             id="profilePictureHolder"/>
+                    </div>
+                    <div class="w-full h-1/2 rounded-lg">
+                        <img class="h-full w-full rounded-t-lg" src="../../assets/example_cover_photo.jpg" alt="Default"
+                             id="coverPictureHolder"/>
+                    </div>
 
-                        <p class="font-sans mt-2" th:text="${companyProfile.website}"></p>
+                    <div class="absolute lg:top-2/3 top-1/2 lg:left-12 left-4 mt-4">
+                        <div>
+                            <h5 class="text-left text-3xl font-bold tracking-tight text-gray-900"
+                                th:text="${currentAppUser.name}"></h5>
 
-                        <p class="font-sans text-primary-variant mt-2"
-                           th:text="${numberOfConnections} + ' connections'"></p>
+                            <p th:if="${currentAppUser.role.toString() == 'COMPANY' and currentAppUser.verificationStatus == true}">
+                                &#10004;</p>
+                            <p class="font-sans mt-2"
+                               th:text="${companyProfile.industry} + '  &#183;  ' + ${companyProfile.speciality} + '  &#183;  ' + ${companyProfile.location} + '  &#183;  ' + ${companyProfile.companySize} + ' employees'"></p>
 
-                        <p th:text="${profilePicture}" id="base64Image" hidden></p>
-                        <p th:text="${coverPicture}" id="base64CoverImage" hidden></p>
+                            <p class="font-sans mt-2" th:text="${companyProfile.website}"></p>
+
+                            <p class="font-sans text-primary-variant mt-2"
+                               th:text="${numberOfConnections} + ' connections'"></p>
+
+                            <p th:text="${profilePicture}" id="base64Image" hidden></p>
+                            <p th:text="${coverPicture}" id="base64CoverImage" hidden></p>
+                        </div>
+                    </div>
+
+                    <div class="absolute lg:top-2/3 md:top-1/2 bottom-8 lg:right-12 right-4 mt-4">
+                        <form th:if="${myRole.toString() != 'ADMIN' and !isConnectedWith and !isPendingConnectionWhenSentConnection and !isPendingConnectionWhenReceivingConnection and !isAuthedUserProfile}"
+                              th:action="@{/connect}" method="post">
+                            <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
+                            <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">
+                                Connect
+                            </button>
+                        </form>
+
+                        <button th:if="${myRole.toString() != 'ADMIN' and isPendingConnectionWhenSentConnection}"
+                                class="btn bg-black btn-black font-sans text-sm w-25 h-9 p-0 mb-4" disabled>Pending
+                        </button>
+
+                        <form th:if="${myRole.toString() != 'ADMIN'}" th:action="@{/connection/accept}" method="post">
+                            <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
+                            <button th:if="${isPendingConnectionWhenReceivingConnection}"
+                                    class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">
+                                Accept
+                            </button>
+                        </form>
+
+                        <form th:if="${myRole.toString() != 'ADMIN' and isConnectedWith}" th:action="@{/disconnect}"
+                              method="post">
+                            <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
+                            <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">
+                                Disconnect
+                            </button>
+                        </form>
+                        <form th:if="${myRole.toString() != 'ADMIN' and !isAuthedUserProfile}"
+                              th:action="@{/chat/create}"
+                              method="post">
+                            <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
+                            <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">
+                                Chat
+                            </button>
+                        </form>
+
+                        <form th:if="${currentAppUser.role.toString() == 'COMPANY' and myRole.toString() == 'ADMIN' and currentAppUser.verificationStatus == false}"
+                              th:action="@{/admin/verifyCompany}" method="post">
+                            <input type="hidden" name="companyUserId" th:value="${currentAppUser.id}"/>
+                            <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">
+                                Mark
+                            </button>
+                        </form>
+
+                        <form th:if="${currentAppUser.role.toString() == 'COMPANY' and myRole.toString() == 'ADMIN' and currentAppUser.verificationStatus == true}"
+                              th:action="@{/admin/unverifyCompany}" method="post">
+                            <input type="hidden" name="companyUserId" th:value="${currentAppUser.id}"/>
+                            <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">
+                                Unmark
+                            </button>
+                        </form>
                     </div>
                 </div>
 
-                <div class="absolute lg:top-2/3 md:top-1/2 bottom-8 lg:right-12 right-4 mt-4">
-                    <form th:if="${myRole.toString() != 'ADMIN' and !isConnectedWith and !isPendingConnectionWhenSentConnection and !isPendingConnectionWhenReceivingConnection and !isAuthedUserProfile}"
-                          th:action="@{/connect}" method="post">
-                        <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
-                        <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">Connect
-                        </button>
-                    </form>
-
-                    <button th:if="${myRole.toString() != 'ADMIN' and isPendingConnectionWhenSentConnection}"
-                            class="btn bg-black btn-black font-sans text-sm w-25 h-9 p-0 mb-4" disabled>Pending
-                    </button>
-
-                    <form th:if="${myRole.toString() != 'ADMIN'}" th:action="@{/connection/accept}" method="post">
-                        <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
-                        <button th:if="${isPendingConnectionWhenReceivingConnection}"
-                                class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">Accept
-                        </button>
-                    </form>
-
-                    <form th:if="${myRole.toString() != 'ADMIN' and isConnectedWith}" th:action="@{/disconnect}"
-                          method="post">
-                        <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
-                        <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">
-                            Disconnect
-                        </button>
-                    </form>
-                    <form th:if="${myRole.toString() != 'ADMIN' and !isAuthedUserProfile}" th:action="@{/chat/create}"
-                          method="post">
-                        <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
-                        <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">Chat
-                        </button>
-                    </form>
-
-                    <form th:if="${currentAppUser.role.toString() == 'COMPANY' and myRole.toString() == 'ADMIN' and currentAppUser.verificationStatus == false}"
-                          th:action="@{/admin/verifyCompany}" method="post">
-                        <input type="hidden" name="companyUserId" th:value="${currentAppUser.id}"/>
-                        <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">Mark
-                        </button>
-                    </form>
-
-                    <form th:if="${currentAppUser.role.toString() == 'COMPANY' and myRole.toString() == 'ADMIN' and currentAppUser.verificationStatus == true}"
-                          th:action="@{/admin/unverifyCompany}" method="post">
-                        <input type="hidden" name="companyUserId" th:value="${currentAppUser.id}"/>
-                        <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">Unmark
-                        </button>
-                    </form>
+                <div class="mt-16 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
+                    <table>
+                        <tr>
+                            <th>
+                                <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">About Us</p>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="max-h-96 overflow-y-auto">
+                                    <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
+                                       th:text="${companyProfile.description}"></p>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
 
-            <div class="mt-16 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
-                <table>
-                    <tr>
-                        <th>
-                            <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">About Us</p>
-                        </th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="max-h-96 overflow-y-auto">
-                                <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
-                                   th:text="${companyProfile.description}"></p>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+            <div th:if="${isAuthedUserProfile}"
+                 class="hidden lg:flex lg:flex-auto lg:w-56 lg:h-36 bg-neutral-100 rounded-lg shadow">
+                <div class="py-5 px-7">
+                    <a th:href="@{/company/update}" class="text-left lg:text-lg text-base text-gray-900">
+                        Edit Public Profile
+                    </a>
+                    <hr class="mt-4 mb-4">
+                    <a th:href="@{/passwordupdate}" class=" text-left lg:text-lg text-base text-gray-900"> Reset
+                        Password</a>
+                </div>
             </div>
         </div>
+    </div>
 
-        <div th:if="${isAuthedUserProfile}"
-             class="hidden lg:flex lg:flex-auto lg:w-56 lg:h-36 bg-neutral-100 rounded-lg shadow">
-            <div class="py-5 px-7">
-                <a th:href="@{/company/update}" class="text-left lg:text-lg text-base text-gray-900">
-                    Edit Public Profile
-                </a>
-                <hr class="mt-4 mb-4">
-                <a th:href="@{/passwordupdate}" class=" text-left lg:text-lg text-base text-gray-900"> Reset
-                    Password</a>
+    <div class="langFR">
+        <div class="flex justify-center mx-16 mb-3 mt-8 gap-16">
+            <div class="flex-auto  w-11/12 md:w-10/12 lg:w-10/12">
+                <div class="rounded-lg bg-neutral-100 shadow relative h-[450px] lg:h-[550px]">
+                    <div class="lg:border-8 border-4 border-neutral-300 rounded-full lg:w-48 lg:h-48 w-24 h-24 absolute top-1/4 left-12 bg-white">
+                        <img class="h-full w-full rounded-full" src="../../assets/company_default.jpg" alt="Default"
+                             id="profilePictureHolder"/>
+                    </div>
+                    <div class="w-full h-1/2 rounded-lg">
+                        <img class="h-full w-full rounded-t-lg" src="../../assets/example_cover_photo.jpg" alt="Default"
+                             id="coverPictureHolder"/>
+                    </div>
+
+                    <div class="absolute lg:top-2/3 top-1/2 lg:left-12 left-4 mt-4">
+                        <div>
+                            <h5 class="text-left text-3xl font-bold tracking-tight text-gray-900"
+                                th:text="${currentAppUser.name}"></h5>
+
+                            <p th:if="${currentAppUser.role.toString() == 'COMPANY' and currentAppUser.verificationStatus == true}">
+                                &#10004;</p>
+                            <p class="font-sans mt-2"
+                               th:text="${companyProfile.industry} + '  &#183;  ' +  ${companyProfile.speciality} + '  &#183;  ' + ${companyProfile.location} + '  &#183;  ' + ${companyProfile.companySize} + ' employees'"></p>
+
+                            <p class="font-sans mt-2" th:text="${companyProfile.website}"></p>
+
+                            <p class="font-sans text-primary-variant mt-2"
+                               th:text="${numberOfConnections} + ' connexions'"></p>
+
+                            <p th:text="${profilePicture}" id="base64Image" hidden></p>
+                            <p th:text="${coverPicture}" id="base64CoverImage" hidden></p>
+                        </div>
+                    </div>
+
+                    <div class="absolute lg:top-2/3 md:top-1/2 bottom-8 lg:right-12 right-4 mt-4">
+                        <form th:if="${myRole.toString() != 'ADMIN' and !isConnectedWith and !isPendingConnectionWhenSentConnection and !isPendingConnectionWhenReceivingConnection and !isAuthedUserProfile}"
+                              th:action="@{/connect}" method="post">
+                            <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
+                            <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">
+                                Connecter
+                            </button>
+                        </form>
+
+                        <button th:if="${myRole.toString() != 'ADMIN' and isPendingConnectionWhenSentConnection}"
+                                class="btn bg-black btn-black font-sans text-sm w-25 h-9 p-0 mb-4" disabled>En attente
+                        </button>
+
+                        <form th:if="${myRole.toString() != 'ADMIN'}" th:action="@{/connection/accept}" method="post">
+                            <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
+                            <button th:if="${isPendingConnectionWhenReceivingConnection}"
+                                    class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">
+                                Accepter
+                            </button>
+                        </form>
+
+                        <form th:if="${myRole.toString() != 'ADMIN' and isConnectedWith}" th:action="@{/disconnect}"
+                              method="post">
+                            <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
+                            <button class="btn bg-black btn-black font-sans text-sm w-24 h-9 p-0 mb-4" type="submit">
+                                Déconnecter
+                            </button>
+                        </form>
+                        <form th:if="${myRole.toString() != 'ADMIN' and !isAuthedUserProfile}"
+                              th:action="@{/chat/create}"
+                              method="post">
+                            <input type="hidden" name="id" th:value="${currentAppUser.id}"/>
+                            <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">
+                                discuter
+                            </button>
+                        </form>
+
+                        <form th:if="${currentAppUser.role.toString() == 'COMPANY' and myRole.toString() == 'ADMIN' and currentAppUser.verificationStatus == false}"
+                              th:action="@{/admin/verifyCompany}" method="post">
+                            <input type="hidden" name="companyUserId" th:value="${currentAppUser.id}"/>
+                            <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">
+                                Marquer
+                            </button>
+                        </form>
+
+                        <form th:if="${currentAppUser.role.toString() == 'COMPANY' and myRole.toString() == 'ADMIN' and currentAppUser.verificationStatus == true}"
+                              th:action="@{/admin/unverifyCompany}" method="post">
+                            <input type="hidden" name="companyUserId" th:value="${currentAppUser.id}"/>
+                            <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0 mb-4" type="submit">
+                                Décocher
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="mt-16 p-4 bg-neutral-100 border-gray-200 rounded-lg shadow">
+                    <table>
+                        <tr>
+                            <th>
+                                <p class="text-left text-2xl ml-8 mt-2 font-bold text-gray-900">À propos de nous</p>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="max-h-96 overflow-y-auto">
+                                    <p class="font-normal ml-12 mt-2 resize-y text-gray-700"
+                                       th:text="${companyProfile.description}"></p>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div th:if="${isAuthedUserProfile}"
+                 class="hidden lg:flex lg:flex-auto lg:w-56 lg:h-40 bg-neutral-100 rounded-lg shadow">
+                <div class="py-5 px-7">
+                    <a th:href="@{/company/update}" class="text-left lg:text-lg text-base text-gray-900">
+                        Modifier le profil public
+                    </a>
+                    <hr class="mt-4 mb-4">
+                    <a th:href="@{/passwordupdate}" class=" text-left lg:text-lg text-base text-gray-900"> Réinitialiser
+                        le mot de passe</a>
+                </div>
             </div>
         </div>
     </div>

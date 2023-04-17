@@ -2,6 +2,8 @@
 <html xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="_layout">
 <div layout:fragment="content">
+
+    <div class="langEN">
     <div class="grid grid-cols-12 grid-rows-20 gap-y-4">
         <div class="max-lg:hidden col-start-2 col-end-4 row-start-1 row-end-4 bg-light-50 rounded-2xl">
             <div class="ml-4 mt-3 mr-4">
@@ -94,6 +96,111 @@
                                 </a>
                             </div>
                         </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+
+
+    <div class="langFR">
+        <div class="grid grid-cols-12 grid-rows-20 gap-y-4">
+            <div class="max-lg:hidden col-start-2 col-end-4 row-start-1 row-end-4 bg-light-50 rounded-2xl">
+                <div class="ml-4 mt-3 mr-4">
+                    <div class="font-sans xl:text-3xl text-xl font-light mb-4">Connexions</div>
+                    <a href="#" class="flex flex-row justify-between items-end">
+                        <i class="flex-none h-4 w-8 fa-solid fa-users fa-lg mt-1"></i>
+                        <div class="flex-initial font-sans xl:text-xl text-sm font-light w-40 ml-2">Toutes les
+                            Connexions
+                        </div>
+                        <div class="flex-none font-sans xl:text-xl text-sm font-light w-8 text-right"
+                             th:text="${connections.size()}"></div>
+                    </a>
+                    <a href="#" class="flex flex-row justify-between items-end">
+                        <i class="flex-none h-4 w-8 fa-solid fa-envelope fa-lg mt-1"></i>
+                        <div class="flex-initial font-sans xl:text-xl text-sm font-light w-40 ml-2">Demande de connexion</div>
+                        <div class="flex-none font-sans xl:text-xl text-sm font-light w-8 text-right"
+                             th:text="${pendingConnectionRequests.size()}"></div>
+                    </a>
+                </div>
+            </div>
+            <div class="lg:col-start-5 lg:col-end-12 col-start-2 col-end-12 row-span-1 h-14 bg-white border rounded-md p-1">
+                <form th:action="@{/search}" class="h-full" method="get">
+
+                    <input class="w-full h-full font-sans text-xl font-light pl-4"
+                           placeholder="Rechercher des connexions" name="name">
+                </form>
+            </div>
+            <div class="lg:col-start-5 lg:col-end-12 col-start-2 col-end-12 row-span-6 bg-light-50 rounded-2xl">
+                <div class="ml-4 mt-3 mr-4">
+                    <div class="font-sans text-3xl font-light mb-4">
+                        Demande de connexion
+                    </div>
+                    <div class="overflow-x-auto whitespace-nowrap h-80">
+
+                        <p th:text="${error}"></p>
+                        <div th:each="pendingConnectionRequest: ${pendingConnectionRequests}"
+                             class="inline-block rounded-2xl shadow w-56 h-72 bg-white mt-4 mr-4">
+                            <a th:href="@{/user/{id}(id=${pendingConnectionRequest.id})}" class="hover:text-black">
+                                <img th:if="${pendingConnectionRequest.getProfilePicture() != null && pendingConnectionRequest.getProfilePicture().getImage() != ''}"
+                                     class="m-auto w-56 h-40 rounded-t-2xl object-cover"
+                                     th:src="'data:image/png;base64,' + ${pendingConnectionRequest.getProfilePicture().getImage()} ">
+
+                                <img th:if="${pendingConnectionRequest.getProfilePicture() == null || pendingConnectionRequest.getProfilePicture().getImage() != ''}"
+                                     class="m-auto w-36 h-40 rounded-t-2xl object-cover" src="/assets/default_user.svg">
+                                <div class="font-sans text-base font-light mt-2 ml-4"
+                                     th:text="${pendingConnectionRequest.name}"></div>
+                                <div class="font-sans text-sm font-light mt-1 ml-4">Craigstutors</div>
+                                <div class="ml-4 mr-4 mt-6 flex justify-between">
+                                    <form th:action="@{/connection/reject}" method="post">
+                                        <input type="hidden" name="id" th:value="${pendingConnectionRequest.getId()}"/>
+                                        <button class="btn bg-black btn-black font-sans text-sm w-20 h-9 p-0" type="submit">
+                                            Retirer
+                                        </button>
+                                    </form>
+                                    <form th:action="@{/connection/accept}" method="post">
+                                        <input type="hidden" name="id" th:value="${pendingConnectionRequest.getId()}"/>
+                                        <button class="btn bg-primary btn-primary font-sans text-sm w-20 h-9 p-0"
+                                                type="submit">
+                                            Accepter
+                                        </button>
+                                    </form>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="lg:col-start-5 lg:col-end-12 col-start-2 col-end-12 row-span-6 bg-light-50 rounded-2xl">
+                <div class="ml-4 mt-3 mr-4">
+                    <div class="font-sans text-3xl font-light mb-4">
+                        Connexions
+                    </div>
+                    <div class="overflow-x-auto whitespace-nowrap h-80">
+                        <div th:each="connection : ${connections}"
+                             class="inline-block rounded-2xl shadow w-56 h-72 bg-white mt-4 mr-4">
+                            <a th:href="@{/user/{id}(id=${connection.id})}" class="hover:text-black">
+                                <img th:if="${connection.getProfilePicture() != null && connection.getProfilePicture().getImage() != ''}"
+                                     class="m-auto w-56 h-40 rounded-t-2xl object-cover"
+                                     th:src="'data:image/png;base64,' + ${connection.getProfilePicture().getImage()} ">
+
+                                <img th:if="${connection.getProfilePicture() == null || connection.getProfilePicture().getImage() == ''}"
+                                     class="m-auto w-36 h-40 rounded-t-2xl object-cover" src="/assets/default_user.svg">
+                                <div class="font-sans text-base font-light mt-2 ml-4" th:text="${connection.name}"></div>
+                                <div class="font-sans text-sm font-light mt-1 ml-4">Craigstutors</div>
+                                <div class="mx-auto mt-6 w-1/2">
+                                    <a th:href="@{/user/{id}(id=${connection.id})}"
+                                       class="btn btn-primary font-sans text-sm w-28 h-9 p-0 flex justify-center items-center">
+                                        <span>Voir le profil</span>
+                                    </a>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

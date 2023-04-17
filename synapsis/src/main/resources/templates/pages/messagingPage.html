@@ -4,8 +4,11 @@
 <div layout:fragment="content" class="flex justify-center">
     <div class="flex flex-row flex-wrap w-[95vw] lg:w-9/10 justify-center shadow-lg rounded-lg border-t-2">
         <div class="flex flex-col w-1/3 align-center h-[60vh] overflow-x-auto">
-            <div class="font-semibold text-base lg:text-2xl p-5">
+            <div class="langEN font-semibold text-base lg:text-2xl p-5">
                 Your Connections
+            </div>
+            <div class="langFR font-semibold text-base lg:text-2xl p-5">
+                Vos Connexions
             </div>
             <div th:if="${chats.size() != 0}"  th:each="chat: ${chats}"
                   class="w-4/5 p-2 py-2 lg:p-5 lg:py-5 my-2 ml-5 bg-neutral-100 border-gray-200 rounded-lg shadow">
@@ -13,7 +16,7 @@
                     <img class="w-6 mr-2 rounded-t-2xl" src="/assets/default_user.svg">
                     <div>
                         <p th:text="${chat.creator.id == globalUserId ? chat.participant.name : chat.creator.name}"
-                           class="text-xs lg:text-lg text-ellipsis"></p>
+                           class="text-xs lg:text-lg truncate"></p>
                     </div>
                 </a>
             </div>
@@ -71,14 +74,22 @@
                                                     </button>
                                                     <div class="p-6 text-center">
                                                         <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14 " fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                                        <p class="mb-5 text-lg font-normal text-gray-500 ">Please note that if you choose to report a message for harassment, up to 5 previous messages from the same conversation will
+                                                        <p class="langEN mb-5 text-lg font-normal text-gray-500 ">Please note that if you choose to report a message for harassment, up to 5 previous messages from the same conversation will
                                                             be reviewed by our administrative team in order to assess the situation fully. This is to ensure that appropriate action is taken and that any patterns of behavior are identified.
                                                             We take harassment very seriously and aim to create a safe and respectful environment for all of our users.
                                                             By reporting a message, you are helping us to achieve this goal.</p>
-                                                        <button data-modal-hide="popup-modal" type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300  font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                                                        <p class="langFR mb-5 text-lg font-normal text-gray-500 ">Veuillez noter que si vous choisissez de signaler un message à cause d'un harcèlement, jusqu'à 5 messages précédents de la même conversation seront
+                                                            examiné par notre équipe administrative afin d'évaluer pleinement la situation. Il s'agit de s'assurer que des mesures appropriées sont prises et que tous les modèles de comportement sont identifiés.
+                                                            Nous prenons le harcèlement très au sérieux et visons à créer un environnement sécurisé et respectueux pour tous nos utilisateurs.
+                                                            En signalant un message, vous nous aidez à atteindre notre objectif.</p>
+                                                        <button data-modal-hide="popup-modal" type="submit" class="langEN text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300  font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
                                                             I accept
                                                         </button>
-                                                        <button data-modal-hide="popup-modal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">I decline</button>
+                                                        <button data-modal-hide="popup-modal" type="submit" class="langFR text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300  font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                                                            J'accepte
+                                                        </button>
+                                                        <button data-modal-hide="popup-modal" type="button" class="langEN text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">I decline</button>
+                                                        <button data-modal-hide="popup-modal" type="button" class="langFR text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">Je refuse</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -99,17 +110,18 @@
                         <input id="receiver" class="hidden" th:value="${receiverId}"/>
 
                         <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control w-[35vw] lg:w-[50vw] mt-10 rounded-lg text-sm md:text-base"/>
-                        <button type="submit" class="btn bg-primary btn-primary font-sans px-4 py-2 ml-8 text-sm md:text-base">Send</button>
+                        <button type="submit" class="langEN btn bg-primary btn-primary font-sans px-4 py-2 ml-8 text-sm md:text-base">Send</button>
+                        <button type="submit" class="langFR btn bg-primary btn-primary font-sans px-4 py-2 ml-8 text-sm md:text-base">Envoyer</button>
                         <br/>
                         <input type="file" id="file" name="file" class="rounded-lg text-sm md:text-base mt-1"/>
 
                     </form>
                 </div>
             </div>
+            <script src="/js/main.js"></script>
         </div>
     </div>
-
-    <script src="/js/main.js"></script>
+</div>
 </div>
 </html>
 
