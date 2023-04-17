@@ -2,6 +2,7 @@
 <html xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="_layout">
 <div layout:fragment="content">
 
+  <div class="langEN">
   <div class="flex flex-col p-4 border border-light mx-auto mt-10 shadow-2xl w-2/3 mb-20 rounded-xl bg-white">
 
     <div class="flex justify-between m-4">
@@ -98,6 +99,108 @@
     </div>
 
   </div>
+  </div>
+
+
+
+<div class="langFR">
+  <div class="flex flex-col p-4 border border-light mx-auto mt-10 shadow-2xl w-2/3 mb-20 rounded-xl bg-white">
+
+    <div class="flex justify-between m-4">
+      <div>
+        <p th:text="${position}" class="text-3xl font-serif font-bold"></p>
+        <p th:text="${company}" class="inline text-2xl font-serif font-thin"></p>
+        <p class="inline text-2xl font-serif font-thin">,</p>
+        <p th:text="${address}" class="inline text-2xl font-serif font-thin mb-4"></p>
+      </div>
+
+      <div class="m-4 transition hover:-translate-y-0.5 duration-150">
+        <div th:if="${!savedJobs.contains(jobId)}">
+          <form th:action="@{/savejob}" method="post">
+            <input type="hidden" name="jobId" th:value="${jobId}" />
+            <button class="p-4 bg-light text-black text-base-variant mx-auto rounded-2xl font-bold
+                 hover:bg-opacity-60" type="submit"><i class="fa-regular fa-bookmark"></i></button>
+          </form>
+        </div>
+
+        <div th:if="${savedJobs.contains(jobId)}">
+          <form th:action="@{/deletesavedjob}" method="post">
+            <input type="hidden" name="jobId" th:value="${jobId}" />
+            <button class="p-4 bg-light text-black text-base-variant mx-auto rounded-2xl font-bold
+                 hover:bg-opacity-60" type="submit"><i class="fa-solid fa-bookmark"></i></button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row justify-between m-4 bg-light rounded-md p-4 space-x-0 md:space-x-4">
+
+      <div class="flex flex-col md:max-w-xl space-y-2">
+        <div>
+          <p class="font-bold">Description</p>
+          <p th:text="${description}" class="font-thin font-serif break-words"></p>
+        </div>
+        <div>
+          <p class="font-bold">Documents obligatoires:</p>
+          <p th:if="${need_resume}" class="font-thin font-serif break-words">Résumé</p>
+          <p th:if="${need_cover}" class="font-thin font-serif break-words">Lettre de motivation</p>
+        </div>
+      </div>
+
+      <div class="flex flex-col mt-2 md:mt-0 space-y-2">
+        <div>
+          <p class="font-bold">Type d'emploi</p>
+          <p th:text="${type}" class="font-serif"></p>
+        </div>
+        <div>
+          <p class="font-bold">Nombre de postes disponibles</p>
+          <p th:text="${num_available}" class="font-serif"></p>
+        </div>
+        <div>
+          <p class="font-bold">Nombre de candidats</p>
+          <p th:text="${num_applicants}" class="font-serif"></p>
+        </div>
+        <div>
+          <p class="font-bold">Offre d'emploi</p>
+          <p th:if="${is_external}" class="font-thin font-serif break-words">Externe</p>
+          <p th:if="${is_external}" th:text="${external_link}" class="font-serif"></p>
+          <p th:if="${!is_external}" class="font-thin font-serif break-words">Interne</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Both recruiters and candidates can apply to jobs. However, only those recruiters who created a particular job can edit/delete it.-->
+    <div th:if="${role.toString()=='CANDIDATE'}" class="mx-auto my-4 transition hover:-translate-y-0.5 duration-150 ">
+      <!--Add link below-->
+      <div th:if="${isJobSubmitted}">
+        <button class="inline-block px-4 py-2 text-white bg-primary-variant rounded-full" disabled>Soumise</button>
+      </div>
+      <div th:unless="${isJobSubmitted}">
+        <a th:href="@{/jobapplication/{id}(id=${jobId})}" class="mb-4 bg-primary text-white mx-auto p-4 rounded-2xl font-thin hover:bg-opacity-60">Postulez maintenant chez Synapsis</a>
+      </div>
+    </div>
+
+    <div th:if="${role.toString()=='RECRUITER'}" class="flex mx-auto my-4 space-x-4">
+      <!--Add link below. Only RECRUITERS can edit jobs.-->
+      <form th:action="@{/editjob}" th:if="${authorization}" method="get">
+        <input type="hidden" name="jobId" th:value="${jobId}" />
+        <button class="mb-4 text-white font-thin bg-primary mx-auto p-4 rounded-2xl
+              hover:bg-opacity-60 transition hover:-translate-y-0.5 duration-150" type="submit">Modifier</button>
+      </form>
+      <form th:action="@{/deletejob}" th:if="${authorization}" method="post">
+        <input type="hidden" name="jobId" th:value="${jobId}" />
+        <button class="mb-4 text-white font-thin bg-primary mx-auto p-4 rounded-2xl
+              hover:bg-opacity-60 transition hover:-translate-y-0.5 duration-150" type="submit">Supprimer</button>
+      </form>
+
+      <a th:unless="${isJobSubmitted}" th:href="@{/jobapplication/{id}(id=${jobId})}" class="mb-4 bg-primary text-white mx-auto p-4 rounded-2xl font-thin hover:bg-opacity-60
+        transition hover:-translate-y-0.5 duration-15">Postulez maintenant chez Synapsis</a>
+
+    </div>
+
+  </div>
+</div>
 
 </div>
 </html>
