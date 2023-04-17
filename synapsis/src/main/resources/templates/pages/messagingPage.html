@@ -38,8 +38,13 @@
                             <li th:each="message : ${messages}" class="flex">
                                 <div class="flex flex-col w-full">
                                     <th:block th:if="${message.fileName != null and message.file != null}">
-                                        <img th:if="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}" th:src="${message.file}" th:alt="${message.fileName}" />
-                                        <a th:unless="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}" th:href="@{/downloadFile/{messageId}(messageId=${message.id})}" th:download="${message.fileName}" th:text="'Download ' + ${message.fileName}"></a>
+                                        <img th:if="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}"
+                                             th:src="${message.file}" th:alt="${message.fileName}"
+                                             class="p-2 px-4 m-2 ml-32 md:ml-56 lg:ml-84 xl:ml-96 bg-primary-variant rounded-lg text-right w-1/2 flex flex-row-reverse text-sm md:text-base"/>
+                                        <a th:unless="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}"
+                                           th:href="@{/downloadFile/{messageId}(messageId=${message.id})}"
+                                           th:download="${message.fileName}" th:text="'Download ' + ${message.fileName}"
+                                           class="p-2 px-4 m-2 ml-32 md:ml-56 lg:ml-84 xl:ml-96 bg-primary-variant rounded-lg text-right w-1/2 flex flex-row-reverse text-sm md:text-base"></a>
                                     </th:block>
                                     <!--Messages sent by user-->
                                     <div th:if="${message.getSender().getId() == globalUserId}"
@@ -54,9 +59,10 @@
                                            data-popover-target="popover-click" data-popover-trigger="click" type="button"></i>
                                         <div data-popover id="popover-click" role="tooltip"
                                              class="absolute z-10 invisible inline-block w-18 text-sm text-black-variant transition-opacity
-                                     duration-300 bg-primary-variant border border-light rounded-lg opacity-0">
+                                            duration-300 bg-primary-variant border border-light rounded-lg opacity-0">
                                             <div class="px-3 py-2 bg-primary-variant border-light rounded-t-lg" data-modal-target="popup-modal" data-modal-toggle="popup-modal">
-                                                <h3 class="font-semibold text-black-variant">Report</h3>
+                                                <h3 class="langEN font-semibold text-black-variant">Report</h3>
+                                                <h3 class="langFR font-semibold text-black-variant">Signaler</h3>
                                             </div>
                                             <div data-popper-arrow></div>
                                         </div>
@@ -78,18 +84,16 @@
                                                             be reviewed by our administrative team in order to assess the situation fully. This is to ensure that appropriate action is taken and that any patterns of behavior are identified.
                                                             We take harassment very seriously and aim to create a safe and respectful environment for all of our users.
                                                             By reporting a message, you are helping us to achieve this goal.</p>
-                                                        <p class="langFR mb-5 text-lg font-normal text-gray-500 ">Veuillez noter que si vous choisissez de signaler un message à cause d'un harcèlement, jusqu'à 5 messages précédents de la même conversation seront
-                                                            examiné par notre équipe administrative afin d'évaluer pleinement la situation. Il s'agit de s'assurer que des mesures appropriées sont prises et que tous les modèles de comportement sont identifiés.
-                                                            Nous prenons le harcèlement très au sérieux et visons à créer un environnement sécurisé et respectueux pour tous nos utilisateurs.
-                                                            En signalant un message, vous nous aidez à atteindre notre objectif.</p>
-                                                        <button data-modal-hide="popup-modal" type="submit" class="langEN text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300  font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
-                                                            I accept
-                                                        </button>
-                                                        <button data-modal-hide="popup-modal" type="submit" class="langFR text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300  font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
-                                                            J'accepte
-                                                        </button>
-                                                        <button data-modal-hide="popup-modal" type="button" class="langEN text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">I decline</button>
-                                                        <button data-modal-hide="popup-modal" type="button" class="langFR text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">Je refuse</button>
+                                                        <p class="langFR mb-5 text-lg font-normal text-gray-500 ">Veuillez noter que si vous choisissez de signaler un message à cause d'un harcèlement, jusqu'à 5 messages précédents de la même
+                                                            conversation seront examiné par notre équipe administrative afin d'évaluer pleinement la situation. Il s'agit de s'assurer que des mesures appropriées sont prises et que tous les modèles
+                                                            de comportement sont identifiés. Nous prenons le harcèlement très sérieux et visons à créer un environnement sécurisé et respectueux pour tous nos utilisateurs. En signalant un message,
+                                                            vous nous aidez à atteindre notre objectif.</p>
+                                                        <div class="flex justify-center">
+                                                            <button data-modal-hide="popup-modal" type="submit" class="langEN text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300  font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">I accept</button>
+                                                            <button data-modal-hide="popup-modal" type="submit" class="langFR text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300  font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">J'accepte</button>
+                                                            <button data-modal-hide="popup-modal" type="button" class="langEN text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">I decline</button>
+                                                            <button data-modal-hide="popup-modal" type="button" class="langFR text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">Je refuse</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -104,15 +108,17 @@
                 </div>
 
                 <div class="relative ml-2 mt-10">
-                    <form  id="messageForm" name="messageForm" nameForm="messageForm">
+                    <form id="messageForm" name="messageForm" nameForm="messageForm" method="POST" enctype="multipart/form-data">
                         <input id="chat" class="hidden" th:value="${chatId}"/>
                         <input id="sender" class="hidden" th:value="${senderId}"/>
                         <input id="receiver" class="hidden" th:value="${receiverId}"/>
 
-                        <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control w-[35vw] lg:w-[50vw] mt-10 rounded-lg text-sm md:text-base"/>
-                        <button type="submit" class="langEN btn bg-primary btn-primary font-sans px-4 py-2 ml-8 text-sm md:text-base">Send</button>
-                        <button type="submit" class="langFR btn bg-primary btn-primary font-sans px-4 py-2 ml-8 text-sm md:text-base">Envoyer</button>
-                        <br/>
+                        <div class="flex flex-row flex-wrap">
+                            <div><input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="langEN form-control w-[30vw] md:w-[35vw] lg:[50vw] xl:w-[50vw] mt-10 rounded-lg text-sm md:text-base"/></div>
+                            <div><input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="langFR form-control w-[30vw] md:w-[35vw] lg:[50vw] xl:w-[50vw] mt-10 rounded-lg text-sm md:text-base"/></div>
+                            <div><button type="submit" class="langEN btn bg-primary btn-primary font-sans ml-8 mt-10 px-4 py-2 text-sm md:text-base">Send</button></div>
+                            <div><button type="submit" class="langFR btn bg-primary btn-primary font-sans ml-8 mt-10 px-4 py-2 text-sm md:text-base">Envoyer</button></div>
+                        </div>
                         <input type="file" id="file" name="file" class="rounded-lg text-sm md:text-base mt-1"/>
 
                     </form>
