@@ -30,17 +30,9 @@
                           th:text="${profile.description}"></textarea>
             </div>
 
-<!--            <div class="langEN">-->
                 <label>Website</label><br>
                 <input type="text" id="website" name="website" th:value="${profile.website}"
                        class="w-full mb-2 text-left font-normal tracking-tight text-gray-900 "/>
-<!--            </div>-->
-<!--            <div class="langFR">-->
-<!--                <label >Site Web</label><br>-->
-<!--                <input type="text" id="website" name="website" th:value="${profile.website}"-->
-<!--                       class="mb-2 text-left font-normal tracking-tight text-gray-900 "/>-->
-<!--            </div>-->
-
             <div>
                 <label>Industry</label><br>
                 <input type="text" id="industry" name="industry" th:value="${profile.industry}"
@@ -66,15 +58,6 @@
                         class="country w-full mb-2 text-left font-normal tracking-tight text-gray-900">
                     <option value="" disabled selected>Select a country</option>
                 </select>
-<!--            </div>-->
-<!--            <div class="langFR">-->
-<!--                <label>Location</label><br>-->
-<!--                <select type="text" id="location" name="country" th:value="${profile.location}"-->
-<!--                        class="country mb-2 text-left font-normal tracking-tight text-gray-900">-->
-<!--                    <option value="" disabled selected>Choisissez un pays</option>-->
-<!--                </select>-->
-<!--            </div>-->
-
             <div>
                 <label>Speciality</label><br>
                 <input type="text" id="speciality" name="speciality" th:value="${profile.speciality}"

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:th="http://thymeleaf.org" xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"  layout:decorate="_layout">
+<div layout:fragment="content">
 <head>
     <meta charset="UTF-8">
     <title>Synapsis</title>
@@ -31,7 +32,7 @@
 
 <div class="langEN">
 <div class="container flex items-center justify-center h-screen w-full">
-    <div class="flex flex-col items-center justify-center border border-black-variant p-6 w-4/5 lg:w-2/3 rounded-sm">
+    <div class="flex flex-col items-center justify-center  bg-neutral-100 border border-black-variant p-6 w-4/5 lg:w-2/3 rounded-sm">
 
         <h1 class="text-3xl font-bold">Success!</h1>
         <p>The ADMIN was successfully created.</p>
@@ -43,7 +44,7 @@
 </div>
 <div class="langFR">
     <div class="container flex items-center justify-center h-screen w-full">
-        <div class="flex flex-col items-center justify-center border border-black-variant p-6 w-4/5 lg:w-2/3 rounded-sm">
+        <div class="flex flex-col items-center justify-center bg-neutral-100 border border-black-variant p-6 w-4/5 lg:w-2/3 rounded-sm">
             <h1 class="text-3xl font-bold">Succès!</h1>
             <p>L'administrateur a été créé avec succès.</p>
             <p>Choisissez ce que vous voulez faire ensuite:</p>
@@ -54,4 +55,5 @@
     </div>
 </div>
 </body>
+</div>
 </html>

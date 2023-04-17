@@ -6,106 +6,210 @@
     <p th:text="${error}"></p>
         <!-- The page that will be displayed in case user candidate or recruiter account user wants to edit their profile -->
 
-        <div class="flex w-4/5 lg:w-1/2 p-5 bg-neutral-100 border-gray-200 rounded-lg shadow">
-            <form th:action="@{/user/update}"
-                  th:object="${updateAppUserProfileRequest}"
-                  method="post"
-                  enctype="multipart/form-data"
-                  class="w-full"
-            >
-            <div class="grid grid-cols-2 py-1">
-                <div><label>Change Profile Picture</label></div>
-                <div><input type="file" name="image" accept="image/png, image/jpeg"/></div>
-            </div>
+        <div class="langEN flex w-4/5 lg:w-1/2 p-5 bg-neutral-100 border-gray-200 rounded-lg shadow">
+    <form th:action="@{/user/update}"
+          th:object="${updateAppUserProfileRequest}"
+          method="post"
+          enctype="multipart/form-data"
+          class="w-full"
+    >
+        <div class="grid grid-cols-2 py-1">
+            <div><label>Change Profile Picture</label></div>
+            <div><input type="file" name="image" accept="image/png, image/jpeg"/></div>
+        </div>
 
-            <div class="grid grid-cols-2 py-1">
-                <div><label>Change Cover Picture</label></div>
-                <div><input type="file" name="coverImage" accept="image/png, image/jpeg"/></div>
-            </div>
+        <div class="grid grid-cols-2 py-1">
+            <div><label>Change Cover Picture</label></div>
+            <div><input type="file" name="coverImage" accept="image/png, image/jpeg"/></div>
+        </div>
 
-            <div class="grid grid-cols-2 py-1">
+        <div class="grid grid-cols-2 py-1">
             <div><label>Upload Default Resume</label></div>
             <div><input type="file" name="defaultResume" accept=".pdf,.docx"/></div>
-            </div>
+        </div>
 
-            <div class="grid grid-cols-2 py-1">
+        <div class="grid grid-cols-2 py-1">
             <div><label>Upload Default Cover Letter</label></div>
             <div><input type="file" name="defaultCoverLetter" accept=".pdf,.docx"/></div>
-            </div>
+        </div>
 
-            <label th:if="${default_resume != null}">Current Default Resume</label><br>
-            <p th:if="${default_resume != null}" th:text="${default_resume}"></p>
-            <label th:if="${default_cover_letter != null}">Current Default Cover Letter</label><br>
-            <p th:if="${default_cover_letter != null}" th:text="${default_cover_letter}"></p>
+        <label th:if="${default_resume != null}">Current Default Resume</label><br>
+        <p th:if="${default_resume != null}" th:text="${default_resume}"></p>
+        <label th:if="${default_cover_letter != null}">Current Default Cover Letter</label><br>
+        <p th:if="${default_cover_letter != null}" th:text="${default_cover_letter}"></p>
 
-            <div>
+        <div>
             <label>Description</label><br>
             <textarea id="description" name="description"
                       class="w-full py-3 px-4 mb-3 rounded-lg h-32 font-normal tracking-tight text-gray-900 resize-y"
                       th:text="${profile.description}"></textarea>
-            </div>
+        </div>
 
-            <div>
+        <div>
             <label>Education</label><br>
             <input type="text" id="education" name="education" th:value="${profile.education}"
                    class="w-full py-3 px-4 mb-3 rounded-lg font-normal tracking-tight text-gray-900"/>
-            </div>
+        </div>
 
-            <div>
+        <div>
             <label>Skill(s)</label><br>
             <input type="text" id="skill" name="skill" th:value="${profile.skill}"
                    class="w-full py-3 px-4 mb-3 rounded-lg font-normal tracking-tight text-gray-900"/>
-            </div>
+        </div>
 
-            <div>
+        <div>
             <label>Work</label><br>
             <input type="text" id="work" name="work" th:value="${profile.work}"
                    class="w-full py-3 px-4 mb-3 rounded-lg font-normal tracking-tight text-gray-900"/>
-            </div>
+        </div>
 
-            <div>
+        <div>
             <label>Course(s)</label><br>
             <input type="text" id="course" name="course" th:value="${profile.course}"
                    class="w-full py-3 px-4 mb-3 rounded-lg font-normal tracking-tight text-gray-900"/>
-            </div>
+        </div>
 
-            <div>
+        <div>
             <label>Phone</label><br>
             <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                    th:value="${profile.phone}"
                    class="w-full pt-3 pb-1 px-4 mb-1 rounded-lg font-normal tracking-tight text-gray-900"/>
             <div class="text-sm help-block mb-3">Format: 123-456-7890</div>
-            </div>
+        </div>
 
-            <div>
+        <div>
             <label>Volunteering</label><br>
             <input type="text" id="volunteering" name="volunteering" th:value="${profile.volunteering}"
                    class="w-full py-3 px-4 mb-3 rounded-lg font-normal tracking-tight text-gray-900"/>
-            </div>
+        </div>
 
-            <div>
+        <div>
             <label>Project(s)</label><br>
             <input type="text" id="project" name="project" th:value="${profile.project}"
                    class="w-full py-3 px-4 mb-3 rounded-lg font-normal tracking-tight text-gray-900"/>
-            </div>
+        </div>
 
-            <div>
+        <div>
             <label>Award(s)</label><br>
             <input type="text" id="award" name="award" th:value="${profile.award}"
                    class="w-full py-3 px-4 mb-3 rounded-lg font-normal tracking-tight text-gray-900"/>
-            </div>
+        </div>
 
-            <div>
+        <div>
             <label>Language(s)</label><br>
             <input type="text" id="location" name="language" th:value="${profile.language}"
                    class="w-full py-3 px-4 mb-3 rounded-lg font-normal tracking-tight text-gray-900"/>
+        </div>
+
+        <div class="flex justify-center">
+            <button class="py-2 px-4 bg-red-500 text-white rounded-full" type="submit">Save</button>
+        </div>
+
+    </form>
+</div>
+
+
+    <div class="langFR flex w-4/5 lg:w-1/2 p-5 bg-neutral-100 border-gray-200 rounded-lg shadow">
+        <form th:action="@{/user/update}"
+              th:object="${updateAppUserProfileRequest}"
+              method="post"
+              enctype="multipart/form-data"
+              class="w-full"
+        >
+            <div class="grid grid-cols-2 py-1">
+                <div><label>Modifier la photo de profil</label></div>
+                <div><input type="file" name="image" accept="image/png, image/jpeg"/></div>
+            </div>
+
+            <div class="grid grid-cols-2 py-1">
+                <div><label>Changer image de fond</label></div>
+                <div><input type="file" name="coverImage" accept="image/png, image/jpeg"/></div>
+            </div>
+
+            <div class="grid grid-cols-2 py-1">
+                <div><label>Télécharger le résumé par défaut</label></div>
+                <div><input type="file" name="defaultResume" accept=".pdf,.docx"/></div>
+            </div>
+
+            <div class="grid grid-cols-2 py-1">
+                <div><label>Télécharger la lettre de motivation par défaut</label></div>
+                <div><input type="file" name="defaultCoverLetter" accept=".pdf,.docx"/></div>
+            </div>
+
+            <label th:if="${default_resume != null}">Résumé actuel par défaut</label><br>
+            <p th:if="${default_resume != null}" th:text="${default_resume}"></p>
+            <label th:if="${default_cover_letter != null}">Lettre de motivation actuelle par défaut</label><br>
+            <p th:if="${default_cover_letter != null}" th:text="${default_cover_letter}"></p>
+
+            <div>
+                <label>Description</label><br>
+                <textarea id="description" name="description"
+                          class="w-full py-3 px-4 mb-3 rounded-lg h-32 font-normal tracking-tight text-gray-900 resize-y"
+                          th:text="${profile.description}"></textarea>
+            </div>
+
+            <div>
+                <label>Éducation</label><br>
+                <input type="text" id="education" name="education" th:value="${profile.education}"
+                       class="w-full py-3 px-4 mb-3 rounded-lg font-normal tracking-tight text-gray-900"/>
+            </div>
+
+            <div>
+                <label>Compétences</label><br>
+                <input type="text" id="skill" name="skill" th:value="${profile.skill}"
+                       class="w-full py-3 px-4 mb-3 rounded-lg font-normal tracking-tight text-gray-900"/>
+            </div>
+
+            <div>
+                <label>Travail</label><br>
+                <input type="text" id="work" name="work" th:value="${profile.work}"
+                       class="w-full py-3 px-4 mb-3 rounded-lg font-normal tracking-tight text-gray-900"/>
+            </div>
+
+            <div>
+                <label>Cours</label><br>
+                <input type="text" id="course" name="course" th:value="${profile.course}"
+                       class="w-full py-3 px-4 mb-3 rounded-lg font-normal tracking-tight text-gray-900"/>
+            </div>
+
+            <div>
+                <label>Téléphone</label><br>
+                <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                       th:value="${profile.phone}"
+                       class="w-full pt-3 pb-1 px-4 mb-1 rounded-lg font-normal tracking-tight text-gray-900"/>
+                <div class="text-sm help-block mb-3">Format: 123-456-7890</div>
+            </div>
+
+            <div>
+                <label>bénévolat</label><br>
+                <input type="text" id="volunteering" name="volunteering" th:value="${profile.volunteering}"
+                       class="w-full py-3 px-4 mb-3 rounded-lg font-normal tracking-tight text-gray-900"/>
+            </div>
+
+            <div>
+                <label>Projet(s)</label><br>
+                <input type="text" id="project" name="project" th:value="${profile.project}"
+                       class="w-full py-3 px-4 mb-3 rounded-lg font-normal tracking-tight text-gray-900"/>
+            </div>
+
+            <div>
+                <label>Prix</label><br>
+                <input type="text" id="award" name="award" th:value="${profile.award}"
+                       class="w-full py-3 px-4 mb-3 rounded-lg font-normal tracking-tight text-gray-900"/>
+            </div>
+
+            <div>
+                <label>Langue(s)</label><br>
+                <input type="text" id="location" name="language" th:value="${profile.language}"
+                       class="w-full py-3 px-4 mb-3 rounded-lg font-normal tracking-tight text-gray-900"/>
             </div>
 
             <div class="flex justify-center">
-            <button class="py-2 px-4 bg-red-500 text-white rounded-full" type="submit">Save</button>
+                <button class="py-2 px-4 bg-red-500 text-white rounded-full" type="submit">Sauvegarder</button>
             </div>
 
-            </form>
-        </div>
+        </form>
+    </div>
+
     </div>
 </html>

@@ -25,7 +25,7 @@
                             <p th:if="${currentAppUser.role.toString() == 'COMPANY' and currentAppUser.verificationStatus == true}">
                                 &#10004;</p>
                             <p class="font-sans mt-2"
-                               th:text="${companyProfile.speciality} + '  &#183;  ' + ${companyProfile.location} + '  &#183;  ' + ${companyProfile.companySize} + ' employees'"></p>
+                               th:text="${companyProfile.industry} + '  &#183;  ' + ${companyProfile.speciality} + '  &#183;  ' + ${companyProfile.location} + '  &#183;  ' + ${companyProfile.companySize} + ' employees'"></p>
 
                             <p class="font-sans mt-2" th:text="${companyProfile.website}"></p>
 
@@ -146,7 +146,7 @@
                             <p th:if="${currentAppUser.role.toString() == 'COMPANY' and currentAppUser.verificationStatus == true}">
                                 &#10004;</p>
                             <p class="font-sans mt-2"
-                               th:text="${companyProfile.speciality} + '  &#183;  ' + ${companyProfile.location} + '  &#183;  ' + ${companyProfile.companySize} + ' employees'"></p>
+                               th:text="${companyProfile.industry} + '  &#183;  ' +  ${companyProfile.speciality} + '  &#183;  ' + ${companyProfile.location} + '  &#183;  ' + ${companyProfile.companySize} + ' employees'"></p>
 
                             <p class="font-sans mt-2" th:text="${companyProfile.website}"></p>
 
