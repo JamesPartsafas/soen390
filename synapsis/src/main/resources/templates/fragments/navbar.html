@@ -9,14 +9,14 @@
             <a href="/" class="flex items-center">
                 <img src="/assets/synapsis_black.svg" class="h-12 lg:h-16 mt-3 mr-3" alt="Synapsis Logo">
             </a>
-            <div class="langEN flex md:order-2 m-2">
-                <a href="/login" class="btn btn-primary text-xl">
+            <div class="flex md:order-2 m-2">
+                <a href="/login" class="hidden langEN btn btn-primary text-xl">
                     Sign In
                 </a>
             </div>
-            <div class="langFR flex md:order-2 m-2">
-                <a href="/login" class="btn btn-primary text-xl">
-                  Se Connecter
+            <div class="flex md:order-2 m-2">
+                <a href="/login" class="hidden langFR btn btn-primary text-xl">
+                    Se Connecter
                 </a>
             </div>
             <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
@@ -349,10 +349,10 @@
                     </a>
 
                     <a href="/admincreationpage" class="langFR">
-                    <li class="flex flex-col items-center">
-                        <i class="fa-solid fa-user fa-2x h-10"></i>
-                        Créer un Administrateur
-                    </li>
+                        <li class="flex flex-col items-center">
+                            <i class="fa-solid fa-user fa-2x h-10"></i>
+                            Créer un Administrateur
+                        </li>
                     </a>
 
                     <a href="/network" class="langEN">
@@ -757,7 +757,7 @@
         </div>
 
         <div class="invisible w-0 h-0" th:text="${globalUserId}" id="userId"></div>
-        <script src="/js/notification.js"></script>
-        <script src="/js/navbar.js"></script>
     </nav>
+    <script src="/js/notification.js"></script>
+    <script src="/js/navbar.js"></script>
 </div>
