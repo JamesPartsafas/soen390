@@ -114,10 +114,9 @@
                         <input id="receiver" class="hidden" th:value="${receiverId}"/>
 
                         <div class="flex flex-row flex-wrap">
-                            <div><input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="langEN form-control w-[30vw] md:w-[35vw] lg:[50vw] xl:w-[50vw] mt-10 rounded-lg text-sm md:text-base"/></div>
-                            <div><input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="langFR form-control w-[30vw] md:w-[35vw] lg:[50vw] xl:w-[50vw] mt-10 rounded-lg text-sm md:text-base"/></div>
-                            <div><button type="submit" class="langEN btn bg-primary btn-primary font-sans ml-8 mt-10 px-4 py-2 text-sm md:text-base">Send</button></div>
-                            <div><button type="submit" class="langFR btn bg-primary btn-primary font-sans ml-8 mt-10 px-4 py-2 text-sm md:text-base">Envoyer</button></div>
+                            <div><input type="text" id="message" autocomplete="off" class="form-control w-[30vw] md:w-[35vw] lg:[50vw] xl:w-[50vw] mt-10 rounded-lg text-sm md:text-base"/></div>
+                            <div><input type="submit" value="Send" class="langEN btn bg-primary btn-primary font-sans ml-8 mt-10 px-4 py-2 text-sm md:text-base" /></div>
+                            <div><input type="submit" value="Envoyer" class="langFR btn bg-primary btn-primary font-sans ml-8 mt-10 px-4 py-2 text-sm md:text-base" /></div>
                         </div>
                         <input type="file" id="file" name="file" class="rounded-lg text-sm md:text-base mt-1"/>
 
