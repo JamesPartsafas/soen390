@@ -223,7 +223,7 @@ function createMessageElement(message) {
             </div>
             ${message.id !== 0 ?
 
-        `<form action="${window.location.origin + '/chat/report'}" method="POST" enctype="multipart/form-data">
+        `<form action="${window.location.origin + '/chat/report'}" method="POST">
             <input type="hidden" name="_csrf" value="${csrfToken}"/>
             <input type="hidden" name="messageID" value="${message.id}" />
             <input type="hidden" name="chatID" value="${chatId}" />
@@ -277,9 +277,12 @@ function generateFileContainerElement(message) {
     const fileExtension = message.fileName.slice(message.fileName.lastIndexOf('.')).toLowerCase();
 
     if (imageExtensions.includes(fileExtension)) {
-        return `<img src="${message.file}" alt="${message.fileName}}"/>`
+        return `<img src="${message.file}" alt="${message.fileName}}"
+                class="p-2 px-4 m-2 ml-32 md:ml-56 lg:ml-84 xl:ml-96 bg-primary-variant rounded-lg text-right w-1/2 flex flex-row-reverse text-sm md:text-base"/>`
     } else {
-        return `<a href="${message.file}" download="${message.fileName}">Download ${message.fileName}</a>`
+        return `<a href="${message.file}" download="${message.fileName}"
+                class="p-2 px-4 m-2 ml-32 md:ml-56 lg:ml-84 xl:ml-96 bg-primary-variant rounded-lg text-right w-1/2 flex flex-row-reverse text-sm md:text-base">
+                Download ${message.fileName}</a>`
     }
 }
 
