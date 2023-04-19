@@ -59,17 +59,19 @@ function onError(error) {
  */
 async function sendMessage(event) {
     event.preventDefault();
-    const messageContent = messageInput.value.trim();
 
-    if (messageContent && stompClient) {
+    if (stompClient) {
         try {
             const fileName = getFileName();
+            const content = messageInput.value.trim();
+
+            if (fileName === null && content.length === 0) {
+                return;
+            }
 
             if (fileName?.length > 50) {
                 throw new Error('FileName is too long. Max length is 50.')
             }
-
-            const content = messageInput.value;
 
             if (content.length > 255) {
                 throw new Error('Message is too long. Max length is 255.')
@@ -215,15 +217,17 @@ function showMessage(message) {
  * @returns {string} The HTML element representing the message.
  */
 function createMessageElement(message) {
-    return `
+    if (message.senderId == senderId) {
+        return `
         <li>
             <div class="p-2 px-4 m-2 ml-32 md:ml-56 lg:ml-84 xl:ml-96 bg-primary-variant rounded-lg text-right w-1/2 flex flex-row-reverse text-sm md:text-base">
                 ${message.content}
                 ${generateFileContainerElement(message)}
             </div>
+                        
             ${message.id !== 0 ?
 
-        `<form action="${window.location.origin + '/chat/report'}" method="POST">
+            `<form action="${window.location.origin + '/chat/report'}" method="POST">
             <input type="hidden" name="_csrf" value="${csrfToken}"/>
             <input type="hidden" name="messageID" value="${message.id}" />
             <input type="hidden" name="chatID" value="${chatId}" />
@@ -255,11 +259,67 @@ function createMessageElement(message) {
                 </div>
             </div>
         </form>`
-        : ''}
+            : ''}
         </li>
     `;
+    }
+    else {
+        return `
+        <li>
+        <div class="p-2 px-2 m-2 bg-neutral-100 rounded-lg w-1/2 flex flex-row text-sm md:text-base">
+            <i class="fa-solid fa-ellipsis-vertical fa-sm p-3 px-4" style="color: #c0c0c0;"
+               data-popover-target="popover-click" data-popover-trigger="click" type="button"></i>
+            <div data-popover id="popover-click" role="tooltip"
+                 class="absolute z-10 invisible inline-block w-18 text-sm text-black-variant transition-opacity
+                duration-300 bg-primary-variant border border-light rounded-lg opacity-0">
+                <div class="px-3 py-2 bg-primary-variant border-light rounded-t-lg" data-modal-target="popup-modal" data-modal-toggle="popup-modal">
+                    <h3 class="langEN font-semibold text-black-variant">Report</h3>
+                    <h3 class="langFR font-semibold text-black-variant">Signaler</h3>
+                </div>
+                <div data-popper-arrow></div>
+            </div>
+            ${message.content}
+            ${generateFileContainerElement(message)}
+        </div>
+                        
+            ${message.id !== 0 ?
 
-
+            `<form action="${window.location.origin + '/chat/report'}" method="POST">
+            <input type="hidden" name="_csrf" value="${csrfToken}"/>
+            <input type="hidden" name="messageID" value="${message.id}" />
+            <input type="hidden" name="chatID" value="${chatId}" />
+            <div id="popup-modal" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full">
+                <div class="relative w-full h-full max-w-md md:h-auto">
+                    <div class="relative bg-white rounded-lg">
+                        <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-hide="popup-modal">
+                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                        <div class="p-6 text-center">
+                            <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14 " fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <p class="langEN mb-5 text-lg font-normal text-gray-500 ">Please note that if you choose to report a message for harassment, up to 5 previous messages from the same conversation will
+                                be reviewed by our administrative team in order to assess the situation fully. This is to ensure that appropriate action is taken and that any patterns of behavior are identified.
+                                We take harassment very seriously and aim to create a safe and respectful environment for all of our users.
+                                By reporting a message, you are helping us to achieve this goal.</p>
+                            <p class="langFR mb-5 text-lg font-normal text-gray-500 ">Veuillez noter que si vous choisissez de signaler un message à cause d'un harcèlement, jusqu'à 5 messages précédents de la même 
+                                conversation seront examiné par notre équipe administrative afin d'évaluer pleinement la situation. Il s'agit de s'assurer que des mesures appropriées sont prises et que tous les modèles
+                                 de comportement sont identifiés. Nous prenons le harcèlement très sérieux et visons à créer un environnement sécurisé et respectueux pour tous nos utilisateurs. En signalant un message, 
+                                 vous nous aidez à atteindre notre objectif.</p>
+                            <div class="flex justify-center">
+                                <button data-modal-hide="popup-modal" type="submit" class="langEN text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300  font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">I accept</button>
+                                <button data-modal-hide="popup-modal" type="submit" class="langFR text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300  font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">J'accepte</button>
+                                <button data-modal-hide="popup-modal" type="button" class="langEN text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">I decline</button>
+                                <button data-modal-hide="popup-modal" type="button" class="langFR text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">Je refuse</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>`
+            : ''}
+        </li>
+    `;
+    }
 }
 
 /**
@@ -276,13 +336,29 @@ function generateFileContainerElement(message) {
     const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
     const fileExtension = message.fileName.slice(message.fileName.lastIndexOf('.')).toLowerCase();
 
+
     if (imageExtensions.includes(fileExtension)) {
-        return `<img src="${message.file}" alt="${message.fileName}}"
+        if (message.senderId == senderId) {
+            return `<img src="${message.file}" alt="${message.fileName}}"
                 class="p-2 px-4 m-2 ml-32 md:ml-56 lg:ml-84 xl:ml-96 bg-primary-variant rounded-lg text-right w-1/2 flex flex-row-reverse text-sm md:text-base"/>`
+        }
+        else {
+            return `<img src="${message.file}" alt="${message.fileName}}"
+                class="p-2 px-2 m-2 bg-neutral-100 rounded-lg w-1/2 flex flex-row text-sm md:text-base"/>`
+        }
+
     } else {
-        return `<a href="${message.file}" download="${message.fileName}"
+        if (message.senderId == senderId) {
+            return `<a href="${message.file}" download="${message.fileName}"
                 class="p-2 px-4 m-2 ml-32 md:ml-56 lg:ml-84 xl:ml-96 bg-primary-variant rounded-lg text-right w-1/2 flex flex-row-reverse text-sm md:text-base">
                 Download ${message.fileName}</a>`
+        }
+        else {
+            return `<a href="${message.file}" download="${message.fileName}"
+                class="p-2 px-2 m-2 bg-neutral-100 rounded-lg w-1/2 flex flex-row text-sm md:text-base">
+                Download ${message.fileName}</a>`
+        }
+
     }
 }
 

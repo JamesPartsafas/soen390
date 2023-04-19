@@ -165,15 +165,14 @@ public class ChatController {
             }
 
             String content = message.getContent();
-
-            if (content == null) {
-                throw new IllegalStateException("Message Content cannot be null");
-            }
-
             String fileName = message.getFileName();
             String file = message.getFile();
 
-            if ((fileName != null && fileName.length() > 50) || (file != null && file.length() > 64600) || content.length() > 255) {
+            if (content == null && file == null) {
+                throw new IllegalStateException("Message Content and File cannot be null");
+            }
+
+            if ((fileName != null && fileName.length() > 50) || (file != null && file.length() > 64600) || (content != null && content.length() > 255)) {
                 throw new IllegalStateException("Message exceeds permitted size limit");
             }
 

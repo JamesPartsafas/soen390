@@ -20,7 +20,6 @@ public class Message {
     @JoinColumn(nullable = false)
     private Chat chat;
 
-    @Column(nullable = false)
     private String content;
 
     @ManyToOne
