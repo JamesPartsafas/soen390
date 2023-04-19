@@ -207,7 +207,7 @@ function showMessage(message) {
     } else if (message.type === 'ERROR') {
         onError(`Could not send message: ${message.content}`);
     } else {
-        messageArea.innerHTML += createMessageElement(message);
+        messageArea.insertAdjacentHTML('beforeend', createMessageElement(message));
     }
 }
 
