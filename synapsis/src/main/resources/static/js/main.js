@@ -271,7 +271,7 @@ function createMessageElement(message) {
                data-popover-target="popover-click" data-popover-trigger="click" type="button"></i>
             <div data-popover id="popover-click" role="tooltip"
                  class="absolute z-10 invisible inline-block w-18 text-sm text-black-variant transition-opacity
-                duration-300 bg-primary-variant border border-light rounded-lg opacity-0">
+                 duration-300 bg-primary-variant border border-light rounded-lg opacity-0">
                 <div class="px-3 py-2 bg-primary-variant border-light rounded-t-lg" data-modal-target="popup-modal" data-modal-toggle="popup-modal">
                     <h3 class="langEN font-semibold text-black-variant">Report</h3>
                     <h3 class="langFR font-semibold text-black-variant">Signaler</h3>
