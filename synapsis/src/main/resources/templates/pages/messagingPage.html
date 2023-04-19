@@ -52,15 +52,6 @@
                                              class="p-2 px-2 m-2 bg-neutral-100 rounded-lg w-1/2 flex flex-row text-sm md:text-base">
                                             <i class="fa-solid fa-ellipsis-vertical fa-sm p-3 px-4" style="color: #c0c0c0;"
                                                data-popover-target="popover-click" data-popover-trigger="click" type="button"></i>
-                                            <div data-popover id="popover-click" role="tooltip"
-                                                 class="absolute z-10 invisible inline-block w-18 text-sm text-black-variant transition-opacity
-                                            duration-300 bg-primary-variant border border-light rounded-lg opacity-0">
-                                                <div class="px-3 py-2 bg-primary-variant border-light rounded-t-lg" data-modal-target="popup-modal" data-modal-toggle="popup-modal">
-                                                    <h3 class="langEN font-semibold text-black-variant">Report</h3>
-                                                    <h3 class="langFR font-semibold text-black-variant">Signaler</h3>
-                                                </div>
-                                                <div data-popper-arrow></div>
-                                            </div>
                                             <img th:if="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}"
                                                  th:src="${message.file}" th:alt="${message.fileName}"/>
                                             <a th:unless="${message.fileName.toLowerCase().matches('.*\.(png|jpe?g|gif|bmp)')}"
@@ -68,6 +59,7 @@
                                                th:download="${message.fileName}" th:text="'Download ' + ${message.fileName}"></a>
                                         </div>
                                     </th:block>
+
                                     <!--Messages sent by user-->
                                     <div th:if="${(message.getSender().getId() == globalUserId) && (!message.getContent().isEmpty())}"
                                          class="p-2 px-4 m-2 ml-32 md:ml-56 lg:ml-84 xl:ml-96 bg-primary-variant rounded-lg text-right w-1/2 flex flex-row-reverse text-sm md:text-base">
@@ -79,17 +71,19 @@
                                          class="p-2 px-2 m-2 bg-neutral-100 rounded-lg w-1/2 flex flex-row text-sm md:text-base">
                                         <i class="fa-solid fa-ellipsis-vertical fa-sm p-3 px-4" style="color: #c0c0c0;"
                                            data-popover-target="popover-click" data-popover-trigger="click" type="button"></i>
-                                        <div data-popover id="popover-click" role="tooltip"
-                                             class="absolute z-10 invisible inline-block w-18 text-sm text-black-variant transition-opacity
-                                            duration-300 bg-primary-variant border border-light rounded-lg opacity-0">
-                                            <div class="px-3 py-2 bg-primary-variant border-light rounded-t-lg" data-modal-target="popup-modal" data-modal-toggle="popup-modal">
-                                                <h3 class="langEN font-semibold text-black-variant">Report</h3>
-                                                <h3 class="langFR font-semibold text-black-variant">Signaler</h3>
-                                            </div>
-                                            <div data-popper-arrow></div>
-                                        </div>
                                         <p th:text="${message.getContent()}"></p>
                                     </div>
+
+                                    <div data-popover id="popover-click" role="tooltip"
+                                         class="absolute z-10 invisible inline-block w-18 text-sm text-black-variant transition-opacity
+                                            duration-300 bg-primary-variant border border-light rounded-lg opacity-0">
+                                        <div class="px-3 py-2 bg-primary-variant border-light rounded-t-lg" data-modal-target="popup-modal" data-modal-toggle="popup-modal">
+                                            <h3 class="langEN font-semibold text-black-variant">Report</h3>
+                                            <h3 class="langFR font-semibold text-black-variant">Signaler</h3>
+                                        </div>
+                                        <div data-popper-arrow></div>
+                                    </div>
+
                                     <form th:if="${message.getSender().getId() != authenticatedUserID}" th:action="@{/chat/report}" method="POST">
                                         <input type="hidden" name="messageID" th:value="${message.getId()}" />
                                         <input type="hidden" name="chatID" th:value="${chatId}" />
