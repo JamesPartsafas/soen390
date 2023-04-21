@@ -1,5 +1,7 @@
 package com.soen.synapsis.appuser;
 
+import com.soen.synapsis.appuser.job.Job;
+import com.soen.synapsis.appuser.job.JobRepository;
 import com.soen.synapsis.appuser.profile.*;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfile;
 import com.soen.synapsis.appuser.profile.appuserprofile.AppUserProfileRepository;
@@ -28,15 +30,17 @@ public class AppUserService {
     private ResumeRepository defaultResumeRepository;
     private CoverLetterRepository defaultCoverLetterRepository;
     private final BCryptPasswordEncoder encoder;
+    private final JobRepository jobRepository;
 
-    public AppUserService(AppUserRepository appUserRepository) {
+    public AppUserService(AppUserRepository appUserRepository, JobRepository jobRepository) {
         this.appUserRepository = appUserRepository;
         this.encoder = new BCryptPasswordEncoder();
+        this.jobRepository = jobRepository;
     }
 
     @Autowired
     public AppUserService(AppUserRepository appUserRepository, AppUserProfileRepository appUserProfileRepository,
-                          CompanyProfileRepository companyProfileRepository, ProfilePictureRepository profilePictureRepository, ResumeRepository defaultResumeRepository, CoverLetterRepository defaultCoverLetterRepository) {
+                          CompanyProfileRepository companyProfileRepository, ProfilePictureRepository profilePictureRepository, ResumeRepository defaultResumeRepository, CoverLetterRepository defaultCoverLetterRepository, JobRepository jobRepository) {
         this.appUserRepository = appUserRepository;
         this.appUserProfileRepository = appUserProfileRepository;
         this.companyProfileRepository = companyProfileRepository;
@@ -44,6 +48,7 @@ public class AppUserService {
         this.defaultResumeRepository = defaultResumeRepository;
         this.defaultCoverLetterRepository = defaultCoverLetterRepository;
         this.encoder = new BCryptPasswordEncoder();
+        this.jobRepository = jobRepository;
     }
 
     public Optional<AppUser> getAppUser(Long id) {
@@ -329,6 +334,12 @@ public class AppUserService {
                 appUserRepository.save(recruiter);
             }
         }
+
+        List<Job> jobsToDelete = jobRepository.findJobsByCompanyEquals(appUser);
+        for (Job jobToDelete : jobsToDelete) {
+            jobRepository.delete(jobToDelete);
+        }
+
         appUserRepository.save(appUser);
 
     }
