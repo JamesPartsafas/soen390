@@ -336,9 +336,7 @@ public class AppUserService {
         }
 
         List<Job> jobsToDelete = jobRepository.findJobsByCompanyEquals(appUser);
-        for (Job jobToDelete : jobsToDelete) {
-            jobRepository.delete(jobToDelete);
-        }
+        jobRepository.deleteAll(jobsToDelete);
 
         appUserRepository.save(appUser);
 
