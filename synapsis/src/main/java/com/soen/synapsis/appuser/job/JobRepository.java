@@ -30,6 +30,14 @@ public interface JobRepository extends JpaRepository<Job, Long>{
     List<Job> findJobsByCreatorEquals(@Param("recruiterID") AppUser recruiter);
 
     /**
+     * Retrieve all jobs associated to a company.
+     *
+     * @param company the company to search for.
+     * @return a list of jobs associated to the company.
+     */
+    List<Job> findJobsByCompanyEquals(@Param("companyID") AppUser company);
+
+    /**
      * Retrieve all jobs given a search query.
      *
      * @param search the search query.

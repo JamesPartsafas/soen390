@@ -1,6 +1,7 @@
 package com.soen.synapsis.unit.appuser;
 
 import com.soen.synapsis.appuser.*;
+import com.soen.synapsis.appuser.job.JobRepository;
 import com.soen.synapsis.appuser.profile.CoverLetterRepository;
 import com.soen.synapsis.appuser.profile.ProfilePictureRepository;
 import com.soen.synapsis.appuser.profile.ResumeRepository;
@@ -28,6 +29,8 @@ public class AppUserServiceTest {
     @Mock
     private AppUserRepository appUserRepository;
     @Mock
+    private JobRepository jobRepository;
+    @Mock
     private AppUserProfileRepository appUserProfileRepository;
     @Mock
     private CompanyProfileRepository companyProfileRepository;
@@ -43,7 +46,7 @@ public class AppUserServiceTest {
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
         underTest = new AppUserService(appUserRepository, appUserProfileRepository,
-                companyProfileRepository, profilePictureRepository, resumeRepository, coverLetterRepository);
+                companyProfileRepository, profilePictureRepository, resumeRepository, coverLetterRepository, jobRepository);
     }
 
     @AfterEach
