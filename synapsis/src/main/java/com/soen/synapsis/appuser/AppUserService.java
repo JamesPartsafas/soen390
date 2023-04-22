@@ -331,6 +331,7 @@ public class AppUserService {
         if(appUser.getRecruiter() != null) {
             for (AppUser recruiter : appUser.getRecruiter()) {
                 recruiter.setVerificationStatus(false);
+                recruiter.setRole(Role.CANDIDATE);
                 appUserRepository.save(recruiter);
             }
         }
